@@ -1,5 +1,5 @@
 Name: admin.rpc
-ListenOn: 127.0.0.1:6005
+ListenOn: 127.0.0.1:6003
 
 Etcd:
   Hosts:

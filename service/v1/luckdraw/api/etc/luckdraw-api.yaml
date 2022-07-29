@@ -1,6 +1,6 @@
 Name: luckdraw-api
 Host: 0.0.0.0
-Port: 6004
+Port: 7002
 Debug: false
 Log:
   Level: error

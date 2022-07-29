@@ -1,6 +1,6 @@
 Name: admin-api
 Host: 0.0.0.0
-Port: 6006
+Port: 7003
 
 Mysql:
   DataSource: luck_draw:r5dWEtetr7ncrdiy@tcp(127.0.0.1:3306)/luck_draw?parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai

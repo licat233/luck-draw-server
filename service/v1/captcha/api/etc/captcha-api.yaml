@@ -1,6 +1,6 @@
 Name: captcha-api
 Host: 0.0.0.0
-Port: 6002
+Port: 7001
 Debug: true
 Log:
   Level: error

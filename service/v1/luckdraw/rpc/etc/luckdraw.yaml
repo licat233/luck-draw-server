@@ -1,5 +1,5 @@
 Name: luckdraw.rpc
-ListenOn: 127.0.0.1:6003
+ListenOn: 127.0.0.1:6002
 Debug: false
 
 Etcd:
