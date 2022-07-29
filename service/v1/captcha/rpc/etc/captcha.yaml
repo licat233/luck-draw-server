@@ -1,0 +1,14 @@
+Name: captcha.rpc
+ListenOn: 127.0.0.1:6001
+Etcd:
+  Hosts:
+    - 127.0.0.1:2379
+  Key: captcha.rpc
+Redis:
+  Host: 127.0.0.1:6379
+  Pass:
+  Type: node
+Log:
+  Level: error
+  Mode: file
+Debug: true

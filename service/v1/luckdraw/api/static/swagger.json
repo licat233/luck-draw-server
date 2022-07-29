@@ -1,0 +1,365 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "host": "127.0.0.1",
+  "basePath": "/",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/api/luckdraw/goodluck": {
+      "post": {
+        "summary": "抽取奖品",
+        "operationId": "goodluck",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/goodluckReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "luckdraw-api"
+        ]
+      }
+    },
+    "/v1/api/luckdraw/identify": {
+      "post": {
+        "summary": "抽奖者身份验证",
+        "operationId": "identify",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/identifyReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "luckdraw-api"
+        ]
+      }
+    },
+    "/v1/api/luckdraw/luckerList": {
+      "post": {
+        "summary": "获取自己在某活动的中奖名单",
+        "operationId": "luckerList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/luckerListReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "luckdraw-api"
+        ]
+      }
+    },
+    "/v1/api/luckdraw/prizes": {
+      "post": {
+        "summary": "获取活动奖品列表",
+        "operationId": "prizes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/prizesReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "luckdraw-api"
+        ]
+      }
+    },
+    "/v1/api/luckdraw/search": {
+      "post": {
+        "summary": "查询中奖信息",
+        "operationId": "search",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/searchReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "luckdraw-api"
+        ]
+      }
+    },
+    "/v1/api/luckdraw/selectPrizes": {
+      "post": {
+        "summary": "挑选奖品",
+        "operationId": "selectPrizes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/selectPrizesReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "luckdraw-api"
+        ]
+      }
+    },
+    "/v1/api/luckdraw/{shortlink}": {
+      "get": {
+        "summary": "展现抽奖页面",
+        "operationId": "luckView",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "shortlink",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "luckdraw-api"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "BaseResp": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object"
+        },
+        "trace∂": {
+          "type": "string"
+        }
+      },
+      "title": "BaseResp",
+      "required": [
+        "success",
+        "message",
+        "data",
+        "trace∂"
+      ]
+    },
+    "goodluckReq": {
+      "type": "object",
+      "properties": {
+        "activity_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 活动id，需要传入活动id，用于查询redis缓存"
+        },
+        "activity_uuid": {
+          "type": "string",
+          "description": "活动uuid"
+        }
+      },
+      "title": "goodluckReq",
+      "required": [
+        "activity_id",
+        "activity_uuid"
+      ]
+    },
+    "identifyReq": {
+      "type": "object",
+      "properties": {
+        "passport": {
+          "type": "string",
+          "description": "凭证"
+        }
+      },
+      "title": "identifyReq",
+      "required": [
+        "passport"
+      ]
+    },
+    "luckerListReq": {
+      "type": "object",
+      "properties": {
+        "activity_uuid": {
+          "type": "string",
+          "description": "活动uuid"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面大小"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码"
+        }
+      },
+      "title": "luckerListReq",
+      "required": [
+        "activity_uuid",
+        "pageSize",
+        "current"
+      ]
+    },
+    "prizesReq": {
+      "type": "object",
+      "properties": {
+        "activity_uuid": {
+          "type": "string",
+          "description": "活动uuid，用于校验，id是否正确"
+        }
+      },
+      "title": "prizesReq",
+      "required": [
+        "activity_uuid"
+      ]
+    },
+    "searchReq": {
+      "type": "object",
+      "properties": {
+        "keyword": {
+          "type": "string",
+          "description": "查询关键词"
+        }
+      },
+      "title": "searchReq",
+      "required": [
+        "keyword"
+      ]
+    },
+    "selectPrizesReq": {
+      "type": "object",
+      "properties": {
+        "activity_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 活动id，需要传入活动id，用于查询redis缓存"
+        },
+        "activity_uuid": {
+          "type": "string",
+          "description": "活动uuid"
+        },
+        "lucker_uuid_list": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "中奖名单UUID"
+        }
+      },
+      "title": "selectPrizesReq",
+      "required": [
+        "activity_id",
+        "activity_uuid",
+        "lucker_uuid_list"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}

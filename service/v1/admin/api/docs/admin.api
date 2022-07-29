@@ -1,0 +1,52 @@
+syntax = "v1"
+
+import "types.api"
+import "activity.api"
+import "adminer.api"
+import "lucker.api"
+import "prize.api"
+import "prizes_pool.api"
+import "project.api"
+import "rbac.api"
+import "user.api"
+import "users_pool.api"
+
+//管理员登陆，可用账号、手机号、邮箱登录，(暂未实现验证码登录功能)
+type loginReq {
+	Passport  string `json:"passport"`
+	Password  string `json:"password"`
+	AutoLogin bool   `json:"autoLogin,default=false"`
+	CaptchaId string `json:"captcha_id"` //验证码ID
+	Solution  string `json:"solution"`   //验证码答案
+}
+
+type loginByEmailReq {
+	Email     string `json:"email"`                   //邮箱地址
+	AutoLogin bool   `json:"autoLogin,default=false"` //是否开启自动登录
+	CaptchaId string `json:"captcha_id,optional"`     //验证码ID
+	Solution  string `json:"solution"`                //验证码答案
+}
+
+@server(
+	prefix: /v1/api/admin
+)
+service admin-api {
+	@doc "登录"
+	@handler login
+	post /login(loginReq) returns(BaseResp)
+	
+	@doc "邮箱登录"
+	@handler loginByEmail
+	post /loginByEmail(loginByEmailReq) returns(BaseResp)
+}
+
+@server(
+	jwt: JwtAuth
+	middleware: JwtMiddleware
+	prefix: /v1/api/admin
+)
+service admin-api {
+	@doc "注销"
+	@handler logout
+	post /logout returns(BaseResp)
+}

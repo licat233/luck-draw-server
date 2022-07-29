@@ -1,0 +1,55 @@
+syntax = "v1"
+
+type luckerGetReq {
+	Id int64 `json:"id"`
+}
+
+type luckerAddReq {
+	UserId       int64     `json:"user_id"`        // 中奖用户id
+	PrizesPoolId int64     `json:"prizes_pool_id"` // 抽中的奖品池id
+	Status       int64     `json:"status"`         // 状态: -1放弃领奖，0未领奖，1已领奖
+	LuckDate     int64 `json:"luck_date"`      // 抽奖时间
+	Ip           string    `json:"ip"`             // ip地址
+}
+
+type luckerPutReq {
+	Id           int64     `json:"id"`             // 表主键
+	Uuid         string    `json:"uuid"`           // 唯一识别码
+	UserId       int64     `json:"user_id"`        // 中奖用户id
+	PrizesPoolId int64     `json:"prizes_pool_id"` // 抽中的奖品池id
+	Status       int64     `json:"status"`         // 状态: -1放弃领奖，0未领奖，1已领奖
+	LuckDate     int64 `json:"luck_date"`      // 抽奖时间
+	Ip           string    `json:"ip"`             // ip地址
+}
+
+type luckerDelReq {
+	Id int64 `json:"id"`
+}
+
+@server(
+	jwt: JwtAuth
+	group: lucker
+	middleware: JwtMiddleware
+    prefix: /v1/api/admin/lucker
+)
+service admin-api {
+	@doc "获取抽奖者列表"
+	@handler List
+	get /list(ListReq) returns(BaseResp)
+
+	@doc "获取抽奖者信息"
+	@handler info 
+	get /(luckerGetReq) returns(BaseResp)
+
+    @doc "添加抽奖者"
+	@handler add 
+	post /(luckerAddReq) returns(BaseResp)
+
+    @doc "编辑抽奖者"
+	@handler edit 
+	put /(luckerPutReq) returns(BaseResp)
+
+    @doc "删除抽奖者"
+	@handler del 
+	delete /(luckerDelReq) returns(BaseResp)
+}

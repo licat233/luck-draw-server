@@ -1,0 +1,16 @@
+Name: captcha-api
+Host: 0.0.0.0
+Port: 6002
+Debug: true
+Log:
+  Level: error
+  Mode: file
+
+JwtAuth:
+  AccessSecret: nA0eH4jC2aF0fC0eP0nH0lC1cB0aE8aQ0cI0
+
+CaptchaRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: captcha.rpc

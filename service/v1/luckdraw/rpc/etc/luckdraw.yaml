@@ -1,0 +1,34 @@
+Name: luckdraw.rpc
+ListenOn: 127.0.0.1:6003
+Debug: false
+
+Etcd:
+  Hosts:
+    - 127.0.0.1:2379
+  Key: luckdraw.rpc
+
+Mysql:
+  DataSource: luck_draw:r5dWEtetr7ncrdiy@tcp(127.0.0.1:3306)/luck_draw?parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai
+
+JwtAuth:
+  AccessSecret: nA0eH4jC2aF0fC0eP0nH0lC1cB0aE8aQ0cI0
+  AccessExpire: 86400
+
+Log:
+  Level: error
+  Mode: file
+
+Redis:
+  Host: 127.0.0.1:6379
+  Pass:
+  Type: node
+
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass:
+    Type: node
+
+KqGoodluckConf:
+  Brokers:
+    - kafka:1
+  Topic: goodluck-topic

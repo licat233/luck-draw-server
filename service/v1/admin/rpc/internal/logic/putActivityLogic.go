@@ -1,0 +1,65 @@
+package logic
+
+import (
+	"context"
+	"fmt"
+	"luck-draw/service/v1/admin/rpc/admin_pb"
+	"luck-draw/service/v1/admin/rpc/internal/svc"
+
+	"luck-draw/common/errorx"
+	"luck-draw/common/utils"
+	"luck-draw/service/model"
+
+	"github.com/zeromicro/go-zero/core/logx"
+)
+
+type PutActivityLogic struct {
+	ctx    context.Context
+	svcCtx *svc.ServiceContext
+	logx.Logger
+}
+
+func NewPutActivityLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutActivityLogic {
+	return &PutActivityLogic{
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
+	}
+}
+
+func (l *PutActivityLogic) PutActivity(in *admin_pb.Activity) (*admin_pb.StatusResp, error) {
+	//是否为空
+	if in == nil {
+		return nil, errorx.ErrEmptyParam
+	}
+	//开始时间戳转化为time.Time
+	startTime, err := utils.Int64ToTime(in.StartTime)
+	if err != nil {
+		return nil, errorx.ErrInvalidParam
+	}
+	//结束时间戳转化为time.Time
+	endTime, err := utils.Int64ToTime(in.EndTime)
+	if err != nil {
+		return nil, errorx.ErrInvalidParam
+	}
+	//构建model.activity
+	activity := &model.Activity{
+		Id:        in.Id,
+		Uuid:      in.Uuid,
+		Name:      in.Name,
+		ProjectId: in.ProjectId,
+		Status:    utils.BoolToInt64(in.Status),
+		Pattern:   int64(in.Pattern),
+		MaxCount:  in.MaxCount,
+		MaxPrizes: in.MaxPrizes,
+		StartTime: startTime,
+		EndTime:   endTime,
+	}
+
+	//更新数据
+	if err = l.svcCtx.ActivityModel.Update(l.ctx, activity); err != nil {
+		return nil, errorx.InternalError(fmt.Errorf("PutActivity ActivityModel.Update(l.ctx, data) error, err:%v", err))
+	}
+
+	return newStatusResponse(), nil
+}

@@ -1,0 +1,53 @@
+syntax = "v1"
+
+type prizeGetReq {
+	Id int64 `json:"id"`
+}
+
+type prizeAddReq {
+	Name      string    `json:"name"`       // 奖品名称
+	Image     string    `json:"image"`      // 奖品图片
+	Price     float64   `json:"price"`      // 奖品价格
+	Status    int64     `json:"status"`     // 是否可用
+}
+
+type prizePutReq {
+	Id        int64     `json:"id"`         // 表主键
+	Uuid      string    `json:"uuid"`       // 唯一识别码
+	Name      string    `json:"name"`       // 奖品名称
+	Image     string    `json:"image"`      // 奖品图片
+	Price     float64   `json:"price"`      // 奖品价格
+	Status    int64     `json:"status"`     // 是否可用
+}
+
+type prizeDelReq {
+	Id int64 `json:"id"`
+}
+
+@server(
+	jwt: JwtAuth
+	group: prize
+	middleware: JwtMiddleware
+    prefix: /v1/api/admin/prize
+)
+service admin-api {
+	@doc "获取奖品列表"
+	@handler List
+	get /list(ListReq) returns(BaseResp)
+
+	@doc "获取奖品信息"
+	@handler info 
+	get /(prizeGetReq) returns(BaseResp)
+
+    @doc "添加奖品"
+	@handler add 
+	post /(prizeAddReq) returns(BaseResp)
+
+    @doc "编辑奖品"
+	@handler edit 
+	put /(prizePutReq) returns(BaseResp)
+
+    @doc "删除奖品"
+	@handler del 
+	delete /(prizeDelReq) returns(BaseResp)
+}

@@ -1,0 +1,22 @@
+Name: luckdraw-api
+Host: 0.0.0.0
+Port: 6004
+Debug: false
+Log:
+  Level: error
+  Mode: file
+
+JwtAuth:
+  AccessSecret: nA0eH4jC2aF0fC0eP0nH0lC1cB0aE8aQ0cI0
+  AccessExpire: 86400
+
+CaptchaRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: captcha.rpc
+LuckdrawRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: luckdraw.rpc

@@ -1,0 +1,41 @@
+package logic
+
+import (
+	"context"
+	"fmt"
+	"luck-draw/service/v1/admin/rpc/admin_pb"
+	"luck-draw/service/v1/admin/rpc/internal/svc"
+
+	"luck-draw/common/errorx"
+	"luck-draw/service/model"
+
+	"github.com/zeromicro/go-zero/core/logx"
+)
+
+type GetAdminerLogic struct {
+	ctx    context.Context
+	svcCtx *svc.ServiceContext
+	logx.Logger
+}
+
+func NewGetAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetAdminerLogic {
+	return &GetAdminerLogic{
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
+	}
+}
+
+func (l *GetAdminerLogic) GetAdminer(in *admin_pb.ItemReq) (*admin_pb.GetAdminerResp, error) {
+	res, err := l.svcCtx.AdminerModel.FindOne(l.ctx, in.Id)
+	if err != nil && err != model.ErrNotFound {
+		return nil, errorx.InternalError(fmt.Errorf("GetAdminer AdminerModel.FindOne(l.ctx, in.Id) error, err: %v", err))
+	}
+	if err == model.ErrNotFound {
+		return nil, nil
+	}
+
+	return &admin_pb.GetAdminerResp{
+		Adminer: mdAdminerToPbAdminer(res),
+	}, nil
+}

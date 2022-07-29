@@ -1,0 +1,62 @@
+syntax = "v1"
+
+type activityGetReq {
+  Id int64 `json:"id"`
+}
+
+type activityAddReq {  
+  Name      string    `json:"name"`       // 活动名称
+  ProjectId int64     `json:"project_id"` // 项目id
+  Status    int64     `json:"status"`     // 活动状态，是否在举办，默认关闭，需手动开启
+  Pattern   int64     `json:"pattern"`    // 方案: 0私密的，1公开的
+  MaxCount  int64     `json:"max_count"`  // 最大抽奖次数：-1表示无限制，0表示不可抽奖
+  MaxPrizes int64     `json:"max_prizes"` // 最大抽奖次数：-1表示无限制，0表示不可抽奖
+  StartTime int64     `json:"start_time"` // 活动开始时间
+  EndTime   int64     `json:"end_time"`   // 活动结束时间
+}
+
+type activityPutReq {  
+  Id        int64     `json:"id"`         // 表主键
+  Uuid      string    `json:"uuid"`       // 唯一识别码
+  Name      string    `json:"name"`       // 活动名称
+  ProjectId int64     `json:"project_id"` // 项目id
+  Status    int64     `json:"status"`     // 活动状态，是否在举办，默认关闭，需手动开启
+  Pattern   int64     `json:"pattern"`    // 方案: 0私密的，1公开的
+  MaxCount  int64     `json:"max_count"`  // 最大抽奖次数：-1表示无限制，0表示不可抽奖
+  MaxPrizes int64     `json:"max_prizes"` // 最大抽奖次数：-1表示无限制，0表示不可抽奖
+  StartTime int64     `json:"start_time"` // 活动开始时间
+  EndTime   int64     `json:"end_time"`   // 活动结束时间
+}
+
+type activityDelReq {
+  Id int64 `json:"id"`
+}
+
+@server(
+  jwt: JwtAuth
+  group: activity
+  middleware: JwtMiddleware
+  prefix: /v1/api/admin/activity
+)
+service admin-api {
+  @doc "获取活动列表"
+  @handler List
+  get /list(ListReq) returns(BaseResp)
+
+  @doc "获取活动信息"
+  @handler info 
+  get /(activityGetReq) returns(BaseResp)
+
+  @doc "添加活动"
+  @handler add 
+  post /(activityAddReq) returns(BaseResp)
+
+  @doc "编辑活动"
+  @handler edit 
+  put /(activityPutReq) returns(BaseResp)
+
+  @doc "删除活动"
+  @handler del 
+  delete /(activityDelReq) returns(BaseResp)
+}
+

@@ -1,0 +1,107 @@
+#服务配置
+ServerConfig:
+  RootPath: ""
+  Domain: localhost
+  Mode: Dev # default=prod, dev|Dev|Prod|prod
+  Debug: true
+#静态资源服务配置
+StaticConfig:
+  Domain: localhost
+  Root:
+    Path: public
+    Upload:
+      Path: upload
+      Images:
+        Path: images
+        Avatar:
+          Path: avatar
+      Collect:
+        Path: collect
+    Static:
+      Path: static
+      Js:
+        Path: js
+      Css:
+        Path: css
+      Images:
+        Path: images
+      Svg:
+        Path: svg
+      Json:
+        Path: json
+      Txt:
+        Path: txt
+#验证码配置
+Captcha:
+  KeyLong: 6
+  ImgWidth: 240
+  ImgHeight: 80
+#jwt配置
+JWT:
+  AccessSecret: licat233333333
+  AccessExpire: 86400
+  BufferTime: 3600
+  Issuer: licat
+#casbin配置
+Casbin: 
+  TableName: casbin_rule
+  ModelPath: deploy/casbin/rbac_with_domains_model.conf
+#Mysql配置
+Mysql:
+  DataSource: luck_draw:r5dWEtetr7ncrdiy@tcp(127.0.0.1:3306)/luck_draw?parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai
+  Host: 127.0.0.1
+  Port: 3306
+  Params: parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai
+  Dbname: luck_draw
+  Username: luck_draw
+  Password: r5dWEtetr7ncrdiy
+  MaxIdleConns: 0
+  MaxOpenConns: 0
+  LogMode: "error"  #Gorm全局日志级别: silent|error|warn|info(默认)
+  LogZap: true
+Redis:
+  DB: 0
+  Addr: 127.0.0.1:6379
+  Password:
+  Type: node
+Cache:
+  Redis: 
+    - Host: 127.0.0.1:6379
+      Pass: ""
+      Type: node
+Cookie:
+  Expire: 86400
+  Path: "/"
+  Domain: "localhost"
+Session:
+  Name: GOSESSION
+  Type: file
+  Store: ""
+  Expire: 86400
+  Prefix: go
+Zap:
+  Level: error
+  Format: console  # 输出格式：json | console(默认)
+  Prefix: zap_
+  Director: logs
+  ShowLine: true
+  EncodeLevel: LowercaseColorLevelEncoder
+  StacktraceKey: stacktrace
+  LogInConsole: true
+Email: 
+  Username: "licat233@qq.com"
+  Secret: "myfppwmqfkombffh"
+  Host: smtp.qq.com
+  Port: 465
+  Subject: workbench系统通知
+  Receiver: 
+    - "1697470538@qq.com"
+CORS:
+  Mode: Dev  #cors模式：Dev | Pro
+  Whitelist:
+    - AllowOrigin: ‘*’
+      AllowMethods: ‘*’
+      AllowHeaders: content-type
+      ExposeHeaders: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
+      AllowCredentials: true
+

@@ -1,0 +1,27 @@
+Name: admin-api
+Host: 0.0.0.0
+Port: 6006
+
+Mysql:
+  DataSource: luck_draw:r5dWEtetr7ncrdiy@tcp(127.0.0.1:3306)/luck_draw?parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai
+
+JwtAuth:
+  AccessSecret: nA0eH4jC1aF0vC5eP0nH0lC1cB0aE8aQ0cI5
+  AccessExpire: 86400
+
+Log:
+  Level: error
+  Mode: file
+
+Debug: false
+
+CaptchaRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: captcha.rpc
+AdminRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: admin.rpc

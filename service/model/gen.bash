@@ -1,0 +1,1 @@
+goctl model mysql datasource -url="luck_draw:r5dWEtetr7ncrdiy@tcp(127.0.0.1:3306)/luck_draw" -table="*"  -dir='.' -cache=true -style goZero

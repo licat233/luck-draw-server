@@ -1,0 +1,90 @@
+info(
+	title: "验证码"
+	author: "licat"
+	email: "1697470538@qq.com"
+	version: "v1"
+)
+//规范返回格式
+type BaseResp {
+	Success bool        `json:"success"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
+	//如果是失败响应，附带trace信息
+	Trace string `json:"trace∂"`
+}
+
+//--------captcha----------
+type CaptchaBgColor {
+	R uint8 `json:"R,optional,default=254,range=[0:254]"`
+	G uint8 `json:"G,optional,default=254,range=[0:254]"`
+	B uint8 `json:"B,optional,default=254,range=[0:254]"`
+	A uint8 `json:"A,optional,default=254,range=[0:254]"`
+}
+type CaptchaReq {
+	//Height png height in pixel.
+	Height int `json:"height,optional,default=60"`
+
+	// Width Captcha png width in pixel.
+	Width int `json:"width,optional,default=200"`
+
+	//BgColor captcha image background color (optional)
+	BgColor CaptchaBgColor `json:"BgColor"`
+}
+type EmailCaptchaReq {
+	Email string `json:"email"` //接收验证码的邮箱地址
+}
+type EmailCaptchaResp {
+	Success   bool   `json:"success"`
+	CaptchaId string `json:"captcha_id"`
+	ExpiresAt int64  `json:"expires_at"`
+}
+type EmailCaptchaVerifyReq {
+	Email     string `json:"email"`
+	CaptchaId string `json:"captcha_id"`
+	Solution  string `json:"solution"`
+}
+
+type CaptchaInfo {
+	CaptchaId   string `json:"captcha_id"`   //验证码Key
+	Base64Image string `json:"base64_image"` //base46图片
+}
+type ProcessCaptchaReq {
+	CaptchaId string `json:"captcha_id"`
+	Solution  string `json:"solution"`
+}
+//--------end captcha----------
+
+@server(
+	prefix: /v1/api/captcha
+)
+service captcha-api {
+	@doc(
+		summary: "获取数学验证码"
+	)
+	@handler mathCaptcha
+	post /math(CaptchaReq) returns(BaseResp)
+	
+	@doc(
+		summary: "验证码图片"
+	)
+	@handler showCaptcha
+	get /show
+	
+	@doc(
+		summary: "验证码校验"
+	)
+	@handler processCaptcha
+	post /process(ProcessCaptchaReq) returns(BaseResp)
+	
+	@doc(
+		summary: "获取发送邮箱验证码"
+	)
+	@handler emailCaptcha
+	post /email(EmailCaptchaReq) returns(BaseResp)
+	
+	@doc(
+		summary: "邮箱验证码校验"
+	)
+	@handler emailCaptchaVerify
+	post /email/process (EmailCaptchaVerifyReq) returns(EmailCaptchaResp)
+}

@@ -1,0 +1,39 @@
+Name: luckdraw-mq
+Host: 0.0.0.0
+Port: 6007
+
+Debug: false
+
+Log:
+  ServiceName: luckdraw-mq
+  Level: error
+  Mode: file
+
+Mysql:
+  DataSource: luck_draw:r5dWEtetr7ncrdiy@tcp(127.0.0.1:3306)/luck_draw?parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai
+
+Redis:
+  Host: 127.0.0.1:6379
+  Pass:
+  Type: node
+
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass:
+    Type: node
+
+LuckdrawRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: luckdraw.rpc
+
+GoodluckConf:
+    Name: GoodluckStatus
+    Brokers:
+      - kafka:1
+    Group: goodluck-group
+    Topic: goodluck-topic
+    Offset: first
+    Consumers: 1
+    Processors: 1

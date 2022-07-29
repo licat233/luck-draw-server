@@ -1,0 +1,366 @@
+syntax = "proto3";
+
+package admin_proto;
+
+option go_package = "./admin_pb";
+
+message Activity {
+  int64   id = 1;
+  string uuid = 2;
+  string name = 3;
+  int64 project_id = 4;
+  bool status = 5; //活动状态，是否在举办，默认关闭，需手动开启
+  int32 pattern = 6; //方案: 0私密的，1公开的
+  int64 max_count = 7; //最大抽奖次数：-1表示无限制，0表示不可抽奖
+  int64 max_prizes = 8; //最大领奖数:  -1表示无限制，0表示不可领奖
+  int64 start_time = 9; //活动开始时间
+  int64 end_time = 10; //活动结束时间
+}
+
+message Adminer {
+  int64   id = 1;
+  string uuid = 2;
+  string name = 3;
+  string passport = 4;
+  string password = 5;
+  string email = 6;
+  int64 status = 7;
+  int64 is_super_admin = 8;
+  int64 login_count = 9;
+  int64 last_login = 10;
+}
+
+message Lucker {
+  int64   id = 1;
+  string uuid = 2;
+  int64 user_id = 3;
+  int64 prizes_pool_id = 4;
+  int32 status = 5;
+  int64 luck_date = 6;
+  string ip = 7;
+}
+
+message Prize {
+  int64 id = 1;
+  string uuid = 2;
+  string name = 3;
+  string image = 4;
+  double price = 5;
+  int32 status = 6;
+}
+
+message PrizesPool {
+  int64   id = 1;
+  string uuid = 2;
+  int64 activity_id = 3;
+  int64 prize_id = 4;
+  int64 luck_value = 5;
+  int32 status = 6;
+  string grade_name = 7;
+  bool is_win = 8;
+  int64 number = 9;
+  int64 remain = 10;
+}
+
+message Project {
+  int64 id = 1;
+  string uuid = 2;
+  string name = 3;
+  int32 status = 4;
+}
+
+message User {
+  int64 id = 1;
+  string uuid = 2;
+  string passport = 3;
+  string email = 4;
+  string phone = 5;
+  string name = 6;
+  string address = 7;
+  int64 score = 8;
+  int32 status = 9;
+}
+
+message UsersPool {
+  int64   id = 1;
+  string uuid = 2;
+  int64 activity_id = 3;
+  int64 user_id = 4;
+  int32 status = 5;
+  int64 score = 6;
+}
+
+message Policy {
+  string sub = 1;
+  string dom = 2;
+  string obj = 3;
+  string act = 4;
+}
+
+
+message LuckerDetail {
+  //幸运者信息
+  Lucker lucker = 1;
+
+  //奖品池信息
+  PrizesPool prizes_pool = 2;
+
+  //活动信息
+  Activity activity = 3;
+
+  //奖品信息
+  Prize prize = 4;
+}
+
+message JwtData {
+  int64 user_id = 1;
+  string ip = 2;
+  string platform = 3;
+}
+
+message JwtToken {
+  string access_token = 1;
+  int64 access_expire = 2;
+  int64 refresh_after = 3;
+}
+
+message GenerateTokenReq {
+  JwtData jwt_data = 1; //jwt数据
+  bool auto_login = 2; //自动登录，1天或者7天免登录
+}
+
+message GenerateTokenResp {
+  JwtToken jwt_token = 1;
+}
+
+message LoginReq {
+  string passport = 1;
+  string password = 2;
+  bool auto_login = 3; //自动登录，1天或者7天免登录
+  JwtData jwt_data = 4; //登录需要提供jwt数据
+}
+
+message LoginResp {
+  JwtToken jwt_token = 2;
+}
+
+message LoginByEmailReq {
+  string email = 1;
+  bool auto_login = 2; //自动登录，1天或者7天免登录
+  JwtData jwt_data = 3; //登录需要提供jwt数据
+}
+
+message LogoutReq {
+  string jwt_token = 1;
+  string platform = 2;
+  string ip = 3;
+}
+
+message LogoutResp {
+}
+
+message IsLogoutReq {
+  string jwt_token = 1;
+}
+
+message IsLogoutResp {
+  bool status = 1;
+}
+
+message ParseJwtTokenReq {
+  string jwt_token = 1;
+  string secret = 2;
+}
+
+message ParseJwtTokenResp {
+  map<string, string> claims = 1;
+}
+
+//-----------
+
+//列表数据请求
+message ListReq {
+  int64 page_size = 1;
+  int64 page = 2;
+}
+
+//单个数据请求
+message ItemReq{
+  int64 id = 1;
+}
+
+//状态响应
+message StatusResp {
+}
+
+//添加单挑数据响应
+message AddActivityResp{
+  Activity activity = 1;
+}
+
+message AddAdminerResp{
+  Adminer adminer = 1;
+}
+
+message AddLuckerResp{
+  Lucker lucker = 1;
+}
+
+message AddPrizeResp{
+  Prize prize = 1;
+}
+
+message AddPrizesPoolResp{
+  PrizesPool prizes_pool = 1;
+}
+
+message AddProjectResp{
+  Project project = 1;
+}
+
+message AddUserResp{
+  User user = 1;
+}
+
+message AddUsersPoolResp{
+  UsersPool users_pool = 1;
+}
+
+//获取单挑数据响应
+message GetActivityResp{
+  Activity activity = 1;
+}
+
+message GetAdminerResp{
+  Adminer adminer = 1;
+}
+
+message GetLuckerResp{
+  Lucker lucker = 1;
+}
+
+message GetPrizeResp{
+  Prize prize = 1;
+}
+
+message GetPrizesPoolResp{
+  PrizesPool prizes_pool = 1;
+}
+
+message GetProjectResp{
+  Project project = 1;
+}
+
+message GetUserResp{
+  User user = 1;
+}
+
+message GetUsersPoolResp{
+  UsersPool users_pool = 1;
+}
+
+//多条数据响应
+message GetActivityListResp {
+  repeated Activity data = 1;
+  int64 total = 2;
+}
+
+message GetAdminerListResp {
+  repeated Adminer data = 1;
+  int64 total = 2;
+}
+
+message GetLuckerListResp {
+  repeated Lucker data = 1;
+  int64 total = 2;
+}
+
+message GetPrizeListResp {
+  repeated Prize data = 1;
+  int64 total = 2;
+}
+
+message GetPrizesPoolListResp {
+  repeated PrizesPool data = 1;
+  int64 total = 2;
+}
+
+message GetProjectListResp {
+  repeated Project data = 1;
+  int64 total = 2;
+}
+
+message GetUserListResp {
+  repeated User data = 1;
+  int64 total = 2;
+}
+
+message GetUsersPoolListResp {
+  repeated UsersPool data = 1;
+  int64 total = 2;
+}
+
+
+service Admin {
+  //生产token
+  rpc GenerateToken (GenerateTokenReq) returns (GenerateTokenResp);
+  //账号登录
+  rpc Login (LoginReq) returns (LoginResp);
+  //邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题
+  rpc LoginByEmail (LoginByEmailReq) returns (LoginResp);
+  //注销登录
+  rpc Logout (LogoutReq) returns (LogoutResp);
+  //是否已经注销
+  rpc IsLogout (IsLogoutReq) returns (IsLogoutResp);
+  //解析 jwtToken, 返回原生error
+  rpc ParseJwtToken (ParseJwtTokenReq) returns (ParseJwtTokenResp);
+
+  rpc GetActivityList (ListReq) returns (GetActivityListResp);
+  rpc GetActivity (ItemReq) returns (GetActivityResp);
+  rpc AddActivity (Activity) returns (AddActivityResp);
+  rpc PutActivity (Activity) returns (StatusResp);
+  rpc DelActivity (ItemReq) returns (StatusResp);
+
+  rpc GetAdminerList (ListReq) returns (GetAdminerListResp);
+  rpc GetAdminer (ItemReq) returns (GetAdminerResp);
+  rpc AddAdminer (Adminer) returns (AddAdminerResp);
+  rpc PutAdminer (Adminer) returns (StatusResp);
+  rpc DelAdminer (ItemReq) returns (StatusResp);
+
+  rpc GetLuckerList (ListReq) returns (GetLuckerListResp);
+  rpc GetLucker (ItemReq) returns (GetLuckerResp);
+  rpc AddLucker (Lucker) returns (AddLuckerResp);
+  rpc PutLucker (Lucker) returns (StatusResp);
+  rpc DelLucker (ItemReq) returns (StatusResp);
+
+  rpc GetPrizeList (ListReq) returns (GetPrizeListResp);
+  rpc GetPrize (ItemReq) returns (GetPrizeResp);
+  rpc AddPrize (Prize) returns (AddPrizeResp);
+  rpc PutPrize (Prize) returns (StatusResp);
+  rpc DelPrize (ItemReq) returns (StatusResp);
+
+  rpc GetPrizesPoolList (ListReq) returns (GetPrizesPoolListResp);
+  rpc GetPrizesPool (ItemReq) returns (GetPrizesPoolResp);
+  rpc AddPrizesPool (PrizesPool) returns (AddPrizesPoolResp);
+  rpc PutPrizesPool (PrizesPool) returns (StatusResp);
+  rpc DelPrizesPool (ItemReq) returns (StatusResp);
+
+  rpc GetProjectList (ListReq) returns (GetProjectListResp);
+  rpc GetProject (ItemReq) returns (GetProjectResp);
+  rpc AddProject (Project) returns (AddProjectResp);
+  rpc PutProject (Project) returns (StatusResp);
+  rpc DelProject (ItemReq) returns (StatusResp);
+
+  rpc GetUserList (ListReq) returns (GetUserListResp);
+  rpc GetUser (ItemReq) returns (GetUserResp);
+  rpc AddUser (User) returns (AddUserResp);
+  rpc PutUser (User) returns (StatusResp);
+  rpc DelUser (ItemReq) returns (StatusResp);
+
+  rpc GetUsersPoolList (ListReq) returns (GetUsersPoolListResp);
+  rpc GetUsersPool (ItemReq) returns (GetUsersPoolResp);
+  rpc AddUsersPool (UsersPool) returns (AddUsersPoolResp);
+  rpc PutUsersPool (UsersPool) returns (StatusResp);
+  rpc DelUsersPool (ItemReq) returns (StatusResp);
+}
+

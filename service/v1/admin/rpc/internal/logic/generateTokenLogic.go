@@ -1,0 +1,63 @@
+package logic
+
+import (
+	"context"
+	"fmt"
+	"luck-draw/service/v1/admin/rpc/admin_pb"
+	"luck-draw/service/v1/admin/rpc/internal/svc"
+	"time"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/zeromicro/go-zero/core/logx"
+	"luck-draw/common/ctxdata"
+	"luck-draw/common/errorx"
+	"luck-draw/common/jwtx"
+)
+
+type GenerateTokenLogic struct {
+	ctx    context.Context
+	svcCtx *svc.ServiceContext
+	logx.Logger
+}
+
+func NewGenerateTokenLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GenerateTokenLogic {
+	return &GenerateTokenLogic{
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
+	}
+}
+
+// 生产token
+func (l *GenerateTokenLogic) GenerateToken(in *admin_pb.GenerateTokenReq) (*admin_pb.GenerateTokenResp, error) {
+	if in.JwtData == nil {
+		return nil, errorx.ErrEmptyParam
+	}
+	now := time.Now().Unix()
+	accessExpire := l.svcCtx.Config.JwtAuth.AccessExpire
+	if in.AutoLogin {
+		accessExpire = 86400 * 7 //7天免登录
+	}
+	accessToken, err := l.getJwtToken(l.svcCtx.Config.JwtAuth.AccessSecret, now, accessExpire, in.JwtData)
+	if err != nil {
+		return nil, errorx.InternalError(fmt.Errorf("GenerateToken getJwtToken(l.svcCtx.Config.JwtAuth.AccessSecret, now, accessExpire, in.UserId) error: %v", err))
+	}
+
+	return &admin_pb.GenerateTokenResp{
+		JwtToken: &admin_pb.JwtToken{
+			AccessToken:  accessToken,
+			AccessExpire: now + accessExpire,
+			RefreshAfter: now + accessExpire/2,
+		},
+	}, nil
+}
+
+func (l *GenerateTokenLogic) getJwtToken(secret string, now, expire int64, data *admin_pb.JwtData) (string, error) {
+	claims := make(jwt.MapClaims)
+	claims["exp"] = now + expire
+	claims["iat"] = now
+	claims[ctxdata.CtxKeyJwtUserId] = data.UserId
+	claims[ctxdata.CtxKeyJwtIp] = data.Ip
+	claims[ctxdata.CtxKeyJwtPlatform] = data.Platform
+	return jwtx.CreateToken(claims, secret)
+}

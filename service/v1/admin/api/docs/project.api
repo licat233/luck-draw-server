@@ -1,0 +1,50 @@
+syntax = "v1"
+
+type projectGetReq {
+	Id int64 `json:"id"`
+}
+
+type projectAddReq {
+	Name       string       `json:"name"`        // 项目名称
+	Status     int64        `json:"status,default=0"`      // 项目状态
+}
+
+type projectPutReq {  
+	Id         int64        `json:"id"`          // 表主键
+	Uuid       string    `json:"uuid"`        // 唯一识别码
+	Name       string       `json:"name"`        // 项目名称
+	Status     int64        `json:"status,default=0"`      // 项目状态
+}
+
+type projectDelReq {
+	Id int64 `json:"id"`
+}
+
+@server(
+	jwt: JwtAuth
+	group: project
+	middleware: JwtMiddleware
+    prefix: /v1/api/admin/project
+)
+service admin-api {	
+	@doc "获取项目列表"
+	@handler List
+	get /list(ListReq) returns(BaseResp)
+
+	@doc "获取项目信息"
+	@handler info 
+	get /(projectGetReq) returns(BaseResp)
+
+    @doc "添加项目"
+	@handler add 
+	post /(projectAddReq) returns(BaseResp)
+
+    @doc "编辑项目"
+	@handler edit 
+	put /(projectPutReq) returns(BaseResp)
+
+    @doc "删除项目"
+	@handler del 
+	delete /(projectDelReq) returns(BaseResp)
+}
+

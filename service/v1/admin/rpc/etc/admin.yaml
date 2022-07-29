@@ -1,0 +1,27 @@
+Name: admin.rpc
+ListenOn: 127.0.0.1:6005
+
+Etcd:
+  Hosts:
+    - 127.0.0.1:2379
+  Key: admin.rpc
+Log:
+  Level: error
+  Mode: file
+
+Debug: false
+
+JwtAuth:
+  AccessSecret: nA0eH4jC1aF0vC5eP0nH0lC1cB0aE8aQ0cI5
+  AccessExpire: 86400
+
+Mysql:
+  DataSource: luck_draw:r5dWEtetr7ncrdiy@tcp(127.0.0.1:3306)/luck_draw?parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai
+Redis:
+  Host: 127.0.0.1:6379
+  Pass: 
+  Type: node
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass: 
+    Type: node
