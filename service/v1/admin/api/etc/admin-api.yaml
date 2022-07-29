@@ -13,7 +13,7 @@ Log:
   Level: error
   Mode: file
 
-Debug: false
+Debug: true
 
 CaptchaRpc:
   Etcd:

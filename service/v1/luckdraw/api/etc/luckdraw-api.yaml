@@ -1,7 +1,7 @@
 Name: luckdraw-api
 Host: 0.0.0.0
 Port: 7002
-Debug: false
+Debug: true
 Log:
   Level: error
   Mode: file

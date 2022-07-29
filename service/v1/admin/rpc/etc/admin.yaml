@@ -9,7 +9,7 @@ Log:
   Level: error
   Mode: file
 
-Debug: false
+Debug: true
 
 JwtAuth:
   AccessSecret: nA0eH4jC1aF0vC5eP0nH0lC1cB0aE8aQ0cI5

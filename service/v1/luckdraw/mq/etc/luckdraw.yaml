@@ -2,7 +2,7 @@ Name: luckdraw-mq
 Host: 0.0.0.0
 Port: 8002
 
-Debug: false
+Debug: true
 
 Log:
   ServiceName: luckdraw-mq
