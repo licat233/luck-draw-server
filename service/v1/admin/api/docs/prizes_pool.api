@@ -34,7 +34,7 @@ type PrizesPoolDelReq {
 
 @server(
 	jwt: JwtAuth
-	group: PrizesPool
+	group: prizesPool
 	middleware: JwtMiddleware
     prefix: /v1/api/admin/PrizesPool
 )

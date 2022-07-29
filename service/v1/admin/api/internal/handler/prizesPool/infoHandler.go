@@ -1,12 +1,12 @@
-package PrizesPool
+package prizesPool
 
 import (
-	"luck-draw/service/v1/admin/api/internal/logic/PrizesPool"
-	"luck-draw/service/v1/admin/api/internal/svc"
-	"luck-draw/service/v1/admin/api/internal/types"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
+	"luck-draw/service/v1/admin/api/internal/logic/prizesPool"
+	"luck-draw/service/v1/admin/api/internal/svc"
+	"luck-draw/service/v1/admin/api/internal/types"
 )
 
 func InfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
@@ -17,7 +17,7 @@ func InfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := PrizesPool.NewInfoLogic(r.Context(), svcCtx)
+		l := prizesPool.NewInfoLogic(r.Context(), svcCtx)
 		resp, err := l.Info(&req)
 		if err != nil {
 			httpx.Error(w, err)
