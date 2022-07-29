@@ -35,8 +35,8 @@ func main() {
 
 	server.AddRoute(rest.Route{
 		Method:  http.MethodGet,
-		Path:    "/v1/captcha/static/:file",
-		Handler: http.StripPrefix("/v1/captcha/static/", http.FileServer(http.Dir("static"))).ServeHTTP,
+		Path:    "/v1/api/captcha/static/:file",
+		Handler: http.StripPrefix("/v1/api/captcha/static/", http.FileServer(http.Dir("static"))).ServeHTTP,
 	})
 
 	ctx := svc.NewServiceContext(c)

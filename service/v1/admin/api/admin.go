@@ -35,8 +35,8 @@ func main() {
 
 	server.AddRoute(rest.Route{
 		Method:  http.MethodGet,
-		Path:    "/v1/admin/static/:file",
-		Handler: http.StripPrefix("/v1/admin/static/", http.FileServer(http.Dir("static"))).ServeHTTP,
+		Path:    "/v1/api/admin/static/:file",
+		Handler: http.StripPrefix("/v1/api/admin/static/", http.FileServer(http.Dir("static"))).ServeHTTP,
 	})
 
 	ctx := svc.NewServiceContext(c)

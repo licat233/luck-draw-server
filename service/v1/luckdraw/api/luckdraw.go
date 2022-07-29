@@ -35,8 +35,8 @@ func main() {
 
 	server.AddRoute(rest.Route{
 		Method:  http.MethodGet,
-		Path:    "/v1/luckdraw/static/:file",
-		Handler: http.StripPrefix("/v1/luckdraw/static/", http.FileServer(http.Dir("static"))).ServeHTTP,
+		Path:    "/v1/api/luckdraw/static/:file",
+		Handler: http.StripPrefix("/v1/api/luckdraw/static/", http.FileServer(http.Dir("static"))).ServeHTTP,
 	})
 
 	ctx := svc.NewServiceContext(c)
