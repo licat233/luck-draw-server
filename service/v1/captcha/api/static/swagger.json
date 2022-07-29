@@ -4,8 +4,6 @@
     "title": "验证码",
     "version": "v1"
   },
-  "host": "127.0.0.1",
-  "basePath": "/",
   "schemes": [
     "http",
     "https"
@@ -17,7 +15,7 @@
     "application/json"
   ],
   "paths": {
-    "/email": {
+    "/v1/api/captcha/email": {
       "post": {
         "summary": "获取发送邮箱验证码",
         "operationId": "emailCaptcha",
@@ -39,12 +37,13 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "captcha-api"
         ]
       }
     },
-    "/email/process": {
+    "/v1/api/captcha/email/process": {
       "post": {
         "summary": "邮箱验证码校验",
         "operationId": "emailCaptchaVerify",
@@ -66,12 +65,13 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "captcha-api"
         ]
       }
     },
-    "/math": {
+    "/v1/api/captcha/math": {
       "post": {
         "summary": "获取数学验证码",
         "operationId": "mathCaptcha",
@@ -93,12 +93,13 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "captcha-api"
         ]
       }
     },
-    "/process": {
+    "/v1/api/captcha/process": {
       "post": {
         "summary": "验证码校验",
         "operationId": "processCaptcha",
@@ -120,12 +121,13 @@
             }
           }
         ],
+        "requestBody": {},
         "tags": [
           "captcha-api"
         ]
       }
     },
-    "/show": {
+    "/v1/api/captcha/show": {
       "get": {
         "summary": "验证码图片",
         "operationId": "showCaptcha",
@@ -135,6 +137,7 @@
             "schema": {}
           }
         },
+        "requestBody": {},
         "tags": [
           "captcha-api"
         ]
@@ -155,16 +158,14 @@
         "data": {
           "type": "object"
         },
-        "trace∂": {
+        "trace": {
           "type": "string"
         }
       },
       "title": "BaseResp",
       "required": [
         "success",
-        "message",
-        "data",
-        "trace∂"
+        "message"
       ]
     },
     "CaptchaBgColor": {

@@ -8,9 +8,9 @@ info(
 type BaseResp {
 	Success bool        `json:"success"`
 	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+	Data    interface{} `json:"data,optional"`
 	//如果是失败响应，附带trace信息
-	Trace string `json:"trace∂"`
+	Trace string `json:"trace,optional"`
 }
 
 //--------captcha----------
