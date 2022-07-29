@@ -17,7 +17,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/api/luckdraw/goodluck": {
+    "/goodluck": {
       "post": {
         "summary": "抽取奖品",
         "operationId": "goodluck",
@@ -39,13 +39,12 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "luckdraw-api"
         ]
       }
     },
-    "/v1/api/luckdraw/identify": {
+    "/identify": {
       "post": {
         "summary": "抽奖者身份验证",
         "operationId": "identify",
@@ -67,13 +66,12 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "luckdraw-api"
         ]
       }
     },
-    "/v1/api/luckdraw/luckerList": {
+    "/luckerList": {
       "post": {
         "summary": "获取自己在某活动的中奖名单",
         "operationId": "luckerList",
@@ -95,13 +93,12 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "luckdraw-api"
         ]
       }
     },
-    "/v1/api/luckdraw/prizes": {
+    "/prizes": {
       "post": {
         "summary": "获取活动奖品列表",
         "operationId": "prizes",
@@ -123,13 +120,12 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "luckdraw-api"
         ]
       }
     },
-    "/v1/api/luckdraw/search": {
+    "/search": {
       "post": {
         "summary": "查询中奖信息",
         "operationId": "search",
@@ -151,13 +147,12 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "luckdraw-api"
         ]
       }
     },
-    "/v1/api/luckdraw/selectPrizes": {
+    "/selectPrizes": {
       "post": {
         "summary": "挑选奖品",
         "operationId": "selectPrizes",
@@ -179,13 +174,12 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "luckdraw-api"
         ]
       }
     },
-    "/v1/api/luckdraw/{shortlink}": {
+    "/{shortlink}": {
       "get": {
         "summary": "展现抽奖页面",
         "operationId": "luckView",
@@ -203,7 +197,6 @@
             "type": "string"
           }
         ],
-        "requestBody": {},
         "tags": [
           "luckdraw-api"
         ]

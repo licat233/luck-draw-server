@@ -17,1505 +17,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/api/admin/PrizesPool/": {
-      "get": {
-        "summary": "获取奖品池信息",
-        "operationId": "info",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "PrizesPool"
-        ]
-      },
-      "delete": {
-        "summary": "删除奖品池",
-        "operationId": "del",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/PrizesPoolDelReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "PrizesPool"
-        ]
-      },
-      "post": {
-        "summary": "添加奖品池",
-        "operationId": "add",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/PrizesPoolAddReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "PrizesPool"
-        ]
-      },
-      "put": {
-        "summary": "编辑奖品池",
-        "operationId": "edit",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/PrizesPoolPutReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "PrizesPool"
-        ]
-      }
-    },
-    "/v1/api/admin/PrizesPool/list": {
-      "get": {
-        "summary": "获取奖品池列表",
-        "operationId": "List",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "pageSize",
-            "description": "页面大小",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "20"
-          },
-          {
-            "name": "current",
-            "description": "当前页码",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "PrizesPool"
-        ]
-      }
-    },
-    "/v1/api/admin/activity/": {
-      "get": {
-        "summary": "获取活动信息",
-        "operationId": "info",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "activity"
-        ]
-      },
-      "delete": {
-        "summary": "删除活动",
-        "operationId": "del",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/activityDelReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "activity"
-        ]
-      },
-      "post": {
-        "summary": "添加活动",
-        "operationId": "add",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/activityAddReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "activity"
-        ]
-      },
-      "put": {
-        "summary": "编辑活动",
-        "operationId": "edit",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/activityPutReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "activity"
-        ]
-      }
-    },
-    "/v1/api/admin/activity/list": {
-      "get": {
-        "summary": "获取活动列表",
-        "operationId": "List",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "pageSize",
-            "description": "页面大小",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "20"
-          },
-          {
-            "name": "current",
-            "description": "当前页码",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "activity"
-        ]
-      }
-    },
-    "/v1/api/admin/adminer/": {
-      "get": {
-        "summary": "获取管理员信息",
-        "operationId": "info",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "adminer"
-        ]
-      },
-      "delete": {
-        "summary": "删除管理员",
-        "operationId": "del",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/adminerDelReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "adminer"
-        ]
-      },
-      "post": {
-        "summary": "添加管理员",
-        "operationId": "add",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/adminerAddReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "adminer"
-        ]
-      },
-      "put": {
-        "summary": "编辑管理员",
-        "operationId": "edit",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/adminerPutReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "adminer"
-        ]
-      }
-    },
-    "/v1/api/admin/adminer/list": {
-      "get": {
-        "summary": "获取管理员列表",
-        "operationId": "List",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "pageSize",
-            "description": "页面大小",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "20"
-          },
-          {
-            "name": "current",
-            "description": "当前页码",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "adminer"
-        ]
-      }
-    },
-    "/v1/api/admin/adminer/modify": {
-      "post": {
-        "summary": "管理员修改自己的账号信息",
-        "operationId": "modify",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/adminerModifyReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "adminer"
-        ]
-      }
-    },
-    "/v1/api/admin/login": {
-      "post": {
-        "summary": "登录",
-        "operationId": "login",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "管理员登陆，可用账号、手机号、邮箱登录，(暂未实现验证码登录功能)",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/loginReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "admin-api"
-        ]
-      }
-    },
-    "/v1/api/admin/loginByEmail": {
-      "post": {
-        "summary": "邮箱登录",
-        "operationId": "loginByEmail",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/loginByEmailReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "admin-api"
-        ]
-      }
-    },
-    "/v1/api/admin/logout": {
-      "post": {
-        "summary": "注销",
-        "operationId": "logout",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "requestBody": {},
-        "tags": [
-          "admin-api"
-        ]
-      }
-    },
-    "/v1/api/admin/lucker/": {
-      "get": {
-        "summary": "获取抽奖者信息",
-        "operationId": "info",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "lucker"
-        ]
-      },
-      "delete": {
-        "summary": "删除抽奖者",
-        "operationId": "del",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/luckerDelReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "lucker"
-        ]
-      },
-      "post": {
-        "summary": "添加抽奖者",
-        "operationId": "add",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/luckerAddReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "lucker"
-        ]
-      },
-      "put": {
-        "summary": "编辑抽奖者",
-        "operationId": "edit",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/luckerPutReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "lucker"
-        ]
-      }
-    },
-    "/v1/api/admin/lucker/list": {
-      "get": {
-        "summary": "获取抽奖者列表",
-        "operationId": "List",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "pageSize",
-            "description": "页面大小",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "20"
-          },
-          {
-            "name": "current",
-            "description": "当前页码",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "lucker"
-        ]
-      }
-    },
-    "/v1/api/admin/prize/": {
-      "get": {
-        "summary": "获取奖品信息",
-        "operationId": "info",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "prize"
-        ]
-      },
-      "delete": {
-        "summary": "删除奖品",
-        "operationId": "del",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/prizeDelReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "prize"
-        ]
-      },
-      "post": {
-        "summary": "添加奖品",
-        "operationId": "add",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/prizeAddReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "prize"
-        ]
-      },
-      "put": {
-        "summary": "编辑奖品",
-        "operationId": "edit",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/prizePutReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "prize"
-        ]
-      }
-    },
-    "/v1/api/admin/prize/list": {
-      "get": {
-        "summary": "获取奖品列表",
-        "operationId": "List",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "pageSize",
-            "description": "页面大小",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "20"
-          },
-          {
-            "name": "current",
-            "description": "当前页码",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "prize"
-        ]
-      }
-    },
-    "/v1/api/admin/project/": {
-      "get": {
-        "summary": "获取项目信息",
-        "operationId": "info",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "project"
-        ]
-      },
-      "delete": {
-        "summary": "删除项目",
-        "operationId": "del",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/projectDelReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "project"
-        ]
-      },
-      "post": {
-        "summary": "添加项目",
-        "operationId": "add",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/projectAddReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "project"
-        ]
-      },
-      "put": {
-        "summary": "编辑项目",
-        "operationId": "edit",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/projectPutReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "project"
-        ]
-      }
-    },
-    "/v1/api/admin/project/list": {
-      "get": {
-        "summary": "获取项目列表",
-        "operationId": "List",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "pageSize",
-            "description": "页面大小",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "20"
-          },
-          {
-            "name": "current",
-            "description": "当前页码",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "project"
-        ]
-      }
-    },
-    "/v1/api/admin/rbac/all-actions": {
-      "get": {
-        "summary": "获取当前策略中显示的操作列表",
-        "operationId": "getAllActions",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "requestBody": {},
-        "tags": [
-          "rbac"
-        ]
-      }
-    },
-    "/v1/api/admin/rbac/all-objects": {
-      "get": {
-        "summary": "获取当前策略中显示的 object 列表",
-        "operationId": "getAllObjects",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "requestBody": {},
-        "tags": [
-          "rbac"
-        ]
-      }
-    },
-    "/v1/api/admin/rbac/all-policies": {
-      "get": {
-        "summary": "获取策略中的所有授权规则",
-        "operationId": "getAllPolicy",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "requestBody": {},
-        "tags": [
-          "rbac"
-        ]
-      }
-    },
-    "/v1/api/admin/rbac/domain-users": {
-      "get": {
-        "summary": "将获得所有与该域相关联的用户",
-        "operationId": "getAllUsersByDomain",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "domain",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "rbac"
-        ]
-      }
-    },
-    "/v1/api/admin/rbac/permissions": {
-      "get": {
-        "summary": "获取用户在某域内的权限",
-        "operationId": "GetPermissionsForUserInDomain",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "sub",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "dom",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "rbac"
-        ]
-      }
-    },
-    "/v1/api/admin/rbac/policies": {
-      "get": {
-        "summary": "批量获取授权策略",
-        "operationId": "getPolicies",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "rules",
-            "in": "query",
-            "required": true,
-            "type": "invalid",
-            "format": "UNKNOWN"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "rbac"
-        ]
-      },
-      "delete": {
-        "summary": "批量删除授权规则",
-        "operationId": "delPolicies",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "策略批量请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/PoliciesReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "rbac"
-        ]
-      },
-      "post": {
-        "summary": "批量添加授权策略",
-        "operationId": "addPolicies",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "策略批量请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/PoliciesReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "rbac"
-        ]
-      },
-      "put": {
-        "summary": "批量修改授权规则",
-        "operationId": "putPolicies",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "策略批量请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/PoliciesReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "rbac"
-        ]
-      }
-    },
-    "/v1/api/admin/rbac/policy": {
-      "get": {
-        "summary": "获取授权策略",
-        "operationId": "getPolicy",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "sub",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "dom",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "obj",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "act",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "rbac"
-        ]
-      },
-      "delete": {
-        "summary": "删除授权规则",
-        "operationId": "delPolicy",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "策略请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/PolicyReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "rbac"
-        ]
-      },
-      "post": {
-        "summary": "添加授权策略",
-        "operationId": "addPolicy",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "策略请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/PolicyReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "rbac"
-        ]
-      },
-      "put": {
-        "summary": "修改授权规则",
-        "operationId": "putPolicy",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "策略请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/PolicyReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "rbac"
-        ]
-      }
-    },
-    "/v1/api/admin/user/": {
-      "get": {
-        "summary": "获取用户信息",
-        "operationId": "info",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "user"
-        ]
-      },
-      "delete": {
-        "summary": "删除用户",
-        "operationId": "del",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/userDelReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "user"
-        ]
-      },
-      "post": {
-        "summary": "添加用户",
-        "operationId": "add",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/userAddReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "user"
-        ]
-      },
-      "put": {
-        "summary": "编辑用户",
-        "operationId": "edit",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/userPutReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "user"
-        ]
-      }
-    },
-    "/v1/api/admin/user/list": {
-      "get": {
-        "summary": "获取用户列表",
-        "operationId": "List",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "pageSize",
-            "description": "页面大小",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "20"
-          },
-          {
-            "name": "current",
-            "description": "当前页码",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "user"
-        ]
-      }
-    },
-    "/v1/api/admin/usersPool/": {
+    "/": {
       "get": {
         "summary": "获取用户池信息",
         "operationId": "info",
@@ -1536,7 +38,6 @@
             "format": "int64"
           }
         ],
-        "requestBody": {},
         "tags": [
           "usersPool"
         ]
@@ -1562,7 +63,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "usersPool"
         ]
@@ -1588,7 +88,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "usersPool"
         ]
@@ -1614,13 +113,88 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "usersPool"
         ]
       }
     },
-    "/v1/api/admin/usersPool/list": {
+    "/all-actions": {
+      "get": {
+        "summary": "获取当前策略中显示的操作列表",
+        "operationId": "getAllActions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "tags": [
+          "rbac"
+        ]
+      }
+    },
+    "/all-objects": {
+      "get": {
+        "summary": "获取当前策略中显示的 object 列表",
+        "operationId": "getAllObjects",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "tags": [
+          "rbac"
+        ]
+      }
+    },
+    "/all-policies": {
+      "get": {
+        "summary": "获取策略中的所有授权规则",
+        "operationId": "getAllPolicy",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "tags": [
+          "rbac"
+        ]
+      }
+    },
+    "/domain-users": {
+      "get": {
+        "summary": "将获得所有与该域相关联的用户",
+        "operationId": "getAllUsersByDomain",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "rbac"
+        ]
+      }
+    },
+    "/list": {
       "get": {
         "summary": "获取用户池列表",
         "operationId": "List",
@@ -1659,9 +233,356 @@
             "type": "string"
           }
         ],
-        "requestBody": {},
         "tags": [
           "usersPool"
+        ]
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "登录",
+        "operationId": "login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/loginReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin-api"
+        ]
+      }
+    },
+    "/loginByEmail": {
+      "post": {
+        "summary": "邮箱登录",
+        "operationId": "loginByEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/loginByEmailReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin-api"
+        ]
+      }
+    },
+    "/logout": {
+      "post": {
+        "summary": "注销",
+        "operationId": "logout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "tags": [
+          "admin-api"
+        ]
+      }
+    },
+    "/modify": {
+      "post": {
+        "summary": "管理员修改自己的账号信息",
+        "operationId": "modify",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/adminerModifyReq"
+            }
+          }
+        ],
+        "tags": [
+          "adminer"
+        ]
+      }
+    },
+    "/permissions": {
+      "get": {
+        "summary": "获取用户在某域内的权限",
+        "operationId": "GetPermissionsForUserInDomain",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "sub",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "dom",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "rbac"
+        ]
+      }
+    },
+    "/policies": {
+      "get": {
+        "summary": "批量获取授权策略",
+        "operationId": "getPolicies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "rules",
+            "in": "query",
+            "required": true,
+            "type": "invalid",
+            "format": "UNKNOWN"
+          }
+        ],
+        "tags": [
+          "rbac"
+        ]
+      },
+      "delete": {
+        "summary": "批量删除授权规则",
+        "operationId": "delPolicies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PoliciesReq"
+            }
+          }
+        ],
+        "tags": [
+          "rbac"
+        ]
+      },
+      "post": {
+        "summary": "批量添加授权策略",
+        "operationId": "addPolicies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PoliciesReq"
+            }
+          }
+        ],
+        "tags": [
+          "rbac"
+        ]
+      },
+      "put": {
+        "summary": "批量修改授权规则",
+        "operationId": "putPolicies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PoliciesReq"
+            }
+          }
+        ],
+        "tags": [
+          "rbac"
+        ]
+      }
+    },
+    "/policy": {
+      "get": {
+        "summary": "获取授权策略",
+        "operationId": "getPolicy",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "sub",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "dom",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "act",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "rbac"
+        ]
+      },
+      "delete": {
+        "summary": "删除授权规则",
+        "operationId": "delPolicy",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PolicyReq"
+            }
+          }
+        ],
+        "tags": [
+          "rbac"
+        ]
+      },
+      "post": {
+        "summary": "添加授权策略",
+        "operationId": "addPolicy",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PolicyReq"
+            }
+          }
+        ],
+        "tags": [
+          "rbac"
+        ]
+      },
+      "put": {
+        "summary": "修改授权规则",
+        "operationId": "putPolicy",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PolicyReq"
+            }
+          }
+        ],
+        "tags": [
+          "rbac"
         ]
       }
     }

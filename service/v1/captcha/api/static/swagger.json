@@ -17,7 +17,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/api/captcha/email": {
+    "/email": {
       "post": {
         "summary": "获取发送邮箱验证码",
         "operationId": "emailCaptcha",
@@ -39,13 +39,12 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "captcha-api"
         ]
       }
     },
-    "/v1/api/captcha/email/process": {
+    "/email/process": {
       "post": {
         "summary": "邮箱验证码校验",
         "operationId": "emailCaptchaVerify",
@@ -67,13 +66,12 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "captcha-api"
         ]
       }
     },
-    "/v1/api/captcha/math": {
+    "/math": {
       "post": {
         "summary": "获取数学验证码",
         "operationId": "mathCaptcha",
@@ -95,13 +93,12 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "captcha-api"
         ]
       }
     },
-    "/v1/api/captcha/process": {
+    "/process": {
       "post": {
         "summary": "验证码校验",
         "operationId": "processCaptcha",
@@ -123,13 +120,12 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "captcha-api"
         ]
       }
     },
-    "/v1/api/captcha/show": {
+    "/show": {
       "get": {
         "summary": "验证码图片",
         "operationId": "showCaptcha",
@@ -139,7 +135,6 @@
             "schema": {}
           }
         },
-        "requestBody": {},
         "tags": [
           "captcha-api"
         ]
