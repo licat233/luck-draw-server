@@ -5,13 +5,12 @@ import (
 	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
+	model2 "luck-draw/service/v1/model"
 
+	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
 	"luck-draw/common/uniqueid"
 	"luck-draw/common/utils"
-	"luck-draw/service/model"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type AddLuckerLogic struct {
@@ -37,7 +36,7 @@ func (l *AddLuckerLogic) AddLucker(in *admin_pb.Lucker) (*admin_pb.AddLuckerResp
 	if err != nil {
 		return nil, errorx.ErrInvalidParam
 	}
-	data := &model.Lucker{
+	data := &model2.Lucker{
 		Uuid:         uniqueid.NewUUID(),
 		UserId:       in.UserId,
 		PrizesPoolId: in.PrizesPoolId,
@@ -55,10 +54,10 @@ func (l *AddLuckerLogic) AddLucker(in *admin_pb.Lucker) (*admin_pb.AddLuckerResp
 	}
 
 	lucker, err := l.svcCtx.LuckerModel.FindOne(l.ctx, id)
-	if err != nil && err != model.ErrNotFound {
+	if err != nil && err != model2.ErrNotFound {
 		return nil, errorx.InternalError(fmt.Errorf("AddLucker LuckerModel.FindOne(l.ctx, id) error, err:%v", err))
 	}
-	if err == model.ErrNotFound {
+	if err == model2.ErrNotFound {
 		return nil, errorx.InternalError(fmt.Errorf("AddLucker LuckerModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
 	}
 

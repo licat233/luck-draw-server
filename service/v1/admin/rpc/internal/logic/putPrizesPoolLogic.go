@@ -5,12 +5,11 @@ import (
 	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
-
-	"luck-draw/common/errorx"
-	"luck-draw/common/utils"
-	"luck-draw/service/model"
+	"luck-draw/service/v1/model"
 
 	"github.com/zeromicro/go-zero/core/logx"
+	"luck-draw/common/errorx"
+	"luck-draw/common/utils"
 )
 
 type PutPrizesPoolLogic struct {

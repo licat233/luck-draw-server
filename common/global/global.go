@@ -1,7 +1,7 @@
 package global
 
 import (
-	"luck-draw/service/model"
+	"luck-draw/service/v1/model"
 
 	"github.com/spf13/viper"
 	gzredisx "github.com/zeromicro/go-zero/core/stores/redis"

@@ -5,13 +5,12 @@ import (
 	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
+	model2 "luck-draw/service/v1/model"
 
+	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
 	"luck-draw/common/uniqueid"
 	"luck-draw/common/utils"
-	"luck-draw/service/model"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type AddActivityLogic struct {
@@ -41,7 +40,7 @@ func (l *AddActivityLogic) AddActivity(in *admin_pb.Activity) (*admin_pb.AddActi
 		return nil, errorx.ErrInvalidParam
 	}
 
-	data := &model.Activity{
+	data := &model2.Activity{
 		Uuid:      uniqueid.NewUUID(),
 		Name:      in.Name,
 		ProjectId: in.ProjectId,
@@ -62,10 +61,10 @@ func (l *AddActivityLogic) AddActivity(in *admin_pb.Activity) (*admin_pb.AddActi
 	}
 
 	activity, err := l.svcCtx.ActivityModel.FindOne(l.ctx, id)
-	if err != nil && err != model.ErrNotFound {
+	if err != nil && err != model2.ErrNotFound {
 		return nil, errorx.InternalError(fmt.Errorf("AddActivity ActivityModel.FindOne(l.ctx, id) error, err:%v", err))
 	}
-	if err == model.ErrNotFound {
+	if err == model2.ErrNotFound {
 		return nil, errorx.InternalError(fmt.Errorf("AddActivity ActivityModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
 	}
 

@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"luck-draw/service/v1/luckdraw/rpc/internal/svc"
 	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
-
-	"luck-draw/common/errorx"
-	"luck-draw/service/model"
+	"luck-draw/service/v1/model"
 
 	"github.com/zeromicro/go-zero/core/logx"
+	"luck-draw/common/errorx"
 )
 
 type GetActivePrizesLogic struct {

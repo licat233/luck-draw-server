@@ -5,12 +5,11 @@ import (
 	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
-
-	"luck-draw/common/errorx"
-	"luck-draw/common/uniqueid"
-	"luck-draw/service/model"
+	model2 "luck-draw/service/v1/model"
 
 	"github.com/zeromicro/go-zero/core/logx"
+	"luck-draw/common/errorx"
+	"luck-draw/common/uniqueid"
 )
 
 type AddProjectLogic struct {
@@ -32,7 +31,7 @@ func (l *AddProjectLogic) AddProject(in *admin_pb.Project) (*admin_pb.AddProject
 		return nil, errorx.ErrEmptyParam
 	}
 
-	data := &model.Project{
+	data := &model2.Project{
 		Uuid:   uniqueid.NewUUID(),
 		Name:   in.Name,
 		Status: int64(in.Status),
@@ -47,10 +46,10 @@ func (l *AddProjectLogic) AddProject(in *admin_pb.Project) (*admin_pb.AddProject
 	}
 
 	project, err := l.svcCtx.ProjectModel.FindOne(l.ctx, id)
-	if err != nil && err != model.ErrNotFound {
+	if err != nil && err != model2.ErrNotFound {
 		return nil, errorx.InternalError(fmt.Errorf("AddProject ProjectModel.FindOne(l.ctx, id) error, err:%v", err))
 	}
-	if err == model.ErrNotFound {
+	if err == model2.ErrNotFound {
 		return nil, errorx.InternalError(fmt.Errorf("AddProject ProjectModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
 	}
 

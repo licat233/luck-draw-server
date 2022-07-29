@@ -5,13 +5,12 @@ import (
 	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
+	model2 "luck-draw/service/v1/model"
 
+	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
 	"luck-draw/common/uniqueid"
 	"luck-draw/common/utils"
-	"luck-draw/service/model"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type AddPrizesPoolLogic struct {
@@ -33,7 +32,7 @@ func (l *AddPrizesPoolLogic) AddPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.A
 		return nil, errorx.ErrEmptyParam
 	}
 
-	data := &model.PrizesPool{
+	data := &model2.PrizesPool{
 		Uuid:       uniqueid.NewUUID(),
 		ActivityId: in.ActivityId,
 		PrizeId:    in.PrizeId,
@@ -54,10 +53,10 @@ func (l *AddPrizesPoolLogic) AddPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.A
 	}
 
 	prizesPool, err := l.svcCtx.PrizesPoolModel.FindOne(l.ctx, id)
-	if err != nil && err != model.ErrNotFound {
+	if err != nil && err != model2.ErrNotFound {
 		return nil, errorx.InternalError(fmt.Errorf("AddPrizesPool PrizesPoolModel.FindOne(l.ctx, id) error, err:%v", err))
 	}
-	if err == model.ErrNotFound {
+	if err == model2.ErrNotFound {
 		return nil, errorx.InternalError(fmt.Errorf("AddPrizesPool PrizesPoolModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
 	}
 

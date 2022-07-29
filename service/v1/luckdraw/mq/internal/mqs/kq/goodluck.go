@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"luck-draw/common/kqueue"
-	"luck-draw/service/model"
 	"luck-draw/service/v1/luckdraw/mq/internal/svc"
+	"luck-draw/service/v1/model"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

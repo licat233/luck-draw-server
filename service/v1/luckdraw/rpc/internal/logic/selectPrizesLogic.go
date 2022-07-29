@@ -6,12 +6,11 @@ import (
 	"fmt"
 	"luck-draw/service/v1/luckdraw/rpc/internal/svc"
 	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
-
-	"luck-draw/common/errorx"
-	"luck-draw/common/utils"
-	"luck-draw/service/model"
+	model2 "luck-draw/service/v1/model"
 
 	"github.com/zeromicro/go-zero/core/logx"
+	"luck-draw/common/errorx"
+	"luck-draw/common/utils"
 )
 
 type SelectPrizesLogic struct {
@@ -36,10 +35,10 @@ func (l *SelectPrizesLogic) SelectPrizes(in *luckdraw_pb.SelectPrizesReq) (*luck
 	}
 	//查询是否存在该活动
 	activity, err := l.svcCtx.ActivityModel.FindOne(l.ctx, in.ActivityId)
-	if err != nil && err != model.ErrNotFound {
+	if err != nil && err != model2.ErrNotFound {
 		return nil, errorx.InternalError(fmt.Errorf("SelectPrizes ActivityModel.FindOneByUUID err:%+v", err))
 	}
-	if err == model.ErrNotFound {
+	if err == model2.ErrNotFound {
 		return nil, errorx.ExternalError(errors.New("activity not found"))
 	}
 	if activity.Uuid != in.ActivityUuid {
@@ -48,18 +47,18 @@ func (l *SelectPrizesLogic) SelectPrizes(in *luckdraw_pb.SelectPrizesReq) (*luck
 
 	//取出中奖名单
 	luckerList, err := l.svcCtx.LuckerModel.FindByUserAndActivity(l.ctx, in.UserId, activity.Id)
-	if err != nil && err != model.ErrNotFound {
+	if err != nil && err != model2.ErrNotFound {
 		return nil, errorx.InternalError(fmt.Errorf("SelectPrizes LuckerModel.FindByUserAndActivity err:%+v", err))
 	}
-	if err == model.ErrNotFound {
+	if err == model2.ErrNotFound {
 		return nil, errorx.ExternalError(errors.New("lucker not found"))
 	}
 	//uuids去重
 	inUuidList := utils.RemoveDuplicatesForString(in.LuckerUuids)
 
 	//已领取的奖品
-	var selectedLuckerList []*model.Lucker   //已领取的奖品
-	var noSelectedLuckerList []*model.Lucker //未领取的奖品
+	var selectedLuckerList []*model2.Lucker   //已领取的奖品
+	var noSelectedLuckerList []*model2.Lucker //未领取的奖品
 	var mdUuidList []string
 	var selectedUuidList []string
 	for _, lucker := range luckerList {
@@ -107,10 +106,10 @@ func (l *SelectPrizesLogic) SelectPrizes(in *luckdraw_pb.SelectPrizesReq) (*luck
 	//如果领取的奖品已达到限额值，其它奖品则为弃领状态
 	//取出中奖名单
 	newestLuckerList, err := l.svcCtx.LuckerModel.FindByUserAndActivity(l.ctx, in.UserId, activity.Id)
-	if err != nil && err != model.ErrNotFound {
+	if err != nil && err != model2.ErrNotFound {
 		return nil, errorx.InternalError(fmt.Errorf("SelectPrizes LuckerModel.FindByUserAndActivity err:%+v", err))
 	}
-	if err == model.ErrNotFound {
+	if err == model2.ErrNotFound {
 		return nil, errorx.ExternalError(nil, errors.New("There is no prize to claim"))
 	}
 
@@ -133,7 +132,7 @@ func (l *SelectPrizesLogic) SelectPrizes(in *luckdraw_pb.SelectPrizesReq) (*luck
 
 	//查询用户已领取的中奖产品
 	mdPrizeList, err := l.svcCtx.PrizeModel.FindsByUserAndActivityAndStatus(l.ctx, in.UserId, activity.Id, 1)
-	if err != nil && err != model.ErrNotFound {
+	if err != nil && err != model2.ErrNotFound {
 		return nil, errorx.InternalError(fmt.Errorf("SelectPrizes PrizeModel.FindsByUserAndActivityAndStatus err:%+v", err))
 	}
 

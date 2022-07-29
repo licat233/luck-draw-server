@@ -5,12 +5,11 @@ import (
 	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
-
-	"luck-draw/common/errorx"
-	"luck-draw/common/uniqueid"
-	"luck-draw/service/model"
+	model2 "luck-draw/service/v1/model"
 
 	"github.com/zeromicro/go-zero/core/logx"
+	"luck-draw/common/errorx"
+	"luck-draw/common/uniqueid"
 )
 
 type AddAdminerLogic struct {
@@ -32,7 +31,7 @@ func (l *AddAdminerLogic) AddAdminer(in *admin_pb.Adminer) (*admin_pb.AddAdminer
 		return nil, errorx.ErrEmptyParam
 	}
 
-	data := &model.Adminer{
+	data := &model2.Adminer{
 		Uuid:         uniqueid.NewUUID(),
 		Name:         in.Name,
 		Passport:     in.Passport,
@@ -51,10 +50,10 @@ func (l *AddAdminerLogic) AddAdminer(in *admin_pb.Adminer) (*admin_pb.AddAdminer
 	}
 
 	adminer, err := l.svcCtx.AdminerModel.FindOne(l.ctx, id)
-	if err != nil && err != model.ErrNotFound {
+	if err != nil && err != model2.ErrNotFound {
 		return nil, errorx.InternalError(fmt.Errorf("AddAdminer AdminerModel.FindOne(l.ctx, id) error, err:%v", err))
 	}
-	if err == model.ErrNotFound {
+	if err == model2.ErrNotFound {
 		return nil, errorx.InternalError(fmt.Errorf("AddAdminer AdminerModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
 	}
 
