@@ -1678,16 +1678,14 @@
         "data": {
           "type": "object"
         },
-        "trace∂": {
+        "trace": {
           "type": "string"
         }
       },
       "title": "BaseResp",
       "required": [
         "success",
-        "message",
-        "data",
-        "trace∂"
+        "message"
       ]
     },
     "BatchIdReq": {
