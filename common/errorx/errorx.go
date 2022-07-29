@@ -94,7 +94,7 @@ func InternalError(errs ...error) error {
  */
 func ExternalError(errs ...error) error {
 	var traceErr error
-	alertErr := errors.New(ServerErrorMsg)
+	alertErr := errors.New(RequestErrorMsg)
 	n := len(errs)
 	if n > 0 {
 		traceErr = errs[0]
@@ -168,10 +168,10 @@ func newErrorx(alertMsg string, traceErr error) *Errorx {
 }
 
 /** ErrorToErrorX 对接go-zero的错误处理函数，将原生错误转化为 Errorx，默认为ExternalError
- * inerr 传入的错误
+ * err 传入的错误
  */
-func ErrorToErrorX(inerr error) (int, interface{}) {
-	if inerr == nil {
+func ErrorToErrorX(err error) (int, interface{}) {
+	if err == nil {
 		//没有错误，应该正常返回
 		return http.StatusOK, &struct {
 			Success bool   `json:"success"` // 请求状态。
@@ -182,89 +182,11 @@ func ErrorToErrorX(inerr error) (int, interface{}) {
 		}
 	}
 	//类型断言看是否为 Errorx 类型
-	if errorx, ok := inerr.(*Errorx); ok {
+	if errorx, ok := err.(*Errorx); ok {
 		//无需处理，直接返回
 		return http.StatusOK, errorx.Data()
 	}
 
 	//原生错误，我们默认把原生error作为ExternalError返回
-	// return http.StatusOK, externalError(inerr.Error(), nil)
-	return http.StatusOK, externalError(inerr.Error(), nil).Data()
-}
-
-/** New 新建Errorx错误，默认是EXTERNAL错误，因为INTERNAL错误比较少
- * description：自定义语法糖，尽量少用，影响性能
- * 需要传入以下参数，分别为:
- * errMsg string 提示信息
- * traceErr error 调试信息
- * errCode int 错误代码
- * showType int 错误显示类型,0.不提示错误;1.警告信息提示；2.错误信息提示；4.通知提示；9.页面跳转
- */
-func New(params ...any) error {
-	var traceErr error
-	errMsg, errCode, showtype := RequestFailedMsg, ERROR_CODE_EXTERNAL, SHOW_TYPE
-	n := len(params)
-	if n == 1 {
-		p := params[0]
-		if p != nil {
-			if v, ok := p.(string); ok {
-				if len(v) > 0 {
-					errMsg = v
-				}
-				goto OVER
-			}
-			if v, ok := p.(error); ok {
-				traceErr = v
-				goto OVER
-			}
-			if v, ok := p.(int); ok {
-				if v > 10 {
-					errCode = v
-				} else {
-					showtype = v
-				}
-				goto OVER
-			}
-		}
-		goto OVER
-	}
-	if n > 1 {
-		if params[0] != nil {
-			if v, ok := params[0].(string); ok {
-				errMsg = v
-			} else {
-				return InternalError(errors.New("errorx.New()的第1个参数不是string"))
-			}
-		}
-		if params[1] != nil {
-			if v, ok := params[1].(error); ok {
-				traceErr = v
-			} else {
-				return InternalError(errors.New("errorx.New()的第2个参数不是error"))
-			}
-		}
-	}
-	if n > 2 {
-		if params[2] != nil {
-			if v, ok := params[2].(int); ok {
-				errCode = v
-			} else {
-				return InternalError(errors.New("errorx.New()的第3个参数不是int"))
-			}
-		}
-	}
-	if n > 3 {
-		if params[3] != nil {
-			if v, ok := params[3].(int); ok {
-				showtype = v
-			} else {
-				return InternalError(errors.New("errorx.New()的第4个参数不是int"))
-			}
-		}
-	}
-OVER:
-	err := newErrorx(errMsg, traceErr)
-	err.ErrorCode = errCode
-	err.ShowType = showtype
-	return err
+	return http.StatusOK, externalError(RequestErrorMsg, err).Data()
 }
