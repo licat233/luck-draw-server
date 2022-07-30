@@ -5,22 +5,23 @@ package captcha
 
 import (
 	"context"
-	captcha_pb2 "luck-draw/service/v1/captcha/rpc/captcha_pb"
+
+	"luck-draw/service/v1/captcha/rpc/captcha_pb"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 )
 
 type (
-	AuthEmailCaptchaReq  = captcha_pb2.AuthEmailCaptchaReq
-	AuthEmailCaptchaResp = captcha_pb2.AuthEmailCaptchaResp
-	CaptchaBgColor       = captcha_pb2.CaptchaBgColor
-	GetCaptchaReq        = captcha_pb2.GetCaptchaReq
-	GetCaptchaResp       = captcha_pb2.GetCaptchaResp
-	GetEmailCaptchaReq   = captcha_pb2.GetEmailCaptchaReq
-	GetEmailCaptchaResp  = captcha_pb2.GetEmailCaptchaResp
-	VerifyCaptchaReq     = captcha_pb2.VerifyCaptchaReq
-	VerifyCaptchaResp    = captcha_pb2.VerifyCaptchaResp
+	AuthEmailCaptchaReq  = captcha_pb.AuthEmailCaptchaReq
+	AuthEmailCaptchaResp = captcha_pb.AuthEmailCaptchaResp
+	CaptchaBgColor       = captcha_pb.CaptchaBgColor
+	GetCaptchaReq        = captcha_pb.GetCaptchaReq
+	GetCaptchaResp       = captcha_pb.GetCaptchaResp
+	GetEmailCaptchaReq   = captcha_pb.GetEmailCaptchaReq
+	GetEmailCaptchaResp  = captcha_pb.GetEmailCaptchaResp
+	VerifyCaptchaReq     = captcha_pb.VerifyCaptchaReq
+	VerifyCaptchaResp    = captcha_pb.VerifyCaptchaResp
 
 	Captcha interface {
 		// 获取数学验证码
@@ -46,24 +47,24 @@ func NewCaptcha(cli zrpc.Client) Captcha {
 
 // 获取数学验证码
 func (m *defaultCaptcha) GetMathCaptcha(ctx context.Context, in *GetCaptchaReq, opts ...grpc.CallOption) (*GetCaptchaResp, error) {
-	client := captcha_pb2.NewCaptchaClient(m.cli.Conn())
+	client := captcha_pb.NewCaptchaClient(m.cli.Conn())
 	return client.GetMathCaptcha(ctx, in, opts...)
 }
 
 // 校验验证码
 func (m *defaultCaptcha) VerifyCaptcha(ctx context.Context, in *VerifyCaptchaReq, opts ...grpc.CallOption) (*VerifyCaptchaResp, error) {
-	client := captcha_pb2.NewCaptchaClient(m.cli.Conn())
+	client := captcha_pb.NewCaptchaClient(m.cli.Conn())
 	return client.VerifyCaptcha(ctx, in, opts...)
 }
 
 // 获取邮箱验证码
 func (m *defaultCaptcha) GetEmailCaptcha(ctx context.Context, in *GetEmailCaptchaReq, opts ...grpc.CallOption) (*GetEmailCaptchaResp, error) {
-	client := captcha_pb2.NewCaptchaClient(m.cli.Conn())
+	client := captcha_pb.NewCaptchaClient(m.cli.Conn())
 	return client.GetEmailCaptcha(ctx, in, opts...)
 }
 
 // 校验邮箱验证码
 func (m *defaultCaptcha) AuthEmailCaptcha(ctx context.Context, in *AuthEmailCaptchaReq, opts ...grpc.CallOption) (*AuthEmailCaptchaResp, error) {
-	client := captcha_pb2.NewCaptchaClient(m.cli.Conn())
+	client := captcha_pb.NewCaptchaClient(m.cli.Conn())
 	return client.AuthEmailCaptcha(ctx, in, opts...)
 }

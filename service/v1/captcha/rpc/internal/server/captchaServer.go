@@ -5,14 +5,15 @@ package server
 
 import (
 	"context"
-	captcha_pb2 "luck-draw/service/v1/captcha/rpc/captcha_pb"
-	logic2 "luck-draw/service/v1/captcha/rpc/internal/logic"
+
+	"luck-draw/service/v1/captcha/rpc/captcha_pb"
+	"luck-draw/service/v1/captcha/rpc/internal/logic"
 	"luck-draw/service/v1/captcha/rpc/internal/svc"
 )
 
 type CaptchaServer struct {
 	svcCtx *svc.ServiceContext
-	captcha_pb2.UnimplementedCaptchaServer
+	captcha_pb.UnimplementedCaptchaServer
 }
 
 func NewCaptchaServer(svcCtx *svc.ServiceContext) *CaptchaServer {
@@ -22,25 +23,25 @@ func NewCaptchaServer(svcCtx *svc.ServiceContext) *CaptchaServer {
 }
 
 // 获取数学验证码
-func (s *CaptchaServer) GetMathCaptcha(ctx context.Context, in *captcha_pb2.GetCaptchaReq) (*captcha_pb2.GetCaptchaResp, error) {
-	l := logic2.NewGetMathCaptchaLogic(ctx, s.svcCtx)
+func (s *CaptchaServer) GetMathCaptcha(ctx context.Context, in *captcha_pb.GetCaptchaReq) (*captcha_pb.GetCaptchaResp, error) {
+	l := logic.NewGetMathCaptchaLogic(ctx, s.svcCtx)
 	return l.GetMathCaptcha(in)
 }
 
 // 校验验证码
-func (s *CaptchaServer) VerifyCaptcha(ctx context.Context, in *captcha_pb2.VerifyCaptchaReq) (*captcha_pb2.VerifyCaptchaResp, error) {
-	l := logic2.NewVerifyCaptchaLogic(ctx, s.svcCtx)
+func (s *CaptchaServer) VerifyCaptcha(ctx context.Context, in *captcha_pb.VerifyCaptchaReq) (*captcha_pb.VerifyCaptchaResp, error) {
+	l := logic.NewVerifyCaptchaLogic(ctx, s.svcCtx)
 	return l.VerifyCaptcha(in)
 }
 
 // 获取邮箱验证码
-func (s *CaptchaServer) GetEmailCaptcha(ctx context.Context, in *captcha_pb2.GetEmailCaptchaReq) (*captcha_pb2.GetEmailCaptchaResp, error) {
-	l := logic2.NewGetEmailCaptchaLogic(ctx, s.svcCtx)
+func (s *CaptchaServer) GetEmailCaptcha(ctx context.Context, in *captcha_pb.GetEmailCaptchaReq) (*captcha_pb.GetEmailCaptchaResp, error) {
+	l := logic.NewGetEmailCaptchaLogic(ctx, s.svcCtx)
 	return l.GetEmailCaptcha(in)
 }
 
 // 校验邮箱验证码
-func (s *CaptchaServer) AuthEmailCaptcha(ctx context.Context, in *captcha_pb2.AuthEmailCaptchaReq) (*captcha_pb2.AuthEmailCaptchaResp, error) {
-	l := logic2.NewAuthEmailCaptchaLogic(ctx, s.svcCtx)
+func (s *CaptchaServer) AuthEmailCaptcha(ctx context.Context, in *captcha_pb.AuthEmailCaptchaReq) (*captcha_pb.AuthEmailCaptchaResp, error) {
+	l := logic.NewAuthEmailCaptchaLogic(ctx, s.svcCtx)
 	return l.AuthEmailCaptcha(in)
 }

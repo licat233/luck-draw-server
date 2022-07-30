@@ -6,11 +6,12 @@ import (
 	"luck-draw/service/v1/luckdraw/api/internal/types"
 	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
 
-	"github.com/asaskevich/govalidator"
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/ctxdata"
 	"luck-draw/common/errorx"
 	"luck-draw/common/respx"
+
+	"github.com/asaskevich/govalidator"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type SelectPrizesLogic struct {
@@ -39,5 +40,8 @@ func (l *SelectPrizesLogic) SelectPrizes(req *types.SelectPrizesReq) (resp any, 
 		LuckerUuids:  req.LuckerUuidList,
 	}
 	res, err := l.svcCtx.LuckdrawRpc.SelectPrizes(l.ctx, in)
+	if err != nil {
+		return nil, err
+	}
 	return respx.DefaultSingleResp(res.Prizes, err)
 }

@@ -48,5 +48,13 @@ func (l *MathCaptchaLogic) MathCaptcha(req *types.CaptchaReq) (any, error) {
 			A: uint32(req.BgColor.A),
 		},
 	}
-	return respx.DefaultSingleResp(l.svcCtx.CaptchaRpc.GetMathCaptcha(l.ctx, in))
+	resp, err := l.svcCtx.CaptchaRpc.GetMathCaptcha(l.ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	data := &types.CaptchaInfo{
+		CaptchaId:   resp.CaptchaId,
+		Base64Image: resp.Base64Image,
+	}
+	return respx.DefaultSingleResp(data, nil)
 }

@@ -30,6 +30,8 @@ func (l *ListLogic) List(req *types.ListReq) (any, error) {
 		PageSize: req.PageSize,
 		Page:     req.Page,
 	})
-
+	if err != nil {
+		return nil, err
+	}
 	return respx.DefaultListResp(resp.Data, resp.Total, req.PageSize, req.Page, err)
 }

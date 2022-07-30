@@ -6,8 +6,9 @@ import (
 	"luck-draw/service/v1/admin/api/internal/types"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/respx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type InfoLogic struct {
@@ -28,6 +29,8 @@ func (l *InfoLogic) Info(req *types.ActivityGetReq) (any, error) {
 	resp, err := l.svcCtx.AdminRpc.GetActivity(l.ctx, &admin_pb.ItemReq{
 		Id: req.Id,
 	})
-
+	if err != nil {
+		return nil, err
+	}
 	return respx.DefaultSingleResp(resp.Activity, err)
 }

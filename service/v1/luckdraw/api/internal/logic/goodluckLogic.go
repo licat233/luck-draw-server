@@ -8,12 +8,13 @@ import (
 	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
 	"net/http"
 
-	"github.com/asaskevich/govalidator"
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/ctxdata"
 	"luck-draw/common/errorx"
 	"luck-draw/common/respx"
 	"luck-draw/common/utils"
+
+	"github.com/asaskevich/govalidator"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GoodluckLogic struct {
@@ -50,5 +51,8 @@ func (l *GoodluckLogic) Goodluck(req *types.GoodluckReq) (any, error) {
 		Ip:           ip,
 	}
 	res, err := l.svcCtx.LuckdrawRpc.Goodluck(l.ctx, in)
+	if err != nil {
+		return nil, err
+	}
 	return respx.DefaultSingleResp(res, err)
 }

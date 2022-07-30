@@ -29,5 +29,8 @@ func (l *DelLogic) Del(req *types.PrizesPoolDelReq) (any, error) {
 	_, err := l.svcCtx.AdminRpc.DelLucker(l.ctx, &admin_pb.ItemReq{
 		Id: req.Id,
 	})
+	if err != nil {
+		return nil, err
+	}
 	return respx.DefaultStateResp(err)
 }

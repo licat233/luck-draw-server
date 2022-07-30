@@ -6,10 +6,11 @@ import (
 	"luck-draw/service/v1/admin/api/internal/types"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/ctxdata"
 	"luck-draw/common/errorx"
 	"luck-draw/common/respx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type ModifyLogic struct {
@@ -42,5 +43,8 @@ func (l *ModifyLogic) Modify(req *types.AdminerModifyReq) (any, error) {
 	resp.Adminer.Password = req.Password
 	resp.Adminer.Email = req.Email
 	_, err = l.svcCtx.AdminRpc.PutAdminer(l.ctx, resp.Adminer)
+	if err != nil {
+		return nil, err
+	}
 	return respx.DefaultStateResp(err)
 }

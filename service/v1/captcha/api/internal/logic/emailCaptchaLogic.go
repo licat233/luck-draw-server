@@ -47,6 +47,13 @@ func (l *EmailCaptchaLogic) EmailCaptcha(req *types.EmailCaptchaReq) (any, error
 	in := &captcha_pb.GetEmailCaptchaReq{
 		Email: email,
 	}
-	res, err := l.svcCtx.CaptchaRpc.GetEmailCaptcha(l.ctx, in)
-	return respx.DefaultSingleResp(res, err)
+	resp, err := l.svcCtx.CaptchaRpc.GetEmailCaptcha(l.ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	data := &types.EmailCaptchaResp{
+		CaptchaId: resp.CaptchaId,
+		ExpiresAt: resp.ExpiresAt,
+	}
+	return respx.DefaultSingleResp(data, err)
 }

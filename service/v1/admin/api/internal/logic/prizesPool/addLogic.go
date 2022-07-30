@@ -37,5 +37,8 @@ func (l *AddLogic) Add(req *types.PrizesPoolAddReq) (any, error) {
 		Number:     req.Number,
 		Remain:     req.Remain,
 	})
+	if err != nil {
+		return nil, err
+	}
 	return respx.DefaultSingleResp(resp.PrizesPool, err)
 }

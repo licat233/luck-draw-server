@@ -6,10 +6,11 @@ import (
 	"luck-draw/service/v1/luckdraw/api/internal/types"
 	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
 
-	"github.com/asaskevich/govalidator"
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
 	"luck-draw/common/respx"
+
+	"github.com/asaskevich/govalidator"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type PrizesLogic struct {
@@ -34,5 +35,8 @@ func (l *PrizesLogic) Prizes(req *types.PrizesReq) (resp any, err error) {
 		ActivityUuid: req.ActivityUUID,
 	}
 	res, err := l.svcCtx.LuckdrawRpc.GetActivePrizes(l.ctx, in)
+	if err != nil {
+		return nil, err
+	}
 	return respx.DefaultSingleResp(res.Prizes, err)
 }

@@ -29,6 +29,8 @@ func (l *InfoLogic) Info(req *types.PrizesPoolGetReq) (any, error) {
 	resp, err := l.svcCtx.AdminRpc.GetPrizesPool(l.ctx, &admin_pb.ItemReq{
 		Id: req.Id,
 	})
-
+	if err != nil {
+		return nil, err
+	}
 	return respx.DefaultSingleResp(resp.PrizesPool, err)
 }

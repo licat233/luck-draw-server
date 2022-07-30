@@ -66,7 +66,7 @@ func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq
 	//发送成功
 	expiresAt := time.Now().Add(l.svcCtx.CaptchaExpire).Unix()
 	return &captcha_pb.GetEmailCaptchaResp{
-		Success:   true,
+		CaptchaId: captchaId,
 		ExpiresAt: expiresAt,
 	}, nil
 }

@@ -39,5 +39,8 @@ func (l *EditLogic) Edit(req *types.PrizesPoolPutReq) (any, error) {
 		Number:     req.Number,
 		Remain:     req.Remain,
 	})
+	if err != nil {
+		return nil, err
+	}
 	return respx.DefaultStateResp(err)
 }

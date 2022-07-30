@@ -71,5 +71,9 @@ func (l *LoginByEmailLogic) LoginByEmail(req *types.LoginByEmailReq) (any, error
 		JwtData:   jwtData,
 	})
 
+	if err != nil {
+		return nil, err
+	}
+
 	return respx.DefaultSingleResp(resp.JwtToken, err)
 }

@@ -65,6 +65,9 @@ func (l *LoginLogic) Login(req *types.LoginReq) (any, error) {
 		AutoLogin: req.AutoLogin,
 		JwtData:   jwtData,
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	return respx.DefaultSingleResp(resp.JwtToken, err)
 }

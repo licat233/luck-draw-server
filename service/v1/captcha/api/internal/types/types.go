@@ -35,7 +35,6 @@ type EmailCaptchaReq struct {
 }
 
 type EmailCaptchaResp struct {
-	Success   bool   `json:"success"`
 	CaptchaId string `json:"captcha_id"`
 	ExpiresAt int64  `json:"expires_at"`
 }

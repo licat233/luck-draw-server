@@ -45,7 +45,6 @@ type EmailCaptchaReq {
 	Email string `json:"email"` //接收验证码的邮箱地址
 }
 type EmailCaptchaResp {
-	Success   bool   `json:"success"`
 	CaptchaId string `json:"captcha_id"`
 	ExpiresAt int64  `json:"expires_at"`
 }

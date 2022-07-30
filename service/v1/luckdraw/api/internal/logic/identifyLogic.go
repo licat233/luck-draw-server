@@ -6,8 +6,9 @@ import (
 	"luck-draw/service/v1/luckdraw/api/internal/types"
 	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/respx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type IdentifyLogic struct {
@@ -29,5 +30,8 @@ func (l *IdentifyLogic) Identify(req *types.IdentifyReq) (any, error) {
 		Passport: req.Passport,
 	}
 	resp, err := l.svcCtx.LuckdrawRpc.Identify(l.ctx, in)
+	if err != nil {
+		return nil, err
+	}
 	return respx.DefaultSingleResp(resp.JwtToken, err)
 }
