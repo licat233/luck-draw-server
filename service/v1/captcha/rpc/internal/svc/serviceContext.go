@@ -2,13 +2,17 @@ package svc
 
 import (
 	"luck-draw/service/v1/captcha/rpc/internal/config"
+	"time"
 
+	"github.com/mojocn/base64Captcha"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 )
 
 type ServiceContext struct {
-	Config      config.Config
-	RedisClient *redis.Redis
+	Config        config.Config
+	RedisClient   *redis.Redis
+	CaptchaStore  base64Captcha.Store
+	CaptchaExpire time.Duration
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -16,8 +20,12 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		r.Type = c.Redis.Type
 		r.Pass = c.Redis.Pass
 	})
+
+	captchaExpire := time.Minute * 5
 	return &ServiceContext{
-		Config:      c,
-		RedisClient: redisConn,
+		Config:        c,
+		RedisClient:   redisConn,
+		CaptchaStore:  base64Captcha.NewMemoryStore(5000, captchaExpire),
+		CaptchaExpire: captchaExpire,
 	}
 }

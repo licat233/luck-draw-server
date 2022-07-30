@@ -6,40 +6,6 @@ import (
 	"reflect"
 )
 
-/** 与前端约定的数据规范
-interface ErrorInfoStructure {
-	success: boolean; // 请求状态
-	data?: any; // 返回数据
-	total?: number; // 数据总个数
-	pageSize: number //单页数量
-	current?: number; // 当前页码
-	page?: number; // 【自己加上去的】总共有多少页，根据前端的pageSize来计算
-}
-**/
-
-/**
-* 前端要求的返回格式规范
-  const result = {
-   data: dataSource,
-   total: tableListDataSource.length,
-   success: true,
-   pageSize: finalPageSize,
-   current: parseInt(`${params.currentPage}`, 10) || 1,
- };
-*/
-
-/** Respx 对接前端antpro框架的接口格式规范
- */
-// type Respx struct {
-// 	Status   bool   `json:"success"`  // 【必需】请求状态
-// 	Message  string `json:"message"`  // 【必需】响应消息
-// 	Data     any    `json:"data"`     // 【必需】返回数据
-// 	Total    int64  `json:"total"`    // 【选填】数据总个数
-// 	PageSize int64  `json:"pageSize"` // 【选填】单页数量
-// 	Current  int64  `json:"current"`  // 【选填】当前页码
-// 	Page     int64  `json:"page"`     // 【自定】总共有多少页，根据前端的pageSize来计算
-// }
-
 var (
 	//respx只会返回成功的请求
 	SUCCESS_MSG = "request success"
@@ -60,13 +26,13 @@ type SingleData struct {
 
 //ListData 列表响应数据结构体
 type ListData struct {
-	Status   bool   `json:"success"`  // 【必需】请求状态
-	Message  string `json:"message"`  // 【必需】响应消息
-	Data     any    `json:"data"`     // 【选填】返回数据
-	Total    int64  `json:"total"`    // 【选填】数据总个数
-	PageSize int64  `json:"pageSize"` // 【选填】单页数量
-	Current  int64  `json:"current"`  // 【选填】当前页码
-	Page     int64  `json:"page"`     // 【自定】总共有多少页，根据前端的pageSize来计算
+	Status    bool        `json:"success"`            //【响应状态】
+	Message   string      `json:"message,optional"`   //【给予的提示信息】
+	Data      interface{} `json:"data,optional"`      //【选填】响应的业务数据
+	Total     int64       `json:"total,optional"`     // 【选填】数据总个数
+	PageSize  int64       `json:"pageSize,optional"`  // 【选填】单页数量
+	Page      int64       `json:"current,optional"`   // 【选填】当前页码
+	TotalPage int64       `json:"totalPage,optional"` // 【自己加上去的】总共有多少页，根据前端的pageSize来计算
 }
 
 //StateResp 返回响应状态
@@ -116,7 +82,7 @@ func DefaultSingleResp(data any, err error) (*SingleData, error) {
 * pageSize int64 单页数据量
 * Current int64 当前页码
  */
-func ListResp(alertMsg string, listData any, totalRecord, pageSize, Current int64) *ListData {
+func ListResp(alertMsg string, listData any, totalRecord, pageSize, Page int64) *ListData {
 	data := listData
 	if listData != nil {
 		if reflect.TypeOf(listData).Kind().String() != "slice" {
@@ -129,13 +95,13 @@ func ListResp(alertMsg string, listData any, totalRecord, pageSize, Current int6
 		pageSize = 1
 	}
 	return &ListData{
-		Status:   true,
-		Message:  alertMsg,
-		Data:     data,
-		Total:    totalRecord,
-		PageSize: pageSize,
-		Current:  Current,
-		Page:     (totalRecord + pageSize - 1) / pageSize,
+		Status:    true,
+		Message:   alertMsg,
+		Data:      data,
+		Total:     totalRecord,
+		PageSize:  pageSize,
+		Page:      Page,
+		TotalPage: (totalRecord + pageSize - 1) / pageSize,
 	}
 }
 
@@ -146,7 +112,7 @@ func ListResp(alertMsg string, listData any, totalRecord, pageSize, Current int6
 * pageSize int64 单页数据量
 * Current int64 当前页码
  */
-func DefaultListResp(listData any, totalRecord, pageSize, Current int64, err error) (*ListData, error) {
+func DefaultListResp(listData any, totalRecord, pageSize, Page int64, err error) (*ListData, error) {
 	if err != nil {
 		return nil, err
 	}
@@ -162,13 +128,13 @@ func DefaultListResp(listData any, totalRecord, pageSize, Current int64, err err
 		pageSize = 1
 	}
 	return &ListData{
-		Status:   true,
-		Message:  SUCCESS_MSG,
-		Data:     data,
-		Total:    totalRecord,
-		PageSize: pageSize,
-		Current:  Current,
-		Page:     (totalRecord + pageSize - 1) / pageSize,
+		Status:    true,
+		Message:   SUCCESS_MSG,
+		Data:      data,
+		Total:     totalRecord,
+		PageSize:  pageSize,
+		Page:      Page,
+		TotalPage: (totalRecord + pageSize - 1) / pageSize,
 	}, nil
 }
 

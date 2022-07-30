@@ -2,16 +2,18 @@ package logic
 
 import (
 	"context"
+	"errors"
 	"luck-draw/service/v1/admin/api/internal/svc"
 	"luck-draw/service/v1/admin/api/internal/types"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/captcha/rpc/captcha_pb"
 	"net/http"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
 	"luck-draw/common/respx"
 	"luck-draw/common/utils"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type LoginLogic struct {
@@ -48,7 +50,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (any, error) {
 		return nil, err
 	}
 	if !res.Success {
-		return respx.StateResp("captcha auth failed", false), nil
+		return nil, errorx.ExternalError(nil, errors.New("captcha auth failed"))
 	}
 
 	//验证码校验成功，调用admin.rpc服务登录

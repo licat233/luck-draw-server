@@ -17,7 +17,7 @@ func mathCaptchaHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := logic.NewMathCaptchaLogic(r.Context(), svcCtx)
+		l := logic.NewMathCaptchaLogic(r.Context(), svcCtx, r)
 		resp, err := l.MathCaptcha(&req)
 		if err != nil {
 			httpx.Error(w, err)

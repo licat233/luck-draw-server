@@ -8,9 +8,10 @@ import (
 	"luck-draw/service/v1/captcha/rpc/captcha_pb"
 	"luck-draw/service/v1/captcha/rpc/internal/svc"
 
+	"luck-draw/common/errorx"
+
 	"github.com/mojocn/base64Captcha"
 	"github.com/zeromicro/go-zero/core/logx"
-	"luck-draw/common/errorx"
 )
 
 type GetMathCaptchaLogic struct {
@@ -28,7 +29,7 @@ func NewGetMathCaptchaLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 }
 
 func (l *GetMathCaptchaLogic) GetMathCaptcha(in *captcha_pb.GetCaptchaReq) (*captcha_pb.GetCaptchaResp, error) {
-	param := &CaptchaConfig{
+	captchaConfig := &CaptchaConfig{
 		CaptchaType: "math",
 		DriverMath: &base64Captcha.DriverMath{
 			BgColor: &color.RGBA{
@@ -45,8 +46,9 @@ func (l *GetMathCaptchaLogic) GetMathCaptcha(in *captcha_pb.GetCaptchaReq) (*cap
 		},
 	}
 
-	driver := param.DriverMath.ConvertFonts()
-	c := base64Captcha.NewCaptcha(driver, CaptchaStore)
+	driver := captchaConfig.DriverMath.ConvertFonts()
+
+	c := base64Captcha.NewCaptcha(driver, l.svcCtx.CaptchaStore)
 	captchaId, base64Image, err := c.Generate()
 	if err != nil {
 		return nil, errorx.InternalError(fmt.Errorf("GetMathCaptcha captchaId, base64Image, err := c.Generate() err:%+v", err))

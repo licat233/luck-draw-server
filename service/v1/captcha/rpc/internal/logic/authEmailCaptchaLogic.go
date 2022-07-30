@@ -8,9 +8,10 @@ import (
 	"luck-draw/service/v1/captcha/rpc/internal/svc"
 	"strings"
 
+	"luck-draw/common/errorx"
+
 	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/core/logx"
-	"luck-draw/common/errorx"
 )
 
 type AuthEmailCaptchaLogic struct {
@@ -69,7 +70,7 @@ func (l *AuthEmailCaptchaLogic) AuthEmailCaptcha(in *captcha_pb.AuthEmailCaptcha
 
 	//校验captcha与solution
 	solution := in.Solution
-	ok := CaptchaStore.Verify(CaptchaId, solution, false)
+	ok := l.svcCtx.CaptchaStore.Verify(CaptchaId, solution, false)
 	if !ok {
 		return &captcha_pb.AuthEmailCaptchaResp{
 			Success: false,
@@ -77,7 +78,7 @@ func (l *AuthEmailCaptchaLogic) AuthEmailCaptcha(in *captcha_pb.AuthEmailCaptcha
 	}
 
 	//清除验证码
-	_ = CaptchaStore.Get(CaptchaId, true)
+	_ = l.svcCtx.CaptchaStore.Get(CaptchaId, true)
 
 	//返回
 	return &captcha_pb.AuthEmailCaptchaResp{

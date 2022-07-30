@@ -12,4 +12,9 @@ type Config struct {
 		AccessSecret string
 	}
 	CaptchaRpc zrpc.RpcClientConf
+	Redis      struct {
+		Host string
+		Type string
+		Pass string
+	}
 }

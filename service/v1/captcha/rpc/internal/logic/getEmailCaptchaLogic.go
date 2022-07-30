@@ -8,10 +8,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/asaskevich/govalidator"
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/emailx"
 	"luck-draw/common/errorx"
+
+	"github.com/asaskevich/govalidator"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetEmailCaptchaLogic struct {
@@ -38,17 +39,17 @@ func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq
 	}
 
 	//生成captcha_id
-	captchaId, err := generateDigitCaptcha()
+	captchaId, err := generateDigitCaptcha(l.svcCtx.CaptchaStore)
 	if err != nil {
 		return nil, errorx.InternalError(fmt.Errorf("GetEmailCaptcha generateDigitCaptcha err:%+v", err))
 	}
 	//获取captcha_id的answer
-	answer := CaptchaStore.Get(captchaId, false)
+	answer := l.svcCtx.CaptchaStore.Get(captchaId, false)
 
 	key := formatEmailCaptchaKey(captchaId)
 
 	//先存入redis中，key为邮箱，value为验证码，过期时间为 expireTime
-	if err := l.svcCtx.RedisClient.SetexCtx(l.ctx, key, email, int(expireTime.Seconds())); err != nil {
+	if err := l.svcCtx.RedisClient.SetexCtx(l.ctx, key, email, int(l.svcCtx.CaptchaExpire.Seconds())); err != nil {
 		return nil, errorx.InternalError(fmt.Errorf("GetEmailCaptcha RedisClient.SetexCtx(l.ctx, key, email, int(expireTime.Seconds())) error：%+v", err))
 	}
 
@@ -63,7 +64,7 @@ func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq
 	}
 
 	//发送成功
-	expiresAt := time.Now().Add(expireTime).Unix()
+	expiresAt := time.Now().Add(l.svcCtx.CaptchaExpire).Unix()
 	return &captcha_pb.GetEmailCaptchaResp{
 		Success:   true,
 		ExpiresAt: expiresAt,

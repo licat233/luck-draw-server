@@ -13,7 +13,7 @@ type Errorx struct {
 	Success      bool   `json:"success"`      // 【必需】请求状态
 	ErrorCode    int    `json:"errorCode"`    // 【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功
 	ErrorMessage string `json:"errorMessage"` // 【选填】向用户显示消息
-	TraceMessage string `json:"traceMessage"` // 【选填】调试错误信息，请勿在生产环境下使用，可有可无
+	TraceMessage string `json:"traceMessage"` // 【选填】自己加上去的，调试错误信息，请勿在生产环境下使用，可有可无
 	ShowType     int    `json:"showType"`     // 【选填】错误显示类型：0.不提示错误;1.警告信息提示；2.错误信息提示；4.通知提示；9.页面跳转
 	TraceId      string `json:"traceId"`      // 【选填】方便后端故障排除：唯一的请求ID
 	Host         string `json:"host"`         // 【选填】方便后端故障排除：当前访问服务器的主机
@@ -25,7 +25,7 @@ type ResponseError struct {
 	Success      bool   `json:"success"`      // 【必需】请求状态
 	ErrorCode    int    `json:"errorCode"`    // 【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功
 	ErrorMessage string `json:"errorMessage"` // 【选填】向用户显示消息
-	TraceMessage string `json:"traceMessage"` // 【选填】调试错误信息，请勿在生产环境下使用，可有可无
+	TraceMessage string `json:"traceMessage"` // 【选填】自己加上去的，调试错误信息，请勿在生产环境下使用，可有可无
 	ShowType     int    `json:"showType"`     // 【选填】错误显示类型：0.不提示错误;1.警告信息提示；2.错误信息提示；4.通知提示；9.页面跳转
 	TraceId      string `json:"traceId"`      // 【选填】方便后端故障排除：唯一的请求ID
 	Host         string `json:"host"`         // 【选填】方便后端故障排除：当前访问服务器的主机
@@ -35,6 +35,7 @@ const (
 	ERROR_CODE_INTERNAL = 500 //内部错误
 	ERROR_CODE_EXTERNAL = 400 //外部错误（默认）
 	ERROR_CODE_AUTH     = 401 //外部错误（默认）
+	ERROR_CODE_ACCESS   = 403 //服务器禁止访问
 	SHOW_TYPE           = 2   //信息错误
 )
 
@@ -105,6 +106,23 @@ func ExternalError(errs ...error) error {
 	return externalError(alertErr.Error(), traceErr)
 }
 
+/** AccessError 外部错误 403
+ * traceErr error 调试信息
+ * alertErr error 提示信息
+ */
+func AccessError(errs ...error) error {
+	var traceErr error
+	alertErr := errors.New(RequestErrorMsg)
+	n := len(errs)
+	if n > 0 {
+		traceErr = errs[0]
+	}
+	if n > 1 {
+		alertErr = errs[1]
+	}
+	return accessError(alertErr.Error(), traceErr)
+}
+
 /** AuthError 身份校验失败 401
  * traceMsg string 调试信息
  */
@@ -148,6 +166,15 @@ func authError(alertMsg string, traceErr error) *Errorx {
 	return errorx
 }
 
+func accessError(alertMsg string, traceErr error) *Errorx {
+	errorx := newErrorx(alertMsg, traceErr)
+	if len(errorx.ErrorMessage) == 0 {
+		errorx.ErrorMessage = AuthErrorMsg
+	}
+	errorx.ErrorCode = ERROR_CODE_ACCESS
+	return errorx
+}
+
 //newErrorx 新建Errorx实例，默认为外部请求错误
 func newErrorx(alertMsg string, traceErr error) *Errorx {
 	traceMsg := ""
@@ -188,5 +215,5 @@ func ErrorToErrorX(err error) (int, interface{}) {
 	}
 
 	//原生错误，我们默认把原生error作为ExternalError返回
-	return http.StatusOK, externalError(RequestErrorMsg, err).Data()
+	return http.StatusOK, externalError(err.Error(), nil).Data()
 }

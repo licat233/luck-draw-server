@@ -10,8 +10,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type ShowCaptchaLogic struct {
@@ -60,8 +61,8 @@ func (l *ShowCaptchaLogic) ShowCaptcha() error {
 	}
 	l.w.Header().Set("cache-control", "no-cache")
 	l.w.Header().Set("content-type", "image/png")
-	l.w.Header().Add("captcha-type", captchaId)
-	l.w.Header().Add("captcha-id", "math")
+	l.w.Header().Add("captcha-type", "math")
+	l.w.Header().Add("captcha-id", captchaId)
 	_, err = l.w.Write(p)
 	if err != nil {
 		return errorx.InternalError(fmt.Errorf("showCaptchaLogic.go  w.Write(p) error:%v", err))

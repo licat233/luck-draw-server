@@ -6,8 +6,9 @@ import (
 	"luck-draw/service/v1/admin/api/internal/types"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/respx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type ListLogic struct {
@@ -27,8 +28,8 @@ func NewListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ListLogic {
 func (l *ListLogic) List(req *types.ListReq) (any, error) {
 	resp, err := l.svcCtx.AdminRpc.GetLuckerList(l.ctx, &admin_pb.ListReq{
 		PageSize: req.PageSize,
-		Page:     req.Current,
+		Page:     req.Page,
 	})
 
-	return respx.DefaultListResp(resp.Data, resp.Total, req.PageSize, req.Current, err)
+	return respx.DefaultListResp(resp.Data, resp.Total, req.PageSize, req.Page, err)
 }

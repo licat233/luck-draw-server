@@ -2,8 +2,9 @@
 package handler
 
 import (
-	"luck-draw/service/v1/captcha/api/internal/svc"
 	"net/http"
+
+	"luck-draw/service/v1/captcha/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )

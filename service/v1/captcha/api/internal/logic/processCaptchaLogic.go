@@ -2,12 +2,14 @@ package logic
 
 import (
 	"context"
+	"errors"
 	"luck-draw/service/v1/captcha/api/internal/svc"
 	"luck-draw/service/v1/captcha/api/internal/types"
 
+	"luck-draw/common/respx"
+
 	"github.com/mojocn/base64Captcha"
 	"github.com/zeromicro/go-zero/core/logx"
-	"luck-draw/common/respx"
 )
 
 type ProcessCaptchaLogic struct {
@@ -27,7 +29,7 @@ func NewProcessCaptchaLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Pr
 func (l *ProcessCaptchaLogic) ProcessCaptcha(req *types.ProcessCaptchaReq) (any, error) {
 	ok := base64Captcha.DefaultMemStore.Verify(req.CaptchaId, req.Solution, true)
 	if ok {
-		return respx.SingleResp("验证成功", ok), nil
+		return respx.StateResp("Captcha verification Success", ok), nil
 	}
-	return respx.SingleResp("验证失败", ok), nil
+	return nil, errors.New("Captcha verification failed")
 }

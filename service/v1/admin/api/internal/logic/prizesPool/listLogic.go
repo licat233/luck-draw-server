@@ -28,8 +28,8 @@ func NewListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ListLogic {
 func (l *ListLogic) List(req *types.ListReq) (any, error) {
 	resp, err := l.svcCtx.AdminRpc.GetPrizesPoolList(l.ctx, &admin_pb.ListReq{
 		PageSize: req.PageSize,
-		Page:     req.Current,
+		Page:     req.Page,
 	})
 
-	return respx.DefaultListResp(resp.Data, resp.Total, req.PageSize, req.Current, err)
+	return respx.DefaultListResp(resp.Data, resp.Total, req.PageSize, req.Page, err)
 }
