@@ -16,6 +16,7 @@ CaptchaRpc:
     Key: captcha.rpc
 
 Redis:
-  Host: 127.0.0.1:6379
+  Addr: 127.0.0.1:6379
   Pass:
   Type: node
+  DB: 1

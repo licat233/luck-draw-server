@@ -13,8 +13,9 @@ type Config struct {
 	}
 	CaptchaRpc zrpc.RpcClientConf
 	Redis      struct {
-		Host string
+		Addr string
 		Type string
 		Pass string
+		DB   int
 	}
 }

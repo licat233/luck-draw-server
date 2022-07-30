@@ -4,3 +4,6 @@ git add .
 git commit -m update --no-verify
 git push origin main
 git push origin-t main
+
+echo "git push 已完成"
+

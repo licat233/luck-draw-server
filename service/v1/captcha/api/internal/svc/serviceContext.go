@@ -15,9 +15,10 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	redisConn := redis.New(c.Redis.Host, func(r *redis.Redis) {
+	redisConn := redis.New(c.Redis.Addr, func(r *redis.Redis) {
 		r.Type = c.Redis.Type
 		r.Pass = c.Redis.Pass
+		r.Addr = c.Redis.Addr
 	})
 
 	return &ServiceContext{

@@ -10,7 +10,7 @@ import (
 	"github.com/zeromicro/go-zero/core/stores/redis"
 )
 
-var CaptchaIpKeyPrefix = "captchaIp"
+var CaptchaIpKeyPrefix = "cache:luckdraw:captcha:ip"
 
 func formatCaptchaIpKey(ip string) string {
 	return fmt.Sprintf("%s:%v", CaptchaIpKeyPrefix, ip)
