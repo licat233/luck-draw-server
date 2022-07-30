@@ -5,10 +5,10 @@ import (
 	"errors"
 	"luck-draw/service/v1/captcha/api/internal/svc"
 	"luck-draw/service/v1/captcha/api/internal/types"
+	"luck-draw/service/v1/captcha/rpc/captcha_pb"
 
 	"luck-draw/common/respx"
 
-	"github.com/mojocn/base64Captcha"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -27,9 +27,16 @@ func NewProcessCaptchaLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Pr
 }
 
 func (l *ProcessCaptchaLogic) ProcessCaptcha(req *types.ProcessCaptchaReq) (any, error) {
-	ok := base64Captcha.DefaultMemStore.Verify(req.CaptchaId, req.Solution, true)
-	if ok {
-		return respx.StateResp("Captcha verification Success", ok), nil
+	in := &captcha_pb.VerifyCaptchaReq{
+		CaptchaId: req.CaptchaId,
+		Solution:  req.Solution,
+	}
+	resp, err := l.svcCtx.CaptchaRpc.VerifyCaptcha(l.ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	if resp.Success {
+		return respx.StateResp("Captcha verification Success", true), nil
 	}
 	return nil, errors.New("Captcha verification failed")
 }
