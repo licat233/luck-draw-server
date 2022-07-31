@@ -32,6 +32,7 @@ func (l *AddLogic) Add(req *types.AdminerAddReq) (any, error) {
 	}
 	resp, err := l.svcCtx.AdminRpc.AddAdminer(l.ctx, &admin_pb.Adminer{
 		Name:         req.Name,
+		Avatar:       req.Avatar,
 		Passport:     req.Passport,
 		Password:     req.Password,
 		Email:        req.Email,

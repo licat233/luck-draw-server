@@ -93,6 +93,7 @@ type AdminerGetReq struct {
 
 type AdminerAddReq struct {
 	Name         string `json:"name"`                     // 管理员名称
+	Avatar       string `json:"avatar"`                   // 头像
 	Passport     string `json:"passport"`                 // 账号
 	Password     string `json:"password"`                 // 密码
 	Email        string `json:"email"`                    // 邮箱
@@ -104,6 +105,7 @@ type AdminerPutReq struct {
 	Id           int64  `json:"id"`                       // 表主键
 	Uuid         string `json:"uuid"`                     // 唯一识别码
 	Name         string `json:"name"`                     // 管理员名称
+	Avatar       string `json:"avatar"`                   // 头像
 	Passport     string `json:"passport"`                 // 账号
 	Password     string `json:"password"`                 // 密码
 	Email        string `json:"email"`                    // 邮箱
@@ -119,6 +121,7 @@ type AdminerDelReq struct {
 
 type AdminerModifyReq struct {
 	Name     string `json:"name"`     // 管理员名称
+	Avatar   string `json:"avatar"`   // 头像
 	Passport string `json:"passport"` // 账号
 	Password string `json:"password"` // 密码
 	Email    string `json:"email"`    // 邮箱

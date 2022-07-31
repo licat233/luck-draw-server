@@ -39,6 +39,7 @@ func (l *ModifyLogic) Modify(req *types.AdminerModifyReq) (any, error) {
 		return nil, err
 	}
 	resp.Adminer.Name = req.Name
+	resp.Adminer.Avatar = req.Avatar
 	resp.Adminer.Passport = req.Passport
 	resp.Adminer.Password = req.Password
 	resp.Adminer.Email = req.Email

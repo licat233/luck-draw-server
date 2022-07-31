@@ -21,13 +21,14 @@ message Adminer {
   int64   id = 1;
   string uuid = 2;
   string name = 3;
-  string passport = 4;
-  string password = 5;
-  string email = 6;
-  int64 status = 7;
-  int64 is_super_admin = 8;
-  int64 login_count = 9;
-  int64 last_login = 10;
+  string avatar = 4;
+  string passport = 5;
+  string password = 6;
+  string email = 7;
+  int64 status = 8;
+  int64 is_super_admin = 9;
+  int64 login_count = 10;
+  int64 last_login = 11;
 }
 
 message Lucker {

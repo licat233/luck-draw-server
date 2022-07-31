@@ -42,6 +42,7 @@ type (
 		Id           int64     `db:"id"`             // 表主键
 		Uuid         string    `db:"uuid"`           // 唯一识别码
 		Name         string    `db:"name"`           // 管理员名称
+		Avatar       string    `db:"avatar"`         // 头像
 		Passport     string    `db:"passport"`       // 账号
 		Password     string    `db:"password"`       // 密码
 		Email        string    `db:"email"`          // 邮箱
@@ -92,8 +93,8 @@ func (m *defaultAdminerModel) FindOne(ctx context.Context, id int64) (*Adminer, 
 func (m *defaultAdminerModel) Insert(ctx context.Context, data *Adminer) (sql.Result, error) {
 	luckDrawAdminerIdKey := fmt.Sprintf("%s%v", cacheLuckDrawAdminerIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, adminerRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.LoginCount, data.LastLogin, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, adminerRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.LoginCount, data.LastLogin, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt)
 	}, luckDrawAdminerIdKey)
 	return ret, err
 }
@@ -102,7 +103,7 @@ func (m *defaultAdminerModel) Update(ctx context.Context, data *Adminer) error {
 	luckDrawAdminerIdKey := fmt.Sprintf("%s%v", cacheLuckDrawAdminerIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, adminerRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.LoginCount, data.LastLogin, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.LoginCount, data.LastLogin, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt, data.Id)
 	}, luckDrawAdminerIdKey)
 	return err
 }

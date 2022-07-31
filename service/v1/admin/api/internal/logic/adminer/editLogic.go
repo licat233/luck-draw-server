@@ -34,6 +34,7 @@ func (l *EditLogic) Edit(req *types.AdminerPutReq) (any, error) {
 		Id:           req.Id,
 		Uuid:         req.Uuid,
 		Name:         req.Name,
+		Avatar:       req.Avatar,
 		Passport:     req.Passport,
 		Password:     req.Password,
 		Email:        req.Email,

@@ -5,63 +5,64 @@ package admin
 
 import (
 	"context"
-	admin_pb2 "luck-draw/service/v1/admin/rpc/admin_pb"
+
+	"luck-draw/service/v1/admin/rpc/admin_pb"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 )
 
 type (
-	Activity              = admin_pb2.Activity
-	AddActivityResp       = admin_pb2.AddActivityResp
-	AddAdminerResp        = admin_pb2.AddAdminerResp
-	AddLuckerResp         = admin_pb2.AddLuckerResp
-	AddPrizeResp          = admin_pb2.AddPrizeResp
-	AddPrizesPoolResp     = admin_pb2.AddPrizesPoolResp
-	AddProjectResp        = admin_pb2.AddProjectResp
-	AddUserResp           = admin_pb2.AddUserResp
-	AddUsersPoolResp      = admin_pb2.AddUsersPoolResp
-	Adminer               = admin_pb2.Adminer
-	GenerateTokenReq      = admin_pb2.GenerateTokenReq
-	GenerateTokenResp     = admin_pb2.GenerateTokenResp
-	GetActivityListResp   = admin_pb2.GetActivityListResp
-	GetActivityResp       = admin_pb2.GetActivityResp
-	GetAdminerListResp    = admin_pb2.GetAdminerListResp
-	GetAdminerResp        = admin_pb2.GetAdminerResp
-	GetLuckerListResp     = admin_pb2.GetLuckerListResp
-	GetLuckerResp         = admin_pb2.GetLuckerResp
-	GetPrizeListResp      = admin_pb2.GetPrizeListResp
-	GetPrizeResp          = admin_pb2.GetPrizeResp
-	GetPrizesPoolListResp = admin_pb2.GetPrizesPoolListResp
-	GetPrizesPoolResp     = admin_pb2.GetPrizesPoolResp
-	GetProjectListResp    = admin_pb2.GetProjectListResp
-	GetProjectResp        = admin_pb2.GetProjectResp
-	GetUserListResp       = admin_pb2.GetUserListResp
-	GetUserResp           = admin_pb2.GetUserResp
-	GetUsersPoolListResp  = admin_pb2.GetUsersPoolListResp
-	GetUsersPoolResp      = admin_pb2.GetUsersPoolResp
-	IsLogoutReq           = admin_pb2.IsLogoutReq
-	IsLogoutResp          = admin_pb2.IsLogoutResp
-	ItemReq               = admin_pb2.ItemReq
-	JwtData               = admin_pb2.JwtData
-	JwtToken              = admin_pb2.JwtToken
-	ListReq               = admin_pb2.ListReq
-	LoginByEmailReq       = admin_pb2.LoginByEmailReq
-	LoginReq              = admin_pb2.LoginReq
-	LoginResp             = admin_pb2.LoginResp
-	LogoutReq             = admin_pb2.LogoutReq
-	LogoutResp            = admin_pb2.LogoutResp
-	Lucker                = admin_pb2.Lucker
-	LuckerDetail          = admin_pb2.LuckerDetail
-	ParseJwtTokenReq      = admin_pb2.ParseJwtTokenReq
-	ParseJwtTokenResp     = admin_pb2.ParseJwtTokenResp
-	Policy                = admin_pb2.Policy
-	Prize                 = admin_pb2.Prize
-	PrizesPool            = admin_pb2.PrizesPool
-	Project               = admin_pb2.Project
-	StatusResp            = admin_pb2.StatusResp
-	User                  = admin_pb2.User
-	UsersPool             = admin_pb2.UsersPool
+	Activity              = admin_pb.Activity
+	AddActivityResp       = admin_pb.AddActivityResp
+	AddAdminerResp        = admin_pb.AddAdminerResp
+	AddLuckerResp         = admin_pb.AddLuckerResp
+	AddPrizeResp          = admin_pb.AddPrizeResp
+	AddPrizesPoolResp     = admin_pb.AddPrizesPoolResp
+	AddProjectResp        = admin_pb.AddProjectResp
+	AddUserResp           = admin_pb.AddUserResp
+	AddUsersPoolResp      = admin_pb.AddUsersPoolResp
+	Adminer               = admin_pb.Adminer
+	GenerateTokenReq      = admin_pb.GenerateTokenReq
+	GenerateTokenResp     = admin_pb.GenerateTokenResp
+	GetActivityListResp   = admin_pb.GetActivityListResp
+	GetActivityResp       = admin_pb.GetActivityResp
+	GetAdminerListResp    = admin_pb.GetAdminerListResp
+	GetAdminerResp        = admin_pb.GetAdminerResp
+	GetLuckerListResp     = admin_pb.GetLuckerListResp
+	GetLuckerResp         = admin_pb.GetLuckerResp
+	GetPrizeListResp      = admin_pb.GetPrizeListResp
+	GetPrizeResp          = admin_pb.GetPrizeResp
+	GetPrizesPoolListResp = admin_pb.GetPrizesPoolListResp
+	GetPrizesPoolResp     = admin_pb.GetPrizesPoolResp
+	GetProjectListResp    = admin_pb.GetProjectListResp
+	GetProjectResp        = admin_pb.GetProjectResp
+	GetUserListResp       = admin_pb.GetUserListResp
+	GetUserResp           = admin_pb.GetUserResp
+	GetUsersPoolListResp  = admin_pb.GetUsersPoolListResp
+	GetUsersPoolResp      = admin_pb.GetUsersPoolResp
+	IsLogoutReq           = admin_pb.IsLogoutReq
+	IsLogoutResp          = admin_pb.IsLogoutResp
+	ItemReq               = admin_pb.ItemReq
+	JwtData               = admin_pb.JwtData
+	JwtToken              = admin_pb.JwtToken
+	ListReq               = admin_pb.ListReq
+	LoginByEmailReq       = admin_pb.LoginByEmailReq
+	LoginReq              = admin_pb.LoginReq
+	LoginResp             = admin_pb.LoginResp
+	LogoutReq             = admin_pb.LogoutReq
+	LogoutResp            = admin_pb.LogoutResp
+	Lucker                = admin_pb.Lucker
+	LuckerDetail          = admin_pb.LuckerDetail
+	ParseJwtTokenReq      = admin_pb.ParseJwtTokenReq
+	ParseJwtTokenResp     = admin_pb.ParseJwtTokenResp
+	Policy                = admin_pb.Policy
+	Prize                 = admin_pb.Prize
+	PrizesPool            = admin_pb.PrizesPool
+	Project               = admin_pb.Project
+	StatusResp            = admin_pb.StatusResp
+	User                  = admin_pb.User
+	UsersPool             = admin_pb.UsersPool
 
 	Admin interface {
 		// 生产token
@@ -131,236 +132,236 @@ func NewAdmin(cli zrpc.Client) Admin {
 
 // 生产token
 func (m *defaultAdmin) GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GenerateToken(ctx, in, opts...)
 }
 
 // 账号登录
 func (m *defaultAdmin) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.Login(ctx, in, opts...)
 }
 
 // 邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题
 func (m *defaultAdmin) LoginByEmail(ctx context.Context, in *LoginByEmailReq, opts ...grpc.CallOption) (*LoginResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.LoginByEmail(ctx, in, opts...)
 }
 
 // 注销登录
 func (m *defaultAdmin) Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*LogoutResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.Logout(ctx, in, opts...)
 }
 
 // 是否已经注销
 func (m *defaultAdmin) IsLogout(ctx context.Context, in *IsLogoutReq, opts ...grpc.CallOption) (*IsLogoutResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.IsLogout(ctx, in, opts...)
 }
 
 // 解析 jwtToken, 返回原生error
 func (m *defaultAdmin) ParseJwtToken(ctx context.Context, in *ParseJwtTokenReq, opts ...grpc.CallOption) (*ParseJwtTokenResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.ParseJwtToken(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetActivityList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetActivityListResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetActivityList(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetActivity(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetActivityResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetActivity(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) AddActivity(ctx context.Context, in *Activity, opts ...grpc.CallOption) (*AddActivityResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.AddActivity(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) PutActivity(ctx context.Context, in *Activity, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.PutActivity(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) DelActivity(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.DelActivity(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetAdminerList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetAdminerListResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetAdminerList(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetAdminer(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetAdminerResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetAdminer(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) AddAdminer(ctx context.Context, in *Adminer, opts ...grpc.CallOption) (*AddAdminerResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.AddAdminer(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) PutAdminer(ctx context.Context, in *Adminer, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.PutAdminer(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) DelAdminer(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.DelAdminer(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetLuckerList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetLuckerListResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetLuckerList(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetLucker(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetLuckerResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetLucker(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) AddLucker(ctx context.Context, in *Lucker, opts ...grpc.CallOption) (*AddLuckerResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.AddLucker(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) PutLucker(ctx context.Context, in *Lucker, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.PutLucker(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) DelLucker(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.DelLucker(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetPrizeList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetPrizeListResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetPrizeList(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetPrize(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetPrizeResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetPrize(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) AddPrize(ctx context.Context, in *Prize, opts ...grpc.CallOption) (*AddPrizeResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.AddPrize(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) PutPrize(ctx context.Context, in *Prize, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.PutPrize(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) DelPrize(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.DelPrize(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetPrizesPoolList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetPrizesPoolListResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetPrizesPoolList(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetPrizesPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetPrizesPoolResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetPrizesPool(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) AddPrizesPool(ctx context.Context, in *PrizesPool, opts ...grpc.CallOption) (*AddPrizesPoolResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.AddPrizesPool(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) PutPrizesPool(ctx context.Context, in *PrizesPool, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.PutPrizesPool(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) DelPrizesPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.DelPrizesPool(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetProjectList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetProjectListResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetProjectList(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetProject(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetProjectResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetProject(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) AddProject(ctx context.Context, in *Project, opts ...grpc.CallOption) (*AddProjectResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.AddProject(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) PutProject(ctx context.Context, in *Project, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.PutProject(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) DelProject(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.DelProject(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetUserList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetUserListResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetUserList(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetUser(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetUserResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetUser(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) AddUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*AddUserResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.AddUser(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) PutUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.PutUser(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) DelUser(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.DelUser(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetUsersPoolList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetUsersPoolListResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetUsersPoolList(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetUsersPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetUsersPoolResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetUsersPool(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) AddUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*AddUsersPoolResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.AddUsersPool(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) PutUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.PutUsersPool(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) DelUsersPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
-	client := admin_pb2.NewAdminClient(m.cli.Conn())
+	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.DelUsersPool(ctx, in, opts...)
 }

@@ -45,6 +45,7 @@ func mdAdminerToPbAdminer(mdAdminer *model2.Adminer) *admin_pb.Adminer {
 		Id:           mdAdminer.Id,
 		Uuid:         mdAdminer.Uuid,
 		Name:         mdAdminer.Name,
+		Avatar:       mdAdminer.Avatar,
 		Passport:     mdAdminer.Passport,
 		Password:     mdAdminer.Password,
 		Email:        mdAdminer.Email,

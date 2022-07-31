@@ -49,4 +49,8 @@ service admin-api {
 	@doc "注销"
 	@handler logout
 	post /logout returns(BaseResp)
+	
+	@doc "获取当前用户信息"
+	@handler currentUser
+	post /currentUser returns(BaseResp)
 }

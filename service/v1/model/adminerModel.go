@@ -87,7 +87,7 @@ func (m *customAdminerModel) Insert(ctx context.Context, data *Adminer) (sql.Res
 	luckDrawAdminerIdKey := m.formatPrimary(data.Id)
 	luckDrawAdminerUuidKey := m.formatUuidKey(data.Uuid)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, adminerRowsExpectAutoSet)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, adminerRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.LoginCount, data.LastLogin, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt)
 	}, luckDrawAdminerIdKey, luckDrawAdminerUuidKey)
 	return ret, err

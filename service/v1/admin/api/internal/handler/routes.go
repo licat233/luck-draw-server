@@ -44,6 +44,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/logout",
 					Handler: logoutHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/currentUser",
+					Handler: currentUserHandler(serverCtx),
+				},
 			}...,
 		),
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),

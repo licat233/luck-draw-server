@@ -1,16 +1,17 @@
 /*
  Navicat MySQL Data Transfer
 
- Source Server         : 2H4G8M
+ Source Server         : 2h4g8m-luck_draw
  Source Server Type    : MySQL
  Source Server Version : 80024
+ Source Host           : 119.91.140.95:3306
  Source Schema         : luck_draw
 
  Target Server Type    : MySQL
  Target Server Version : 80024
  File Encoding         : 65001
 
- Date: 07/07/2022 17:53:25
+ Date: 31/07/2022 17:20:31
 */
 
 SET NAMES utf8mb4;
@@ -56,8 +57,9 @@ CREATE TABLE `adminer` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
   `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '唯一识别码',
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '管理员名称',
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '头像',
   `passport` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '账号',
-  `password` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
   `email` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '邮箱',
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '账号状态，是否可用',
   `is_super_admin` tinyint NOT NULL DEFAULT '0' COMMENT '是否为超级管理员',
@@ -69,7 +71,14 @@ CREATE TABLE `adminer` (
   `delete_at` datetime NOT NULL DEFAULT '2005-01-02 15:04:05' COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `uuid` (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='管理员';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='管理员';
+
+-- ----------------------------
+-- Records of adminer
+-- ----------------------------
+BEGIN;
+INSERT INTO `adminer` VALUES (1, '3a37bef3-65da-4d1f-9acf-f13b308ad213', '超管', '', 'licat', 'licat233', 'licat@gmail.com', 1, 1, 0, '2005-01-02 15:04:05', '2022-07-29 09:47:08', '2022-07-29 09:47:08', 0, '2005-01-02 15:04:05');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for jwt_blacklists

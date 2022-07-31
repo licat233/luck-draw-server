@@ -35,6 +35,37 @@ type ListData struct {
 	TotalPage int64       `json:"totalPage,optional"` // 【自己加上去的】总共有多少页，根据前端的pageSize来计算
 }
 
+func NewData(data any) *SingleData {
+	return &SingleData{
+		Status:  true,
+		Message: SUCCESS_MSG,
+		Data:    data,
+	}
+}
+
+func NewListData(listData any, totalRecord, pageSize, Page int64) *ListData {
+	data := listData
+	if listData != nil {
+		if reflect.TypeOf(listData).Kind().String() != "slice" {
+			data = []any{listData}
+		}
+	} else {
+		data = []any{}
+	}
+	if pageSize == 0 {
+		pageSize = 1
+	}
+	return &ListData{
+		Status:    true,
+		Message:   SUCCESS_MSG,
+		Data:      data,
+		Total:     totalRecord,
+		PageSize:  pageSize,
+		Page:      Page,
+		TotalPage: (totalRecord + pageSize - 1) / pageSize,
+	}
+}
+
 //StateResp 返回响应状态
 func StateResp(alertMsg string, status bool) *StateData {
 	return &StateData{
