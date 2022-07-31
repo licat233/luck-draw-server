@@ -31,8 +31,8 @@ LuckdrawRpc:
 GoodluckConf:
     Name: GoodluckStatus
     Brokers:
-      - kafka:1
-    Group: goodluck-group
+      - localhost:9092
+    Group: luckdraw-group
     Topic: goodluck-topic
     Offset: first
     Consumers: 1
