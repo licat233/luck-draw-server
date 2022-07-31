@@ -101,6 +101,7 @@ export interface AdminerGetReq {
 
 export interface AdminerAddReq {
 	name: string // 管理员名称
+	avatar: string // 头像
 	passport: string // 账号
 	password: string // 密码
 	email: string // 邮箱
@@ -112,6 +113,7 @@ export interface AdminerPutReq {
 	id: number // 表主键
 	uuid: string // 唯一识别码
 	name: string // 管理员名称
+	avatar: string // 头像
 	passport: string // 账号
 	password: string // 密码
 	email: string // 邮箱
@@ -127,6 +129,7 @@ export interface AdminerDelReq {
 
 export interface AdminerModifyReq {
 	name: string // 管理员名称
+	avatar: string // 头像
 	passport: string // 账号
 	password: string // 密码
 	email: string // 邮箱

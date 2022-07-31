@@ -25,6 +25,13 @@ export function logout() {
 }
 
 /**
+ * @description "获取当前用户信息"
+ */
+export function currentUser() {
+	return webapi.post<components.BaseResp>("/v1/api/admin/currentUser")
+}
+
+/**
  * @description "获取活动列表"
  * @param params
  */

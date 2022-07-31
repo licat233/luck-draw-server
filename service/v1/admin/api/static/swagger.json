@@ -493,6 +493,24 @@
         ]
       }
     },
+    "/v1/api/admin/currentUser": {
+      "post": {
+        "summary": "获取当前用户信息",
+        "operationId": "currentUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "admin-api"
+        ]
+      }
+    },
     "/v1/api/admin/login": {
       "post": {
         "summary": "登录",
@@ -2187,6 +2205,10 @@
           "type": "string",
           "description": " 管理员名称"
         },
+        "avatar": {
+          "type": "string",
+          "description": " 头像"
+        },
         "passport": {
           "type": "string",
           "description": " 账号"
@@ -2215,6 +2237,7 @@
       "title": "adminerAddReq",
       "required": [
         "name",
+        "avatar",
         "passport",
         "password",
         "email",
@@ -2255,6 +2278,10 @@
           "type": "string",
           "description": " 管理员名称"
         },
+        "avatar": {
+          "type": "string",
+          "description": " 头像"
+        },
         "passport": {
           "type": "string",
           "description": " 账号"
@@ -2271,6 +2298,7 @@
       "title": "adminerModifyReq",
       "required": [
         "name",
+        "avatar",
         "passport",
         "password",
         "email"
@@ -2291,6 +2319,10 @@
         "name": {
           "type": "string",
           "description": " 管理员名称"
+        },
+        "avatar": {
+          "type": "string",
+          "description": " 头像"
         },
         "passport": {
           "type": "string",
@@ -2334,6 +2366,7 @@
         "id",
         "uuid",
         "name",
+        "avatar",
         "passport",
         "password",
         "email",

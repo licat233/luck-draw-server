@@ -40,7 +40,6 @@ export interface EmailCaptchaReq {
 }
 
 export interface EmailCaptchaResp {
-	success: boolean
 	captcha_id: string
 	expires_at: number
 }

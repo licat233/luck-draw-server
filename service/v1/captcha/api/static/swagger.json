@@ -301,10 +301,6 @@
     "EmailCaptchaResp": {
       "type": "object",
       "properties": {
-        "success": {
-          "type": "boolean",
-          "format": "boolean"
-        },
         "captcha_id": {
           "type": "string"
         },
@@ -315,7 +311,6 @@
       },
       "title": "EmailCaptchaResp",
       "required": [
-        "success",
         "captcha_id",
         "expires_at"
       ]
