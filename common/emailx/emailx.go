@@ -52,7 +52,7 @@ func SendCaptcha(ctx context.Context, chaptcha string, receiver string) (err err
 
 	email := &Email{
 		Username: global.Viper.GetString("Email.Username"),
-		Password: global.Viper.GetString("Email.Password"),
+		Password: global.Viper.GetString("Email.Secret"),
 		Host:     global.Viper.GetString("Email.Host"),
 		Port:     global.Viper.GetInt("Email.Port"),
 		Receiver: []string{receiver},
@@ -69,7 +69,7 @@ func SendCaptcha(ctx context.Context, chaptcha string, receiver string) (err err
 	email.Dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	email.Message.SetBody("text/html", emailCaptchaBody(chaptcha))
 	if err := email.Dialer.DialAndSend(email.Message); err != nil {
-		logx.Error("邮件发送失败", err)
+		logx.Error(fmt.Sprintf("邮件发送失败:%v", err))
 		return err
 	}
 	if err := global.RedisX.SetexCtx(ctx, "captchaReceiver:"+receiver, chaptcha, 60); err != nil {

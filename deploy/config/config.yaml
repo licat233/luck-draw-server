@@ -89,11 +89,11 @@ Zap:
   StacktraceKey: stacktrace
   LogInConsole: true
 Email: 
-  Username: "licat233@qq.com"
-  Secret: "myfppwmqfkombffh"
+  Username: licat233@qq.com
+  Secret: myfppwmqfkombffh
   Host: smtp.qq.com
   Port: 465
-  Subject: workbench系统通知
+  Subject: 系统邮件
   Receiver: 
     - "1697470538@qq.com"
 CORS:

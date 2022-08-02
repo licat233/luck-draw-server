@@ -2,6 +2,7 @@ package errorx
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -143,7 +144,7 @@ func internalError(alertMsg string, traceErr error) *Errorx {
 	}
 	//内部错误要做日志处理
 	if traceErr != nil {
-		logx.Error(ServerErrorMsg, traceErr.Error())
+		logx.Error(fmt.Sprintf("%s:%v", ServerErrorMsg, traceErr.Error()))
 	}
 	return errorx
 }
