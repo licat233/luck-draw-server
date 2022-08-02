@@ -31,7 +31,14 @@ func NewGetEmailCaptchaLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 
 /** GetEmailCaptcha 获取邮箱验证码
  */
-func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq) (*captcha_pb.GetEmailCaptchaResp, error) {
+func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq) (resp *captcha_pb.GetEmailCaptchaResp, err error) {
+	defer func() {
+		e := recover()
+		if e != nil {
+			resp = nil
+			err = errorx.InternalError(fmt.Errorf("has panic: %+v", e))
+		}
+	}()
 	email := strings.TrimSpace(in.Email)
 	//校验邮箱格式是否正确
 	if govalidator.IsEmail(email) == false {

@@ -2,11 +2,11 @@ package logic
 
 import (
 	"context"
-	"errors"
 	"luck-draw/service/v1/captcha/api/internal/svc"
 	"luck-draw/service/v1/captcha/api/internal/types"
 	"luck-draw/service/v1/captcha/rpc/captcha_pb"
 
+	"luck-draw/common/errorx"
 	"luck-draw/common/respx"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -38,5 +38,5 @@ func (l *ProcessCaptchaLogic) ProcessCaptcha(req *types.ProcessCaptchaReq) (any,
 	if resp.Success {
 		return respx.StateResp("Captcha verification Success", true), nil
 	}
-	return nil, errors.New("Captcha verification failed")
+	return nil, errorx.New("Captcha verification failed")
 }

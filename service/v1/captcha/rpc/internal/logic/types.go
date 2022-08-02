@@ -17,10 +17,6 @@ type CaptchaConfig struct {
 	DriverDigit   *base64Captcha.DriverDigit
 }
 
-// var expireTime = time.Minute * 5
-
-// var CaptchaStore = base64Captcha.NewMemoryStore(5000, expireTime)
-
 var CaptchaKeyPrefix = "LicatCaptcha"
 
 func formatEmailCaptchaKey(captchaId interface{}) string {
@@ -28,8 +24,27 @@ func formatEmailCaptchaKey(captchaId interface{}) string {
 }
 
 func generateDigitCaptcha(store base64Captcha.Store) (captchaId string, err error) {
-	driver := base64Captcha.NewDriverDigit(10, 10, 6, 0, 0)
+	defer func() {
+		e := recover()
+		if e != nil {
+			err = fmt.Errorf("panic err:%+v", e)
+		}
+		return
+	}()
+
+	driver := base64Captcha.NewDriverDigit(40, 150, 6, 0, 0)
 	c := base64Captcha.NewCaptcha(driver, store)
 	captchaId, _, err = c.Generate()
+	if err != nil {
+		err = fmt.Errorf("c.Generate() err:%+v\n", err)
+	}
 	return
+}
+
+func getCaptchaAnswer(store base64Captcha.Store, captchaId string) string {
+	return store.Get(captchaId, false)
+}
+
+func verifyCaptcha(store base64Captcha.Store, captchaId, answer string) bool {
+	return store.Verify(captchaId, answer, false)
 }

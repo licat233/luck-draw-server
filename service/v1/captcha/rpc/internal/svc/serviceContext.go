@@ -25,7 +25,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config:        c,
 		RedisClient:   redisConn,
-		CaptchaStore:  base64Captcha.NewMemoryStore(5000, captchaExpire),
+		CaptchaStore:  base64Captcha.NewMemoryStore(10240, captchaExpire),
 		CaptchaExpire: captchaExpire,
 	}
 }

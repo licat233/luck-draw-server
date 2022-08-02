@@ -8,9 +8,10 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
+	"luck-draw/common/errorx"
+
 	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/core/logx"
-	"luck-draw/common/errorx"
 )
 
 type LoginLogic struct {
@@ -30,7 +31,7 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 // 账号登录
 func (l *LoginLogic) Login(in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 	if len(in.Passport) == 0 {
-		return nil, errors.New("passport is empty")
+		return nil, errorx.New("passport is empty")
 	}
 	//根据账户查找用户
 	//passport也可能是邮箱

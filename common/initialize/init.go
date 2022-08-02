@@ -13,6 +13,7 @@ func Initialize() {
 	InitTime()
 	initViper()
 	InitProjectRootPath()
+	initRedisx() //emailx会用到
 	// initRedis()
 }
 

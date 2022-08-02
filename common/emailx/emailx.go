@@ -24,7 +24,14 @@ type Email struct {
 }
 
 //发送验证码到邮箱，1分钟只能发送一条
-func SendCaptcha(ctx context.Context, chaptcha string, receiver string) error {
+func SendCaptcha(ctx context.Context, chaptcha string, receiver string) (err error) {
+	defer func() {
+		e := recover()
+		if e != nil {
+			err = fmt.Errorf("SendCaptcha has panic: %+v", e)
+		}
+	}()
+
 	if len(chaptcha) == 0 {
 		return errors.New("captcha is nil")
 	}
@@ -32,6 +39,9 @@ func SendCaptcha(ctx context.Context, chaptcha string, receiver string) error {
 		return errors.New("receiver is nil")
 	}
 
+	if global.RedisX == nil {
+		return errors.New("global.Redisx is nil")
+	}
 	exists, err := global.RedisX.ExistsCtx(ctx, "captchaReceiver:"+receiver)
 	if err != nil {
 		return err

@@ -78,11 +78,11 @@ func (e *Errorx) Data() *ResponseError {
  */
 func InternalError(errs ...error) error {
 	var traceErr error
-	alertErr := errors.New(ServerErrorMsg)
 	n := len(errs)
 	if n > 0 {
 		traceErr = errs[0]
 	}
+	alertErr := errors.New(ServerErrorMsg)
 	if n > 1 {
 		alertErr = errs[1]
 	}
@@ -194,10 +194,40 @@ func newErrorx(alertMsg string, traceErr error) *Errorx {
 	return errorx
 }
 
-/** ErrorToErrorX 对接go-zero的错误处理函数，将原生错误转化为 Errorx，默认为ExternalError
+//将原生错误转化为errorx 400错误
+func ToErrorx(err error) error {
+	if err == nil {
+		return nil
+	}
+	//类型断言看是否为 Errorx 类型
+	if _, ok := err.(*Errorx); ok {
+		//无需处理，直接返回
+		return err
+	}
+	return New(err.Error())
+}
+
+/** New 新建基本的errorx错误 400
+ * alertErr string 调试信息
+ * traceErr string 提示信息
+ */
+func New(errs ...string) error {
+	alertErr := RequestErrorMsg
+	n := len(errs)
+	if n > 0 {
+		alertErr = errs[0]
+	}
+	var traceErr string
+	if n > 1 {
+		traceErr = errs[1]
+	}
+	return externalError(alertErr, errors.New(traceErr))
+}
+
+/** ResponseErrorHandler 对接go-zero的错误处理函数，将原生错误转化为 Errorx，默认为ExternalError
  * err 传入的错误
  */
-func ErrorToErrorX(err error) (int, interface{}) {
+func ResponseErrorHandler(err error) (int, interface{}) {
 	if err == nil {
 		//没有错误，应该正常返回
 		return http.StatusOK, &struct {
@@ -214,6 +244,8 @@ func ErrorToErrorX(err error) (int, interface{}) {
 		return http.StatusOK, errorx.Data()
 	}
 
-	//原生错误，我们默认把原生error作为ExternalError返回
-	return http.StatusOK, externalError(err.Error(), nil).Data()
+	//原生错误，我们默认把原生error作为internalError返回
+	//原生错误可能是服务器内部panic错误，将这样的错误抛出给前端，是很不利的
+	//所有返回的错误应该尽量使用 errorx.New()
+	return http.StatusOK, internalError(ServerErrorMsg, err).Data()
 }

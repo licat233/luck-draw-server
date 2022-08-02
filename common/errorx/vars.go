@@ -3,11 +3,11 @@ package errorx
 import "errors"
 
 var (
-	ErrInvalidEmail    = ExternalError(errors.New("invalid email"))
-	ErrEmptyParam      = ExternalError(errors.New("Parameter cannot be empty"))
-	ErrNotFound        = ExternalError(errors.New("not found"))
-	ErrInvalidParam    = ExternalError(errors.New("invalid parameter"))
-	ErrInvalidUuid     = ExternalError(errors.New("uuid format error"))
+	ErrInvalidEmail    = New("invalid email")
+	ErrEmptyParam      = New("Parameter cannot be empty")
+	ErrNotFound        = New("not found")
+	ErrInvalidParam    = New("invalid parameter")
+	ErrInvalidUuid     = New("uuid format error")
 	ErrTooManyRequests = AccessError(nil, errors.New("too many requests"))
 
 	ErrAuth     = AuthError(errors.New("Authentication failed, identity exception"))
