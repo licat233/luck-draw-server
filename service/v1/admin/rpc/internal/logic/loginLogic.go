@@ -31,7 +31,7 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 // 账号登录
 func (l *LoginLogic) Login(in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 	if len(in.Passport) == 0 {
-		return nil, errorx.New("passport is empty")
+		return nil, errorx.ExtStatusErr(errorx.New("passport is empty"))
 	}
 	//根据账户查找用户
 	//passport也可能是邮箱
@@ -47,20 +47,20 @@ func (l *LoginLogic) Login(in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 	//进行账号登录
 	adminer, err := l.svcCtx.AdminerModel.FindOneByPassport(l.ctx, in.Passport)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("Login AdminerModel.FindOneByPassport(l.ctx, in.Passport) error: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("Login AdminerModel.FindOneByPassport(l.ctx, in.Passport) error: %v", err))
 	}
 	//账户不存在
 	if err == model.ErrNotFound {
-		return nil, errorx.ErrNotFound
+		return nil, errorx.SecStatusErr(errorx.ErrNotFound)
 	}
 
 	if adminer.Passport != in.Passport {
-		return nil, errorx.ExternalError(errors.New("Account and password do not match"))
+		return nil, errorx.ExtStatusErr(errors.New("Account and password do not match"))
 	}
 
 	//检查adminer的状态
 	if err = verifyAdminerStatus(adminer); err != nil {
-		return nil, errorx.ExternalError(err)
+		return nil, errorx.ExtStatusErr(err)
 	}
 
 	//生成jwt-token

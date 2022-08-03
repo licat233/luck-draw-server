@@ -6,10 +6,11 @@ import (
 	"fmt"
 	"luck-draw/service/v1/luckdraw/rpc/internal/svc"
 	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
-	model2 "luck-draw/service/v1/model"
+	"luck-draw/service/v1/model"
+
+	"luck-draw/common/errorx"
 
 	"github.com/zeromicro/go-zero/core/logx"
-	"luck-draw/common/errorx"
 )
 
 type SearchLuckerLogic struct {
@@ -34,19 +35,19 @@ func (l *SearchLuckerLogic) SearchLucker(in *luckdraw_pb.SearchLuckerReq) (*luck
 		return nil, err
 	}
 	if mdUser == nil {
-		return nil, errorx.ExternalError(nil, errors.New("user not found"))
+		return nil, errorx.SecStatusErr(errors.New("user not found"))
 	}
 
 	//查询该用户的中奖名单
-	mdLuckerDetails, _, err := l.svcCtx.LuckerModel.FindDetails(l.ctx, &model2.FindDetailsOptions{
+	mdLuckerDetails, _, err := l.svcCtx.LuckerModel.FindDetails(l.ctx, &model.FindDetailsOptions{
 		UserId:       mdUser.Id,
 		ActivityId:   0,
 		ActivityUUID: "",
 		PageSize:     0,
 		Page:         0,
 	})
-	if err != nil && err != model2.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("SearchLucker LuckerModel.FindDetails error, err:%+v", err))
+	if err != nil && err != model.ErrNotFound {
+		return nil, errorx.IntStatusErr(fmt.Errorf("SearchLucker LuckerModel.FindDetails error, err:%+v", err))
 	}
 	pbLuckerDetails := convertLuckerDetailsList(mdLuckerDetails)
 	return &luckdraw_pb.SearchLuckerResp{

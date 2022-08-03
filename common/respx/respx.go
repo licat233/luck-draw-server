@@ -76,7 +76,7 @@ func StateResp(alertMsg string, status bool) *StateData {
 //DefaultStateResp 默认返回响应状态，主要用于对接go-zero
 func DefaultStateResp(err error) (*StateData, error) {
 	if err != nil {
-		return nil, errorx.ToErrorx(err)
+		return nil, errorx.Convert(err)
 	}
 	return &StateData{
 		Status:  true,
@@ -96,7 +96,7 @@ func SingleResp(alertMsg string, data any) *SingleData {
 //DefaultSingleResp 默认返回单数据响应，主要用于对接go-zero
 func DefaultSingleResp(data any, err error) (*SingleData, error) {
 	if err != nil {
-		return nil, errorx.ToErrorx(err)
+		return nil, errorx.Convert(err)
 	}
 	return &SingleData{
 		Status:  true,
@@ -144,7 +144,7 @@ func ListResp(alertMsg string, listData any, totalRecord, pageSize, Page int64) 
  */
 func DefaultListResp(listData any, totalRecord, pageSize, Page int64, err error) (*ListData, error) {
 	if err != nil {
-		return nil, errorx.ToErrorx(err)
+		return nil, errorx.Convert(err)
 	}
 	data := listData
 	if listData != nil {
@@ -187,5 +187,5 @@ func DefaultBoolResp(ok bool, err error) (*StateData, error) {
 	if err == nil {
 		err = errorx.New("Request failed! But the server has no error prompt")
 	}
-	return nil, errorx.ToErrorx(err)
+	return nil, errorx.Convert(err)
 }

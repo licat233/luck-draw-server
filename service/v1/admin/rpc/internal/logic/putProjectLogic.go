@@ -7,8 +7,9 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type PutProjectLogic struct {
@@ -27,7 +28,7 @@ func NewPutProjectLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutPro
 
 func (l *PutProjectLogic) PutProject(in *admin_pb.Project) (*admin_pb.StatusResp, error) {
 	if in == nil {
-		return nil, errorx.ErrEmptyParam
+		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
 	}
 
 	data := &model.Project{
@@ -38,7 +39,7 @@ func (l *PutProjectLogic) PutProject(in *admin_pb.Project) (*admin_pb.StatusResp
 	}
 
 	if err := l.svcCtx.ProjectModel.Update(l.ctx, data); err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("PutProject ProjectModel.Update(l.ctx, data) error, err:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("PutProject ProjectModel.Update(l.ctx, data) error, err:%v", err))
 	}
 
 	return newStatusResponse(), nil

@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
-	model2 "luck-draw/service/v1/model"
+	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
 	"luck-draw/common/uniqueid"
 	"luck-draw/common/utils"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type AddPrizesPoolLogic struct {
@@ -29,10 +30,10 @@ func NewAddPrizesPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Add
 
 func (l *AddPrizesPoolLogic) AddPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.AddPrizesPoolResp, error) {
 	if in == nil {
-		return nil, errorx.ErrEmptyParam
+		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
 	}
 
-	data := &model2.PrizesPool{
+	data := &model.PrizesPool{
 		Uuid:       uniqueid.NewUUID(),
 		ActivityId: in.ActivityId,
 		PrizeId:    in.PrizeId,
@@ -45,19 +46,19 @@ func (l *AddPrizesPoolLogic) AddPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.A
 	}
 	result, err := l.svcCtx.PrizesPoolModel.Insert(l.ctx, data)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("AddPrizesPool PrizesPoolModel.Insert(l.ctx, data) error, err:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddPrizesPool PrizesPoolModel.Insert(l.ctx, data) error, err:%v", err))
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("AddPrizesPool PrizesPoolModel.Insert(l.ctx, data) error, err:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddPrizesPool PrizesPoolModel.Insert(l.ctx, data) error, err:%v", err))
 	}
 
 	prizesPool, err := l.svcCtx.PrizesPoolModel.FindOne(l.ctx, id)
-	if err != nil && err != model2.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("AddPrizesPool PrizesPoolModel.FindOne(l.ctx, id) error, err:%v", err))
+	if err != nil && err != model.ErrNotFound {
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddPrizesPool PrizesPoolModel.FindOne(l.ctx, id) error, err:%v", err))
 	}
-	if err == model2.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("AddPrizesPool PrizesPoolModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
+	if err == model.ErrNotFound {
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddPrizesPool PrizesPoolModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
 	}
 
 	return &admin_pb.AddPrizesPoolResp{

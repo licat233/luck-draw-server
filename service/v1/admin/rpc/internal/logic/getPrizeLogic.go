@@ -7,8 +7,9 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetPrizeLogic struct {
@@ -28,7 +29,7 @@ func NewGetPrizeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetPrize
 func (l *GetPrizeLogic) GetPrize(in *admin_pb.ItemReq) (*admin_pb.GetPrizeResp, error) {
 	res, err := l.svcCtx.PrizeModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("GetPrize PrizeModel.FindOne(l.ctx, in.Id) error, err: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetPrize PrizeModel.FindOne(l.ctx, in.Id) error, err: %v", err))
 	}
 	if err == model.ErrNotFound {
 		return nil, nil

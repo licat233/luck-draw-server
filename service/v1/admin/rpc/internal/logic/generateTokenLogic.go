@@ -7,11 +7,12 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/ctxdata"
 	"luck-draw/common/errorx"
 	"luck-draw/common/jwtx"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GenerateTokenLogic struct {
@@ -31,7 +32,7 @@ func NewGenerateTokenLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Gen
 // 生产token
 func (l *GenerateTokenLogic) GenerateToken(in *admin_pb.GenerateTokenReq) (*admin_pb.GenerateTokenResp, error) {
 	if in.JwtData == nil {
-		return nil, errorx.ErrEmptyParam
+		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
 	}
 	now := time.Now().Unix()
 	accessExpire := l.svcCtx.Config.JwtAuth.AccessExpire
@@ -40,7 +41,7 @@ func (l *GenerateTokenLogic) GenerateToken(in *admin_pb.GenerateTokenReq) (*admi
 	}
 	accessToken, err := l.getJwtToken(l.svcCtx.Config.JwtAuth.AccessSecret, now, accessExpire, in.JwtData)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("GenerateToken getJwtToken(l.svcCtx.Config.JwtAuth.AccessSecret, now, accessExpire, in.UserId) error: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GenerateToken getJwtToken(l.svcCtx.Config.JwtAuth.AccessSecret, now, accessExpire, in.UserId) error: %v", err))
 	}
 
 	return &admin_pb.GenerateTokenResp{

@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
-	model2 "luck-draw/service/v1/model"
+	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
 	"luck-draw/common/uniqueid"
 	"luck-draw/common/utils"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type AddActivityLogic struct {
@@ -29,18 +30,18 @@ func NewAddActivityLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddAc
 
 func (l *AddActivityLogic) AddActivity(in *admin_pb.Activity) (*admin_pb.AddActivityResp, error) {
 	if in == nil {
-		return nil, errorx.ErrEmptyParam
+		return nil, errorx.ExtStatusErr(errorx.ErrEmptyParam)
 	}
 	startTime, err := utils.Int64ToTime(in.StartTime)
 	if err != nil {
-		return nil, errorx.ErrInvalidParam
+		return nil, errorx.ExtStatusErr(errorx.ErrInvalidParam)
 	}
 	endTime, err := utils.Int64ToTime(in.EndTime)
 	if err != nil {
-		return nil, errorx.ErrInvalidParam
+		return nil, errorx.ExtStatusErr(errorx.ErrInvalidParam)
 	}
 
-	data := &model2.Activity{
+	data := &model.Activity{
 		Uuid:      uniqueid.NewUUID(),
 		Name:      in.Name,
 		ProjectId: in.ProjectId,
@@ -53,19 +54,19 @@ func (l *AddActivityLogic) AddActivity(in *admin_pb.Activity) (*admin_pb.AddActi
 	}
 	result, err := l.svcCtx.ActivityModel.Insert(l.ctx, data)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("AddActivity ActivityModel.Insert(l.ctx, data) error, err:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddActivity ActivityModel.Insert(l.ctx, data) error, err:%v", err))
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("AddActivity result.LastInsertId() error, err:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddActivity result.LastInsertId() error, err:%v", err))
 	}
 
 	activity, err := l.svcCtx.ActivityModel.FindOne(l.ctx, id)
-	if err != nil && err != model2.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("AddActivity ActivityModel.FindOne(l.ctx, id) error, err:%v", err))
+	if err != nil && err != model.ErrNotFound {
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddActivity ActivityModel.FindOne(l.ctx, id) error, err:%v", err))
 	}
-	if err == model2.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("AddActivity ActivityModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
+	if err == model.ErrNotFound {
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddActivity ActivityModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
 	}
 
 	return &admin_pb.AddActivityResp{

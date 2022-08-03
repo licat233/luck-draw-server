@@ -7,9 +7,10 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
 	"luck-draw/common/utils"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type PutAdminerLogic struct {
@@ -28,12 +29,12 @@ func NewPutAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutAdm
 
 func (l *PutAdminerLogic) PutAdminer(in *admin_pb.Adminer) (*admin_pb.StatusResp, error) {
 	if in == nil {
-		return nil, errorx.ErrEmptyParam
+		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
 	}
 	//时间戳转化为time.Time
 	lastLogin, err := utils.Int64ToTime(in.LastLogin)
 	if err != nil {
-		return nil, errorx.ExternalError(fmt.Errorf("lastLoginTime convert error, err:%v", err))
+		return nil, errorx.ExtStatusErr(fmt.Errorf("lastLoginTime convert error, err:%v", err))
 	}
 
 	data := &model.Adminer{
@@ -50,7 +51,7 @@ func (l *PutAdminerLogic) PutAdminer(in *admin_pb.Adminer) (*admin_pb.StatusResp
 	}
 
 	if err = l.svcCtx.AdminerModel.Update(l.ctx, data); err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("PutAdminer AdminerModel.Update(l.ctx, data) error, err:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("PutAdminer AdminerModel.Update(l.ctx, data) error, err:%v", err))
 	}
 
 	return newStatusResponse(), nil

@@ -6,10 +6,11 @@ import (
 	"luck-draw/service/v1/captcha/api/internal/types"
 	"luck-draw/service/v1/captcha/rpc/captcha_pb"
 
-	"github.com/asaskevich/govalidator"
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
 	"luck-draw/common/respx"
+
+	"github.com/asaskevich/govalidator"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type EmailCaptchaVerifyLogic struct {

@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
-	model2 "luck-draw/service/v1/model"
+	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
 	"luck-draw/common/uniqueid"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type AddPrizeLogic struct {
@@ -28,10 +29,10 @@ func NewAddPrizeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPrize
 
 func (l *AddPrizeLogic) AddPrize(in *admin_pb.Prize) (*admin_pb.AddPrizeResp, error) {
 	if in == nil {
-		return nil, errorx.ErrEmptyParam
+		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
 	}
 
-	data := &model2.Prize{
+	data := &model.Prize{
 		Uuid:   uniqueid.NewUUID(),
 		Name:   in.Name,
 		Image:  in.Image,
@@ -40,19 +41,19 @@ func (l *AddPrizeLogic) AddPrize(in *admin_pb.Prize) (*admin_pb.AddPrizeResp, er
 	}
 	result, err := l.svcCtx.PrizeModel.Insert(l.ctx, data)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("AddPrize PrizeModel.Insert(l.ctx, data) error, err:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddPrize PrizeModel.Insert(l.ctx, data) error, err:%v", err))
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("AddPrize PrizeModel.Insert(l.ctx, data) error, err:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddPrize PrizeModel.Insert(l.ctx, data) error, err:%v", err))
 	}
 
 	prize, err := l.svcCtx.PrizeModel.FindOne(l.ctx, id)
-	if err != nil && err != model2.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("AddPrize PrizeModel.FindOne(l.ctx, id) error, err:%v", err))
+	if err != nil && err != model.ErrNotFound {
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddPrize PrizeModel.FindOne(l.ctx, id) error, err:%v", err))
 	}
-	if err == model2.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("AddPrize PrizeModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
+	if err == model.ErrNotFound {
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddPrize PrizeModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
 	}
 
 	return &admin_pb.AddPrizeResp{

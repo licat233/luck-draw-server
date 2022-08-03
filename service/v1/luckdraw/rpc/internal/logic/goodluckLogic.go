@@ -46,60 +46,60 @@ func NewGoodluckLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Goodluck
  */
 func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.GoodluckResp, error) {
 	if !govalidator.IsIP(in.Ip) {
-		return nil, errorx.ExternalError(errors.New("request ip validator failed"))
+		return nil, errorx.SecStatusErr(errors.New("request ip validator failed"))
 	}
 	//获取用户信息
 	user, err := l.svcCtx.UserModel.FindOne(l.ctx, in.UserId)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("Goodluck UserModel.Exists error, err:%+v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("Goodluck UserModel.Exists error, err:%+v", err))
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.ExternalError(fmt.Errorf("user not found, id: %d", in.UserId))
+		return nil, errorx.SecStatusErr(fmt.Errorf("user not found, id: %d", in.UserId))
 	}
 	err = model.VerifyUser(user)
 	if err != nil {
-		return nil, errorx.ExternalError(err)
+		return nil, errorx.ExtStatusErr(err)
 	}
 
 	//获取活动信息
 	mdActivity, err := l.svcCtx.ActivityModel.FindOne(l.ctx, in.ActivityId)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("Goodluck ActivityModel.FindOne error, err:%+v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("Goodluck ActivityModel.FindOne error, err:%+v", err))
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.ExternalError(fmt.Errorf("activity not found, id: %d", in.ActivityId))
+		return nil, errorx.SecStatusErr(fmt.Errorf("activity not found, id: %d", in.ActivityId))
 	}
 	if mdActivity.Uuid != in.ActivityUuid {
-		return nil, errorx.ExternalError(errors.New("Activity UUID does not match activity ID"))
+		return nil, errorx.SecStatusErr(errors.New("Activity UUID does not match activity ID"))
 	}
 	err = model.VerifyActivity(mdActivity)
 	if err != nil {
-		return nil, errorx.ExternalError(err)
+		return nil, errorx.ExtStatusErr(err)
 	}
 
 	//检查该用户在该活动的抽奖次数
 	luckCount, err := l.svcCtx.LuckerModel.FindCountByUserAndActivity(l.ctx, in.UserId, mdActivity.Id)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("Goodluck LuckerModel.FindCountByUserAndActivity error, err:%+v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("Goodluck LuckerModel.FindCountByUserAndActivity error, err:%+v", err))
 	}
 	if luckCount >= mdActivity.MaxCount {
-		return nil, errorx.ExternalError(nil, fmt.Errorf("你在[%s]活动中的抽奖次数已达到上限！", mdActivity.Name))
+		return nil, errorx.ExtStatusErr(fmt.Errorf("你在[%s]活动中的抽奖次数已达到上限！", mdActivity.Name))
 	}
 
 	//获取活动奖品列表
 	mdPrizesPoolList, err := l.svcCtx.PrizesPoolModel.FindByActivityUuid(l.ctx, in.ActivityUuid)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("Goodluck PrizesPoolModel.FindByActivityUuid err:%+v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("Goodluck PrizesPoolModel.FindByActivityUuid err:%+v", err))
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.ExternalError(nil, errors.New("该活动的奖品池还没有放入奖品"))
+		return nil, errorx.ExtStatusErr(errors.New("该活动的奖品池还没有放入奖品"))
 	}
 	pbPrizesPoolList := convertPrizesPoolList(mdPrizesPoolList)
 
 	//抽取奖品
 	PrizesPool, err := randomPrize(pbPrizesPoolList)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("Goodluck randomPrize errors err:%+v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("Goodluck randomPrize errors err:%+v", err))
 	}
 
 	//建立中奖信息
@@ -113,7 +113,7 @@ func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.Good
 	}
 	_, err = l.svcCtx.LuckerModel.Insert(l.ctx, mdLucker)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("Goodluck LuckerModel.Insert err:%+v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("Goodluck LuckerModel.Insert err:%+v", err))
 	}
 
 	//积分奖励
@@ -121,7 +121,7 @@ func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.Good
 	// if PrizesPool.IsWin == false {
 	// 	user.Score += 10
 	// 	if err = l.svcCtx.UserModel.Update(l.ctx, user); err != nil {
-	// 		return nil, errorx.InternalError(fmt.Errorf("Goodluck UserModel.Update err:%+v", err))
+	// 		return nil, errorx.IntStatusErr(fmt.Errorf("Goodluck UserModel.Update err:%+v", err))
 	// 	}
 	// }
 
@@ -133,10 +133,10 @@ func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.Good
 	//获取奖品信息
 	mdPrize, err := l.svcCtx.PrizeModel.FindOne(l.ctx, PrizesPool.PrizeId)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("Goodluck PrizeModel.FindOne err:%+v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("Goodluck PrizeModel.FindOne err:%+v", err))
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("Goodluck PrizesPool.PrizeId:%d not found, err:%+v", PrizesPool.PrizeId, err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("Goodluck PrizesPool.PrizeId:%d not found, err:%+v", PrizesPool.PrizeId, err))
 	}
 
 	//返回中奖信息

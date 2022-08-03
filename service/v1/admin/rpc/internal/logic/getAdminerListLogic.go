@@ -7,8 +7,9 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetAdminerListLogic struct {
@@ -28,7 +29,7 @@ func NewGetAdminerListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 func (l *GetAdminerListLogic) GetAdminerList(in *admin_pb.ListReq) (*admin_pb.GetAdminerListResp, error) {
 	list, err := l.svcCtx.AdminerModel.FindList(l.ctx, in.PageSize, in.Page)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("GetAdminerList AdminerModel.FindList(l.ctx, in.PageSize, in.Page) error, err: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetAdminerList AdminerModel.FindList(l.ctx, in.PageSize, in.Page) error, err: %v", err))
 	}
 	if err == model.ErrNotFound {
 		return &admin_pb.GetAdminerListResp{
@@ -37,7 +38,7 @@ func (l *GetAdminerListLogic) GetAdminerList(in *admin_pb.ListReq) (*admin_pb.Ge
 	}
 	total, err := l.svcCtx.AdminerModel.FindCount(l.ctx)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("GetAdminerList AdminerModel.FindCount(l.ctx) error, err: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetAdminerList AdminerModel.FindCount(l.ctx) error, err: %v", err))
 	}
 
 	return &admin_pb.GetAdminerListResp{

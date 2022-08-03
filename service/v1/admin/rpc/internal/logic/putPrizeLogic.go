@@ -7,8 +7,9 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type PutPrizeLogic struct {
@@ -27,7 +28,7 @@ func NewPutPrizeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutPrize
 
 func (l *PutPrizeLogic) PutPrize(in *admin_pb.Prize) (*admin_pb.StatusResp, error) {
 	if in == nil {
-		return nil, errorx.ErrEmptyParam
+		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
 	}
 
 	data := &model.Prize{
@@ -40,7 +41,7 @@ func (l *PutPrizeLogic) PutPrize(in *admin_pb.Prize) (*admin_pb.StatusResp, erro
 	}
 
 	if err := l.svcCtx.PrizeModel.Update(l.ctx, data); err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("PutPrize PrizeModel.Update(l.ctx, data) error, err:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("PutPrize PrizeModel.Update(l.ctx, data) error, err:%v", err))
 	}
 
 	return newStatusResponse(), nil

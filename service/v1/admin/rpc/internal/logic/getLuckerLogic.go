@@ -7,8 +7,9 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetLuckerLogic struct {
@@ -28,7 +29,7 @@ func NewGetLuckerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetLuck
 func (l *GetLuckerLogic) GetLucker(in *admin_pb.ItemReq) (*admin_pb.GetLuckerResp, error) {
 	res, err := l.svcCtx.LuckerModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("GetLucker LuckerModel.FindOne(l.ctx, in.Id) error, err: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetLucker LuckerModel.FindOne(l.ctx, in.Id) error, err: %v", err))
 	}
 	if err == model.ErrNotFound {
 		return nil, nil

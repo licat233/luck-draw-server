@@ -36,19 +36,19 @@ func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq
 		e := recover()
 		if e != nil {
 			resp = nil
-			err = errorx.InternalError(fmt.Errorf("has panic: %+v", e))
+			err = errorx.IntStatusErr(fmt.Errorf("has panic: %+v", e))
 		}
 	}()
 	email := strings.TrimSpace(in.Email)
 	//校验邮箱格式是否正确
 	if govalidator.IsEmail(email) == false {
-		return nil, errorx.ErrInvalidEmail
+		return nil, errorx.ExtStatusErr(errorx.ErrInvalidEmail)
 	}
 
 	//生成captcha_id
 	captchaId, err := generateDigitCaptcha(l.svcCtx.CaptchaStore)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("GetEmailCaptcha generateDigitCaptcha err:%+v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetEmailCaptcha generateDigitCaptcha err:%+v", err))
 	}
 	//获取captcha_id的answer
 	answer := l.svcCtx.CaptchaStore.Get(captchaId, false)
@@ -57,7 +57,7 @@ func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq
 
 	//先存入redis中，key为邮箱，value为验证码，过期时间为 expireTime
 	if err := l.svcCtx.RedisClient.SetexCtx(l.ctx, key, email, int(l.svcCtx.CaptchaExpire.Seconds())); err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("GetEmailCaptcha RedisClient.SetexCtx(l.ctx, key, email, int(expireTime.Seconds())) error：%+v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetEmailCaptcha RedisClient.SetexCtx(l.ctx, key, email, int(expireTime.Seconds())) error：%+v", err))
 	}
 
 	//发送邮件到邮箱
@@ -65,9 +65,12 @@ func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq
 	if err != nil {
 		// 如果发送失败了，就要删除刚刚存入redis的数据
 		if _, e := l.svcCtx.RedisClient.DelCtx(l.ctx, key); e != nil {
-			return nil, errorx.InternalError(fmt.Errorf("GetEmailCaptcha emailx.SendCaptcha(l.ctx, answer, email) err:%+v , RedisClient.DelCtx(l.ctx, key) error:%+v", err, e))
+			return nil, errorx.IntStatusErr(fmt.Errorf("GetEmailCaptcha emailx.SendCaptcha(l.ctx, answer, email) err:%+v , RedisClient.DelCtx(l.ctx, key) error:%+v", err, e))
 		}
-		return nil, errorx.InternalError(fmt.Errorf("GetEmailCaptcha emailx.SendCaptcha(l.ctx, captchaValue, email) error:%+v", err))
+		if err == emailx.ErrTimed {
+			return nil, errorx.ExtStatusErr(err)
+		}
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetEmailCaptcha emailx.SendCaptcha(l.ctx, captchaValue, email) error:%+v", err))
 	}
 
 	//发送成功

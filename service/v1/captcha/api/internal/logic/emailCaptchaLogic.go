@@ -55,5 +55,5 @@ func (l *EmailCaptchaLogic) EmailCaptcha(req *types.EmailCaptchaReq) (any, error
 		CaptchaId: resp.CaptchaId,
 		ExpiresAt: resp.ExpiresAt,
 	}
-	return respx.DefaultSingleResp(data, err)
+	return respx.NewData(data), nil
 }

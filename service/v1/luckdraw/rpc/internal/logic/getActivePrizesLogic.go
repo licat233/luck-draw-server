@@ -7,8 +7,9 @@ import (
 	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetActivePrizesLogic struct {
@@ -29,7 +30,7 @@ func NewGetActivePrizesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 func (l *GetActivePrizesLogic) GetActivePrizes(in *luckdraw_pb.ActivePrizesReq) (*luckdraw_pb.ActivePrizesResp, error) {
 	list, err := l.svcCtx.PrizeModel.FindPrizesByActivityUuid(l.ctx, in.ActivityUuid)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("GetActivePrizes err:%+v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetActivePrizes err:%+v", err))
 	}
 	return &luckdraw_pb.ActivePrizesResp{
 		Prizes: convertPrizes(list),

@@ -4,14 +4,14 @@ import (
 	"errors"
 	"luck-draw/common/utils"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
-	model2 "luck-draw/service/v1/model"
+	"luck-draw/service/v1/model"
 )
 
 func newStatusResponse() *admin_pb.StatusResp {
 	return &admin_pb.StatusResp{}
 }
 
-func mdActivityToPbActivity(mdActivity *model2.Activity) *admin_pb.Activity {
+func mdActivityToPbActivity(mdActivity *model.Activity) *admin_pb.Activity {
 	if mdActivity == nil {
 		return nil
 	}
@@ -29,7 +29,7 @@ func mdActivityToPbActivity(mdActivity *model2.Activity) *admin_pb.Activity {
 	}
 }
 
-func mdActivityListToPbActivityList(mdActivityList []*model2.Activity) []*admin_pb.Activity {
+func mdActivityListToPbActivityList(mdActivityList []*model.Activity) []*admin_pb.Activity {
 	pbActivityList := make([]*admin_pb.Activity, 0, len(mdActivityList))
 	for _, mdActivity := range mdActivityList {
 		pbActivityList = append(pbActivityList, mdActivityToPbActivity(mdActivity))
@@ -37,7 +37,7 @@ func mdActivityListToPbActivityList(mdActivityList []*model2.Activity) []*admin_
 	return pbActivityList
 }
 
-func mdAdminerToPbAdminer(mdAdminer *model2.Adminer) *admin_pb.Adminer {
+func mdAdminerToPbAdminer(mdAdminer *model.Adminer) *admin_pb.Adminer {
 	if mdAdminer == nil {
 		return nil
 	}
@@ -54,7 +54,7 @@ func mdAdminerToPbAdminer(mdAdminer *model2.Adminer) *admin_pb.Adminer {
 	}
 }
 
-func mdAdminerListToPbAdminerList(mdAdminerList []*model2.Adminer) []*admin_pb.Adminer {
+func mdAdminerListToPbAdminerList(mdAdminerList []*model.Adminer) []*admin_pb.Adminer {
 	pbAdminerList := make([]*admin_pb.Adminer, 0, len(mdAdminerList))
 	for _, mdAdminer := range mdAdminerList {
 		pbAdminerList = append(pbAdminerList, mdAdminerToPbAdminer(mdAdminer))
@@ -62,7 +62,7 @@ func mdAdminerListToPbAdminerList(mdAdminerList []*model2.Adminer) []*admin_pb.A
 	return pbAdminerList
 }
 
-func mdLuckerToPbLucker(mdLucker *model2.Lucker) *admin_pb.Lucker {
+func mdLuckerToPbLucker(mdLucker *model.Lucker) *admin_pb.Lucker {
 	if mdLucker == nil {
 		return nil
 	}
@@ -77,7 +77,7 @@ func mdLuckerToPbLucker(mdLucker *model2.Lucker) *admin_pb.Lucker {
 	}
 }
 
-func mdLuckerListToPbLuckerList(mdLuckerList []*model2.Lucker) []*admin_pb.Lucker {
+func mdLuckerListToPbLuckerList(mdLuckerList []*model.Lucker) []*admin_pb.Lucker {
 	pbLuckerList := make([]*admin_pb.Lucker, 0, len(mdLuckerList))
 	for _, mdLucker := range mdLuckerList {
 		pbLuckerList = append(pbLuckerList, mdLuckerToPbLucker(mdLucker))
@@ -85,7 +85,7 @@ func mdLuckerListToPbLuckerList(mdLuckerList []*model2.Lucker) []*admin_pb.Lucke
 	return pbLuckerList
 }
 
-func mdPrizeToPbPrize(mdPrize *model2.Prize) *admin_pb.Prize {
+func mdPrizeToPbPrize(mdPrize *model.Prize) *admin_pb.Prize {
 	if mdPrize == nil {
 		return nil
 	}
@@ -99,7 +99,7 @@ func mdPrizeToPbPrize(mdPrize *model2.Prize) *admin_pb.Prize {
 	}
 }
 
-func mdPrizeListToPbPrizeList(mdPrizeList []*model2.Prize) []*admin_pb.Prize {
+func mdPrizeListToPbPrizeList(mdPrizeList []*model.Prize) []*admin_pb.Prize {
 	pbPrizeList := make([]*admin_pb.Prize, 0, len(mdPrizeList))
 	for _, mdPrize := range mdPrizeList {
 		pbPrizeList = append(pbPrizeList, mdPrizeToPbPrize(mdPrize))
@@ -107,7 +107,7 @@ func mdPrizeListToPbPrizeList(mdPrizeList []*model2.Prize) []*admin_pb.Prize {
 	return pbPrizeList
 }
 
-func mdPrizesPoolToPbPrizesPool(mdPrizesPool *model2.PrizesPool) *admin_pb.PrizesPool {
+func mdPrizesPoolToPbPrizesPool(mdPrizesPool *model.PrizesPool) *admin_pb.PrizesPool {
 	if mdPrizesPool == nil {
 		return nil
 	}
@@ -125,7 +125,7 @@ func mdPrizesPoolToPbPrizesPool(mdPrizesPool *model2.PrizesPool) *admin_pb.Prize
 	}
 }
 
-func mdPrizesPoolListToPbPrizesPoolList(mdPrizesPoolList []*model2.PrizesPool) []*admin_pb.PrizesPool {
+func mdPrizesPoolListToPbPrizesPoolList(mdPrizesPoolList []*model.PrizesPool) []*admin_pb.PrizesPool {
 	pbPrizesPoolList := make([]*admin_pb.PrizesPool, 0, len(mdPrizesPoolList))
 	for _, mdPrizesPool := range mdPrizesPoolList {
 		pbPrizesPoolList = append(pbPrizesPoolList, mdPrizesPoolToPbPrizesPool(mdPrizesPool))
@@ -133,7 +133,7 @@ func mdPrizesPoolListToPbPrizesPoolList(mdPrizesPoolList []*model2.PrizesPool) [
 	return pbPrizesPoolList
 }
 
-func mdProjectToPbProject(mdProject *model2.Project) *admin_pb.Project {
+func mdProjectToPbProject(mdProject *model.Project) *admin_pb.Project {
 	if mdProject == nil {
 		return nil
 	}
@@ -145,7 +145,7 @@ func mdProjectToPbProject(mdProject *model2.Project) *admin_pb.Project {
 	}
 }
 
-func mdProjectListToPbProjectList(mdProjectList []*model2.Project) []*admin_pb.Project {
+func mdProjectListToPbProjectList(mdProjectList []*model.Project) []*admin_pb.Project {
 	pbProjectList := make([]*admin_pb.Project, 0, len(mdProjectList))
 	for _, mdProject := range mdProjectList {
 		pbProjectList = append(pbProjectList, mdProjectToPbProject(mdProject))
@@ -153,7 +153,7 @@ func mdProjectListToPbProjectList(mdProjectList []*model2.Project) []*admin_pb.P
 	return pbProjectList
 }
 
-func mdUserToPbUser(mdUser *model2.User) *admin_pb.User {
+func mdUserToPbUser(mdUser *model.User) *admin_pb.User {
 	if mdUser == nil {
 		return nil
 	}
@@ -170,7 +170,7 @@ func mdUserToPbUser(mdUser *model2.User) *admin_pb.User {
 	}
 }
 
-func mdUserListToPbUserList(mdUserList []*model2.User) []*admin_pb.User {
+func mdUserListToPbUserList(mdUserList []*model.User) []*admin_pb.User {
 	pbUserList := make([]*admin_pb.User, 0, len(mdUserList))
 	for _, mdUser := range mdUserList {
 		pbUserList = append(pbUserList, mdUserToPbUser(mdUser))
@@ -178,7 +178,7 @@ func mdUserListToPbUserList(mdUserList []*model2.User) []*admin_pb.User {
 	return pbUserList
 }
 
-func mdUsersPoolToPbUsersPool(mdUsersPool *model2.UsersPool) *admin_pb.UsersPool {
+func mdUsersPoolToPbUsersPool(mdUsersPool *model.UsersPool) *admin_pb.UsersPool {
 	if mdUsersPool == nil {
 		return nil
 	}
@@ -192,7 +192,7 @@ func mdUsersPoolToPbUsersPool(mdUsersPool *model2.UsersPool) *admin_pb.UsersPool
 	}
 }
 
-func mdUsersPoolListToPbUsersPoolList(mdUsersPoolList []*model2.UsersPool) []*admin_pb.UsersPool {
+func mdUsersPoolListToPbUsersPoolList(mdUsersPoolList []*model.UsersPool) []*admin_pb.UsersPool {
 	pbUsersPoolList := make([]*admin_pb.UsersPool, 0, len(mdUsersPoolList))
 	for _, mdUsersPool := range mdUsersPoolList {
 		pbUsersPoolList = append(pbUsersPoolList, mdUsersPoolToPbUsersPool(mdUsersPool))
@@ -200,7 +200,7 @@ func mdUsersPoolListToPbUsersPoolList(mdUsersPoolList []*model2.UsersPool) []*ad
 	return pbUsersPoolList
 }
 
-func verifyAdminerStatus(adminer *model2.Adminer) error {
+func verifyAdminerStatus(adminer *model.Adminer) error {
 	if adminer.Status == 0 {
 		return errors.New("This account has been disabled")
 	}

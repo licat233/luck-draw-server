@@ -8,8 +8,9 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type DelAdminerLogic struct {
@@ -29,15 +30,15 @@ func NewDelAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelAdm
 func (l *DelAdminerLogic) DelAdminer(in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
 	data, err := l.svcCtx.AdminerModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("DelAdminer AdminerModel.FindOne(l.ctx, in.Id) error:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("DelAdminer AdminerModel.FindOne(l.ctx, in.Id) error:%v", err))
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.ExternalError(errors.New("Adminer not found"))
+		return nil, errorx.ExtStatusErr(errors.New("Adminer not found"))
 	}
 
 	err = l.svcCtx.AdminerModel.DeleteSoft(l.ctx, data)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("DelAdminer AdminerModel.DeleteSoft(l.ctx, data) error, err: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("DelAdminer AdminerModel.DeleteSoft(l.ctx, data) error, err: %v", err))
 	}
 	return newStatusResponse(), nil
 }

@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"luck-draw/service/v1/luckdraw/rpc/internal/svc"
 	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
-	model2 "luck-draw/service/v1/model"
+	"luck-draw/service/v1/model"
+
+	"luck-draw/common/errorx"
 
 	"github.com/zeromicro/go-zero/core/logx"
-	"luck-draw/common/errorx"
 )
 
 type GetLuckerListLogic struct {
@@ -28,7 +29,7 @@ func NewGetLuckerListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 // 查询某用户在某活动里的中奖名单
 func (l *GetLuckerListLogic) GetLuckerList(in *luckdraw_pb.GetLuckerListReq) (*luckdraw_pb.GetLuckerListResp, error) {
 	//查询中奖详情名单
-	luckerDtailsList, _, err := l.svcCtx.LuckerModel.FindDetails(l.ctx, &model2.FindDetailsOptions{
+	luckerDtailsList, _, err := l.svcCtx.LuckerModel.FindDetails(l.ctx, &model.FindDetailsOptions{
 		UserId:       in.UserId,
 		ActivityId:   -1,
 		ActivityUUID: in.ActivityUuid,
@@ -36,8 +37,8 @@ func (l *GetLuckerListLogic) GetLuckerList(in *luckdraw_pb.GetLuckerListReq) (*l
 		Page:         -1,
 	})
 
-	if err != nil && err != model2.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("GetLuckerList LuckerModel.FindDetails error, err:%+v", err))
+	if err != nil && err != model.ErrNotFound {
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetLuckerList LuckerModel.FindDetails error, err:%+v", err))
 	}
 
 	return &luckdraw_pb.GetLuckerListResp{

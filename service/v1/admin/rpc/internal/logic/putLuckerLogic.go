@@ -7,9 +7,10 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
 	"luck-draw/common/utils"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type PutLuckerLogic struct {
@@ -28,7 +29,7 @@ func NewPutLuckerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutLuck
 
 func (l *PutLuckerLogic) PutLucker(in *admin_pb.Lucker) (*admin_pb.StatusResp, error) {
 	if in == nil {
-		return nil, errorx.ErrEmptyParam
+		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
 	}
 	luckDate, err := utils.Int64ToTime(in.LuckDate)
 	if err != nil {
@@ -46,7 +47,7 @@ func (l *PutLuckerLogic) PutLucker(in *admin_pb.Lucker) (*admin_pb.StatusResp, e
 	}
 
 	if err = l.svcCtx.LuckerModel.Update(l.ctx, data); err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("PutLucker LuckerModel.Update(l.ctx, data) error, err:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("PutLucker LuckerModel.Update(l.ctx, data) error, err:%v", err))
 	}
 
 	return newStatusResponse(), nil

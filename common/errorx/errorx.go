@@ -6,12 +6,14 @@ import (
 	"net/http"
 
 	"github.com/zeromicro/go-zero/core/logx"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 /** Errorx 对接前端antpro框架的接口格式规范，用于实现error接口
  */
 type Errorx struct {
-	Success      bool   `json:"success"`      // 【必需】请求状态
+	Status       bool   `json:"success"`      // 【必需】请求状态
 	ErrorCode    int    `json:"errorCode"`    // 【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功
 	ErrorMessage string `json:"errorMessage"` // 【选填】向用户显示消息
 	TraceMessage string `json:"traceMessage"` // 【选填】自己加上去的，调试错误信息，请勿在生产环境下使用，可有可无
@@ -23,7 +25,7 @@ type Errorx struct {
 /** ResponseError 对接前端antpro框架的接口格式规范，用于实现展现错误
  */
 type ResponseError struct {
-	Success      bool   `json:"success"`      // 【必需】请求状态
+	Status       bool   `json:"success"`      // 【必需】请求状态
 	ErrorCode    int    `json:"errorCode"`    // 【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功
 	ErrorMessage string `json:"errorMessage"` // 【选填】向用户显示消息
 	TraceMessage string `json:"traceMessage"` // 【选填】自己加上去的，调试错误信息，请勿在生产环境下使用，可有可无
@@ -33,11 +35,12 @@ type ResponseError struct {
 }
 
 const (
-	ERROR_CODE_INTERNAL = 500 //内部错误
-	ERROR_CODE_EXTERNAL = 400 //外部错误（默认）
-	ERROR_CODE_AUTH     = 401 //外部错误（默认）
-	ERROR_CODE_ACCESS   = 403 //服务器禁止访问
-	SHOW_TYPE           = 2   //信息错误
+	ERROR_CODE_INTERNAL         = 500  //内部错误
+	ERROR_CODE_EXTERNAL         = 400  //外部错误（默认）会给与提示
+	ERROR_CODE_EXTERNAL_SECRECY = 4001 //外部错误，但错误原因保密
+	ERROR_CODE_AUTH             = 401  //外部错误（默认）
+	ERROR_CODE_ACCESS           = 403  //服务器禁止访问
+	SHOW_TYPE                   = 2    //信息错误
 )
 
 // var TRACE_MODEL = isTraceModel() //调试模式
@@ -63,7 +66,7 @@ func (e *Errorx) Error() string {
 //我们需要自己定义一个展现errorx结果的函数，使用ResponseError结构体
 func (e *Errorx) Data() *ResponseError {
 	return &ResponseError{
-		Success:      e.Success,
+		Status:       e.Status,
 		ErrorCode:    e.ErrorCode,
 		ErrorMessage: e.ErrorMessage,
 		TraceMessage: e.TraceMessage,
@@ -184,7 +187,7 @@ func newErrorx(alertMsg string, traceErr error) *Errorx {
 		traceMsg = traceErr.Error()
 	}
 	errorx := &Errorx{
-		Success:      false,
+		Status:       false,
 		ErrorCode:    ERROR_CODE_EXTERNAL,
 		ErrorMessage: alertMsg,
 		TraceMessage: traceMsg,
@@ -195,24 +198,33 @@ func newErrorx(alertMsg string, traceErr error) *Errorx {
 	return errorx
 }
 
+//判断是否为*Errorx错误
+func IsErrorx(err error) bool {
+	_, ok := err.(*Errorx)
+	return ok
+}
+
 //将原生错误转化为errorx 400错误
-func ToErrorx(err error) error {
+func Convert(err error) (errorx *Errorx) {
 	if err == nil {
 		return nil
 	}
 	//类型断言看是否为 Errorx 类型
-	if _, ok := err.(*Errorx); ok {
+	if errx, ok := err.(*Errorx); ok {
 		//无需处理，直接返回
-		return err
+		return errx
 	}
-	return New(err.Error())
+	//类型断言看是否为status.Error 类型
+
+	errorx = New(err.Error())
+	return
 }
 
 /** New 新建基本的errorx错误 400
  * alertErr string 调试信息
  * traceErr string 提示信息
  */
-func New(errs ...string) error {
+func New(errs ...string) (errorx *Errorx) {
 	alertErr := RequestErrorMsg
 	n := len(errs)
 	if n > 0 {
@@ -222,7 +234,8 @@ func New(errs ...string) error {
 	if n > 1 {
 		traceErr = errs[1]
 	}
-	return externalError(alertErr, errors.New(traceErr))
+	errorx = externalError(alertErr, errors.New(traceErr))
+	return
 }
 
 /** ResponseErrorHandler 对接go-zero的错误处理函数，将原生错误转化为 Errorx，默认为ExternalError
@@ -245,8 +258,84 @@ func ResponseErrorHandler(err error) (int, interface{}) {
 		return http.StatusOK, errorx.Data()
 	}
 
+	//类型断言看是否为 status.Error 类型
+	if se, ok := err.(interface {
+		GRPCStatus() *status.Status
+	}); ok {
+		//如果是statusErr错误，则需要转化为Errorx错误
+		return http.StatusOK, StatusErrToErrorx(se.GRPCStatus()).Data()
+	}
+
 	//原生错误，我们默认把原生error作为internalError返回
 	//原生错误可能是服务器内部panic错误，将这样的错误抛出给前端，是很不利的
 	//所有返回的错误应该尽量使用 errorx.New()
 	return http.StatusOK, internalError(ServerErrorMsg, err).Data()
+}
+
+/**需要注意的是：rpc中返回的status.Error Internael错误没有traceMessage，只有一个message**/
+
+//将error转化成External status.Status，主要用于rpc服务中
+func ExtStatusErr(err error) (statusError error) {
+	statusError = status.Error(ERROR_CODE_EXTERNAL, err.Error())
+	return
+}
+
+//将error转化成Internal status.Status，主要用于rpc服务中
+func IntStatusErr(err error) (statusError error) {
+	statusError = status.Error(ERROR_CODE_INTERNAL, err.Error())
+	return
+}
+
+//将error转化成Internal status.Status，主要用于rpc服务中
+func SecStatusErr(err error) (statusError error) {
+	statusError = status.Error(ERROR_CODE_EXTERNAL_SECRECY, err.Error())
+	return
+}
+
+//将status.Status error转化为Errorx，主要用于api服务处理rpc返回的错误
+func FromRpcErr(statusErr error) (errorx *Errorx) {
+	s := status.Convert(statusErr)
+	return StatusErrToErrorx(s)
+}
+
+//status.Error转化为errorx
+func StatusErrToErrorx(statusErr *status.Status) (errorx *Errorx) {
+	switch statusErr.Code() {
+	case ERROR_CODE_INTERNAL:
+		errorx = internalError(ServerErrorMsg, errors.New(statusErr.Message()))
+	case ERROR_CODE_EXTERNAL:
+		errorx = externalError(statusErr.Message(), nil)
+	case ERROR_CODE_EXTERNAL_SECRECY:
+		errorx = externalError(RequestErrorMsg, errors.New(statusErr.Message()))
+	case ERROR_CODE_AUTH:
+		errorx = authError(statusErr.Message(), nil)
+	case ERROR_CODE_ACCESS:
+		errorx = accessError(RequestFailedMsg, errors.New(statusErr.Message()))
+	default:
+		//未知错误，可能是panic引起的，内部错误，不抛给前端
+		errorx = internalError(ServerErrorMsg, errors.New(statusErr.Message()))
+	}
+	return
+}
+
+//将errorx转化为status.Status error
+func ToStatusErr(errorx error) (statusErr error) {
+	if errx, ok := errorx.(*Errorx); ok {
+		return status.Error(codes.Code(errx.ErrorCode), errx.ErrorMessage)
+	}
+	//原生错误，我们默认转化为500错误
+	return status.Error(ERROR_CODE_INTERNAL, errorx.Error())
+}
+
+//转化为status.Error
+func (errx *Errorx) ToStatusErr() status.Status {
+	if errx.TraceMessage != "" {
+		return *status.New(codes.Code(errx.ErrorCode), errx.TraceMessage)
+	}
+	return *status.New(codes.Code(errx.ErrorCode), errx.ErrorMessage)
+}
+
+//转化为error接口
+func (errx *Errorx) ToError() error {
+	return errx
 }

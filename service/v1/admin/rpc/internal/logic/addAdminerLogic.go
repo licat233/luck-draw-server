@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
-	model2 "luck-draw/service/v1/model"
+	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
 	"luck-draw/common/uniqueid"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type AddAdminerLogic struct {
@@ -28,10 +29,10 @@ func NewAddAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddAdm
 
 func (l *AddAdminerLogic) AddAdminer(in *admin_pb.Adminer) (*admin_pb.AddAdminerResp, error) {
 	if in == nil {
-		return nil, errorx.ErrEmptyParam
+		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
 	}
 
-	data := &model2.Adminer{
+	data := &model.Adminer{
 		Uuid:         uniqueid.NewUUID(),
 		Name:         in.Name,
 		Passport:     in.Passport,
@@ -42,19 +43,19 @@ func (l *AddAdminerLogic) AddAdminer(in *admin_pb.Adminer) (*admin_pb.AddAdminer
 	}
 	result, err := l.svcCtx.AdminerModel.Insert(l.ctx, data)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("AddAdminer AdminerModel.Insert(l.ctx, data) error, err:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddAdminer AdminerModel.Insert(l.ctx, data) error, err:%v", err))
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("AddAdminer AdminerModel.Insert(l.ctx, data) error, err:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddAdminer AdminerModel.Insert(l.ctx, data) error, err:%v", err))
 	}
 
 	adminer, err := l.svcCtx.AdminerModel.FindOne(l.ctx, id)
-	if err != nil && err != model2.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("AddAdminer AdminerModel.FindOne(l.ctx, id) error, err:%v", err))
+	if err != nil && err != model.ErrNotFound {
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddAdminer AdminerModel.FindOne(l.ctx, id) error, err:%v", err))
 	}
-	if err == model2.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("AddAdminer AdminerModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
+	if err == model.ErrNotFound {
+		return nil, errorx.IntStatusErr(fmt.Errorf("AddAdminer AdminerModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
 	}
 
 	return &admin_pb.AddAdminerResp{

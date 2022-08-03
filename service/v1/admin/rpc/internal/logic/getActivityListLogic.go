@@ -7,8 +7,9 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetActivityListLogic struct {
@@ -28,7 +29,7 @@ func NewGetActivityListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 func (l *GetActivityListLogic) GetActivityList(in *admin_pb.ListReq) (*admin_pb.GetActivityListResp, error) {
 	list, err := l.svcCtx.ActivityModel.FindList(l.ctx, in.PageSize, in.Page)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("GetActivityList ActivityModel.FindList(l.ctx, in.PageSize, in.Page) error, err: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetActivityList ActivityModel.FindList(l.ctx, in.PageSize, in.Page) error, err: %v", err))
 	}
 	if err == model.ErrNotFound {
 		return &admin_pb.GetActivityListResp{
@@ -37,7 +38,7 @@ func (l *GetActivityListLogic) GetActivityList(in *admin_pb.ListReq) (*admin_pb.
 	}
 	total, err := l.svcCtx.ActivityModel.FindCount(l.ctx)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("GetActivityList ActivityModel.FindCount(l.ctx) error, err: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetActivityList ActivityModel.FindCount(l.ctx) error, err: %v", err))
 	}
 
 	return &admin_pb.GetActivityListResp{

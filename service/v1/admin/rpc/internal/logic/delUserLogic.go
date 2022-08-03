@@ -8,8 +8,9 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type DelUserLogic struct {
@@ -29,15 +30,15 @@ func NewDelUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelUserLo
 func (l *DelUserLogic) DelUser(in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
 	data, err := l.svcCtx.UserModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("DelUser UserModel.FindOne(l.ctx, in.Id) error:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("DelUser UserModel.FindOne(l.ctx, in.Id) error:%v", err))
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.ExternalError(errors.New("User not found"))
+		return nil, errorx.ExtStatusErr(errors.New("User not found"))
 	}
 
 	err = l.svcCtx.UserModel.DeleteSoft(l.ctx, data)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("DelUser UserModel.DeleteSoft(l.ctx, data) error, err: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("DelUser UserModel.DeleteSoft(l.ctx, data) error, err: %v", err))
 	}
 	return newStatusResponse(), nil
 }

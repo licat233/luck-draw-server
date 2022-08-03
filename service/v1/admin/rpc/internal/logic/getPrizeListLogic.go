@@ -7,8 +7,9 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetPrizeListLogic struct {
@@ -28,7 +29,7 @@ func NewGetPrizeListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetP
 func (l *GetPrizeListLogic) GetPrizeList(in *admin_pb.ListReq) (*admin_pb.GetPrizeListResp, error) {
 	list, err := l.svcCtx.PrizeModel.FindList(l.ctx, in.PageSize, in.Page)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("GetPrizeList PrizeModel.FindList(l.ctx, in.PageSize, in.Page) error, err: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetPrizeList PrizeModel.FindList(l.ctx, in.PageSize, in.Page) error, err: %v", err))
 	}
 	if err == model.ErrNotFound {
 		return &admin_pb.GetPrizeListResp{
@@ -37,7 +38,7 @@ func (l *GetPrizeListLogic) GetPrizeList(in *admin_pb.ListReq) (*admin_pb.GetPri
 	}
 	total, err := l.svcCtx.PrizeModel.FindCount(l.ctx)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("GetPrizeList PrizeModel.FindCount(l.ctx) error, err: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetPrizeList PrizeModel.FindCount(l.ctx) error, err: %v", err))
 	}
 
 	return &admin_pb.GetPrizeListResp{

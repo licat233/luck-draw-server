@@ -6,45 +6,45 @@ import (
 	"luck-draw/common/errorx"
 	"luck-draw/common/utils"
 	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
-	model2 "luck-draw/service/v1/model"
+	"luck-draw/service/v1/model"
 )
 
 /** SearchUser 搜索用户
  * 返回的error均为 errorx 错误
  * 先匹配passport，然后再去匹配 email ,再去匹配 phone
  */
-func SearchUser(ctx context.Context, UserModel model2.UserModel, passport string) (*model2.User, error) {
+func SearchUser(ctx context.Context, UserModel model.UserModel, passport string) (*model.User, error) {
 	mdUser, err := UserModel.FindByPasspord(ctx, passport)
-	if err != nil && err != model2.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("SearchUser  UserModel.FindByPasspord error, err:%+v", err))
+	if err != nil && err != model.ErrNotFound {
+		return nil, errorx.IntStatusErr(fmt.Errorf("SearchUser  UserModel.FindByPasspord error, err:%+v", err))
 	}
 	if err == nil {
 		return mdUser, nil
 	}
 
 	mdUser, err = UserModel.FindByEmail(ctx, passport)
-	if err != nil && err != model2.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("SearchUser UserModel.FindByEmail error, err:%+v", err))
+	if err != nil && err != model.ErrNotFound {
+		return nil, errorx.IntStatusErr(fmt.Errorf("SearchUser UserModel.FindByEmail error, err:%+v", err))
 	}
 	if err == nil {
 		return mdUser, nil
 	}
 
 	mdUser, err = UserModel.FindByPhone(ctx, passport)
-	if err != nil && err != model2.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("SearchUser UserModel.FindByPhone error, err:%+v", err))
+	if err != nil && err != model.ErrNotFound {
+		return nil, errorx.IntStatusErr(fmt.Errorf("SearchUser UserModel.FindByPhone error, err:%+v", err))
 	}
 	if err == nil {
 		return mdUser, nil
 	}
 
-	if err == model2.ErrNotFound {
+	if err == model.ErrNotFound {
 		return nil, nil
 	}
 	return mdUser, nil
 }
 
-func convertActivity(mdActivity *model2.Activity) *luckdraw_pb.Activity {
+func convertActivity(mdActivity *model.Activity) *luckdraw_pb.Activity {
 	if mdActivity == nil {
 		return nil
 	}
@@ -62,7 +62,7 @@ func convertActivity(mdActivity *model2.Activity) *luckdraw_pb.Activity {
 	}
 }
 
-func convertPrize(mdPrize *model2.Prize) *luckdraw_pb.Prize {
+func convertPrize(mdPrize *model.Prize) *luckdraw_pb.Prize {
 	if mdPrize == nil {
 		return nil
 	}
@@ -76,7 +76,7 @@ func convertPrize(mdPrize *model2.Prize) *luckdraw_pb.Prize {
 	}
 }
 
-func convertPrizesPool(mdPrizesPool *model2.PrizesPool) *luckdraw_pb.PrizesPool {
+func convertPrizesPool(mdPrizesPool *model.PrizesPool) *luckdraw_pb.PrizesPool {
 	if mdPrizesPool == nil {
 		return nil
 	}
@@ -94,7 +94,7 @@ func convertPrizesPool(mdPrizesPool *model2.PrizesPool) *luckdraw_pb.PrizesPool 
 	}
 }
 
-func convertUser(mdUser *model2.User) *luckdraw_pb.User {
+func convertUser(mdUser *model.User) *luckdraw_pb.User {
 	if mdUser == nil {
 		return nil
 	}
@@ -111,7 +111,7 @@ func convertUser(mdUser *model2.User) *luckdraw_pb.User {
 	}
 }
 
-func convertLucker(mdLucker *model2.Lucker) *luckdraw_pb.Lucker {
+func convertLucker(mdLucker *model.Lucker) *luckdraw_pb.Lucker {
 	if mdLucker == nil {
 		return nil
 	}
@@ -126,7 +126,7 @@ func convertLucker(mdLucker *model2.Lucker) *luckdraw_pb.Lucker {
 	}
 }
 
-func convertPrizes(mPrizes []*model2.Prize) (pbPrizes []*luckdraw_pb.Prize) {
+func convertPrizes(mPrizes []*model.Prize) (pbPrizes []*luckdraw_pb.Prize) {
 	if len(mPrizes) == 0 {
 		return
 	}
@@ -140,7 +140,7 @@ func convertPrizes(mPrizes []*model2.Prize) (pbPrizes []*luckdraw_pb.Prize) {
 	return
 }
 
-func convertLuckerList(mdLuckerList []*model2.Lucker) (pbLuckerlist []*luckdraw_pb.Lucker) {
+func convertLuckerList(mdLuckerList []*model.Lucker) (pbLuckerlist []*luckdraw_pb.Lucker) {
 	for _, mdLucker := range mdLuckerList {
 		pbLucker := convertLucker(mdLucker)
 		if pbLucker == nil {
@@ -151,7 +151,7 @@ func convertLuckerList(mdLuckerList []*model2.Lucker) (pbLuckerlist []*luckdraw_
 	return
 }
 
-func convertPrizesPoolList(mdPrizesPoolList []*model2.PrizesPool) (pbPrizesPoolList []*luckdraw_pb.PrizesPool) {
+func convertPrizesPoolList(mdPrizesPoolList []*model.PrizesPool) (pbPrizesPoolList []*luckdraw_pb.PrizesPool) {
 	for _, mdPrizesPool := range mdPrizesPoolList {
 		pbPrizesPool := convertPrizesPool(mdPrizesPool)
 		if pbPrizesPool == nil {
@@ -162,7 +162,7 @@ func convertPrizesPoolList(mdPrizesPoolList []*model2.PrizesPool) (pbPrizesPoolL
 	return
 }
 
-func convertLuckerDetail(mdLuckerDetail *model2.LuckerDetail) *luckdraw_pb.LuckerDetail {
+func convertLuckerDetail(mdLuckerDetail *model.LuckerDetail) *luckdraw_pb.LuckerDetail {
 	if mdLuckerDetail == nil {
 		return nil
 	}
@@ -210,7 +210,7 @@ func convertLuckerDetail(mdLuckerDetail *model2.LuckerDetail) *luckdraw_pb.Lucke
 	}
 }
 
-func convertLuckerDetailsList(mdLuckerDetailsList []*model2.LuckerDetail) (res []*luckdraw_pb.LuckerDetail) {
+func convertLuckerDetailsList(mdLuckerDetailsList []*model.LuckerDetail) (res []*luckdraw_pb.LuckerDetail) {
 	for _, mdluckerDetail := range mdLuckerDetailsList {
 		pbLuckerDetail := convertLuckerDetail(mdluckerDetail)
 		if pbLuckerDetail == nil {

@@ -7,9 +7,10 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
 	"luck-draw/common/utils"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type PutActivityLogic struct {
@@ -29,17 +30,17 @@ func NewPutActivityLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutAc
 func (l *PutActivityLogic) PutActivity(in *admin_pb.Activity) (*admin_pb.StatusResp, error) {
 	//是否为空
 	if in == nil {
-		return nil, errorx.ErrEmptyParam
+		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
 	}
 	//开始时间戳转化为time.Time
 	startTime, err := utils.Int64ToTime(in.StartTime)
 	if err != nil {
-		return nil, errorx.ErrInvalidParam
+		return nil, errorx.ExtStatusErr(errorx.ErrInvalidParam)
 	}
 	//结束时间戳转化为time.Time
 	endTime, err := utils.Int64ToTime(in.EndTime)
 	if err != nil {
-		return nil, errorx.ErrInvalidParam
+		return nil, errorx.ExtStatusErr(errorx.ErrInvalidParam)
 	}
 	//构建model.activity
 	activity := &model.Activity{
@@ -57,7 +58,7 @@ func (l *PutActivityLogic) PutActivity(in *admin_pb.Activity) (*admin_pb.StatusR
 
 	//更新数据
 	if err = l.svcCtx.ActivityModel.Update(l.ctx, activity); err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("PutActivity ActivityModel.Update(l.ctx, data) error, err:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("PutActivity ActivityModel.Update(l.ctx, data) error, err:%v", err))
 	}
 
 	return newStatusResponse(), nil

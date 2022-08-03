@@ -7,8 +7,9 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type PutUsersPoolLogic struct {
@@ -27,7 +28,7 @@ func NewPutUsersPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutU
 
 func (l *PutUsersPoolLogic) PutUsersPool(in *admin_pb.UsersPool) (*admin_pb.StatusResp, error) {
 	if in == nil {
-		return nil, errorx.ErrEmptyParam
+		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
 	}
 
 	data := &model.UsersPool{
@@ -40,7 +41,7 @@ func (l *PutUsersPoolLogic) PutUsersPool(in *admin_pb.UsersPool) (*admin_pb.Stat
 	}
 
 	if err := l.svcCtx.UsersPoolModel.Update(l.ctx, data); err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("PutUsersPool UsersPoolModel.Update(l.ctx, data) error, err:%v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("PutUsersPool UsersPoolModel.Update(l.ctx, data) error, err:%v", err))
 	}
 
 	return newStatusResponse(), nil

@@ -7,11 +7,12 @@ import (
 	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/ctxdata"
 	"luck-draw/common/errorx"
 	"luck-draw/common/jwtx"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GenerateTokenLogic struct {
@@ -37,7 +38,7 @@ func (l *GenerateTokenLogic) GenerateToken(in *luckdraw_pb.GenerateTokenReq) (*l
 	accessExpire := l.svcCtx.Config.JwtAuth.AccessExpire
 	jwtToken, err := l.getJwtToken(l.svcCtx.Config.JwtAuth.AccessSecret, now, accessExpire, in.JwtData)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("GenerateToken getJwtToken(l.svcCtx.Config.JwtAuth.AccessSecret, now, accessExpire, in.UserId) error: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GenerateToken getJwtToken(l.svcCtx.Config.JwtAuth.AccessSecret, now, accessExpire, in.UserId) error: %v", err))
 	}
 
 	return &luckdraw_pb.GenerateTokenResp{

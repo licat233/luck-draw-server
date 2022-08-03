@@ -23,6 +23,12 @@ type Email struct {
 	Receiver []string
 }
 
+var ErrTimed = errors.New("发送验证码太频繁，请一分钟以后再试")
+
+func FormatEmailCaptchaKey(receiver any) string {
+	return fmt.Sprintf("captchaReceiver:%v", receiver)
+}
+
 //发送验证码到邮箱，1分钟只能发送一条
 func SendCaptcha(ctx context.Context, chaptcha string, receiver string) (err error) {
 	defer func() {
@@ -42,13 +48,25 @@ func SendCaptcha(ctx context.Context, chaptcha string, receiver string) (err err
 	if global.RedisX == nil {
 		return errors.New("global.Redisx is nil")
 	}
-	exists, err := global.RedisX.ExistsCtx(ctx, "captchaReceiver:"+receiver)
+
+	key := FormatEmailCaptchaKey(receiver)
+	exists, err := global.RedisX.ExistsCtx(ctx, key)
 	if err != nil {
 		return err
 	}
+
 	if exists {
-		return errors.New("发送验证码太频繁，请一分钟以后再试")
+		return ErrTimed
 	}
+
+	//当 key 不存在时，返回 -2 。 当 key 存在但没有设置剩余生存时间时，返回 -1 。 否则，以秒为单位，返回 key 的剩余生存时间。
+	// ttlv, err := global.RedisX.TtlCtx(ctx, key)
+	// if err != nil {
+	// 	return err
+	// }
+	// if ttlv != -2 && ttlv != -1 {
+	// 	return
+	// }
 
 	email := &Email{
 		Username: global.Viper.GetString("Email.Username"),
@@ -72,7 +90,7 @@ func SendCaptcha(ctx context.Context, chaptcha string, receiver string) (err err
 		logx.Error(fmt.Sprintf("邮件发送失败:%v", err))
 		return err
 	}
-	if err := global.RedisX.SetexCtx(ctx, "captchaReceiver:"+receiver, chaptcha, 60); err != nil {
+	if err := global.RedisX.SetexCtx(ctx, key, chaptcha, 60); err != nil {
 		return err
 	}
 	return nil
@@ -100,7 +118,7 @@ func SendToAdmin(msg string, receivers ...string) error {
 	m := gomail.NewMessage()
 	m.SetHeader("From", email.Username)
 	m.SetHeader("To", email.Receiver...)
-	m.SetHeader("Subject", "workbench系统通知")
+	m.SetHeader("Subject", "luck_draw系统通知")
 	email.Message = m
 	// 新建拨号器
 	email.Dialer = gomail.NewDialer(email.Host, email.Port, email.Username, email.Password)
@@ -147,7 +165,7 @@ func emailBody(msg string) string {
 }
 
 func emailCaptchaBody(captcha string) string {
-	return fmt.Sprintf(`<div style="max-width:600px;min-width:320px;margin:0 auto;background:#fff;border-collapse:collapse;font-size:18px">
+	return fmt.Sprintf(`<div style="max-width:600px;min-width:300px;margin:0 auto;background:#fff;border-collapse:collapse;font-size:18px;overflow:hidden">
 	<div style=width:100vw>
 		<div style=background:#000;padding:30px;color:#fff>
           系统通知-验证码
@@ -160,8 +178,8 @@ func emailCaptchaBody(captcha string) string {
         <div>
             尊敬的用户，您好！
         </div>
-        <div style="padding: 8px 40px 8px 50px;">
-            <p>你本次的验证码为：%s,为了保证账号安全，验证码有效期为5分钟。请确认为本人操作，切勿向他人泄露，感谢您的理解与使用。</p>
+        <div style="padding: 8px 36px">
+            <p>你本次的验证码为：%s <br/>为了保证账号安全，验证码有效期为5分钟。请确认为本人操作，切勿向他人泄露，感谢您的理解与使用。</p>
         </div>
         <div>
             <p>此邮箱为系统邮箱，请勿回复。</p>

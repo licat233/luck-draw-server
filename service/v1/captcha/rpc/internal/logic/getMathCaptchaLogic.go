@@ -51,7 +51,7 @@ func (l *GetMathCaptchaLogic) GetMathCaptcha(in *captcha_pb.GetCaptchaReq) (*cap
 	c := base64Captcha.NewCaptcha(driver, l.svcCtx.CaptchaStore)
 	captchaId, base64Image, err := c.Generate()
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("GetMathCaptcha captchaId, base64Image, err := c.Generate() err:%+v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetMathCaptcha captchaId, base64Image, err := c.Generate() err:%+v", err))
 	}
 
 	return &captcha.GetCaptchaResp{

@@ -35,17 +35,17 @@ func (l *AuthEmailCaptchaLogic) AuthEmailCaptcha(in *captcha_pb.AuthEmailCaptcha
 	email := strings.TrimSpace(in.Email)
 	//校验邮箱格式是否正确
 	if govalidator.IsEmail(email) == false {
-		return nil, errorx.ErrInvalidEmail
+		return nil, errorx.ExtStatusErr(errorx.ErrInvalidEmail)
 	}
 	//处理captchaId
 	CaptchaId := strings.TrimSpace(in.CaptchaId)
 	if len(CaptchaId) == 0 {
-		return nil, errorx.ExternalError(errors.New("captcha_id is nil"))
+		return nil, errorx.ExtStatusErr(errors.New("captcha_id is nil"))
 	}
 	key := formatEmailCaptchaKey(CaptchaId)
 	exists, err := l.svcCtx.RedisClient.ExistsCtx(l.ctx, key)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("VerifyEmailCaptcha RedisClient.ExistsCtx(l.ctx, key) error：%+v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("VerifyEmailCaptcha RedisClient.ExistsCtx(l.ctx, key) error：%+v", err))
 	}
 	//如果不存在，说明该captcha_id可能是假的
 	if !exists {
@@ -57,7 +57,7 @@ func (l *AuthEmailCaptchaLogic) AuthEmailCaptcha(in *captcha_pb.AuthEmailCaptcha
 	//存在，则取出
 	emailV, err := l.svcCtx.RedisClient.GetCtx(l.ctx, key)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("VerifyEmailCaptcha RedisClient.GetCtx(l.ctx, key) error：%+v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("VerifyEmailCaptcha RedisClient.GetCtx(l.ctx, key) error：%+v", err))
 	}
 
 	//检查邮箱与captcha_id是否对应

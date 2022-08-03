@@ -7,8 +7,9 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetAdminerLogic struct {
@@ -28,7 +29,7 @@ func NewGetAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetAdm
 func (l *GetAdminerLogic) GetAdminer(in *admin_pb.ItemReq) (*admin_pb.GetAdminerResp, error) {
 	res, err := l.svcCtx.AdminerModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("GetAdminer AdminerModel.FindOne(l.ctx, in.Id) error, err: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetAdminer AdminerModel.FindOne(l.ctx, in.Id) error, err: %v", err))
 	}
 	if err == model.ErrNotFound {
 		return nil, nil

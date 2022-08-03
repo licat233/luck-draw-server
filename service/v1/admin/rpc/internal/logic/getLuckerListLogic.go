@@ -7,8 +7,9 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetLuckerListLogic struct {
@@ -28,7 +29,7 @@ func NewGetLuckerListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 func (l *GetLuckerListLogic) GetLuckerList(in *admin_pb.ListReq) (*admin_pb.GetLuckerListResp, error) {
 	list, err := l.svcCtx.LuckerModel.FindList(l.ctx, in.PageSize, in.Page)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("GetLuckerList LuckerModel.FindList(l.ctx, in.PageSize, in.Page) error, err: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetLuckerList LuckerModel.FindList(l.ctx, in.PageSize, in.Page) error, err: %v", err))
 	}
 	if err == model.ErrNotFound {
 		return &admin_pb.GetLuckerListResp{
@@ -37,7 +38,7 @@ func (l *GetLuckerListLogic) GetLuckerList(in *admin_pb.ListReq) (*admin_pb.GetL
 	}
 	total, err := l.svcCtx.LuckerModel.FindCount(l.ctx)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("GetLuckerList LuckerModel.FindCount(l.ctx) error, err: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetLuckerList LuckerModel.FindCount(l.ctx) error, err: %v", err))
 	}
 
 	return &admin_pb.GetLuckerListResp{

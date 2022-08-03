@@ -7,8 +7,9 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetProjectListLogic struct {
@@ -28,7 +29,7 @@ func NewGetProjectListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 func (l *GetProjectListLogic) GetProjectList(in *admin_pb.ListReq) (*admin_pb.GetProjectListResp, error) {
 	list, err := l.svcCtx.ProjectModel.FindList(l.ctx, in.PageSize, in.Page)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.InternalError(fmt.Errorf("GetProjectList ProjectModel.FindList(l.ctx, in.PageSize, in.Page) error, err: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetProjectList ProjectModel.FindList(l.ctx, in.PageSize, in.Page) error, err: %v", err))
 	}
 	if err == model.ErrNotFound {
 		return &admin_pb.GetProjectListResp{
@@ -37,7 +38,7 @@ func (l *GetProjectListLogic) GetProjectList(in *admin_pb.ListReq) (*admin_pb.Ge
 	}
 	total, err := l.svcCtx.ProjectModel.FindCount(l.ctx)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("GetProjectList ProjectModel.FindCount(l.ctx) error, err: %v", err))
+		return nil, errorx.IntStatusErr(fmt.Errorf("GetProjectList ProjectModel.FindCount(l.ctx) error, err: %v", err))
 	}
 
 	return &admin_pb.GetProjectListResp{
