@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
@@ -40,7 +41,7 @@ func (l *LoginByEmailLogic) LoginByEmail(in *admin_pb.LoginByEmailReq) (*admin_p
 	}
 	//账户不存在
 	if err == model.ErrNotFound {
-		return nil, errorx.SecStatusErr(errorx.ErrNotFound)
+		return nil, errorx.ExtStatusErr(errors.New("Account does not exist"))
 	}
 	//检查adminer的状态
 	if err = verifyAdminerStatus(adminer); err != nil {

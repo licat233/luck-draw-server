@@ -51,7 +51,7 @@ func (l *LoginLogic) Login(in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 	}
 	//账户不存在
 	if err == model.ErrNotFound {
-		return nil, errorx.SecStatusErr(errorx.ErrNotFound)
+		return nil, errorx.ExtStatusErr(errors.New("Account does not exist"))
 	}
 
 	if adminer.Passport != in.Passport {
