@@ -31,11 +31,17 @@ func (l *GetAdminerListLogic) GetAdminerList(in *admin_pb.ListReq) (*admin_pb.Ge
 	if err != nil && err != model.ErrNotFound {
 		return nil, errorx.IntStatusErr(fmt.Errorf("GetAdminerList AdminerModel.FindList(l.ctx, in.PageSize, in.Page) error, err: %v", err))
 	}
+
 	if err == model.ErrNotFound {
 		return &admin_pb.GetAdminerListResp{
 			Data: nil,
 		}, nil
 	}
+
+	for _, adminer := range list {
+		adminer.Password = ""
+	}
+
 	total, err := l.svcCtx.AdminerModel.FindCount(l.ctx)
 	if err != nil {
 		return nil, errorx.IntStatusErr(fmt.Errorf("GetAdminerList AdminerModel.FindCount(l.ctx) error, err: %v", err))
