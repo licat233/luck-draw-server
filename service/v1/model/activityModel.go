@@ -50,7 +50,7 @@ func (m *customActivityModel) formatUuidKey(uuid string) string {
 	return fmt.Sprintf("%s%v", cacheLuckDrawActivityUuidPrefix, uuid)
 }
 
-//软删除
+// 软删除
 func (m *customActivityModel) DeleteSoft(ctx context.Context, data *Activity) error {
 	luckDrawActivityIdKey := m.formatPrimary(data.Id)
 	luckDrawActivityUuidKey := m.formatUuidKey(data.Uuid)
@@ -106,12 +106,12 @@ func (m *customActivityModel) Update(ctx context.Context, data *Activity) error 
 //----------
 
 func (m *customActivityModel) FindCount(ctx context.Context) (int64, error) {
-	query := fmt.Sprintf("select count(*) from %s where `is_deleted`= '0'", m.table)
-	var resp int64
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
+	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted`= '0'", m.table)
+	var count int64
+	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
 	switch err {
 	case nil:
-		return resp, nil
+		return count, nil
 	case sqlc.ErrNotFound:
 		return 0, nil
 	default:

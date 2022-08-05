@@ -49,7 +49,7 @@ func (m *customPrizesPoolModel) formatUuidKey(uuid string) string {
 	return fmt.Sprintf("%s%v", cacheLuckDrawPrizesPoolUuidPrefix, uuid)
 }
 
-//软删除
+// 软删除
 func (m *customPrizesPoolModel) DeleteSoft(ctx context.Context, data *PrizesPool) error {
 	luckDrawPrizesPoolIdKey := m.formatPrimary(data.Id)
 	luckDrawPrizesPoolUuidKey := m.formatUuidKey(data.Uuid)
@@ -122,12 +122,12 @@ func (m *customPrizesPoolModel) Update(ctx context.Context, data *PrizesPool) er
 //----------------------------------------------------------------
 
 func (m *customPrizesPoolModel) FindCount(ctx context.Context) (int64, error) {
-	query := fmt.Sprintf("select count(*) from %s where `is_deleted`= '0'", m.table)
-	var resp int64
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
+	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted`= '0'", m.table)
+	var count int64
+	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
 	switch err {
 	case nil:
-		return resp, nil
+		return count, nil
 	case sqlc.ErrNotFound:
 		return 0, nil
 	default:
@@ -135,9 +135,9 @@ func (m *customPrizesPoolModel) FindCount(ctx context.Context) (int64, error) {
 	}
 }
 
-//获取某活动奖品池内的奖品
-//TODO：为了避免复杂性，一般先依据activityUUID查询到activity_id，再根据activity_id进行查询
-//TODO：但在此处，我们直接使用关联查询，一劳永逸
+// 获取某活动奖品池内的奖品
+// TODO：为了避免复杂性，一般先依据activityUUID查询到activity_id，再根据activity_id进行查询
+// TODO：但在此处，我们直接使用关联查询，一劳永逸
 func (m *customPrizesPoolModel) FindByActivityUuid(ctx context.Context, activityUuid string) ([]*PrizesPool, error) {
 	query := fmt.Sprintf("SELECT pp.* FROM %s AS pp LEFT JOIN %s AS a ON pp.activity_id = a.id WHERE a.uuid = ? AND pp.is_deleted = 0 AND a.is_deleted = 0;", m.table, ActivityTableName)
 	var resp []*PrizesPool

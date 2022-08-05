@@ -7,8 +7,8 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
 
+	"luck-draw/common/ctxdata"
 	"luck-draw/common/errorx"
-	"luck-draw/common/utils"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -29,13 +29,17 @@ func NewLogoutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LogoutLogi
 
 // 注销登录
 func (l *LogoutLogic) Logout(in *admin_pb.LogoutReq) (*admin_pb.LogoutResp, error) {
-	md5Value, err := utils.JwtTokenToMd5(in.JwtToken)
-	if err != nil {
-		return nil, errorx.SecStatusErr(err)
+	uid := ctxdata.GetUidFromCtx(l.ctx)
+	adminer, err := l.svcCtx.AdminerModel.FindOne(l.ctx, uid)
+	if err != nil && err != model.ErrNotFound {
+		return nil, errorx.IntStatusErr(fmt.Errorf("Logout l.svcCtx.AdminerModel.FindOne(l.ctx, uid) error: %v", err))
+	}
+	if err == model.ErrNotFound {
+		return &admin_pb.LogoutResp{}, nil
 	}
 	//注销方案
 	data := &model.JwtBlacklists{
-		Uuid:     md5Value,
+		Uuid:     adminer.Uuid,
 		Token:    in.JwtToken,
 		Platform: in.Platform,
 		Ip:       in.Ip,

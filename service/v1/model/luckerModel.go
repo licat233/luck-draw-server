@@ -56,7 +56,7 @@ func (m *customLuckerModel) formatUuidKey(uuid string) string {
 	return fmt.Sprintf("%s%v", cacheLuckDrawLuckerUuidPrefix, uuid)
 }
 
-//软删除
+// 软删除
 func (m *customLuckerModel) DeleteSoft(ctx context.Context, data *Lucker) error {
 	luckDrawLuckerIdKey := m.formatPrimary(data.Id)
 	luckDrawLuckerUuidKey := m.formatUuidKey(data.Uuid)
@@ -129,12 +129,12 @@ func (m *customLuckerModel) Update(ctx context.Context, data *Lucker) error {
 //----------------------------------------------------------------------------------------------------------------------
 
 func (m *customLuckerModel) FindCount(ctx context.Context) (int64, error) {
-	query := fmt.Sprintf("select count(*) from %s where `is_deleted`= '0'", m.table)
-	var resp int64
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
+	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted`= '0'", m.table)
+	var count int64
+	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
 	switch err {
 	case nil:
-		return resp, nil
+		return count, nil
 	case sqlc.ErrNotFound:
 		return 0, nil
 	default:

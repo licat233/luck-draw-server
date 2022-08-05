@@ -92,12 +92,12 @@ func (m *customJwtBlacklistsModel) Update(ctx context.Context, data *JwtBlacklis
 //--
 
 func (m *customJwtBlacklistsModel) FindCount(ctx context.Context) (int64, error) {
-	query := fmt.Sprintf("select count(*) from %s", m.table)
-	var resp int64
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
+	query := fmt.Sprintf("select count(*) as count from %s", m.table)
+	var count int64
+	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
 	switch err {
 	case nil:
-		return resp, nil
+		return count, nil
 	case sqlc.ErrNotFound:
 		return 0, nil
 	default:

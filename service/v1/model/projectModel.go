@@ -48,7 +48,7 @@ func (m *customProjectModel) formatUuidKey(uuid string) string {
 	return fmt.Sprintf("%s%v", cacheLuckDrawProjectUuidPrefix, uuid)
 }
 
-//软删除
+// 软删除
 func (m *customProjectModel) DeleteSoft(ctx context.Context, data *Project) error {
 	luckDrawProjectIdKey := m.formatPrimary(data.Id)
 	luckDrawProjectUuidKey := m.formatUuidKey(data.Uuid)
@@ -121,12 +121,12 @@ func (m *customProjectModel) Update(ctx context.Context, data *Project) error {
 //-------------------
 
 func (m *customProjectModel) FindCount(ctx context.Context) (int64, error) {
-	query := fmt.Sprintf("select count(*) from %s where `is_deleted`= '0'", m.table)
-	var resp int64
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
+	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted`= '0'", m.table)
+	var count int64
+	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
 	switch err {
 	case nil:
-		return resp, nil
+		return count, nil
 	case sqlc.ErrNotFound:
 		return 0, nil
 	default:

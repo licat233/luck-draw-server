@@ -2,11 +2,9 @@ package errorx
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -165,9 +163,9 @@ func internalError(alertMsg string, traceErr error) *Errorx {
 		errorx.TraceMessage = "There is an error in the server, please contact the administrator licat233@gmail.com"
 	}
 	//内部错误要做日志处理
-	if traceErr != nil {
-		logx.Error(fmt.Sprintf("%s:%v", ServerErrorMsg, traceErr.Error()))
-	}
+	// if traceErr != nil {
+	// 	logx.Error(fmt.Sprintf("%s:%v", ServerErrorMsg, traceErr.Error()))
+	// }
 	return errorx
 }
 

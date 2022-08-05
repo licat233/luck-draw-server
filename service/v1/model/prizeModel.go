@@ -51,7 +51,7 @@ func (m *customPrizeModel) formatUuidKey(uuid string) string {
 	return fmt.Sprintf("%s%v", cacheLuckDrawPrizeUuidPrefix, uuid)
 }
 
-//软删除
+// 软删除
 func (m *customPrizeModel) DeleteSoft(ctx context.Context, data *Prize) error {
 	luckDrawPrizeIdKey := m.formatPrimary(data.Id)
 	luckDrawPrizeUuidKey := m.formatUuidKey(data.Uuid)
@@ -124,12 +124,12 @@ func (m *customPrizeModel) Update(ctx context.Context, data *Prize) error {
 //----------------------------------------------------------------
 
 func (m *customPrizeModel) FindCount(ctx context.Context) (int64, error) {
-	query := fmt.Sprintf("select count(*) from %s where `is_deleted`= '0'", m.table)
-	var resp int64
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
+	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted`= '0'", m.table)
+	var count int64
+	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
 	switch err {
 	case nil:
-		return resp, nil
+		return count, nil
 	case sqlc.ErrNotFound:
 		return 0, nil
 	default:
@@ -152,7 +152,7 @@ func (m *customPrizeModel) FindPrizesByActivityUuid(ctx context.Context, activit
 	}
 }
 
-//FindsByUserAndActivity 查找某用户在某活动中的奖品
+// FindsByUserAndActivity 查找某用户在某活动中的奖品
 func (m *customPrizeModel) FindsByUserAndActivity(ctx context.Context, userId, activityId int64) ([]*Prize, error) {
 	//select * from prize as p left join prizes_pool as pp ON pp.prize_id = p.id LEFT JOIN lucker as l ON l.prizes_pool_id = pp.id WHERE pp.activity_id = 1 AND p.is_deleted = 0 AND pp.is_deleted = 0 AND l.is_deleted = 0;
 	// newPrizeRows := resetTableRows(prizeFieldNames, "p")
@@ -169,7 +169,7 @@ func (m *customPrizeModel) FindsByUserAndActivity(ctx context.Context, userId, a
 	}
 }
 
-//FindsByUserAndActivityAndStatus 查找某用户在某活动中的奖品
+// FindsByUserAndActivityAndStatus 查找某用户在某活动中的奖品
 func (m *customPrizeModel) FindsByUserAndActivityAndStatus(ctx context.Context, userId, activityId, Status int64) ([]*Prize, error) {
 	//select * from prize as p left join prizes_pool as pp ON pp.prize_id = p.id LEFT JOIN lucker as l ON l.prizes_pool_id = pp.id WHERE pp.activity_id = 1 AND p.is_deleted = 0 AND pp.is_deleted = 0 AND l.is_deleted = 0;
 	// newPrizeRows := resetTableRows(prizeFieldNames, "p")

@@ -108,12 +108,12 @@ func (m *customAdminerModel) Update(ctx context.Context, data *Adminer) error {
 //-------
 
 func (m *customAdminerModel) FindCount(ctx context.Context) (int64, error) {
-	query := fmt.Sprintf("select count(*) from %s where `is_deleted`= '0'", m.table)
-	var resp int64
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
+	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted`= '0'", m.table)
+	var count int64
+	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
 	switch err {
 	case nil:
-		return resp, nil
+		return count, nil
 	case sqlc.ErrNotFound:
 		return 0, nil
 	default:
@@ -164,7 +164,7 @@ func (m *customAdminerModel) FindOneByEmail(ctx context.Context, email string) (
 }
 
 func (m *customAdminerModel) ExsitByEmail(ctx context.Context, email string) (bool, error) {
-	query := fmt.Sprintf("select 1 from %s where `email` = ? and `is_deleted`= 0 limit 1", m.table)
+	query := fmt.Sprintf("select 1 as count from %s where `email` = ? and `is_deleted`= 0 limit 1", m.table)
 	var count int64
 	err := m.QueryRowNoCacheCtx(ctx, &count, query, email)
 	switch err {

@@ -1,22 +1,20 @@
 /*
  Navicat MySQL Data Transfer
-
+ 
  Source Server         : 2h4g8m-luck_draw
  Source Server Type    : MySQL
  Source Server Version : 80024
  Source Host           : 119.91.140.95:3306
  Source Schema         : luck_draw
-
+ 
  Target Server Type    : MySQL
  Target Server Version : 80024
  File Encoding         : 65001
-
+ 
  Date: 31/07/2022 17:20:31
-*/
-
+ */
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
 -- ----------------------------
 -- Table structure for activity
 -- ----------------------------
@@ -39,16 +37,46 @@ CREATE TABLE `activity` (
   PRIMARY KEY (`id`),
   KEY `uuid` (`uuid`),
   KEY `project_id` (`project_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='活动';
-
+) ENGINE = InnoDB AUTO_INCREMENT = 3 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '活动';
 -- ----------------------------
 -- Records of activity
 -- ----------------------------
 BEGIN;
-INSERT INTO `activity` VALUES (1, 'eC3cD3fC3hR0dQ7cA6oD0gC1dA5aJ2kC1aY2', '618购物节', 1, 1, 0, 1, 1, '2022-07-07 17:38:50', '2022-07-31 17:38:52', '2022-07-07 17:38:56', '2022-07-07 17:38:56', 0, '2005-01-02 15:04:05');
-INSERT INTO `activity` VALUES (2, 'aJ1eI3bA2iG1cC5lJ0bG0qA7aK2aC0aG8cY0', '七夕促销', 1, 1, 1, 1, 1, '2022-07-07 17:39:39', '2022-08-31 17:39:41', '2022-07-07 17:39:46', '2022-07-07 17:39:46', 0, '2005-01-02 15:04:05');
+INSERT INTO `activity`
+VALUES (
+    1,
+    'eC3cD3fC3hR0dQ7cA6oD0gC1dA5aJ2kC1aY2',
+    '618购物节',
+    1,
+    1,
+    0,
+    1,
+    1,
+    '2022-07-07 17:38:50',
+    '2022-07-31 17:38:52',
+    '2022-07-07 17:38:56',
+    '2022-07-07 17:38:56',
+    0,
+    '2005-01-02 15:04:05'
+  );
+INSERT INTO `activity`
+VALUES (
+    2,
+    'aJ1eI3bA2iG1cC5lJ0bG0qA7aK2aC0aG8cY0',
+    '七夕促销',
+    1,
+    1,
+    1,
+    1,
+    1,
+    '2022-07-07 17:39:39',
+    '2022-08-31 17:39:41',
+    '2022-07-07 17:39:46',
+    '2022-07-07 17:39:46',
+    0,
+    '2005-01-02 15:04:05'
+  );
 COMMIT;
-
 -- ----------------------------
 -- Table structure for adminer
 -- ----------------------------
@@ -57,9 +85,9 @@ CREATE TABLE `adminer` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
   `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '唯一识别码',
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '管理员名称',
-  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '头像',
+  `avatar` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '头像',
   `passport` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '账号',
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
+  `password` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
   `email` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '邮箱',
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '账号状态，是否可用',
   `is_super_admin` tinyint NOT NULL DEFAULT '0' COMMENT '是否为超级管理员',
@@ -71,32 +99,46 @@ CREATE TABLE `adminer` (
   `delete_at` datetime NOT NULL DEFAULT '2005-01-02 15:04:05' COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `uuid` (`uuid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='管理员';
-
+) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '管理员';
 -- ----------------------------
 -- Records of adminer
 -- ----------------------------
 BEGIN;
-INSERT INTO `adminer` VALUES (1, '3a37bef3-65da-4d1f-9acf-f13b308ad213', '超管', 'https://img.alicdn.com/imgextra/i2/917298378/O1CN010hGXaf2BlAzexJ8cM_!!917298378.png', 'licat', 'licat233', '1697470538@qq.com', 1, 1, 0, '2005-01-02 15:04:05', '2022-07-29 09:47:08', '2022-07-29 09:47:08', 0, '2005-01-02 15:04:05');
+INSERT INTO `adminer`
+VALUES (
+    1,
+    '3a37bef3-65da-4d1f-9acf-f13b308ad213',
+    '超管',
+    'https://img.alicdn.com/imgextra/i2/917298378/O1CN010hGXaf2BlAzexJ8cM_!!917298378.png',
+    'licat',
+    'licat233',
+    '1697470538@qq.com',
+    1,
+    1,
+    0,
+    '2005-01-02 15:04:05',
+    '2022-07-29 09:47:08',
+    '2022-07-29 09:47:08',
+    0,
+    '2005-01-02 15:04:05'
+  );
 COMMIT;
-
 -- ----------------------------
 -- Table structure for jwt_blacklists
 -- ----------------------------
 DROP TABLE IF EXISTS `jwt_blacklists`;
 CREATE TABLE `jwt_blacklists` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` int NOT NULL COMMENT '用户或者管理员的唯一识别码',
+  `uuid` varchar(254) NOT NULL COMMENT '用户或者管理员的唯一识别码',
   `token` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'jwt-token',
-  `platform` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '绑定平台',
-  `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0.0.0.0' COMMENT '绑定ip',
+  `platform` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '绑定平台',
+  `ip` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0.0.0.0' COMMENT '绑定ip',
+  `expire_at` datetime NOT NULL DEFAULT '2005-01-02 15:04:05' COMMENT '过期时间',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `expire_at` datetime NOT NULL DEFAULT '2005-01-02 15:04:05' COMMENT '过期时间',
   PRIMARY KEY (`id`),
   KEY `uuid` (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='jwt黑名单';
-
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'jwt黑名单';
 -- ----------------------------
 -- Table structure for lucker
 -- ----------------------------
@@ -116,15 +158,25 @@ CREATE TABLE `lucker` (
   KEY `uuid` (`uuid`),
   KEY `user_id` (`user_id`),
   KEY `prizes_pool_id` (`prizes_pool_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='中奖名单';
-
+) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '中奖名单';
 -- ----------------------------
 -- Records of lucker
 -- ----------------------------
 BEGIN;
-INSERT INTO `lucker` VALUES (1, 'cL0bQ7aA0bC0aC0jA2aD0jA6jL8oL0fF2dI1', 1, 1, 1, '2022-07-07 17:49:13', '2022-07-07 17:49:15', '2022-07-07 17:49:15', 0, '2005-01-02 15:04:05');
+INSERT INTO `lucker`
+VALUES (
+    1,
+    'cL0bQ7aA0bC0aC0jA2aD0jA6jL8oL0fF2dI1',
+    1,
+    1,
+    1,
+    '2022-07-07 17:49:13',
+    '2022-07-07 17:49:15',
+    '2022-07-07 17:49:15',
+    0,
+    '2005-01-02 15:04:05'
+  );
 COMMIT;
-
 -- ----------------------------
 -- Table structure for prize
 -- ----------------------------
@@ -134,7 +186,7 @@ CREATE TABLE `prize` (
   `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '唯一识别码',
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '奖品名称',
   `image` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '奖品图片',
-  `price` decimal(10,2) NOT NULL COMMENT '奖品价格',
+  `price` decimal(10, 2) NOT NULL COMMENT '奖品价格',
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '是否可用',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -142,18 +194,64 @@ CREATE TABLE `prize` (
   `delete_at` datetime NOT NULL DEFAULT '2005-01-02 15:04:05' COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `uuid` (`uuid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='奖品名单';
-
+) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '奖品名单';
 -- ----------------------------
 -- Records of prize
 -- ----------------------------
 BEGIN;
-INSERT INTO `prize` VALUES (1, 'aC6nB0fC0qI4lC1fT2aQ2bA4aN0aB0yT0aM0', '美的蒸烤箱', 'https://img.alicdn.com/imgextra/i3/917298378/O1CN01Us4mhB2BlAymmJh8F_!!917298378.png', 325.99, 1, '2022-07-07 17:51:03', '2022-07-07 17:51:03', 0, '2005-01-02 15:04:05');
-INSERT INTO `prize` VALUES (2, 'dG7cE0uC3cB2dC2iF3hE0eC4jH1fI7gP1jF1', 'YSL-聖羅蘭', 'https://img.alicdn.com/imgextra/i3/917298378/O1CN01WlLtDx2BlAyrbjRQs_!!917298378.png', 199.89, 1, '2022-07-07 17:51:38', '2022-07-07 17:51:38', 0, '2005-01-02 15:04:05');
-INSERT INTO `prize` VALUES (3, 'bB1gA0aD1qI2kA8dD0jD0fE2uK3dF0bA1mC9', '雪肌淨膚面膜', 'https://img.alicdn.com/imgextra/i3/917298378/O1CN01Nr8x9L2BlAyrbiAQ8_!!917298378.png', 668.99, 1, '2022-07-07 17:36:33', '2022-07-07 17:36:33', 0, '2005-01-02 15:04:05');
-INSERT INTO `prize` VALUES (4, 'gA5dC0oC0cQ3aA0aT0aI3eH0qJ0jA1cL2oP0', '谢谢参与', '\'\'', 0.00, 1, '2022-07-07 17:44:39', '2022-07-07 17:44:39', 0, '2005-01-02 15:04:05');
+INSERT INTO `prize`
+VALUES (
+    1,
+    'aC6nB0fC0qI4lC1fT2aQ2bA4aN0aB0yT0aM0',
+    '美的蒸烤箱',
+    'https://img.alicdn.com/imgextra/i3/917298378/O1CN01Us4mhB2BlAymmJh8F_!!917298378.png',
+    325.99,
+    1,
+    '2022-07-07 17:51:03',
+    '2022-07-07 17:51:03',
+    0,
+    '2005-01-02 15:04:05'
+  );
+INSERT INTO `prize`
+VALUES (
+    2,
+    'dG7cE0uC3cB2dC2iF3hE0eC4jH1fI7gP1jF1',
+    'YSL-聖羅蘭',
+    'https://img.alicdn.com/imgextra/i3/917298378/O1CN01WlLtDx2BlAyrbjRQs_!!917298378.png',
+    199.89,
+    1,
+    '2022-07-07 17:51:38',
+    '2022-07-07 17:51:38',
+    0,
+    '2005-01-02 15:04:05'
+  );
+INSERT INTO `prize`
+VALUES (
+    3,
+    'bB1gA0aD1qI2kA8dD0jD0fE2uK3dF0bA1mC9',
+    '雪肌淨膚面膜',
+    'https://img.alicdn.com/imgextra/i3/917298378/O1CN01Nr8x9L2BlAyrbiAQ8_!!917298378.png',
+    668.99,
+    1,
+    '2022-07-07 17:36:33',
+    '2022-07-07 17:36:33',
+    0,
+    '2005-01-02 15:04:05'
+  );
+INSERT INTO `prize`
+VALUES (
+    4,
+    'gA5dC0oC0cQ3aA0aT0aI3eH0qJ0jA1cL2oP0',
+    '谢谢参与',
+    '\'\'',
+    0.00,
+    1,
+    '2022-07-07 17:44:39',
+    '2022-07-07 17:44:39',
+    0,
+    '2005-01-02 15:04:05'
+  );
 COMMIT;
-
 -- ----------------------------
 -- Table structure for prize_grade
 -- ----------------------------
@@ -167,21 +265,82 @@ CREATE TABLE `prize_grade` (
   `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已被删除',
   `delete_at` datetime NOT NULL DEFAULT '2005-01-02 15:04:05' COMMENT '删除时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='奖品级别';
-
+) ENGINE = InnoDB AUTO_INCREMENT = 8 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '奖品级别';
 -- ----------------------------
 -- Records of prize_grade
 -- ----------------------------
 BEGIN;
-INSERT INTO `prize_grade` VALUES (1, '未中奖', 0, '2022-07-07 17:40:55', '2022-07-07 17:40:55', 0, '2005-01-02 15:04:05');
-INSERT INTO `prize_grade` VALUES (2, '幸运奖', 1, '2022-07-07 17:41:04', '2022-07-07 17:41:04', 0, '2005-01-02 15:04:05');
-INSERT INTO `prize_grade` VALUES (3, '一等奖', 1, '2022-07-07 17:41:21', '2022-07-07 17:41:21', 0, '2005-01-02 15:04:05');
-INSERT INTO `prize_grade` VALUES (4, '二等奖', 1, '2022-07-07 17:41:30', '2022-07-07 17:41:30', 0, '2005-01-02 15:04:05');
-INSERT INTO `prize_grade` VALUES (5, '三等奖', 1, '2022-07-07 17:41:36', '2022-07-07 17:41:36', 0, '2005-01-02 15:04:05');
-INSERT INTO `prize_grade` VALUES (6, '四等奖', 1, '2022-07-07 17:41:42', '2022-07-07 17:41:42', 0, '2005-01-02 15:04:05');
-INSERT INTO `prize_grade` VALUES (7, '特等奖', 1, '2022-07-07 17:41:58', '2022-07-07 17:41:58', 0, '2005-01-02 15:04:05');
+INSERT INTO `prize_grade`
+VALUES (
+    1,
+    '未中奖',
+    0,
+    '2022-07-07 17:40:55',
+    '2022-07-07 17:40:55',
+    0,
+    '2005-01-02 15:04:05'
+  );
+INSERT INTO `prize_grade`
+VALUES (
+    2,
+    '幸运奖',
+    1,
+    '2022-07-07 17:41:04',
+    '2022-07-07 17:41:04',
+    0,
+    '2005-01-02 15:04:05'
+  );
+INSERT INTO `prize_grade`
+VALUES (
+    3,
+    '一等奖',
+    1,
+    '2022-07-07 17:41:21',
+    '2022-07-07 17:41:21',
+    0,
+    '2005-01-02 15:04:05'
+  );
+INSERT INTO `prize_grade`
+VALUES (
+    4,
+    '二等奖',
+    1,
+    '2022-07-07 17:41:30',
+    '2022-07-07 17:41:30',
+    0,
+    '2005-01-02 15:04:05'
+  );
+INSERT INTO `prize_grade`
+VALUES (
+    5,
+    '三等奖',
+    1,
+    '2022-07-07 17:41:36',
+    '2022-07-07 17:41:36',
+    0,
+    '2005-01-02 15:04:05'
+  );
+INSERT INTO `prize_grade`
+VALUES (
+    6,
+    '四等奖',
+    1,
+    '2022-07-07 17:41:42',
+    '2022-07-07 17:41:42',
+    0,
+    '2005-01-02 15:04:05'
+  );
+INSERT INTO `prize_grade`
+VALUES (
+    7,
+    '特等奖',
+    1,
+    '2022-07-07 17:41:58',
+    '2022-07-07 17:41:58',
+    0,
+    '2005-01-02 15:04:05'
+  );
 COMMIT;
-
 -- ----------------------------
 -- Table structure for prizes_pool
 -- ----------------------------
@@ -204,18 +363,76 @@ CREATE TABLE `prizes_pool` (
   KEY `uuid` (`uuid`),
   KEY `activity_id` (`activity_id`),
   KEY `prize_id` (`prize_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='活动奖品池';
-
+) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '活动奖品池';
 -- ----------------------------
 -- Records of prizes_pool
 -- ----------------------------
 BEGIN;
-INSERT INTO `prizes_pool` VALUES (1, 'aE1gM6eE5kK0eO2bI3cA1iK1bR0qD0rC0aB4', 1, 4, 100, 1, 1, 1, 1, '2022-07-07 17:44:54', '2022-07-07 17:45:00', 0, '2005-01-02 15:04:05');
-INSERT INTO `prizes_pool` VALUES (2, 'bK0bA0uD0kH0bB0oC0cA0oH3eB0aH0wI6cR4', 1, 1, 100, 1, 2, 1, 1, '2022-07-07 17:46:01', '2022-07-07 17:46:01', 0, '2005-01-02 15:04:05');
-INSERT INTO `prizes_pool` VALUES (3, 'iD3hE0gD2yD3mT0jI5jV0bB5bC2aA1qA2fC0', 1, 2, 100, 1, 3, 1, 1, '2022-07-07 17:46:26', '2022-07-07 17:46:26', 0, '2005-01-02 15:04:05');
-INSERT INTO `prizes_pool` VALUES (4, 'aW1cI0aB0cB0gA6aR4bC1mA1bD0fJ2bB5hB8', 1, 3, 100, 1, 4, 1, 1, '2022-07-07 17:46:44', '2022-07-07 17:46:44', 0, '2005-01-02 15:04:05');
+INSERT INTO `prizes_pool`
+VALUES (
+    1,
+    'aE1gM6eE5kK0eO2bI3cA1iK1bR0qD0rC0aB4',
+    1,
+    4,
+    100,
+    1,
+    1,
+    1,
+    1,
+    '2022-07-07 17:44:54',
+    '2022-07-07 17:45:00',
+    0,
+    '2005-01-02 15:04:05'
+  );
+INSERT INTO `prizes_pool`
+VALUES (
+    2,
+    'bK0bA0uD0kH0bB0oC0cA0oH3eB0aH0wI6cR4',
+    1,
+    1,
+    100,
+    1,
+    2,
+    1,
+    1,
+    '2022-07-07 17:46:01',
+    '2022-07-07 17:46:01',
+    0,
+    '2005-01-02 15:04:05'
+  );
+INSERT INTO `prizes_pool`
+VALUES (
+    3,
+    'iD3hE0gD2yD3mT0jI5jV0bB5bC2aA1qA2fC0',
+    1,
+    2,
+    100,
+    1,
+    3,
+    1,
+    1,
+    '2022-07-07 17:46:26',
+    '2022-07-07 17:46:26',
+    0,
+    '2005-01-02 15:04:05'
+  );
+INSERT INTO `prizes_pool`
+VALUES (
+    4,
+    'aW1cI0aB0cB0gA6aR4bC1mA1bD0fJ2bB5hB8',
+    1,
+    3,
+    100,
+    1,
+    4,
+    1,
+    1,
+    '2022-07-07 17:46:44',
+    '2022-07-07 17:46:44',
+    0,
+    '2005-01-02 15:04:05'
+  );
 COMMIT;
-
 -- ----------------------------
 -- Table structure for project
 -- ----------------------------
@@ -231,15 +448,23 @@ CREATE TABLE `project` (
   `delete_at` datetime NOT NULL DEFAULT '2005-01-02 15:04:05' COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `uuid` (`uuid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='项目';
-
+) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '项目';
 -- ----------------------------
 -- Records of project
 -- ----------------------------
 BEGIN;
-INSERT INTO `project` VALUES (1, 'aD6aC0aS0aK0dJ0jK2bB1aL0oM2bD0hJ0mC2', '植题祛斑', 1, '2022-07-07 17:37:52', '2022-07-07 17:38:06', 0, '2005-01-02 15:04:05');
+INSERT INTO `project`
+VALUES (
+    1,
+    'aD6aC0aS0aK0dJ0jK2bB1aL0oM2bD0hJ0mC2',
+    '植题祛斑',
+    1,
+    '2022-07-07 17:37:52',
+    '2022-07-07 17:38:06',
+    0,
+    '2005-01-02 15:04:05'
+  );
 COMMIT;
-
 -- ----------------------------
 -- Table structure for user
 -- ----------------------------
@@ -260,15 +485,28 @@ CREATE TABLE `user` (
   `delete_at` datetime NOT NULL DEFAULT '2005-01-02 15:04:05' COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `uuid` (`uuid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户名单';
-
+) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户名单';
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` VALUES (1, 'aB3eO3fA0pA0lI7mJ2mY1fJ3fQ1gR0aB0eW6', 'licat', 'licat233@gmail.com', '13570923455', '李哥', '广东省广州市白云区金沙洲', 0, 1, '2022-07-07 17:50:22', '2022-07-07 17:50:22', 0, '2005-01-02 15:04:05');
+INSERT INTO `user`
+VALUES (
+    1,
+    'aB3eO3fA0pA0lI7mJ2mY1fJ3fQ1gR0aB0eW6',
+    'licat',
+    'licat233@gmail.com',
+    '13570923455',
+    '李哥',
+    '广东省广州市白云区金沙洲',
+    0,
+    1,
+    '2022-07-07 17:50:22',
+    '2022-07-07 17:50:22',
+    0,
+    '2005-01-02 15:04:05'
+  );
 COMMIT;
-
 -- ----------------------------
 -- Table structure for users_pool
 -- ----------------------------
@@ -288,13 +526,23 @@ CREATE TABLE `users_pool` (
   KEY `uuid` (`uuid`),
   KEY `activity_id` (`activity_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='活动用户池';
-
+) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '活动用户池';
 -- ----------------------------
 -- Records of users_pool
 -- ----------------------------
 BEGIN;
-INSERT INTO `users_pool` VALUES (1, 'bD0aI3iF0kS3iU0jA1iA0xX0gK6aT0lU0sE0', 1, 1, 1, 0, '2022-07-07 17:53:05', '2022-07-07 17:53:05', 0, '2005-01-02 15:04:05');
+INSERT INTO `users_pool`
+VALUES (
+    1,
+    'bD0aI3iF0kS3iU0jA1iA0xX0gK6aT0lU0sE0',
+    1,
+    1,
+    1,
+    0,
+    '2022-07-07 17:53:05',
+    '2022-07-07 17:53:05',
+    0,
+    '2005-01-02 15:04:05'
+  );
 COMMIT;
-
 SET FOREIGN_KEY_CHECKS = 1;

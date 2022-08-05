@@ -40,7 +40,7 @@ type (
 
 	JwtBlacklists struct {
 		Id       int64     `db:"id"`        // 表主键
-		Uuid     string    `db:"uuid"`      // 唯一识别码，这里可使用jwt的md5码
+		Uuid     string    `db:"uuid"`      // 用户或者管理员的唯一识别码
 		Token    string    `db:"token"`     // jwt-token
 		Platform string    `db:"platform"`  // 绑定平台
 		Ip       string    `db:"ip"`        // 绑定ip
