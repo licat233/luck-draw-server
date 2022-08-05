@@ -28,6 +28,8 @@ type (
 		FindList(ctx context.Context, pageSize, page int64) ([]*Adminer, error)
 		FindOneByEmail(ctx context.Context, email string) (*Adminer, error)
 		FindOneByPassport(ctx context.Context, passport string) (*Adminer, error)
+
+		ExsitByEmail(ctx context.Context, email string) (bool, error)
 	}
 
 	customAdminerModel struct {
@@ -50,7 +52,7 @@ func (m *customAdminerModel) formatUuidKey(uuid string) string {
 	return fmt.Sprintf("%s%v", cacheLuckDrawAdminerUuidPrefix, uuid)
 }
 
-//软删除
+// 软删除
 func (m *customAdminerModel) DeleteSoft(ctx context.Context, data *Adminer) error {
 	luckDrawAdminerIdKey := m.formatPrimary(data.Id)
 	luckDrawAdminerUuidKey := m.formatUuidKey(data.Uuid)
@@ -158,5 +160,22 @@ func (m *customAdminerModel) FindOneByEmail(ctx context.Context, email string) (
 		return nil, ErrNotFound
 	default:
 		return nil, err
+	}
+}
+
+func (m *customAdminerModel) ExsitByEmail(ctx context.Context, email string) (bool, error) {
+	query := fmt.Sprintf("select 1 from %s where `email` = ? and `is_deleted`= 0 limit 1", m.table)
+	var count int64
+	err := m.QueryRowNoCacheCtx(ctx, &count, query, email)
+	switch err {
+	case nil:
+		if count != 0 {
+			return true, nil
+		}
+		return false, nil
+	case sqlc.ErrNotFound:
+		return false, nil
+	default:
+		return false, err
 	}
 }

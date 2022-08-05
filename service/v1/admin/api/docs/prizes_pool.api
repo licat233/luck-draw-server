@@ -69,7 +69,7 @@ service admin-api {
 	post /(PrizesPoolAddReq) returns(BaseResp)
 
     @doc "编辑奖品池"
-	@handler edit 
+	@handler put 
 	put /(PrizesPoolPutReq) returns(BaseResp)
 
     @doc "删除奖品池"

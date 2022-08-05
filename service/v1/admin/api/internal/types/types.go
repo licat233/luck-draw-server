@@ -16,6 +16,24 @@ type LoginByEmailReq struct {
 	Solution  string `json:"solution"`                //验证码答案
 }
 
+type LoginEmailCaptchaReq struct {
+	Email     string `json:"email"`               //邮箱地址
+	CaptchaId string `json:"captcha_id,optional"` //验证码ID
+	Solution  string `json:"solution"`            //验证码答案
+}
+
+type RegisterEmailCaptchaReq struct {
+	Email     string `json:"email"`               //邮箱地址
+	CaptchaId string `json:"captcha_id,optional"` //验证码ID
+	Solution  string `json:"solution"`            //验证码答案
+}
+
+type BindEmailCaptchaReq struct {
+	Email     string `json:"email"`               //邮箱地址
+	CaptchaId string `json:"captcha_id,optional"` //验证码ID
+	Solution  string `json:"solution"`            //验证码答案
+}
+
 type BaseResp struct {
 	Status       bool        `json:"success"`               //【响应状态】
 	Message      string      `json:"message,optional"`      //【给予的提示信息】
@@ -54,6 +72,17 @@ type JwtToken struct {
 	AccessToken  string `json:"access_token"`
 	AccessExpire int64  `json:"access_expire"`
 	RefreshAfter int64  `json:"refresh_after"`
+}
+
+type CaptchaResp struct {
+	CaptchaId string `json:"captcha_id"`
+	ExpiresAt int64  `json:"expires_at"`
+}
+
+type EmailCaptchaVerifyReq struct {
+	Email     string `json:"email"`
+	CaptchaId string `json:"captcha_id"`
+	Solution  string `json:"solution"`
 }
 
 type Activity struct {

@@ -95,7 +95,7 @@
       },
       "put": {
         "summary": "编辑奖品池",
-        "operationId": "edit",
+        "operationId": "put",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -245,7 +245,7 @@
       },
       "put": {
         "summary": "编辑活动",
-        "operationId": "edit",
+        "operationId": "put",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -395,7 +395,7 @@
       },
       "put": {
         "summary": "编辑管理员",
-        "operationId": "edit",
+        "operationId": "put",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -493,6 +493,34 @@
         ]
       }
     },
+    "/v1/api/admin/bindEmailCaptcha": {
+      "post": {
+        "summary": "给绑定邮箱发送验证码",
+        "operationId": "bindEmailCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/bindEmailCaptchaReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "admin-api"
+        ]
+      }
+    },
     "/v1/api/admin/currentUser": {
       "post": {
         "summary": "获取当前用户信息",
@@ -559,6 +587,34 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/loginByEmailReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "admin-api"
+        ]
+      }
+    },
+    "/v1/api/admin/loginEmailCaptcha": {
+      "post": {
+        "summary": "给登录邮箱发送验证码",
+        "operationId": "loginEmailCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/loginEmailCaptchaReq"
             }
           }
         ],
@@ -666,7 +722,7 @@
       },
       "put": {
         "summary": "编辑抽奖者",
-        "operationId": "edit",
+        "operationId": "put",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -816,7 +872,7 @@
       },
       "put": {
         "summary": "编辑奖品",
-        "operationId": "edit",
+        "operationId": "put",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -966,7 +1022,7 @@
       },
       "put": {
         "summary": "编辑项目",
-        "operationId": "edit",
+        "operationId": "put",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1381,6 +1437,34 @@
         ]
       }
     },
+    "/v1/api/admin/registerEmailCaptcha": {
+      "post": {
+        "summary": "给注册邮箱发送验证码",
+        "operationId": "registerEmailCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/registerEmailCaptchaReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "admin-api"
+        ]
+      }
+    },
     "/v1/api/admin/user/": {
       "get": {
         "summary": "获取用户信息",
@@ -1461,7 +1545,7 @@
       },
       "put": {
         "summary": "编辑用户",
-        "operationId": "edit",
+        "operationId": "put",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1611,7 +1695,7 @@
       },
       "put": {
         "summary": "编辑用户池",
-        "operationId": "edit",
+        "operationId": "put",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1767,6 +1851,23 @@
         "id"
       ]
     },
+    "CaptchaResp": {
+      "type": "object",
+      "properties": {
+        "captcha_id": {
+          "type": "string"
+        },
+        "expires_at": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "CaptchaResp",
+      "required": [
+        "captcha_id",
+        "expires_at"
+      ]
+    },
     "DomainReq": {
       "type": "object",
       "properties": {
@@ -1789,6 +1890,26 @@
       "title": "DownloadReq",
       "required": [
         "file"
+      ]
+    },
+    "EmailCaptchaVerifyReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "captcha_id": {
+          "type": "string"
+        },
+        "solution": {
+          "type": "string"
+        }
+      },
+      "title": "EmailCaptchaVerifyReq",
+      "required": [
+        "email",
+        "captcha_id",
+        "solution"
       ]
     },
     "IdReq": {
@@ -1889,6 +2010,96 @@
         "dom",
         "obj",
         "act"
+      ]
+    },
+    "PrizesPool": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": " 唯一识别码"
+        },
+        "activity_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 活动id"
+        },
+        "prize_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 奖品id"
+        },
+        "luck_value": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 幸运值"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 是否可用，0不可用，1可用"
+        },
+        "grade_name": {
+          "type": "string",
+          "description": " 等级名称，如：一等奖"
+        },
+        "is_win": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 是否中奖"
+        },
+        "number": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 奖品总数量"
+        },
+        "remain": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 奖品剩余数量"
+        },
+        "create_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 创建时间"
+        },
+        "update_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 更新时间"
+        },
+        "is_deleted": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 是否已被删除"
+        },
+        "delete_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 删除时间"
+        }
+      },
+      "title": "PrizesPool",
+      "required": [
+        "id",
+        "uuid",
+        "activity_id",
+        "prize_id",
+        "luck_value",
+        "status",
+        "grade_name",
+        "is_win",
+        "number",
+        "remain",
+        "create_at",
+        "update_at",
+        "is_deleted",
+        "delete_at"
       ]
     },
     "PrizesPoolAddReq": {
@@ -2054,6 +2265,96 @@
         "dom"
       ]
     },
+    "activity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": " 唯一识别码"
+        },
+        "name": {
+          "type": "string",
+          "description": " 活动名称"
+        },
+        "project_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 项目id"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 活动状态，是否在举办，默认关闭，需手动开启"
+        },
+        "pattern": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 方案: 0私密的，1公开的"
+        },
+        "max_count": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 最大抽奖次数：-1表示无限制，0表示不可抽奖"
+        },
+        "max_prizes": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 最大抽奖次数：-1表示无限制，0表示不可抽奖"
+        },
+        "start_time": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 活动开始时间"
+        },
+        "end_time": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 活动结束时间"
+        },
+        "create_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 创建时间"
+        },
+        "update_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 更新时间"
+        },
+        "is_deleted": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 是否已被删除"
+        },
+        "delete_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 删除时间"
+        }
+      },
+      "title": "activity",
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "project_id",
+        "status",
+        "pattern",
+        "max_count",
+        "max_prizes",
+        "start_time",
+        "end_time",
+        "create_at",
+        "update_at",
+        "is_deleted",
+        "delete_at"
+      ]
+    },
     "activityAddReq": {
       "type": "object",
       "properties": {
@@ -2199,6 +2500,98 @@
         "max_prizes",
         "start_time",
         "end_time"
+      ]
+    },
+    "adminer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": " 唯一识别码"
+        },
+        "name": {
+          "type": "string",
+          "description": " 管理员名称"
+        },
+        "avatar": {
+          "type": "string",
+          "description": " 头像"
+        },
+        "passport": {
+          "type": "string",
+          "description": " 账号"
+        },
+        "password": {
+          "type": "string",
+          "description": " 密码"
+        },
+        "email": {
+          "type": "string",
+          "description": " 邮箱"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 账号状态，是否可用"
+        },
+        "is_super_admin": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 是否为超级管理员"
+        },
+        "login_count": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 登录次数"
+        },
+        "last_login": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 最后一次登录时间"
+        },
+        "create_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 创建时间"
+        },
+        "update_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 更新时间"
+        },
+        "is_deleted": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 是否已被删除"
+        },
+        "delete_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 删除时间"
+        }
+      },
+      "title": "adminer",
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "avatar",
+        "passport",
+        "password",
+        "email",
+        "status",
+        "is_super_admin",
+        "login_count",
+        "last_login",
+        "create_at",
+        "update_at",
+        "is_deleted",
+        "delete_at"
       ]
     },
     "adminerAddReq": {
@@ -2379,6 +2772,28 @@
         "last_login"
       ]
     },
+    "bindEmailCaptchaReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "邮箱地址"
+        },
+        "captcha_id": {
+          "type": "string",
+          "description": "验证码ID"
+        },
+        "solution": {
+          "type": "string",
+          "description": "验证码答案"
+        }
+      },
+      "title": "bindEmailCaptchaReq",
+      "required": [
+        "email",
+        "solution"
+      ]
+    },
     "loginByEmailReq": {
       "type": "object",
       "properties": {
@@ -2405,6 +2820,28 @@
       "required": [
         "email",
         "autoLogin",
+        "solution"
+      ]
+    },
+    "loginEmailCaptchaReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "邮箱地址"
+        },
+        "captcha_id": {
+          "type": "string",
+          "description": "验证码ID"
+        },
+        "solution": {
+          "type": "string",
+          "description": "验证码答案"
+        }
+      },
+      "title": "loginEmailCaptchaReq",
+      "required": [
+        "email",
         "solution"
       ]
     },
@@ -2438,6 +2875,78 @@
         "autoLogin",
         "captcha_id",
         "solution"
+      ]
+    },
+    "lucker": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": " 唯一识别码"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 中奖用户id"
+        },
+        "prizes_pool_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 抽中的奖品池id"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 状态: -1放弃领奖，0未领奖，1已领奖"
+        },
+        "luck_date": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 抽奖时间"
+        },
+        "ip": {
+          "type": "string",
+          "description": " ip地址"
+        },
+        "create_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 创建时间"
+        },
+        "update_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 更新时间"
+        },
+        "is_deleted": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 是否已被删除"
+        },
+        "delete_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 删除时间"
+        }
+      },
+      "title": "lucker",
+      "required": [
+        "id",
+        "uuid",
+        "user_id",
+        "prizes_pool_id",
+        "status",
+        "luck_date",
+        "ip",
+        "create_at",
+        "update_at",
+        "is_deleted",
+        "delete_at"
       ]
     },
     "luckerAddReq": {
@@ -2551,6 +3060,71 @@
         "ip"
       ]
     },
+    "prize": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": " 唯一识别码"
+        },
+        "name": {
+          "type": "string",
+          "description": " 奖品名称"
+        },
+        "image": {
+          "type": "string",
+          "description": " 奖品图片"
+        },
+        "price": {
+          "type": "number",
+          "format": "double",
+          "description": " 奖品价格"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 是否可用"
+        },
+        "create_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 创建时间"
+        },
+        "update_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 更新时间"
+        },
+        "is_deleted": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 是否已被删除"
+        },
+        "delete_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 删除时间"
+        }
+      },
+      "title": "prize",
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "image",
+        "price",
+        "status",
+        "create_at",
+        "update_at",
+        "is_deleted",
+        "delete_at"
+      ]
+    },
     "prizeAddReq": {
       "type": "object",
       "properties": {
@@ -2648,6 +3222,60 @@
         "status"
       ]
     },
+    "project": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": " 唯一识别码"
+        },
+        "name": {
+          "type": "string",
+          "description": " 项目名称"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 项目状态"
+        },
+        "create_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 创建日期"
+        },
+        "update_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 更新时间"
+        },
+        "is_deleted": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 是否已被删除"
+        },
+        "delete_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 删除时间"
+        }
+      },
+      "title": "project",
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "status",
+        "create_at",
+        "update_at",
+        "is_deleted",
+        "delete_at"
+      ]
+    },
     "projectAddReq": {
       "type": "object",
       "properties": {
@@ -2723,6 +3351,108 @@
         "uuid",
         "name",
         "status"
+      ]
+    },
+    "registerEmailCaptchaReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "邮箱地址"
+        },
+        "captcha_id": {
+          "type": "string",
+          "description": "验证码ID"
+        },
+        "solution": {
+          "type": "string",
+          "description": "验证码答案"
+        }
+      },
+      "title": "registerEmailCaptchaReq",
+      "required": [
+        "email",
+        "solution"
+      ]
+    },
+    "user": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": " 唯一识别码"
+        },
+        "passport": {
+          "type": "string",
+          "description": " 凭证，可以是手机号或者社交账号，一般是由客户填入"
+        },
+        "email": {
+          "type": "string",
+          "description": " 邮箱"
+        },
+        "phone": {
+          "type": "string",
+          "description": " 手机号"
+        },
+        "name": {
+          "type": "string",
+          "description": " 用户名"
+        },
+        "address": {
+          "type": "string",
+          "description": " 收货地址"
+        },
+        "score": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 积分"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 状态:-1已经封禁，0未授权，1已授权"
+        },
+        "create_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 创建时间"
+        },
+        "update_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 更新时间"
+        },
+        "is_deleted": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 是否已被删除"
+        },
+        "delete_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 删除时间"
+        }
+      },
+      "title": "user",
+      "required": [
+        "id",
+        "uuid",
+        "passport",
+        "email",
+        "phone",
+        "name",
+        "address",
+        "score",
+        "status",
+        "create_at",
+        "update_at",
+        "is_deleted",
+        "delete_at"
       ]
     },
     "userAddReq": {
@@ -2850,6 +3580,73 @@
         "address",
         "score",
         "status"
+      ]
+    },
+    "usersPool": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": " 唯一识别码"
+        },
+        "activity_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 活动id"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 奖品id"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 状态：-1已被禁止,0未授权，1已授权"
+        },
+        "score": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 用户在当前活动的积分"
+        },
+        "create_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 创建时间"
+        },
+        "update_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 更新时间"
+        },
+        "is_deleted": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 是否已被删除"
+        },
+        "delete_at": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 删除时间"
+        }
+      },
+      "title": "usersPool",
+      "required": [
+        "id",
+        "uuid",
+        "activity_id",
+        "user_id",
+        "status",
+        "score",
+        "create_at",
+        "update_at",
+        "is_deleted",
+        "delete_at"
       ]
     },
     "usersPoolAddReq": {

@@ -23,6 +23,10 @@ type (
 	AddUserResp           = admin_pb.AddUserResp
 	AddUsersPoolResp      = admin_pb.AddUsersPoolResp
 	Adminer               = admin_pb.Adminer
+	ExsitEmailReq         = admin_pb.ExsitEmailReq
+	ExsitEmailResp        = admin_pb.ExsitEmailResp
+	FindByEmailReq        = admin_pb.FindByEmailReq
+	FindByEmailResp       = admin_pb.FindByEmailResp
 	GenerateTokenReq      = admin_pb.GenerateTokenReq
 	GenerateTokenResp     = admin_pb.GenerateTokenResp
 	GetActivityListResp   = admin_pb.GetActivityListResp
@@ -71,6 +75,10 @@ type (
 		Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 		// 邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题
 		LoginByEmail(ctx context.Context, in *LoginByEmailReq, opts ...grpc.CallOption) (*LoginResp, error)
+		// 邮箱是否存在
+		ExsitEmail(ctx context.Context, in *ExsitEmailReq, opts ...grpc.CallOption) (*ExsitEmailResp, error)
+		// 通过邮箱查找用户
+		FindByEmail(ctx context.Context, in *FindByEmailReq, opts ...grpc.CallOption) (*FindByEmailResp, error)
 		// 注销登录
 		Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*LogoutResp, error)
 		// 是否已经注销
@@ -146,6 +154,18 @@ func (m *defaultAdmin) Login(ctx context.Context, in *LoginReq, opts ...grpc.Cal
 func (m *defaultAdmin) LoginByEmail(ctx context.Context, in *LoginByEmailReq, opts ...grpc.CallOption) (*LoginResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.LoginByEmail(ctx, in, opts...)
+}
+
+// 邮箱是否存在
+func (m *defaultAdmin) ExsitEmail(ctx context.Context, in *ExsitEmailReq, opts ...grpc.CallOption) (*ExsitEmailResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.ExsitEmail(ctx, in, opts...)
+}
+
+// 通过邮箱查找用户
+func (m *defaultAdmin) FindByEmail(ctx context.Context, in *FindByEmailReq, opts ...grpc.CallOption) (*FindByEmailResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.FindByEmail(ctx, in, opts...)
 }
 
 // 注销登录

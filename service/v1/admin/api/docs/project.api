@@ -51,7 +51,7 @@ service admin-api {
 	post /(projectAddReq) returns(BaseResp)
 
     @doc "编辑项目"
-	@handler edit 
+	@handler put 
 	put /(projectPutReq) returns(BaseResp)
 
     @doc "删除项目"

@@ -60,7 +60,7 @@ service admin-api {
 	post /(luckerAddReq) returns(BaseResp)
 
     @doc "编辑抽奖者"
-	@handler edit 
+	@handler put 
 	put /(luckerPutReq) returns(BaseResp)
 
     @doc "删除抽奖者"

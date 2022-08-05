@@ -151,6 +151,22 @@ message LoginByEmailReq {
   JwtData jwt_data = 3; //登录需要提供jwt数据
 }
 
+message ExsitEmailReq {
+  string email = 1;
+}
+
+message ExsitEmailResp {
+  bool exsit = 1;
+}
+
+message FindByEmailReq {
+  string email = 1;
+}
+
+message FindByEmailResp {
+  Adminer adminer = 1;
+}
+
 message LogoutReq {
   string jwt_token = 1;
   string platform = 2;
@@ -309,6 +325,10 @@ service Admin {
   rpc Login (LoginReq) returns (LoginResp);
   //邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题
   rpc LoginByEmail (LoginByEmailReq) returns (LoginResp);
+  //邮箱是否存在
+  rpc ExsitEmail (ExsitEmailReq) returns (ExsitEmailResp);
+  //通过邮箱查找用户
+  rpc FindByEmail (FindByEmailReq) returns (FindByEmailResp);
   //注销登录
   rpc Logout (LogoutReq) returns (LogoutResp);
   //是否已经注销

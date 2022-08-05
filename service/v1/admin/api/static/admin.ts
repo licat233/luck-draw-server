@@ -18,6 +18,30 @@ export function loginByEmail(req: components.LoginByEmailReq) {
 }
 
 /**
+ * @description "给登录邮箱发送验证码"
+ * @param req
+ */
+export function loginEmailCaptcha(req: components.LoginEmailCaptchaReq) {
+	return webapi.post<components.BaseResp>("/v1/api/admin/loginEmailCaptcha", req)
+}
+
+/**
+ * @description "给注册邮箱发送验证码"
+ * @param req
+ */
+export function registerEmailCaptcha(req: components.RegisterEmailCaptchaReq) {
+	return webapi.post<components.BaseResp>("/v1/api/admin/registerEmailCaptcha", req)
+}
+
+/**
+ * @description "给绑定邮箱发送验证码"
+ * @param req
+ */
+export function bindEmailCaptcha(req: components.BindEmailCaptchaReq) {
+	return webapi.post<components.BaseResp>("/v1/api/admin/bindEmailCaptcha", req)
+}
+
+/**
  * @description "注销"
  */
 export function logout() {
@@ -59,7 +83,7 @@ export function add(req: components.ActivityAddReq) {
  * @description "编辑活动"
  * @param req
  */
-export function edit(req: components.ActivityPutReq) {
+export function put(req: components.ActivityPutReq) {
 	return webapi.put<components.BaseResp>("/v1/api/admin/activity", req)
 }
 
@@ -99,7 +123,7 @@ export function add(req: components.AdminerAddReq) {
  * @description "编辑管理员"
  * @param req
  */
-export function edit(req: components.AdminerPutReq) {
+export function put(req: components.AdminerPutReq) {
 	return webapi.put<components.BaseResp>("/v1/api/admin/adminer", req)
 }
 
@@ -147,7 +171,7 @@ export function add(req: components.LuckerAddReq) {
  * @description "编辑抽奖者"
  * @param req
  */
-export function edit(req: components.LuckerPutReq) {
+export function put(req: components.LuckerPutReq) {
 	return webapi.put<components.BaseResp>("/v1/api/admin/lucker", req)
 }
 
@@ -187,7 +211,7 @@ export function add(req: components.PrizeAddReq) {
  * @description "编辑奖品"
  * @param req
  */
-export function edit(req: components.PrizePutReq) {
+export function put(req: components.PrizePutReq) {
 	return webapi.put<components.BaseResp>("/v1/api/admin/prize", req)
 }
 
@@ -227,7 +251,7 @@ export function add(req: components.PrizesPoolAddReq) {
  * @description "编辑奖品池"
  * @param req
  */
-export function edit(req: components.PrizesPoolPutReq) {
+export function put(req: components.PrizesPoolPutReq) {
 	return webapi.put<components.BaseResp>("/v1/api/admin/PrizesPool", req)
 }
 
@@ -267,7 +291,7 @@ export function add(req: components.ProjectAddReq) {
  * @description "编辑项目"
  * @param req
  */
-export function edit(req: components.ProjectPutReq) {
+export function put(req: components.ProjectPutReq) {
 	return webapi.put<components.BaseResp>("/v1/api/admin/project", req)
 }
 
@@ -408,7 +432,7 @@ export function add(req: components.UserAddReq) {
  * @description "编辑用户"
  * @param req
  */
-export function edit(req: components.UserPutReq) {
+export function put(req: components.UserPutReq) {
 	return webapi.put<components.BaseResp>("/v1/api/admin/user", req)
 }
 
@@ -448,7 +472,7 @@ export function add(req: components.UsersPoolAddReq) {
  * @description "编辑用户池"
  * @param req
  */
-export function edit(req: components.UsersPoolPutReq) {
+export function put(req: components.UsersPoolPutReq) {
 	return webapi.put<components.BaseResp>("/v1/api/admin/usersPool", req)
 }
 

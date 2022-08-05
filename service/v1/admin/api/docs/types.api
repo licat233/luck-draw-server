@@ -54,3 +54,14 @@ type JwtToken {
 	AccessExpire int64  `json:"access_expire"`
 	RefreshAfter int64  `json:"refresh_after"`
 }
+
+type CaptchaResp {
+	CaptchaId string `json:"captcha_id"`
+	ExpiresAt int64  `json:"expires_at"`
+}
+
+type EmailCaptchaVerifyReq {
+	Email     string `json:"email"`
+	CaptchaId string `json:"captcha_id"`
+	Solution  string `json:"solution"`
+}

@@ -1,15 +1,15 @@
 package usersPool
 
 import (
-	"luck-draw/service/v1/admin/api/internal/logic/usersPool"
-	"luck-draw/service/v1/admin/api/internal/svc"
-	"luck-draw/service/v1/admin/api/internal/types"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
+	"luck-draw/service/v1/admin/api/internal/logic/usersPool"
+	"luck-draw/service/v1/admin/api/internal/svc"
+	"luck-draw/service/v1/admin/api/internal/types"
 )
 
-func EditHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func PutHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.UsersPoolPutReq
 		if err := httpx.Parse(r, &req); err != nil {
@@ -17,8 +17,8 @@ func EditHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := usersPool.NewEditLogic(r.Context(), svcCtx)
-		resp, err := l.Edit(&req)
+		l := usersPool.NewPutLogic(r.Context(), svcCtx)
+		resp, err := l.Put(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

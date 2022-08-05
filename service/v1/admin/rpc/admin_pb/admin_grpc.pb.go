@@ -28,6 +28,10 @@ type AdminClient interface {
 	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 	//邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题
 	LoginByEmail(ctx context.Context, in *LoginByEmailReq, opts ...grpc.CallOption) (*LoginResp, error)
+	//邮箱是否存在
+	ExsitEmail(ctx context.Context, in *ExsitEmailReq, opts ...grpc.CallOption) (*ExsitEmailResp, error)
+	//通过邮箱查找用户
+	FindByEmail(ctx context.Context, in *FindByEmailReq, opts ...grpc.CallOption) (*FindByEmailResp, error)
 	//注销登录
 	Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*LogoutResp, error)
 	//是否已经注销
@@ -105,6 +109,24 @@ func (c *adminClient) Login(ctx context.Context, in *LoginReq, opts ...grpc.Call
 func (c *adminClient) LoginByEmail(ctx context.Context, in *LoginByEmailReq, opts ...grpc.CallOption) (*LoginResp, error) {
 	out := new(LoginResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/LoginByEmail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminClient) ExsitEmail(ctx context.Context, in *ExsitEmailReq, opts ...grpc.CallOption) (*ExsitEmailResp, error) {
+	out := new(ExsitEmailResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/ExsitEmail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminClient) FindByEmail(ctx context.Context, in *FindByEmailReq, opts ...grpc.CallOption) (*FindByEmailResp, error) {
+	out := new(FindByEmailResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/FindByEmail", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -508,6 +530,10 @@ type AdminServer interface {
 	Login(context.Context, *LoginReq) (*LoginResp, error)
 	//邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题
 	LoginByEmail(context.Context, *LoginByEmailReq) (*LoginResp, error)
+	//邮箱是否存在
+	ExsitEmail(context.Context, *ExsitEmailReq) (*ExsitEmailResp, error)
+	//通过邮箱查找用户
+	FindByEmail(context.Context, *FindByEmailReq) (*FindByEmailResp, error)
 	//注销登录
 	Logout(context.Context, *LogoutReq) (*LogoutResp, error)
 	//是否已经注销
@@ -569,6 +595,12 @@ func (UnimplementedAdminServer) Login(context.Context, *LoginReq) (*LoginResp, e
 }
 func (UnimplementedAdminServer) LoginByEmail(context.Context, *LoginByEmailReq) (*LoginResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginByEmail not implemented")
+}
+func (UnimplementedAdminServer) ExsitEmail(context.Context, *ExsitEmailReq) (*ExsitEmailResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExsitEmail not implemented")
+}
+func (UnimplementedAdminServer) FindByEmail(context.Context, *FindByEmailReq) (*FindByEmailResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindByEmail not implemented")
 }
 func (UnimplementedAdminServer) Logout(context.Context, *LogoutReq) (*LogoutResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
@@ -762,6 +794,42 @@ func _Admin_LoginByEmail_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AdminServer).LoginByEmail(ctx, req.(*LoginByEmailReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Admin_ExsitEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExsitEmailReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).ExsitEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/ExsitEmail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).ExsitEmail(ctx, req.(*ExsitEmailReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Admin_FindByEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindByEmailReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).FindByEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/FindByEmail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).FindByEmail(ctx, req.(*FindByEmailReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1558,6 +1626,14 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LoginByEmail",
 			Handler:    _Admin_LoginByEmail_Handler,
+		},
+		{
+			MethodName: "ExsitEmail",
+			Handler:    _Admin_ExsitEmail_Handler,
+		},
+		{
+			MethodName: "FindByEmail",
+			Handler:    _Admin_FindByEmail_Handler,
 		},
 		{
 			MethodName: "Logout",

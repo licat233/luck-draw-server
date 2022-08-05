@@ -17,7 +17,7 @@
   "paths": {
     "/v1/api/captcha/email": {
       "post": {
-        "summary": "获取发送邮箱验证码",
+        "summary": "向邮箱发送验证码",
         "operationId": "emailCaptcha",
         "responses": {
           "200": {
@@ -288,6 +288,12 @@
     "EmailCaptchaReq": {
       "type": "object",
       "properties": {
+        "captcha_id": {
+          "type": "string"
+        },
+        "solution": {
+          "type": "string"
+        },
         "email": {
           "type": "string",
           "description": "接收验证码的邮箱地址"
@@ -295,6 +301,8 @@
       },
       "title": "EmailCaptchaReq",
       "required": [
+        "captcha_id",
+        "solution",
         "email"
       ]
     },

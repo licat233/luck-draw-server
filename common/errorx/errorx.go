@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/codes"
@@ -48,22 +49,22 @@ var Debug = false
 var ServerError = InternalError
 var RequestError = ExternalError
 
-//消息提示
+// 消息提示
 var ServerErrorMsg = "server error"
 var RequestErrorMsg = "bad request"
 var AuthErrorMsg = "permission denied"
 var RequestSuccessMsg = "request successful"
 var RequestFailedMsg = "request failed"
 
-//Error 返回错误信息，主要用于实现原生error接口，
-//注意：打印errorx的时候，会调用该函数值，所以返回errorx，等于返回该Error()的结果
+// Error 返回错误信息，主要用于实现原生error接口，
+// 注意：打印errorx的时候，会调用该函数值，所以返回errorx，等于返回该Error()的结果
 func (e *Errorx) Error() string {
 	return e.ErrorMessage
 }
 
-//Data 返回errorx的值
-//如果需要返回errorx的值怎么办？
-//我们需要自己定义一个展现errorx结果的函数，使用ResponseError结构体
+// Data 返回errorx的值
+// 如果需要返回errorx的值怎么办？
+// 我们需要自己定义一个展现errorx结果的函数，使用ResponseError结构体
 func (e *Errorx) Data() *ResponseError {
 	return &ResponseError{
 		Status:       e.Status,
@@ -134,6 +135,24 @@ func AuthError(traceErr error) error {
 	return authError(AuthErrorMsg, traceErr)
 }
 
+// Alert 错误提示, 400
+func Alert(msg string) error {
+	if strings.TrimSpace(msg) == "" {
+		msg = RequestFailedMsg
+	}
+	return &Errorx{
+		Status:       false,
+		ErrorCode:    ERROR_CODE_EXTERNAL,
+		ErrorMessage: msg,
+		TraceMessage: "",
+		ShowType:     SHOW_TYPE,
+		TraceId:      "",
+		Host:         "",
+	}
+}
+
+//----------实现--------
+
 func internalError(alertMsg string, traceErr error) *Errorx {
 	errorx := newErrorx(alertMsg, traceErr)
 	if len(errorx.ErrorMessage) == 0 {
@@ -179,7 +198,7 @@ func accessError(alertMsg string, traceErr error) *Errorx {
 	return errorx
 }
 
-//newErrorx 新建Errorx实例，默认为外部请求错误
+// newErrorx 新建Errorx实例，默认为外部请求错误
 func newErrorx(alertMsg string, traceErr error) *Errorx {
 	traceMsg := ""
 	//调试模式下，展现错误调试信息
@@ -198,13 +217,13 @@ func newErrorx(alertMsg string, traceErr error) *Errorx {
 	return errorx
 }
 
-//判断是否为*Errorx错误
+// 判断是否为*Errorx错误
 func IsErrorx(err error) bool {
 	_, ok := err.(*Errorx)
 	return ok
 }
 
-//将原生错误转化为errorx 400错误
+// 将原生错误转化为errorx 400错误
 func Convert(err error) (errorx *Errorx) {
 	if err == nil {
 		return nil
@@ -274,31 +293,31 @@ func ResponseErrorHandler(err error) (int, interface{}) {
 
 /**需要注意的是：rpc中返回的status.Error Internael错误没有traceMessage，只有一个message**/
 
-//将error转化成External status.Status，主要用于rpc服务中
+// 将error转化成External status.Status，主要用于rpc服务中
 func ExtStatusErr(err error) (statusError error) {
 	statusError = status.Error(ERROR_CODE_EXTERNAL, err.Error())
 	return
 }
 
-//将error转化成Internal status.Status，主要用于rpc服务中
+// 将error转化成Internal status.Status，主要用于rpc服务中
 func IntStatusErr(err error) (statusError error) {
 	statusError = status.Error(ERROR_CODE_INTERNAL, err.Error())
 	return
 }
 
-//将error转化成Internal status.Status，主要用于rpc服务中
+// 将error转化成Internal status.Status，主要用于rpc服务中
 func SecStatusErr(err error) (statusError error) {
 	statusError = status.Error(ERROR_CODE_EXTERNAL_SECRECY, err.Error())
 	return
 }
 
-//将status.Status error转化为Errorx，主要用于api服务处理rpc返回的错误
+// 将status.Status error转化为Errorx，主要用于api服务处理rpc返回的错误
 func FromRpcErr(statusErr error) (errorx *Errorx) {
 	s := status.Convert(statusErr)
 	return StatusErrToErrorx(s)
 }
 
-//status.Error转化为errorx
+// status.Error转化为errorx
 func StatusErrToErrorx(statusErr *status.Status) (errorx *Errorx) {
 	switch statusErr.Code() {
 	case ERROR_CODE_INTERNAL:
@@ -318,7 +337,7 @@ func StatusErrToErrorx(statusErr *status.Status) (errorx *Errorx) {
 	return
 }
 
-//将errorx转化为status.Status error
+// 将errorx转化为status.Status error
 func ToStatusErr(errorx error) (statusErr error) {
 	if errx, ok := errorx.(*Errorx); ok {
 		return status.Error(codes.Code(errx.ErrorCode), errx.ErrorMessage)
@@ -327,7 +346,7 @@ func ToStatusErr(errorx error) (statusErr error) {
 	return status.Error(ERROR_CODE_INTERNAL, errorx.Error())
 }
 
-//转化为status.Error
+// 转化为status.Error
 func (errx *Errorx) ToStatusErr() status.Status {
 	if errx.TraceMessage != "" {
 		return *status.New(codes.Code(errx.ErrorCode), errx.TraceMessage)
@@ -335,7 +354,7 @@ func (errx *Errorx) ToStatusErr() status.Status {
 	return *status.New(codes.Code(errx.ErrorCode), errx.ErrorMessage)
 }
 
-//转化为error接口
+// 转化为error接口
 func (errx *Errorx) ToError() error {
 	return errx
 }

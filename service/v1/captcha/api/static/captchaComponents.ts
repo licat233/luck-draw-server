@@ -36,6 +36,8 @@ export interface CaptchaReq {
 }
 
 export interface EmailCaptchaReq {
+	captcha_id: string
+	solution: string
 	email: string // 接收验证码的邮箱地址
 }
 

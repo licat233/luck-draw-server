@@ -78,7 +78,7 @@ service admin-api {
 	post /(adminerAddReq) returns(BaseResp)
 
     @doc "编辑管理员"
-	@handler edit 
+	@handler put 
 	put /(adminerPutReq) returns(BaseResp)
 
     @doc "删除管理员"

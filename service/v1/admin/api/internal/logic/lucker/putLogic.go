@@ -2,30 +2,30 @@ package lucker
 
 import (
 	"context"
+
+	"luck-draw/common/respx"
 	"luck-draw/service/v1/admin/api/internal/svc"
 	"luck-draw/service/v1/admin/api/internal/types"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 
-	"luck-draw/common/respx"
-
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type EditLogic struct {
+type PutLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewEditLogic(ctx context.Context, svcCtx *svc.ServiceContext) *EditLogic {
-	return &EditLogic{
+func NewPutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutLogic {
+	return &PutLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *EditLogic) Edit(req *types.LuckerPutReq) (any, error) {
+func (l *PutLogic) Put(req *types.LuckerPutReq) (any, error) {
 	_, err := l.svcCtx.AdminRpc.PutLucker(l.ctx, &admin_pb.Lucker{
 		Id:           req.Id,
 		Uuid:         req.Uuid,

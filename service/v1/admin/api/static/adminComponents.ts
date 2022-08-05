@@ -15,6 +15,24 @@ export interface LoginByEmailReq {
 	solution: string // 验证码答案
 }
 
+export interface LoginEmailCaptchaReq {
+	email: string // 邮箱地址
+	captcha_id?: string // 验证码ID
+	solution: string // 验证码答案
+}
+
+export interface RegisterEmailCaptchaReq {
+	email: string // 邮箱地址
+	captcha_id?: string // 验证码ID
+	solution: string // 验证码答案
+}
+
+export interface BindEmailCaptchaReq {
+	email: string // 邮箱地址
+	captcha_id?: string // 验证码ID
+	solution: string // 验证码答案
+}
+
 export interface BaseResp {
 	//响应成功的基本格式
 	success: boolean // 【响应状态】
@@ -64,6 +82,34 @@ export interface JwtToken {
 	refresh_after: number
 }
 
+export interface CaptchaResp {
+	captcha_id: string
+	expires_at: number
+}
+
+export interface EmailCaptchaVerifyReq {
+	email: string
+	captcha_id: string
+	solution: string
+}
+
+export interface Activity {
+	id: number // 表主键
+	uuid: string // 唯一识别码
+	name: string // 活动名称
+	project_id: number // 项目id
+	status: number // 活动状态，是否在举办，默认关闭，需手动开启
+	pattern: number // 方案: 0私密的，1公开的
+	max_count: number // 最大抽奖次数：-1表示无限制，0表示不可抽奖
+	max_prizes: number // 最大抽奖次数：-1表示无限制，0表示不可抽奖
+	start_time: number // 活动开始时间
+	end_time: number // 活动结束时间
+	create_at: number // 创建时间
+	update_at: number // 更新时间
+	is_deleted: number // 是否已被删除
+	delete_at: number // 删除时间
+}
+
 export interface ActivityGetReq {
 	id: number
 }
@@ -94,6 +140,24 @@ export interface ActivityPutReq {
 
 export interface ActivityDelReq {
 	id: number
+}
+
+export interface Adminer {
+	id: number // 表主键
+	uuid: string // 唯一识别码
+	name: string // 管理员名称
+	avatar: string // 头像
+	passport: string // 账号
+	password: string // 密码
+	email: string // 邮箱
+	status: number // 账号状态，是否可用
+	is_super_admin: number // 是否为超级管理员
+	login_count: number // 登录次数
+	last_login: number // 最后一次登录时间
+	create_at: number // 创建时间
+	update_at: number // 更新时间
+	is_deleted: number // 是否已被删除
+	delete_at: number // 删除时间
 }
 
 export interface AdminerGetReq {
@@ -136,6 +200,20 @@ export interface AdminerModifyReq {
 	email: string // 邮箱
 }
 
+export interface Lucker {
+	id: number // 表主键
+	uuid: string // 唯一识别码
+	user_id: number // 中奖用户id
+	prizes_pool_id: number // 抽中的奖品池id
+	status: number // 状态: -1放弃领奖，0未领奖，1已领奖
+	luck_date: number // 抽奖时间
+	ip: string // ip地址
+	create_at: number // 创建时间
+	update_at: number // 更新时间
+	is_deleted: number // 是否已被删除
+	delete_at: number // 删除时间
+}
+
 export interface LuckerGetReq {
 	id: number
 }
@@ -162,6 +240,19 @@ export interface LuckerDelReq {
 	id: number
 }
 
+export interface Prize {
+	id: number // 表主键
+	uuid: string // 唯一识别码
+	name: string // 奖品名称
+	image: string // 奖品图片
+	price: number // 奖品价格
+	status: number // 是否可用
+	create_at: number // 创建时间
+	update_at: number // 更新时间
+	is_deleted: number // 是否已被删除
+	delete_at: number // 删除时间
+}
+
 export interface PrizeGetReq {
 	id: number
 }
@@ -184,6 +275,23 @@ export interface PrizePutReq {
 
 export interface PrizeDelReq {
 	id: number
+}
+
+export interface PrizesPool {
+	id: number // 表主键
+	uuid: string // 唯一识别码
+	activity_id: number // 活动id
+	prize_id: number // 奖品id
+	luck_value: number // 幸运值
+	status: number // 是否可用，0不可用，1可用
+	grade_name: string // 等级名称，如：一等奖
+	is_win: number // 是否中奖
+	number: number // 奖品总数量
+	remain: number // 奖品剩余数量
+	create_at: number // 创建时间
+	update_at: number // 更新时间
+	is_deleted: number // 是否已被删除
+	delete_at: number // 删除时间
 }
 
 export interface PrizesPoolGetReq {
@@ -216,6 +324,17 @@ export interface PrizesPoolPutReq {
 
 export interface PrizesPoolDelReq {
 	id: number
+}
+
+export interface Project {
+	id: number // 表主键
+	uuid: string // 唯一识别码
+	name: string // 项目名称
+	status: number // 项目状态
+	create_at: number // 创建日期
+	update_at: number // 更新时间
+	is_deleted: number // 是否已被删除
+	delete_at: number // 删除时间
 }
 
 export interface ProjectGetReq {
@@ -258,6 +377,22 @@ export interface RoleAndDomainReq {
 	dom: string
 }
 
+export interface User {
+	id: number // 表主键
+	uuid: string // 唯一识别码
+	passport: string // 凭证，可以是手机号或者社交账号，一般是由客户填入
+	email: string // 邮箱
+	phone: string // 手机号
+	name: string // 用户名
+	address: string // 收货地址
+	score: number // 积分
+	status: number // 状态:-1已经封禁，0未授权，1已授权
+	create_at: number // 创建时间
+	update_at: number // 更新时间
+	is_deleted: number // 是否已被删除
+	delete_at: number // 删除时间
+}
+
 export interface UserGetReq {
 	id: number
 }
@@ -286,6 +421,19 @@ export interface UserPutReq {
 
 export interface UserDelReq {
 	id: number
+}
+
+export interface UsersPool {
+	id: number // 表主键
+	uuid: string // 唯一识别码
+	activity_id: number // 活动id
+	user_id: number // 奖品id
+	status: number // 状态：-1已被禁止,0未授权，1已授权
+	score: number // 用户在当前活动的积分
+	create_at: number // 创建时间
+	update_at: number // 更新时间
+	is_deleted: number // 是否已被删除
+	delete_at: number // 删除时间
 }
 
 export interface UsersPoolGetReq {

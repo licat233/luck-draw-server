@@ -40,6 +40,18 @@ func (s *AdminServer) LoginByEmail(ctx context.Context, in *admin_pb.LoginByEmai
 	return l.LoginByEmail(in)
 }
 
+// 邮箱是否存在
+func (s *AdminServer) ExsitEmail(ctx context.Context, in *admin_pb.ExsitEmailReq) (*admin_pb.ExsitEmailResp, error) {
+	l := logic.NewExsitEmailLogic(ctx, s.svcCtx)
+	return l.ExsitEmail(in)
+}
+
+// 通过邮箱查找用户
+func (s *AdminServer) FindByEmail(ctx context.Context, in *admin_pb.FindByEmailReq) (*admin_pb.FindByEmailResp, error) {
+	l := logic.NewFindByEmailLogic(ctx, s.svcCtx)
+	return l.FindByEmail(in)
+}
+
 // 注销登录
 func (s *AdminServer) Logout(ctx context.Context, in *admin_pb.LogoutReq) (*admin_pb.LogoutResp, error) {
 	l := logic.NewLogoutLogic(ctx, s.svcCtx)

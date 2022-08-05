@@ -31,7 +31,9 @@ type CaptchaReq struct {
 }
 
 type EmailCaptchaReq struct {
-	Email string `json:"email"` //接收验证码的邮箱地址
+	CaptchaId string `json:"captcha_id"`
+	Solution  string `json:"solution"`
+	Email     string `json:"email"` //接收验证码的邮箱地址
 }
 
 type EmailCaptchaResp struct {

@@ -31,6 +31,21 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/loginByEmail",
 				Handler: loginByEmailHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/loginEmailCaptcha",
+				Handler: loginEmailCaptchaHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/registerEmailCaptcha",
+				Handler: registerEmailCaptchaHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/bindEmailCaptcha",
+				Handler: bindEmailCaptchaHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/v1/api/admin"),
 	)
@@ -77,7 +92,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: activity.EditHandler(serverCtx),
+					Handler: activity.PutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
@@ -112,7 +127,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: adminer.EditHandler(serverCtx),
+					Handler: adminer.PutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
@@ -152,7 +167,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: lucker.EditHandler(serverCtx),
+					Handler: lucker.PutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
@@ -187,7 +202,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: prize.EditHandler(serverCtx),
+					Handler: prize.PutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
@@ -222,7 +237,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: prizesPool.EditHandler(serverCtx),
+					Handler: prizesPool.PutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
@@ -257,7 +272,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: project.EditHandler(serverCtx),
+					Handler: project.PutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
@@ -367,7 +382,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: user.EditHandler(serverCtx),
+					Handler: user.PutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
@@ -402,7 +417,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: usersPool.EditHandler(serverCtx),
+					Handler: usersPool.PutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,

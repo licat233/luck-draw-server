@@ -7,6 +7,7 @@ import (
 	"luck-draw/service/v1/captcha/api/internal/types"
 	"luck-draw/service/v1/captcha/rpc/captcha_pb"
 	"net/http"
+	"strings"
 
 	"luck-draw/common/errorx"
 	"luck-draw/common/respx"
@@ -32,6 +33,15 @@ func NewEmailCaptchaLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *ht
 }
 
 func (l *EmailCaptchaLogic) EmailCaptcha(req *types.EmailCaptchaReq) (any, error) {
+	email := strings.TrimSpace(req.Email)
+	if req.CaptchaId == "" || req.Solution == "" || email == "" {
+		return nil, errorx.ErrInvalidParam
+	}
+
+	if !govalidator.IsEmail(email) {
+		return nil, errorx.ErrInvalidEmail
+	}
+
 	ok, err := RequestCountValid(l.ctx, l.svcCtx.RedisClient, l.r)
 	if err != nil {
 		return nil, errorx.InternalError(fmt.Errorf("emailCaptchaLogic.go MathCaptcha RequestCountValid error: %v", err))
@@ -40,14 +50,22 @@ func (l *EmailCaptchaLogic) EmailCaptcha(req *types.EmailCaptchaReq) (any, error
 		return nil, errorx.ErrTooManyRequests
 	}
 
-	email := req.Email
-	if !govalidator.IsEmail(email) {
-		return nil, errorx.ErrInvalidEmail
+	//校验图片验证码是否正确
+	in := &captcha_pb.VerifyCaptchaReq{
+		CaptchaId: req.CaptchaId,
+		Solution:  req.Solution,
 	}
-	in := &captcha_pb.GetEmailCaptchaReq{
+	res, err := l.svcCtx.CaptchaRpc.VerifyCaptcha(l.ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	if !res.Success {
+		errorx.Alert("Captcha verification failed")
+	}
+
+	resp, err := l.svcCtx.CaptchaRpc.GetEmailCaptcha(l.ctx, &captcha_pb.GetEmailCaptchaReq{
 		Email: email,
-	}
-	resp, err := l.svcCtx.CaptchaRpc.GetEmailCaptcha(l.ctx, in)
+	})
 	if err != nil {
 		return nil, err
 	}
