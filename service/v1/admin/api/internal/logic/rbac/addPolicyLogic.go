@@ -3,13 +3,13 @@ package rbac
 import (
 	"context"
 	"errors"
-	"fmt"
 	"luck-draw/service/v1/admin/api/internal/svc"
 	"luck-draw/service/v1/admin/api/internal/types"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
 	"luck-draw/common/respx"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type AddPolicyLogic struct {
@@ -29,7 +29,8 @@ func NewAddPolicyLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPoli
 func (l *AddPolicyLogic) AddPolicy(req *types.PolicyReq) (any, error) {
 	ok, err := l.svcCtx.CasbinEnforcer.AddPolicy(req.Sub, req.Dom, req.Obj, req.Act)
 	if logState && err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("AddPolicy l.svcCtx.CasbinEnforcer.AddPolicy(req.Sub, req.Dom, req.Obj, req.Act) error: %v", err))
+		logx.Error(err)
+		return nil, errorx.InternalError(err)
 	}
 	return respx.DefaultBoolResp(ok, errors.New("rule already exists"))
 }

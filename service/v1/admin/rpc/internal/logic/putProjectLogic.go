@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -28,7 +27,7 @@ func NewPutProjectLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutPro
 
 func (l *PutProjectLogic) PutProject(in *admin_pb.Project) (*admin_pb.StatusResp, error) {
 	if in == nil {
-		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
+		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
 
 	data := &model.Project{
@@ -39,7 +38,8 @@ func (l *PutProjectLogic) PutProject(in *admin_pb.Project) (*admin_pb.StatusResp
 	}
 
 	if err := l.svcCtx.ProjectModel.Update(l.ctx, data); err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("PutProject ProjectModel.Update(l.ctx, data) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return newStatusResponse(), nil

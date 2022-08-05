@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -28,7 +27,7 @@ func NewPutPrizeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutPrize
 
 func (l *PutPrizeLogic) PutPrize(in *admin_pb.Prize) (*admin_pb.StatusResp, error) {
 	if in == nil {
-		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
+		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
 
 	data := &model.Prize{
@@ -41,7 +40,8 @@ func (l *PutPrizeLogic) PutPrize(in *admin_pb.Prize) (*admin_pb.StatusResp, erro
 	}
 
 	if err := l.svcCtx.PrizeModel.Update(l.ctx, data); err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("PutPrize PrizeModel.Update(l.ctx, data) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return newStatusResponse(), nil

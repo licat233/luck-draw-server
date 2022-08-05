@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/zeromicro/go-zero/core/logx"
 	// uuid "github.com/satori/go.uuid"
 )
 
@@ -64,17 +65,19 @@ func GetToken(r *http.Request) string {
 	return r.Header.Get(ReqHeaderKey)
 }
 
-//GetClaims 从请求中获取claims
+// GetClaims 从请求中获取claims
 func GetClaims(r *http.Request, secret string) (*jwt.MapClaims, error) {
 	token := GetToken(r)
 	claims, err := ParseToken(token, secret)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("从request中获取从jwt解析信息失败, 请检查请求头是否存在x-token且claims是否为规定结构,error:%s", err.Error()))
+		err = fmt.Errorf("从request中获取从jwt解析信息失败, 请检查请求头是否存在x-token且claims是否为规定结构,error:%s", err.Error())
+		logx.Error(err)
+		return nil, errorx.InternalError(err)
 	}
 	return claims, nil
 }
 
-//GetClaimsValue 从token对象里获得参数(key)对应的值
+// GetClaimsValue 从token对象里获得参数(key)对应的值
 // 示例 GetClaimsValue("username", token.claims) 其中token是已经解密的token
 func GetClaimsValue(key string, claims jwt.MapClaims) string {
 	v := reflect.ValueOf(claims)
@@ -90,7 +93,7 @@ func GetClaimsValue(key string, claims jwt.MapClaims) string {
 	return ""
 }
 
-//将claims转化为map[string]string类型
+// 将claims转化为map[string]string类型
 func ClaimsToMap(claims jwt.MapClaims) map[string]string {
 	res := make(map[string]string)
 	v := reflect.ValueOf(claims)

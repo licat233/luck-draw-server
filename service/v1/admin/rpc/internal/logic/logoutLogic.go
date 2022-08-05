@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -32,7 +31,8 @@ func (l *LogoutLogic) Logout(in *admin_pb.LogoutReq) (*admin_pb.LogoutResp, erro
 	uid := ctxdata.GetUidFromCtx(l.ctx)
 	adminer, err := l.svcCtx.AdminerModel.FindOne(l.ctx, uid)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("Logout l.svcCtx.AdminerModel.FindOne(l.ctx, uid) error: %v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
 		return &admin_pb.LogoutResp{}, nil
@@ -47,7 +47,8 @@ func (l *LogoutLogic) Logout(in *admin_pb.LogoutReq) (*admin_pb.LogoutResp, erro
 
 	_, err = l.svcCtx.JwtBlacklistsModel.Insert(l.ctx, data)
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("Logout JwtBlacklistsModel.Insert(l.ctx, data) error:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return &admin_pb.LogoutResp{}, nil

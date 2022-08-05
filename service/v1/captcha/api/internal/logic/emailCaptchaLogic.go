@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/captcha/api/internal/svc"
 	"luck-draw/service/v1/captcha/api/internal/types"
 	"luck-draw/service/v1/captcha/rpc/captcha_pb"
@@ -44,7 +43,8 @@ func (l *EmailCaptchaLogic) EmailCaptcha(req *types.EmailCaptchaReq) (any, error
 
 	ok, err := RequestCountValid(l.ctx, l.svcCtx.RedisClient, l.r)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("emailCaptchaLogic.go MathCaptcha RequestCountValid error: %v", err))
+		logx.Error(err)
+		return nil, errorx.InternalError(err)
 	}
 	if !ok {
 		return nil, errorx.ErrTooManyRequests

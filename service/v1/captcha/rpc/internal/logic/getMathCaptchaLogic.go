@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"image/color"
 	"luck-draw/service/v1/captcha/rpc/captcha"
 	"luck-draw/service/v1/captcha/rpc/captcha_pb"
@@ -46,7 +45,8 @@ func (l *GetMathCaptchaLogic) GetMathCaptcha(in *captcha_pb.GetCaptchaReq) (*cap
 	c := base64Captcha.NewCaptcha(driver, l.svcCtx.CaptchaStore)
 	captchaId, base64Image, err := c.Generate()
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("GetMathCaptcha captchaId, base64Image, err := c.Generate() err:%+v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return &captcha.GetCaptchaResp{

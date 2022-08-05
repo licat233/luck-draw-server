@@ -2,9 +2,11 @@ package errorx
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strings"
 
+	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -286,25 +288,27 @@ func ResponseErrorHandler(err error) (int, interface{}) {
 	//原生错误，我们默认把原生error作为internalError返回
 	//原生错误可能是服务器内部panic错误，将这样的错误抛出给前端，是很不利的
 	//所有返回的错误应该尽量使用 errorx.New()
+	//日志收集一下
+	logx.Error(fmt.Sprintf("未知错误: %+v", err))
 	return http.StatusOK, internalError(ServerErrorMsg, err).Data()
 }
 
 /**需要注意的是：rpc中返回的status.Error Internael错误没有traceMessage，只有一个message**/
 
-// 将error转化成External status.Status，主要用于rpc服务中
-func ExtStatusErr(err error) (statusError error) {
+// 将error转化成External RPC status.Status，主要用于rpc服务中
+func ExtRpcErr(err error) (statusError error) {
 	statusError = status.Error(ERROR_CODE_EXTERNAL, err.Error())
 	return
 }
 
-// 将error转化成Internal status.Status，主要用于rpc服务中
-func IntStatusErr(err error) (statusError error) {
+// 将error转化成Internal RPC status.Status，主要用于rpc服务中
+func IntRpcErr(err error) (statusError error) {
 	statusError = status.Error(ERROR_CODE_INTERNAL, err.Error())
 	return
 }
 
-// 将error转化成Internal status.Status，主要用于rpc服务中
-func SecStatusErr(err error) (statusError error) {
+// 将error转化成Internal RPC status.Status，主要用于rpc服务中，外部错误，但错误信息保密
+func SecRpcErr(err error) (statusError error) {
 	statusError = status.Error(ERROR_CODE_EXTERNAL_SECRECY, err.Error())
 	return
 }
@@ -330,6 +334,8 @@ func StatusErrToErrorx(statusErr *status.Status) (errorx *Errorx) {
 		errorx = accessError(RequestFailedMsg, errors.New(statusErr.Message()))
 	default:
 		//未知错误，可能是panic引起的，内部错误，不抛给前端
+		//记录一下
+		logx.Error(fmt.Sprintf("未知错误: %+v", statusErr.Message()))
 		errorx = internalError(ServerErrorMsg, errors.New(statusErr.Message()))
 	}
 	return

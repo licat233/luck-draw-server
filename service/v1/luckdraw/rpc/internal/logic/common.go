@@ -2,11 +2,12 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/common/errorx"
 	"luck-draw/common/utils"
 	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
 	"luck-draw/service/v1/model"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 /** SearchUser 搜索用户
@@ -16,7 +17,8 @@ import (
 func SearchUser(ctx context.Context, UserModel model.UserModel, passport string) (*model.User, error) {
 	mdUser, err := UserModel.FindByPasspord(ctx, passport)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("SearchUser  UserModel.FindByPasspord error, err:%+v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	if err == nil {
 		return mdUser, nil
@@ -24,7 +26,8 @@ func SearchUser(ctx context.Context, UserModel model.UserModel, passport string)
 
 	mdUser, err = UserModel.FindByEmail(ctx, passport)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("SearchUser UserModel.FindByEmail error, err:%+v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	if err == nil {
 		return mdUser, nil
@@ -32,7 +35,8 @@ func SearchUser(ctx context.Context, UserModel model.UserModel, passport string)
 
 	mdUser, err = UserModel.FindByPhone(ctx, passport)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("SearchUser UserModel.FindByPhone error, err:%+v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	if err == nil {
 		return mdUser, nil

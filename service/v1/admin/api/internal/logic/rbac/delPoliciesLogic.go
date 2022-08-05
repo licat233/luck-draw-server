@@ -3,14 +3,14 @@ package rbac
 import (
 	"context"
 	"errors"
-	"fmt"
 	"luck-draw/service/v1/admin/api/internal/svc"
 	"luck-draw/service/v1/admin/api/internal/types"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"luck-draw/common/errorx"
 	"luck-draw/common/respx"
 	"luck-draw/common/utils"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type DelPoliciesLogic struct {
@@ -34,7 +34,8 @@ func (l *DelPoliciesLogic) DelPolicies(req *types.PoliciesReq) (any, error) {
 	}
 	ok, err := l.svcCtx.CasbinEnforcer.RemovePolicies(rules)
 	if logState && err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("DelPolicies l.svcCtx.CasbinEnforcer.RemovePolicies(rules) error: %v", err))
+		logx.Error(err)
+		return nil, errorx.InternalError(err)
 	}
 	return respx.DefaultBoolResp(ok, errors.New("rule not exists"))
 }

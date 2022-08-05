@@ -8,6 +8,7 @@ import (
 	"luck-draw/service/v1/luckdraw/api/internal/config"
 	"net/http"
 
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
@@ -32,7 +33,9 @@ func (m *JwtMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 		//解析 token
 		claims, err := jwtx.ParseToken(jwtToken, m.Config.JwtAuth.AccessSecret)
 		if err != nil {
+			logx.Error(err)
 			httpx.Error(w, errorx.InternalError(err))
+			return
 		}
 
 		//获取请求设备

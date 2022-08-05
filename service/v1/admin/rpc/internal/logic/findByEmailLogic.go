@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"luck-draw/common/errorx"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
@@ -32,16 +31,17 @@ func NewFindByEmailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindB
 func (l *FindByEmailLogic) FindByEmail(in *admin_pb.FindByEmailReq) (*admin_pb.FindByEmailResp, error) {
 	//校验邮箱
 	if !govalidator.IsEmail(in.Email) {
-		return nil, errorx.ExtStatusErr(errorx.ErrInvalidEmail)
+		return nil, errorx.ExtRpcErr(errorx.ErrInvalidEmail)
 	}
 	//查找是否有绑定该邮箱的用户
 	adminer, err := l.svcCtx.AdminerModel.FindOneByEmail(l.ctx, in.Email)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("FindByEmail AdminerModel.FindOneByEmail(l.ctx, in.Email) error: %v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	//账户不存在
 	if err == model.ErrNotFound {
-		return nil, errorx.ExtStatusErr(errors.New("account does not exist"))
+		return nil, errorx.ExtRpcErr(errors.New("account does not exist"))
 	}
 
 	return &admin_pb.FindByEmailResp{

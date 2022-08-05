@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -29,7 +28,7 @@ func NewAddProjectLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPro
 
 func (l *AddProjectLogic) AddProject(in *admin_pb.Project) (*admin_pb.AddProjectResp, error) {
 	if in == nil {
-		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
+		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
 
 	data := &model.Project{
@@ -39,19 +38,23 @@ func (l *AddProjectLogic) AddProject(in *admin_pb.Project) (*admin_pb.AddProject
 	}
 	result, err := l.svcCtx.ProjectModel.Insert(l.ctx, data)
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddProject ProjectModel.Insert(l.ctx, data) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddProject ProjectModel.Insert(l.ctx, data) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	project, err := l.svcCtx.ProjectModel.FindOne(l.ctx, id)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddProject ProjectModel.FindOne(l.ctx, id) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddProject ProjectModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return &admin_pb.AddProjectResp{

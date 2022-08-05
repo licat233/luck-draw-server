@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -29,7 +28,7 @@ func NewAddUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddUserLo
 
 func (l *AddUserLogic) AddUser(in *admin_pb.User) (*admin_pb.AddUserResp, error) {
 	if in == nil {
-		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
+		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
 
 	data := &model.User{
@@ -44,19 +43,23 @@ func (l *AddUserLogic) AddUser(in *admin_pb.User) (*admin_pb.AddUserResp, error)
 	}
 	result, err := l.svcCtx.UserModel.Insert(l.ctx, data)
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddUser UserModel.Insert(l.ctx, data) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddUser UserModel.Insert(l.ctx, data) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	user, err := l.svcCtx.UserModel.FindOne(l.ctx, id)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddUser UserModel.FindOne(l.ctx, id) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddUser UserModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return &admin_pb.AddUserResp{

@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"time"
@@ -32,7 +31,7 @@ func NewGenerateTokenLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Gen
 // 生产token
 func (l *GenerateTokenLogic) GenerateToken(in *admin_pb.GenerateTokenReq) (*admin_pb.GenerateTokenResp, error) {
 	if in.JwtData == nil {
-		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
+		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
 	now := time.Now().Unix()
 	accessExpire := l.svcCtx.Config.JwtAuth.AccessExpire
@@ -41,7 +40,8 @@ func (l *GenerateTokenLogic) GenerateToken(in *admin_pb.GenerateTokenReq) (*admi
 	}
 	accessToken, err := l.getJwtToken(l.svcCtx.Config.JwtAuth.AccessSecret, now, accessExpire, in.JwtData)
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("GenerateToken getJwtToken(l.svcCtx.Config.JwtAuth.AccessSecret, now, accessExpire, in.UserId) error: %v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return &admin_pb.GenerateTokenResp{

@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -29,7 +28,8 @@ func NewGetActivityLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetAc
 func (l *GetActivityLogic) GetActivity(in *admin_pb.ItemReq) (*admin_pb.GetActivityResp, error) {
 	res, err := l.svcCtx.ActivityModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("GetActivity ActivityModel.FindOne(l.ctx, in.Id) error, err: %v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
 		return nil, nil

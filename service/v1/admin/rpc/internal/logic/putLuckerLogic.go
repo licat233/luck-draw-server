@@ -29,7 +29,7 @@ func NewPutLuckerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutLuck
 
 func (l *PutLuckerLogic) PutLucker(in *admin_pb.Lucker) (*admin_pb.StatusResp, error) {
 	if in == nil {
-		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
+		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
 	luckDate, err := utils.Int64ToTime(in.LuckDate)
 	if err != nil {
@@ -47,7 +47,8 @@ func (l *PutLuckerLogic) PutLucker(in *admin_pb.Lucker) (*admin_pb.StatusResp, e
 	}
 
 	if err = l.svcCtx.LuckerModel.Update(l.ctx, data); err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("PutLucker LuckerModel.Update(l.ctx, data) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return newStatusResponse(), nil

@@ -10,20 +10,20 @@ var (
 	SUCCESS_MSG = "request success"
 )
 
-//StateData 状态响应结构体
+// StateData 状态响应结构体
 type StateData struct {
 	Status  bool   `json:"success"` // 请求状态。
 	Message string `json:"message"` // 响应消息
 }
 
-//SingleData 单数据响应结构体
+// SingleData 单数据响应结构体
 type SingleData struct {
 	Status  bool   `json:"success"` // 请求状态。可有可无
 	Message string `json:"message"` // 响应消息
 	Data    any    `json:"data"`    // 返回数据
 }
 
-//ListData 列表响应数据结构体
+// ListData 列表响应数据结构体
 type ListData struct {
 	Status    bool        `json:"success"`            //【响应状态】
 	Message   string      `json:"message,optional"`   //【给予的提示信息】
@@ -65,7 +65,7 @@ func NewListData(listData any, totalRecord, pageSize, Page int64) *ListData {
 	}
 }
 
-//StateResp 返回响应状态
+// StateResp 返回响应状态
 func StateResp(alertMsg string, status bool) *StateData {
 	return &StateData{
 		Status:  status,
@@ -73,7 +73,7 @@ func StateResp(alertMsg string, status bool) *StateData {
 	}
 }
 
-//DefaultStateResp 默认返回响应状态，主要用于对接go-zero
+// DefaultStateResp 默认返回响应状态，主要用于对接go-zero
 func DefaultStateResp(err error) (*StateData, error) {
 	if err != nil {
 		return nil, errorx.Convert(err)
@@ -84,7 +84,7 @@ func DefaultStateResp(err error) (*StateData, error) {
 	}, nil
 }
 
-//SingleResp 返回单数据响应
+// SingleResp 返回单数据响应
 func SingleResp(alertMsg string, data any) *SingleData {
 	return &SingleData{
 		Status:  true,
@@ -93,7 +93,7 @@ func SingleResp(alertMsg string, data any) *SingleData {
 	}
 }
 
-//DefaultSingleResp 默认返回单数据响应，主要用于对接go-zero
+// DefaultSingleResp 默认返回单数据响应，主要用于对接go-zero
 func DefaultSingleResp(data any, err error) (*SingleData, error) {
 	if err != nil {
 		return nil, errorx.Convert(err)
@@ -168,7 +168,7 @@ func DefaultListResp(listData any, totalRecord, pageSize, Page int64, err error)
 	}, nil
 }
 
-//Msg 根据error返回不同提示信息
+// Msg 根据error返回不同提示信息
 func Msg(data any, err error, successMsg, failedMsg string) (any, error) {
 	if err != nil {
 		return nil, errorx.InternalError(err)
@@ -176,7 +176,7 @@ func Msg(data any, err error, successMsg, failedMsg string) (any, error) {
 	return SingleResp(successMsg, data), nil
 }
 
-//DefaultBoolResp 默认返回响应状态，主要用于对接go-zero
+// DefaultBoolResp 默认返回响应状态，主要用于对接go-zero
 func DefaultBoolResp(ok bool, err error) (*StateData, error) {
 	if ok {
 		return &StateData{

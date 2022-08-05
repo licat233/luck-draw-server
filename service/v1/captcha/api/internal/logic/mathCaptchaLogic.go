@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/common/errorx"
 	"luck-draw/common/respx"
 	"luck-draw/service/v1/captcha/api/internal/svc"
@@ -32,7 +31,8 @@ func NewMathCaptchaLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *htt
 func (l *MathCaptchaLogic) MathCaptcha(req *types.CaptchaReq) (any, error) {
 	ok, err := RequestCountValid(l.ctx, l.svcCtx.RedisClient, l.r)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("mathCaptchaLogic.go MathCaptcha RequestCountValid error: %v", err))
+		logx.Error(err)
+		return nil, errorx.InternalError(err)
 	}
 	if !ok {
 		return nil, errorx.ErrTooManyRequests

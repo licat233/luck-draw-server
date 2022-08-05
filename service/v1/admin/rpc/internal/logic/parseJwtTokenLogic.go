@@ -29,7 +29,7 @@ func NewParseJwtTokenLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Par
 func (l *ParseJwtTokenLogic) ParseJwtToken(in *admin_pb.ParseJwtTokenReq) (*admin_pb.ParseJwtTokenResp, error) {
 	claims, err := jwtx.ParseToken(in.JwtToken, in.Secret)
 	if err != nil {
-		return nil, errorx.SecStatusErr(err)
+		return nil, errorx.SecRpcErr(err)
 	}
 	data := jwtx.ClaimsToMap(*claims)
 	return &admin_pb.ParseJwtTokenResp{

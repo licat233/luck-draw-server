@@ -9,6 +9,7 @@ import (
 	"luck-draw/service/v1/admin/rpc/admin"
 	"net/http"
 
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"github.com/zeromicro/go-zero/zrpc"
 )
@@ -49,6 +50,7 @@ func (m *JwtMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 		//解析 token
 		claims, err := jwtx.ParseToken(jwtToken, m.Config.JwtAuth.AccessSecret)
 		if err != nil {
+			logx.Error(err)
 			httpx.Error(w, errorx.InternalError(err))
 		}
 

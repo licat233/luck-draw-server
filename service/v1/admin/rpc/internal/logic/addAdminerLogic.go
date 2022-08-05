@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -29,7 +28,7 @@ func NewAddAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddAdm
 
 func (l *AddAdminerLogic) AddAdminer(in *admin_pb.Adminer) (*admin_pb.AddAdminerResp, error) {
 	if in == nil {
-		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
+		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
 
 	data := &model.Adminer{
@@ -43,19 +42,23 @@ func (l *AddAdminerLogic) AddAdminer(in *admin_pb.Adminer) (*admin_pb.AddAdminer
 	}
 	result, err := l.svcCtx.AdminerModel.Insert(l.ctx, data)
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddAdminer AdminerModel.Insert(l.ctx, data) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddAdminer AdminerModel.Insert(l.ctx, data) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	adminer, err := l.svcCtx.AdminerModel.FindOne(l.ctx, id)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddAdminer AdminerModel.FindOne(l.ctx, id) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddAdminer AdminerModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return &admin_pb.AddAdminerResp{

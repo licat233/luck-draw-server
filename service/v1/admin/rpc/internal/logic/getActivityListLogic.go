@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -29,7 +28,8 @@ func NewGetActivityListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 func (l *GetActivityListLogic) GetActivityList(in *admin_pb.ListReq) (*admin_pb.GetActivityListResp, error) {
 	list, err := l.svcCtx.ActivityModel.FindList(l.ctx, in.PageSize, in.Page)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("GetActivityList ActivityModel.FindList(l.ctx, in.PageSize, in.Page) error, err: %v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
 		return &admin_pb.GetActivityListResp{
@@ -38,7 +38,8 @@ func (l *GetActivityListLogic) GetActivityList(in *admin_pb.ListReq) (*admin_pb.
 	}
 	total, err := l.svcCtx.ActivityModel.FindCount(l.ctx)
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("GetActivityList ActivityModel.FindCount(l.ctx) error, err: %v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return &admin_pb.GetActivityListResp{

@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -29,7 +28,8 @@ func NewGetPrizesPoolListLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 func (l *GetPrizesPoolListLogic) GetPrizesPoolList(in *admin_pb.ListReq) (*admin_pb.GetPrizesPoolListResp, error) {
 	list, err := l.svcCtx.PrizesPoolModel.FindList(l.ctx, in.PageSize, in.Page)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("GetPrizesPoolList PrizesPoolModel.FindList(l.ctx, in.PageSize, in.Page) error, err: %v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
 		return &admin_pb.GetPrizesPoolListResp{
@@ -38,7 +38,8 @@ func (l *GetPrizesPoolListLogic) GetPrizesPoolList(in *admin_pb.ListReq) (*admin
 	}
 	total, err := l.svcCtx.PrizesPoolModel.FindCount(l.ctx)
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("GetPrizesPoolList PrizesPoolModel.FindCount(l.ctx) error, err: %v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return &admin_pb.GetPrizesPoolListResp{

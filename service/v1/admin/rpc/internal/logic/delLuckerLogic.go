@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"errors"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -30,15 +29,17 @@ func NewDelLuckerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelLuck
 func (l *DelLuckerLogic) DelLucker(in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
 	data, err := l.svcCtx.LuckerModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("DelLucker LuckerModel.FindOne(l.ctx, in.Id) error:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.ExtStatusErr(errors.New("lucker not found"))
+		return nil, errorx.ExtRpcErr(errors.New("lucker not found"))
 	}
 
 	err = l.svcCtx.LuckerModel.DeleteSoft(l.ctx, data)
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("DelLucker LuckerModel.DeleteSoft(l.ctx, data) error, err: %v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	return newStatusResponse(), nil
 }

@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"errors"
-	"fmt"
 	"luck-draw/service/v1/luckdraw/rpc/internal/svc"
 	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
 	"luck-draw/service/v1/model"
@@ -35,7 +34,7 @@ func (l *SearchLuckerLogic) SearchLucker(in *luckdraw_pb.SearchLuckerReq) (*luck
 		return nil, err
 	}
 	if mdUser == nil {
-		return nil, errorx.SecStatusErr(errors.New("user not found"))
+		return nil, errorx.SecRpcErr(errors.New("user not found"))
 	}
 
 	//查询该用户的中奖名单
@@ -47,7 +46,8 @@ func (l *SearchLuckerLogic) SearchLucker(in *luckdraw_pb.SearchLuckerReq) (*luck
 		Page:         0,
 	})
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("SearchLucker LuckerModel.FindDetails error, err:%+v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	pbLuckerDetails := convertLuckerDetailsList(mdLuckerDetails)
 	return &luckdraw_pb.SearchLuckerResp{

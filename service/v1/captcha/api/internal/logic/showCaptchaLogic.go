@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/base64"
 	"errors"
-	"fmt"
 	"luck-draw/service/v1/captcha/api/internal/svc"
 	"luck-draw/service/v1/captcha/rpc/captcha_pb"
 	"net/http"
@@ -50,13 +49,16 @@ func (l *ShowCaptchaLogic) ShowCaptcha() error {
 	mark := "data:image/png;base64,"
 	m := strings.Index(b64s, mark)
 	if m == -1 {
-		return errorx.InternalError(errors.New("showCaptchaLogic.go strings.Index(b64s, mark) not found mark"))
+		err = errors.New("showCaptchaLogic.go strings.Index(b64s, mark) not found mark")
+		logx.Error(err)
+		return errorx.InternalError(err)
 	}
 	n := m + len(mark)
 	base := string([]byte(b64s)[n:])
 	p, err := base64.StdEncoding.DecodeString(base)
 	if err != nil {
-		return errorx.InternalError(fmt.Errorf("showCaptchaLogic.go base64.StdEncoding.DecodeString(base) error:%v", err))
+		logx.Error(err)
+		return errorx.InternalError(err)
 	}
 	l.w.Header().Set("cache-control", "no-cache")
 	l.w.Header().Set("content-type", "image/png")
@@ -64,7 +66,8 @@ func (l *ShowCaptchaLogic) ShowCaptcha() error {
 	l.w.Header().Add("captcha-id", captchaResp.CaptchaId)
 	_, err = l.w.Write(p)
 	if err != nil {
-		return errorx.InternalError(fmt.Errorf("showCaptchaLogic.go  w.Write(p) error:%v", err))
+		logx.Error(err)
+		return errorx.InternalError(err)
 	}
 	return nil
 }

@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -30,12 +29,12 @@ func NewAddLuckerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddLuck
 
 func (l *AddLuckerLogic) AddLucker(in *admin_pb.Lucker) (*admin_pb.AddLuckerResp, error) {
 	if in == nil {
-		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
+		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
 
 	luckdate, err := utils.Int64ToTime(in.LuckDate)
 	if err != nil {
-		return nil, errorx.SecStatusErr(errorx.ErrInvalidParam)
+		return nil, errorx.SecRpcErr(errorx.ErrInvalidParam)
 	}
 	data := &model.Lucker{
 		Uuid:         uniqueid.NewUUID(),
@@ -47,19 +46,23 @@ func (l *AddLuckerLogic) AddLucker(in *admin_pb.Lucker) (*admin_pb.AddLuckerResp
 	}
 	result, err := l.svcCtx.LuckerModel.Insert(l.ctx, data)
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddLucker LuckerModel.Insert(l.ctx, data) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddLucker LuckerModel.Insert(l.ctx, data) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	lucker, err := l.svcCtx.LuckerModel.FindOne(l.ctx, id)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddLucker LuckerModel.FindOne(l.ctx, id) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddLucker LuckerModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return &admin_pb.AddLuckerResp{

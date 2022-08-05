@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -30,7 +29,7 @@ func NewAddPrizesPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Add
 
 func (l *AddPrizesPoolLogic) AddPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.AddPrizesPoolResp, error) {
 	if in == nil {
-		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
+		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
 
 	data := &model.PrizesPool{
@@ -46,19 +45,23 @@ func (l *AddPrizesPoolLogic) AddPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.A
 	}
 	result, err := l.svcCtx.PrizesPoolModel.Insert(l.ctx, data)
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddPrizesPool PrizesPoolModel.Insert(l.ctx, data) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddPrizesPool PrizesPoolModel.Insert(l.ctx, data) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	prizesPool, err := l.svcCtx.PrizesPoolModel.FindOne(l.ctx, id)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddPrizesPool PrizesPoolModel.FindOne(l.ctx, id) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("AddPrizesPool PrizesPoolModel.FindOne(l.ctx, id) error, 新插入的数据未找到，err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return &admin_pb.AddPrizesPoolResp{

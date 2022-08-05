@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"errors"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -30,15 +29,17 @@ func NewDelProjectLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelPro
 func (l *DelProjectLogic) DelProject(in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
 	data, err := l.svcCtx.ProjectModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("DelProject ProjectModel.FindOne(l.ctx, in.Id) error:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.ExtStatusErr(errors.New("project not found"))
+		return nil, errorx.ExtRpcErr(errors.New("project not found"))
 	}
 
 	err = l.svcCtx.ProjectModel.DeleteSoft(l.ctx, data)
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("DelProject ProjectModel.DeleteSoft(l.ctx, data) error, err: %v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	return newStatusResponse(), nil
 }

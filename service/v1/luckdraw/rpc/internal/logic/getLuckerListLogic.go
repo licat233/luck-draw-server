@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/luckdraw/rpc/internal/svc"
 	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
 	"luck-draw/service/v1/model"
@@ -38,7 +37,8 @@ func (l *GetLuckerListLogic) GetLuckerList(in *luckdraw_pb.GetLuckerListReq) (*l
 	})
 
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("GetLuckerList LuckerModel.FindDetails error, err:%+v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return &luckdraw_pb.GetLuckerListResp{

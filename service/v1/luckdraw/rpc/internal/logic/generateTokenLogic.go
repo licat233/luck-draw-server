@@ -38,7 +38,7 @@ func (l *GenerateTokenLogic) GenerateToken(in *luckdraw_pb.GenerateTokenReq) (*l
 	accessExpire := l.svcCtx.Config.JwtAuth.AccessExpire
 	jwtToken, err := l.getJwtToken(l.svcCtx.Config.JwtAuth.AccessSecret, now, accessExpire, in.JwtData)
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("GenerateToken getJwtToken(l.svcCtx.Config.JwtAuth.AccessSecret, now, accessExpire, in.UserId) error: %v", err))
+		return nil, errorx.IntRpcErr(fmt.Errorf("GenerateToken getJwtToken(l.svcCtx.Config.JwtAuth.AccessSecret, now, accessExpire, in.UserId) error: %v", err))
 	}
 
 	return &luckdraw_pb.GenerateTokenResp{

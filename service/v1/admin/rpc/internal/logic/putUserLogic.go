@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -28,7 +27,7 @@ func NewPutUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutUserLo
 
 func (l *PutUserLogic) PutUser(in *admin_pb.User) (*admin_pb.StatusResp, error) {
 	if in == nil {
-		return nil, errorx.SecStatusErr(errorx.ErrEmptyParam)
+		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
 
 	data := &model.User{
@@ -44,7 +43,8 @@ func (l *PutUserLogic) PutUser(in *admin_pb.User) (*admin_pb.StatusResp, error) 
 	}
 
 	if err := l.svcCtx.UserModel.Update(l.ctx, data); err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("PutUser UserModel.Update(l.ctx, data) error, err:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	return newStatusResponse(), nil
 }

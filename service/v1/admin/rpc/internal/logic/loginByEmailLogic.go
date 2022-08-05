@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"errors"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -32,20 +31,21 @@ func NewLoginByEmailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Logi
 func (l *LoginByEmailLogic) LoginByEmail(in *admin_pb.LoginByEmailReq) (*admin_pb.LoginResp, error) {
 	//校验邮箱
 	if !govalidator.IsEmail(in.Email) {
-		return nil, errorx.ExtStatusErr(errorx.ErrInvalidEmail)
+		return nil, errorx.ExtRpcErr(errorx.ErrInvalidEmail)
 	}
 	//查找是否有绑定该邮箱的用户
 	adminer, err := l.svcCtx.AdminerModel.FindOneByEmail(l.ctx, in.Email)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("LoginByEmail AdminerModel.FindOneByEmail(l.ctx, in.Email) error: %v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	//账户不存在
 	if err == model.ErrNotFound {
-		return nil, errorx.ExtStatusErr(errors.New("account does not exist"))
+		return nil, errorx.ExtRpcErr(errors.New("account does not exist"))
 	}
 	//检查adminer的状态
 	if err = verifyAdminerStatus(adminer); err != nil {
-		return nil, errorx.ExtStatusErr(err)
+		return nil, errorx.ExtRpcErr(err)
 	}
 	//生成jwt-token
 	jwtData := &admin_pb.JwtData{

@@ -29,22 +29,13 @@ func generateDigitCaptcha(store base64Captcha.Store) (captchaId string, err erro
 		if e != nil {
 			err = fmt.Errorf("panic err:%+v", e)
 		}
-		return
 	}()
 
 	driver := base64Captcha.NewDriverDigit(40, 150, 6, 0, 0)
 	c := base64Captcha.NewCaptcha(driver, store)
 	captchaId, _, err = c.Generate()
 	if err != nil {
-		err = fmt.Errorf("c.Generate() err:%+v\n", err)
+		err = fmt.Errorf("generateDigitCaptcha c.Generate() err:%+v", err)
 	}
 	return
-}
-
-func getCaptchaAnswer(store base64Captcha.Store, captchaId string) string {
-	return store.Get(captchaId, false)
-}
-
-func verifyCaptcha(store base64Captcha.Store, captchaId, answer string) bool {
-	return store.Verify(captchaId, answer, false)
 }

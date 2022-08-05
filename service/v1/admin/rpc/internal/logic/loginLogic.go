@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"errors"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -31,7 +30,7 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 // 账号登录
 func (l *LoginLogic) Login(in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 	if len(in.Passport) == 0 {
-		return nil, errorx.ExtStatusErr(errorx.New("passport is empty"))
+		return nil, errorx.ExtRpcErr(errorx.New("passport is empty"))
 	}
 	//根据账户查找用户
 	//passport也可能是邮箱
@@ -47,20 +46,21 @@ func (l *LoginLogic) Login(in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 	//进行账号登录
 	adminer, err := l.svcCtx.AdminerModel.FindOneByPassport(l.ctx, in.Passport)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("Login AdminerModel.FindOneByPassport(l.ctx, in.Passport) error: %v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	//账户不存在
 	if err == model.ErrNotFound {
-		return nil, errorx.ExtStatusErr(errors.New("account does not exist"))
+		return nil, errorx.ExtRpcErr(errors.New("account does not exist"))
 	}
 
 	if adminer.Passport != in.Passport {
-		return nil, errorx.ExtStatusErr(errors.New("account and password do not match"))
+		return nil, errorx.ExtRpcErr(errors.New("account and password do not match"))
 	}
 
 	//检查adminer的状态
 	if err = verifyAdminerStatus(adminer); err != nil {
-		return nil, errorx.ExtStatusErr(err)
+		return nil, errorx.ExtRpcErr(err)
 	}
 
 	//生成jwt-token

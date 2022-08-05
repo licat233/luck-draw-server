@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -29,7 +28,8 @@ func NewGetAdminerListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 func (l *GetAdminerListLogic) GetAdminerList(in *admin_pb.ListReq) (*admin_pb.GetAdminerListResp, error) {
 	list, err := l.svcCtx.AdminerModel.FindList(l.ctx, in.PageSize, in.Page)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("GetAdminerList AdminerModel.FindList(l.ctx, in.PageSize, in.Page) error, err: %v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	if err == model.ErrNotFound {
@@ -44,7 +44,8 @@ func (l *GetAdminerListLogic) GetAdminerList(in *admin_pb.ListReq) (*admin_pb.Ge
 
 	total, err := l.svcCtx.AdminerModel.FindCount(l.ctx)
 	if err != nil {
-		return nil, errorx.IntStatusErr(fmt.Errorf("GetAdminerList AdminerModel.FindCount(l.ctx) error, err: %v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return &admin_pb.GetAdminerListResp{

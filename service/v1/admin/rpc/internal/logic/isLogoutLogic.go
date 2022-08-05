@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
@@ -31,12 +30,13 @@ func NewIsLogoutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *IsLogout
 func (l *IsLogoutLogic) IsLogout(in *admin_pb.IsLogoutReq) (*admin_pb.IsLogoutResp, error) {
 	uuid, err := utils.JwtTokenToMd5(in.JwtToken)
 	if err != nil {
-		return nil, errorx.SecStatusErr(err)
+		return nil, errorx.SecRpcErr(err)
 	}
 
 	_, err = l.svcCtx.JwtBlacklistsModel.FindOneByUuid(l.ctx, uuid)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("IsLogout JwtBlacklistsModel.FindOneByUuid(l.ctx, uuid) error:%v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	return &admin_pb.IsLogoutResp{

@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck-draw/service/v1/luckdraw/rpc/internal/svc"
 	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
 	"luck-draw/service/v1/model"
@@ -30,7 +29,8 @@ func NewGetActivePrizesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 func (l *GetActivePrizesLogic) GetActivePrizes(in *luckdraw_pb.ActivePrizesReq) (*luckdraw_pb.ActivePrizesResp, error) {
 	list, err := l.svcCtx.PrizeModel.FindPrizesByActivityUuid(l.ctx, in.ActivityUuid)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errorx.IntStatusErr(fmt.Errorf("GetActivePrizes err:%+v", err))
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	return &luckdraw_pb.ActivePrizesResp{
 		Prizes: convertPrizes(list),
