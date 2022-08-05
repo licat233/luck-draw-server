@@ -10,9 +10,9 @@ var (
 	ErrInvalidUuid     = New("uuid format error")
 	ErrTooManyRequests = AccessError(nil, errors.New("too many requests"))
 
-	ErrAuth     = AuthError(errors.New("Authentication failed, identity exception"))
-	ErrPlatform = AuthError(errors.New("Authentication failed, platform exception"))
-	ErrIp       = AuthError(errors.New("Authentication failed, request ip exception"))
+	ErrAuth     = AuthError(errors.New("authentication failed, identity exception"))
+	ErrPlatform = AuthError(errors.New("authentication failed, platform exception"))
+	ErrIp       = AuthError(errors.New("authentication failed, request ip exception"))
 )
 
 var ResponseCode map[int]string = map[int]string{
