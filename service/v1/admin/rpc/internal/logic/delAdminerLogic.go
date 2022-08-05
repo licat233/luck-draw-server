@@ -33,7 +33,7 @@ func (l *DelAdminerLogic) DelAdminer(in *admin_pb.ItemReq) (*admin_pb.StatusResp
 		return nil, errorx.IntStatusErr(fmt.Errorf("DelAdminer AdminerModel.FindOne(l.ctx, in.Id) error:%v", err))
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.ExtStatusErr(errors.New("Adminer not found"))
+		return nil, errorx.ExtStatusErr(errors.New("adminer not found"))
 	}
 
 	err = l.svcCtx.AdminerModel.DeleteSoft(l.ctx, data)

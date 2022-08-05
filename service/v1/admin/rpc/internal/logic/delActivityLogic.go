@@ -33,7 +33,7 @@ func (l *DelActivityLogic) DelActivity(in *admin_pb.ItemReq) (*admin_pb.StatusRe
 		return nil, errorx.IntStatusErr(fmt.Errorf("DelActivity ActivityModel.FindOne(l.ctx, in.Id) error:%v", err))
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.ExtStatusErr(errors.New("Activity not found"))
+		return nil, errorx.ExtStatusErr(errors.New("activity not found"))
 	}
 
 	err = l.svcCtx.ActivityModel.DeleteSoft(l.ctx, data)

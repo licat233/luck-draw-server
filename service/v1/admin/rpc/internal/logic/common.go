@@ -202,7 +202,7 @@ func mdUsersPoolListToPbUsersPoolList(mdUsersPoolList []*model.UsersPool) []*adm
 
 func verifyAdminerStatus(adminer *model.Adminer) error {
 	if adminer.Status == 0 {
-		return errors.New("This account has been disabled")
+		return errors.New("this account has been disabled")
 	}
 	return nil
 }

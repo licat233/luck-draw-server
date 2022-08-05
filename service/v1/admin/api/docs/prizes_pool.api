@@ -1,5 +1,22 @@
 syntax = "v1"
 
+type PrizesPool {
+	Id         int64     `json:"id"`          // 表主键
+	Uuid       string    `json:"uuid"`        // 唯一识别码
+	ActivityId int64     `json:"activity_id"` // 活动id
+	PrizeId    int64     `json:"prize_id"`    // 奖品id
+	LuckValue  int64     `json:"luck_value"`  // 幸运值
+	Status     int64     `json:"status"`      // 是否可用，0不可用，1可用
+	GradeName  string    `json:"grade_name"`  // 等级名称，如：一等奖
+	IsWin      int64     `json:"is_win"`      // 是否中奖
+	Number     int64     `json:"number"`      // 奖品总数量
+	Remain     int64     `json:"remain"`      // 奖品剩余数量
+	CreateAt   int64     `json:"create_at"`   // 创建时间
+	UpdateAt   int64     `json:"update_at"`   // 更新时间
+	IsDeleted  int64     `json:"is_deleted"`  // 是否已被删除
+	DeleteAt   int64     `json:"delete_at"`   // 删除时间
+}
+
 type PrizesPoolGetReq {
 	Id int64 `json:"id"`
 }

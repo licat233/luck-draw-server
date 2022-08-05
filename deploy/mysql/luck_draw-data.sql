@@ -77,7 +77,7 @@ CREATE TABLE `adminer` (
 -- Records of adminer
 -- ----------------------------
 BEGIN;
-INSERT INTO `adminer` VALUES (1, '3a37bef3-65da-4d1f-9acf-f13b308ad213', '超管', '', 'licat', 'licat233', 'licat@gmail.com', 1, 1, 0, '2005-01-02 15:04:05', '2022-07-29 09:47:08', '2022-07-29 09:47:08', 0, '2005-01-02 15:04:05');
+INSERT INTO `adminer` VALUES (1, '3a37bef3-65da-4d1f-9acf-f13b308ad213', '超管', 'https://img.alicdn.com/imgextra/i2/917298378/O1CN010hGXaf2BlAzexJ8cM_!!917298378.png', 'licat', 'licat233', '1697470538@qq.com', 1, 1, 0, '2005-01-02 15:04:05', '2022-07-29 09:47:08', '2022-07-29 09:47:08', 0, '2005-01-02 15:04:05');
 COMMIT;
 
 -- ----------------------------
@@ -87,7 +87,7 @@ DROP TABLE IF EXISTS `jwt_blacklists`;
 CREATE TABLE `jwt_blacklists` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
   `uuid` int NOT NULL COMMENT '用户或者管理员的唯一识别码',
-  `jwt` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'jwt-token',
+  `token` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'jwt-token',
   `platform` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '绑定平台',
   `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0.0.0.0' COMMENT '绑定ip',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

@@ -33,7 +33,7 @@ func (l *DelLuckerLogic) DelLucker(in *admin_pb.ItemReq) (*admin_pb.StatusResp, 
 		return nil, errorx.IntStatusErr(fmt.Errorf("DelLucker LuckerModel.FindOne(l.ctx, in.Id) error:%v", err))
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.ExtStatusErr(errors.New("Lucker not found"))
+		return nil, errorx.ExtStatusErr(errors.New("lucker not found"))
 	}
 
 	err = l.svcCtx.LuckerModel.DeleteSoft(l.ctx, data)

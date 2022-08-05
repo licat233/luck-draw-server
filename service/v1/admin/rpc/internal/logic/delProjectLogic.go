@@ -33,7 +33,7 @@ func (l *DelProjectLogic) DelProject(in *admin_pb.ItemReq) (*admin_pb.StatusResp
 		return nil, errorx.IntStatusErr(fmt.Errorf("DelProject ProjectModel.FindOne(l.ctx, in.Id) error:%v", err))
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.ExtStatusErr(errors.New("Project not found"))
+		return nil, errorx.ExtStatusErr(errors.New("project not found"))
 	}
 
 	err = l.svcCtx.ProjectModel.DeleteSoft(l.ctx, data)

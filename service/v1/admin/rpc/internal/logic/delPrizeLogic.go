@@ -33,7 +33,7 @@ func (l *DelPrizeLogic) DelPrize(in *admin_pb.ItemReq) (*admin_pb.StatusResp, er
 		return nil, errorx.IntStatusErr(fmt.Errorf("DelPrize PrizeModel.FindOne(l.ctx, in.Id) error:%v", err))
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.ExtStatusErr(errors.New("Prize not found"))
+		return nil, errorx.ExtStatusErr(errors.New("prize not found"))
 	}
 
 	err = l.svcCtx.PrizeModel.DeleteSoft(l.ctx, data)

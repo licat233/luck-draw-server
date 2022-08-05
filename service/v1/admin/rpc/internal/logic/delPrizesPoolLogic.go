@@ -33,7 +33,7 @@ func (l *DelPrizesPoolLogic) DelPrizesPool(in *admin_pb.ItemReq) (*admin_pb.Stat
 		return nil, errorx.IntStatusErr(fmt.Errorf("DelPrizesPool PrizesPoolModel.FindOne(l.ctx, in.Id) error:%v", err))
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.ExtStatusErr(errors.New("PrizesPool not found"))
+		return nil, errorx.ExtStatusErr(errors.New("prizesPool not found"))
 	}
 
 	err = l.svcCtx.PrizesPoolModel.DeleteSoft(l.ctx, data)

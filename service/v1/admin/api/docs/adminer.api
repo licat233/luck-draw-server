@@ -1,5 +1,23 @@
 syntax = "v1"
 
+type adminer {
+	Id           int64     `json:"id"`             // 表主键
+	Uuid         string    `json:"uuid"`           // 唯一识别码
+	Name         string    `json:"name"`           // 管理员名称
+	Avatar       string    `json:"avatar"`         // 头像
+	Passport     string    `json:"passport"`       // 账号
+	Password     string    `json:"password"`       // 密码
+	Email        string    `json:"email"`          // 邮箱
+	Status       int64     `json:"status"`         // 账号状态，是否可用
+	IsSuperAdmin int64     `json:"is_super_admin"` // 是否为超级管理员
+	LoginCount   int64     `json:"login_count"`    // 登录次数
+	LastLogin    int64     `json:"last_login"`     // 最后一次登录时间
+	CreateAt     int64     `json:"create_at"`      // 创建时间
+	UpdateAt     int64     `json:"update_at"`      // 更新时间
+	IsDeleted    int64     `json:"is_deleted"`     // 是否已被删除
+	DeleteAt     int64     `json:"delete_at"`      // 删除时间
+}
+
 type adminerGetReq {
 	Id int64 `json:"id"`
 }

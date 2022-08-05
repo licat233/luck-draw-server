@@ -17,19 +17,19 @@ type LoginByEmailReq struct {
 }
 
 type BaseResp struct {
-	Status       bool        `json:"success"`                     //【响应状态】
-	Message      string      `json:"message,optional"`            //【给予的提示信息】
-	Data         interface{} `json:"data,optional"`               //【选填】响应的业务数据
-	Total        int64       `json:"total,optional"`              // 【选填】数据总个数
-	PageSize     int64       `json:"pageSize,optional"`           // 【选填】单页数量
-	Page         int64       `json:"current,optional"`            // 【选填】当前页码，current与antd前端对接
-	TotalPage    int64       `json:"totalPage,optional"`          // 【自己加上去的】总共有多少页，根据前端的pageSize来计算
-	ErrorCode    int         `json:"errorCode,optional"`          // 【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功
-	ErrorMessage string      `json:"errorMessage,optional"`       // 【选填】向用户显示消息
-	TraceMessage string      `json:"traceMessage,optional"`       // 【选填】调试错误信息，请勿在生产环境下使用，可有可无
-	ShowType     int         `json:"showType,optional,default=2"` // 【选填】错误显示类型：0.不提示错误;1.警告信息提示；2.错误信息提示；4.通知提示；9.页面跳转
-	TraceId      string      `json:"traceId,optional"`            // 【选填】方便后端故障排除：唯一的请求ID
-	Host         string      `json:"host,optional"`               // 【选填】方便后端故障排除：当前访问服务器的主机
+	Status       bool        `json:"success"`               //【响应状态】
+	Message      string      `json:"message,optional"`      //【给予的提示信息】
+	Data         interface{} `json:"data,optional"`         //【选填】响应的业务数据
+	Total        int64       `json:"total,optional"`        // 【选填】数据总个数
+	PageSize     int64       `json:"pageSize,optional"`     // 【选填】单页数量
+	Page         int64       `json:"current,optional"`      // 【选填】当前页码，current与antd前端对接
+	TotalPage    int64       `json:"totalPage,optional"`    // 【选填】自增项，总共有多少页，根据前端的pageSize来计算
+	ErrorCode    int         `json:"errorCode,optional"`    // 【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功
+	ErrorMessage string      `json:"errorMessage,optional"` // 【选填】向用户显示消息
+	TraceMessage string      `json:"traceMessage,optional"` // 【选填】调试错误信息，请勿在生产环境下使用，可有可无
+	ShowType     int         `json:"showType,optional"`     // 【选填】错误显示类型：0.不提示错误;1.警告信息提示；2.错误信息提示；4.通知提示；9.页面跳转
+	TraceId      string      `json:"traceId,optional"`      // 【选填】方便后端故障排除：唯一的请求ID
+	Host         string      `json:"host,optional"`         // 【选填】方便后端故障排除：当前访问服务器的主机
 }
 
 type DownloadReq struct {
@@ -51,8 +51,26 @@ type ListReq struct {
 }
 
 type JwtToken struct {
-	AccessToken  string `json:"token"`
-	AccessExpire int64  `json:"expire"`
+	AccessToken  string `json:"access_token"`
+	AccessExpire int64  `json:"access_expire"`
+	RefreshAfter int64  `json:"refresh_after"`
+}
+
+type Activity struct {
+	Id        int64  `json:"id"`         // 表主键
+	Uuid      string `json:"uuid"`       // 唯一识别码
+	Name      string `json:"name"`       // 活动名称
+	ProjectId int64  `json:"project_id"` // 项目id
+	Status    int64  `json:"status"`     // 活动状态，是否在举办，默认关闭，需手动开启
+	Pattern   int64  `json:"pattern"`    // 方案: 0私密的，1公开的
+	MaxCount  int64  `json:"max_count"`  // 最大抽奖次数：-1表示无限制，0表示不可抽奖
+	MaxPrizes int64  `json:"max_prizes"` // 最大抽奖次数：-1表示无限制，0表示不可抽奖
+	StartTime int64  `json:"start_time"` // 活动开始时间
+	EndTime   int64  `json:"end_time"`   // 活动结束时间
+	CreateAt  int64  `json:"create_at"`  // 创建时间
+	UpdateAt  int64  `json:"update_at"`  // 更新时间
+	IsDeleted int64  `json:"is_deleted"` // 是否已被删除
+	DeleteAt  int64  `json:"delete_at"`  // 删除时间
 }
 
 type ActivityGetReq struct {
@@ -85,6 +103,24 @@ type ActivityPutReq struct {
 
 type ActivityDelReq struct {
 	Id int64 `json:"id"`
+}
+
+type Adminer struct {
+	Id           int64  `json:"id"`             // 表主键
+	Uuid         string `json:"uuid"`           // 唯一识别码
+	Name         string `json:"name"`           // 管理员名称
+	Avatar       string `json:"avatar"`         // 头像
+	Passport     string `json:"passport"`       // 账号
+	Password     string `json:"password"`       // 密码
+	Email        string `json:"email"`          // 邮箱
+	Status       int64  `json:"status"`         // 账号状态，是否可用
+	IsSuperAdmin int64  `json:"is_super_admin"` // 是否为超级管理员
+	LoginCount   int64  `json:"login_count"`    // 登录次数
+	LastLogin    int64  `json:"last_login"`     // 最后一次登录时间
+	CreateAt     int64  `json:"create_at"`      // 创建时间
+	UpdateAt     int64  `json:"update_at"`      // 更新时间
+	IsDeleted    int64  `json:"is_deleted"`     // 是否已被删除
+	DeleteAt     int64  `json:"delete_at"`      // 删除时间
 }
 
 type AdminerGetReq struct {
@@ -127,6 +163,20 @@ type AdminerModifyReq struct {
 	Email    string `json:"email"`    // 邮箱
 }
 
+type Lucker struct {
+	Id           int64  `json:"id"`             // 表主键
+	Uuid         string `json:"uuid"`           // 唯一识别码
+	UserId       int64  `json:"user_id"`        // 中奖用户id
+	PrizesPoolId int64  `json:"prizes_pool_id"` // 抽中的奖品池id
+	Status       int64  `json:"status"`         // 状态: -1放弃领奖，0未领奖，1已领奖
+	LuckDate     int64  `json:"luck_date"`      // 抽奖时间
+	Ip           string `json:"ip"`             // ip地址
+	CreateAt     int64  `json:"create_at"`      // 创建时间
+	UpdateAt     int64  `json:"update_at"`      // 更新时间
+	IsDeleted    int64  `json:"is_deleted"`     // 是否已被删除
+	DeleteAt     int64  `json:"delete_at"`      // 删除时间
+}
+
 type LuckerGetReq struct {
 	Id int64 `json:"id"`
 }
@@ -153,6 +203,19 @@ type LuckerDelReq struct {
 	Id int64 `json:"id"`
 }
 
+type Prize struct {
+	Id        int64   `json:"id"`         // 表主键
+	Uuid      string  `json:"uuid"`       // 唯一识别码
+	Name      string  `json:"name"`       // 奖品名称
+	Image     string  `json:"image"`      // 奖品图片
+	Price     float64 `json:"price"`      // 奖品价格
+	Status    int64   `json:"status"`     // 是否可用
+	CreateAt  int64   `json:"create_at"`  // 创建时间
+	UpdateAt  int64   `json:"update_at"`  // 更新时间
+	IsDeleted int64   `json:"is_deleted"` // 是否已被删除
+	DeleteAt  int64   `json:"delete_at"`  // 删除时间
+}
+
 type PrizeGetReq struct {
 	Id int64 `json:"id"`
 }
@@ -175,6 +238,23 @@ type PrizePutReq struct {
 
 type PrizeDelReq struct {
 	Id int64 `json:"id"`
+}
+
+type PrizesPool struct {
+	Id         int64  `json:"id"`          // 表主键
+	Uuid       string `json:"uuid"`        // 唯一识别码
+	ActivityId int64  `json:"activity_id"` // 活动id
+	PrizeId    int64  `json:"prize_id"`    // 奖品id
+	LuckValue  int64  `json:"luck_value"`  // 幸运值
+	Status     int64  `json:"status"`      // 是否可用，0不可用，1可用
+	GradeName  string `json:"grade_name"`  // 等级名称，如：一等奖
+	IsWin      int64  `json:"is_win"`      // 是否中奖
+	Number     int64  `json:"number"`      // 奖品总数量
+	Remain     int64  `json:"remain"`      // 奖品剩余数量
+	CreateAt   int64  `json:"create_at"`   // 创建时间
+	UpdateAt   int64  `json:"update_at"`   // 更新时间
+	IsDeleted  int64  `json:"is_deleted"`  // 是否已被删除
+	DeleteAt   int64  `json:"delete_at"`   // 删除时间
 }
 
 type PrizesPoolGetReq struct {
@@ -207,6 +287,17 @@ type PrizesPoolPutReq struct {
 
 type PrizesPoolDelReq struct {
 	Id int64 `json:"id"`
+}
+
+type Project struct {
+	Id        int64  `json:"id"`         // 表主键
+	Uuid      string `json:"uuid"`       // 唯一识别码
+	Name      string `json:"name"`       // 项目名称
+	Status    int64  `json:"status"`     // 项目状态
+	CreateAt  int64  `json:"create_at"`  // 创建日期
+	UpdateAt  int64  `json:"update_at"`  // 更新时间
+	IsDeleted int64  `json:"is_deleted"` // 是否已被删除
+	DeleteAt  int64  `json:"delete_at"`  // 删除时间
 }
 
 type ProjectGetReq struct {
@@ -249,6 +340,22 @@ type RoleAndDomainReq struct {
 	Dom string `json:"dom"`
 }
 
+type User struct {
+	Id        int64  `json:"id"`         // 表主键
+	Uuid      string `json:"uuid"`       // 唯一识别码
+	Passport  string `json:"passport"`   // 凭证，可以是手机号或者社交账号，一般是由客户填入
+	Email     string `json:"email"`      // 邮箱
+	Phone     string `json:"phone"`      // 手机号
+	Name      string `json:"name"`       // 用户名
+	Address   string `json:"address"`    // 收货地址
+	Score     int64  `json:"score"`      // 积分
+	Status    int64  `json:"status"`     // 状态:-1已经封禁，0未授权，1已授权
+	CreateAt  int64  `json:"create_at"`  // 创建时间
+	UpdateAt  int64  `json:"update_at"`  // 更新时间
+	IsDeleted int64  `json:"is_deleted"` // 是否已被删除
+	DeleteAt  int64  `json:"delete_at"`  // 删除时间
+}
+
 type UserGetReq struct {
 	Id int64 `json:"id"`
 }
@@ -277,6 +384,19 @@ type UserPutReq struct {
 
 type UserDelReq struct {
 	Id int64 `json:"id"`
+}
+
+type UsersPool struct {
+	Id         int64  `json:"id"`          // 表主键
+	Uuid       string `json:"uuid"`        // 唯一识别码
+	ActivityId int64  `json:"activity_id"` // 活动id
+	UserId     int64  `json:"user_id"`     // 奖品id
+	Status     int64  `json:"status"`      // 状态：-1已被禁止,0未授权，1已授权
+	Score      int64  `json:"score"`       // 用户在当前活动的积分
+	CreateAt   int64  `json:"create_at"`   // 创建时间
+	UpdateAt   int64  `json:"update_at"`   // 更新时间
+	IsDeleted  int64  `json:"is_deleted"`  // 是否已被删除
+	DeleteAt   int64  `json:"delete_at"`   // 删除时间
 }
 
 type UsersPoolGetReq struct {

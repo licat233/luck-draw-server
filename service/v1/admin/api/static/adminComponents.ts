@@ -24,7 +24,7 @@ export interface BaseResp {
 	total?: number // 【选填】数据总个数
 	pageSize?: number // 【选填】单页数量
 	current?: number // 【选填】当前页码，current与antd前端对接
-	totalPage?: number // 【自己加上去的】总共有多少页，根据前端的pageSize来计算
+	totalPage?: number // 【选填】自增项，总共有多少页，根据前端的pageSize来计算
 	//如果是失败响应，附带debug信息
 	errorCode?: number // 【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功
 	errorMessage?: string // 【选填】向用户显示消息
@@ -59,8 +59,9 @@ export interface ListReqParams {
 }
 
 export interface JwtToken {
-	token: string
-	expire: number
+	access_token: string
+	access_expire: number
+	refresh_after: number
 }
 
 export interface ActivityGetReq {

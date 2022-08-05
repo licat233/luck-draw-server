@@ -33,7 +33,7 @@ func (l *DelUserLogic) DelUser(in *admin_pb.ItemReq) (*admin_pb.StatusResp, erro
 		return nil, errorx.IntStatusErr(fmt.Errorf("DelUser UserModel.FindOne(l.ctx, in.Id) error:%v", err))
 	}
 	if err == model.ErrNotFound {
-		return nil, errorx.ExtStatusErr(errors.New("User not found"))
+		return nil, errorx.ExtStatusErr(errors.New("user not found"))
 	}
 
 	err = l.svcCtx.UserModel.DeleteSoft(l.ctx, data)

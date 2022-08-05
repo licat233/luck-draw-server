@@ -1,5 +1,18 @@
 syntax = "v1"
 
+type prize {
+	Id        int64     `json:"id"`         // 表主键
+	Uuid      string    `json:"uuid"`       // 唯一识别码
+	Name      string    `json:"name"`       // 奖品名称
+	Image     string    `json:"image"`      // 奖品图片
+	Price     float64   `json:"price"`      // 奖品价格
+	Status    int64     `json:"status"`     // 是否可用
+	CreateAt  int64     `json:"create_at"`  // 创建时间
+	UpdateAt  int64     `json:"update_at"`  // 更新时间
+	IsDeleted int64     `json:"is_deleted"` // 是否已被删除
+	DeleteAt  int64     `json:"delete_at"`  // 删除时间
+}
+
 type prizeGetReq {
 	Id int64 `json:"id"`
 }

@@ -51,11 +51,11 @@ func (l *LoginLogic) Login(in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 	}
 	//账户不存在
 	if err == model.ErrNotFound {
-		return nil, errorx.ExtStatusErr(errors.New("Account does not exist"))
+		return nil, errorx.ExtStatusErr(errors.New("account does not exist"))
 	}
 
 	if adminer.Passport != in.Passport {
-		return nil, errorx.ExtStatusErr(errors.New("Account and password do not match"))
+		return nil, errorx.ExtStatusErr(errors.New("account and password do not match"))
 	}
 
 	//检查adminer的状态
@@ -82,6 +82,7 @@ func (l *LoginLogic) Login(in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 		JwtToken: &admin_pb.JwtToken{
 			AccessToken:  res.JwtToken.AccessToken,
 			AccessExpire: res.JwtToken.AccessExpire,
+			RefreshAfter: res.JwtToken.RefreshAfter,
 		},
 	}, nil
 }

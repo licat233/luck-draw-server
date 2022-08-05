@@ -32,17 +32,12 @@ func (l *GetMathCaptchaLogic) GetMathCaptcha(in *captcha_pb.GetCaptchaReq) (*cap
 	captchaConfig := &CaptchaConfig{
 		CaptchaType: "math",
 		DriverMath: &base64Captcha.DriverMath{
-			BgColor: &color.RGBA{
-				R: uint8(in.BgColor.R),
-				G: uint8(in.BgColor.G),
-				B: uint8(in.BgColor.B),
-				A: uint8(in.BgColor.A),
-			},
-			Fonts:           []string{"actionj.ttf", "3Dumb.ttf"},
 			Height:          int(in.Height),
-			NoiseCount:      0,
-			ShowLineOptions: 6,
 			Width:           int(in.Width),
+			NoiseCount:      0,
+			ShowLineOptions: 2,
+			BgColor:         &color.RGBA{R: uint8(in.BgColor.R), G: uint8(in.BgColor.G), B: uint8(in.BgColor.B), A: uint8(in.BgColor.A)},
+			Fonts:           []string{"actionj.ttf", "wqy-microhei.ttc", "chromohv.ttf"},
 		},
 	}
 

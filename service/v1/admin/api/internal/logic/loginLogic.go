@@ -69,5 +69,9 @@ func (l *LoginLogic) Login(req *types.LoginReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.DefaultSingleResp(resp.JwtToken, err)
+	return respx.NewData(&types.JwtToken{
+		AccessToken:  resp.JwtToken.AccessToken,
+		AccessExpire: resp.JwtToken.AccessExpire,
+		RefreshAfter: resp.JwtToken.RefreshAfter,
+	}), nil
 }

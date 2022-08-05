@@ -1,5 +1,19 @@
 syntax = "v1"
 
+type lucker {
+	Id           int64     `json:"id"`             // 表主键
+	Uuid         string    `json:"uuid"`           // 唯一识别码
+	UserId       int64     `json:"user_id"`        // 中奖用户id
+	PrizesPoolId int64     `json:"prizes_pool_id"` // 抽中的奖品池id
+	Status       int64     `json:"status"`         // 状态: -1放弃领奖，0未领奖，1已领奖
+	LuckDate     int64     `json:"luck_date"`      // 抽奖时间
+	Ip           string    `json:"ip"`             // ip地址
+	CreateAt     int64     `json:"create_at"`      // 创建时间
+	UpdateAt     int64     `json:"update_at"`      // 更新时间
+	IsDeleted    int64     `json:"is_deleted"`     // 是否已被删除
+	DeleteAt     int64     `json:"delete_at"`      // 删除时间
+}
+
 type luckerGetReq {
 	Id int64 `json:"id"`
 }

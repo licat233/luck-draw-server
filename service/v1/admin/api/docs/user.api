@@ -1,5 +1,21 @@
 syntax = "v1"
 
+type user {
+	Id        int64     `json:"id"`         // 表主键
+	Uuid      string    `json:"uuid"`       // 唯一识别码
+	Passport  string    `json:"passport"`   // 凭证，可以是手机号或者社交账号，一般是由客户填入
+	Email     string    `json:"email"`      // 邮箱
+	Phone     string    `json:"phone"`      // 手机号
+	Name      string    `json:"name"`       // 用户名
+	Address   string    `json:"address"`    // 收货地址
+	Score     int64     `json:"score"`      // 积分
+	Status    int64     `json:"status"`     // 状态:-1已经封禁，0未授权，1已授权
+	CreateAt  int64     `json:"create_at"`  // 创建时间
+	UpdateAt  int64     `json:"update_at"`  // 更新时间
+	IsDeleted int64     `json:"is_deleted"` // 是否已被删除
+	DeleteAt  int64     `json:"delete_at"`  // 删除时间
+}
+
 type userGetReq {
 	Id int64 `json:"id"`
 }
