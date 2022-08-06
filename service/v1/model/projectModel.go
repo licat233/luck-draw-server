@@ -123,7 +123,7 @@ func (m *customProjectModel) Update(ctx context.Context, data *Project) error {
 func (m *customProjectModel) FindCount(ctx context.Context) (int64, error) {
 	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted`= '0'", m.table)
 	var count int64
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
+	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	switch err {
 	case nil:
 		return count, nil

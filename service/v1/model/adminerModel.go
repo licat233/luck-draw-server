@@ -110,15 +110,9 @@ func (m *customAdminerModel) Update(ctx context.Context, data *Adminer) error {
 func (m *customAdminerModel) FindCount(ctx context.Context) (int64, error) {
 	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted`= '0'", m.table)
 	var count int64
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
-	switch err {
-	case nil:
-		return count, nil
-	case sqlc.ErrNotFound:
-		return 0, nil
-	default:
-		return 0, err
-	}
+	err := m.QueryRowNoCacheCtx(ctx, &count, query)
+	//就算不存在，err也不会等于 model.ErrNotFound
+	return count, err
 }
 
 func (m *customAdminerModel) FindList(ctx context.Context, pageSize, page int64) ([]*Adminer, error) {
@@ -164,18 +158,10 @@ func (m *customAdminerModel) FindOneByEmail(ctx context.Context, email string) (
 }
 
 func (m *customAdminerModel) ExsitByEmail(ctx context.Context, email string) (bool, error) {
-	query := fmt.Sprintf("select 1 as count from %s where `email` = ? and `is_deleted`= 0 limit 1", m.table)
+	query := fmt.Sprintf("select count(*) as count from %s where `email` = ? and `is_deleted`= 0 limit 1", m.table)
 	var count int64
 	err := m.QueryRowNoCacheCtx(ctx, &count, query, email)
-	switch err {
-	case nil:
-		if count != 0 {
-			return true, nil
-		}
-		return false, nil
-	case sqlc.ErrNotFound:
-		return false, nil
-	default:
-		return false, err
-	}
+	//就算不存在，err也不会等于 model.ErrNotFound
+	// fmt.Printf("count: %+v , error: %+v \n", count, err)
+	return count != 0, err
 }

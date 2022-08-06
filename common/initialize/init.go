@@ -7,6 +7,8 @@ import (
 	"luck-draw/common/utils"
 	"luck-draw/common/viperx"
 	"time"
+
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 func Initialize() {
@@ -36,4 +38,8 @@ func InitJwtBlacklistsModel() {
 
 func InitProjectRootPath() {
 	global.ProjectRootPath = utils.CurrentProjectRootPath()
+}
+
+func InitMysql() {
+	global.SQLConn = sqlx.NewMysql(global.Viper.GetString("Mysql.DataSource"))
 }
