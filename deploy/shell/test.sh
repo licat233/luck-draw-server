@@ -1,5 +1,44 @@
 #!/bin/bash
 
+name=admin
+service_path="/www/wwwroot/luck_draw/service/v1/${name}/rpc"
+cd $service_path
+
+"./admin-rpc" &
+
+exit
+
+name=admin
+pid=$(ps -ef | grep ${name}-rpc | grep -v grep | awk '{print $2}')
+if [ ! -z $pid ]; then
+    kill -9 $pid
+    if [ ! $? -eq 0 ]; then
+        #kill失败
+        echo "${name}-rpc: [ kill -9 $pid ] 失败"
+        exit
+    fi
+fi
+
+exit
+
+name=admin
+service_path="/www/wwwroot/luck_draw/service/v1/${name}"
+if [ ! -d $service_path ]; then
+    echo "不存在"
+else
+    echo "存在"
+fi
+
+exit
+
+output=$(ps -ef | grep admin-rpc | grep -v grep | awk '{print $2}')
+echo $output
+if [ ! -z $output ]; then
+    echo "空"
+fi
+
+exit
+
 loading_show=""
 loading_index=0
 loading_ch=('|' '\' '-' '/')
@@ -35,7 +74,7 @@ loading() {
     done
     loading_index=$i
     loading_show=$str
-    if (( $loading_index >= 100)); then
+    if (($loading_index >= 100)); then
         printf "\n"
     fi
     unset str

@@ -1,72 +1,115 @@
 #!/bin/bash
 
-loading_show=""
-loading_index=0
-loading_ch=('|' '\' '-' '/')
-loading() {
-    i=$loading_index
-    j=$1
-    if [ -z $j ]; then
-        j=100
+build_rpc() {
+    name=$1
+    service_path="/www/wwwroot/luck_draw/service/v1/${name}/rpc"
+    if [ ! -d $service_path ]; then
+        #如果不存在，则退出
+        return
     fi
-    str=$loading_show
-    while [ $i -le $j ]; do
-        let index=i%4
-        if [ $i -le 20 ]; then
-            let color=44
-            let bg=34
-        elif [ $i -le 45 ]; then
-            let color=43
-            let bg=33
-        elif [ $i -le 75 ]; then
-            let color=41
-            let bg=31
-        else
-            let color=42
-            let bg=32
+    cd $service_path
+    #查找相关服务，并终止
+    pid=$(ps -ef | grep ${name}-rpc | grep -v grep | awk '{print $2}')
+    if [ ! -z $pid ]; then
+        kill - $pid
+        if [ ! $? -eq 0 ]; then
+            #kill失败
+            echo "${name}-rpc: [ kill -9 $pid ] 失败"
+            return
         fi
-        printf "\033[${color};${bg}m%-s\033[0m %d %c\r" "$str" "$i" "%" "${loading_ch[$index]}"
-        usleep 30000
-        let i=i+1
-        if [ $(($i % 2)) -eq 0 ]; then
-            str+="#"
-        fi
+    fi
+    #编译rpc服务 rm -f admin-rpc; go build -o admin-rpc admin.go
+    echo "开始编译${name}-rpc ...... "
+    rm -f "${name}-rpc"
+    go build -o "${name}-rpc" "${name}.go"
+    echo "${name}-rpc 编译完成"
+    "./${name}-rpc" &
+}
 
-    done
-    loading_index=$i
-    loading_show=$str
-    if (($loading_index > 100)); then
-        printf "\n"
-        loading_index=0
-        loading_show=""
+build_api() {
+    name=$1
+    service_path="/www/wwwroot/luck_draw/service/v1/${name}/api"
+    if [ ! -d $service_path ]; then
+        #如果不存在，则退出
+        return
     fi
-    unset str
+    cd $service_path
+    #查找相关服务，并终止
+    pid=$(ps -ef | grep ${name}-api | grep -v grep | awk '{print $2}')
+    if [ ! -z $pid ]; then
+        kill - $pid
+        if [ ! $? -eq 0 ]; then
+            #kill失败
+            echo "${name}-api: [ kill -9 $pid ] 失败"
+            return
+        fi
+    fi
+    #编译api服务 rm -f admin-api; go build -o admin-api admin.go
+    echo "开始编译${name}-api ...... "
+    rm -f "${name}-api"
+    go build -o "${name}-api" "${name}.go"
+    echo "${name}-api 编译完成"
+}
+
+build_mq() {
+    name=$1
+    service_path="/www/wwwroot/luck_draw/service/v1/${name}/mq"
+    if [ ! -d $service_path ]; then
+        #如果不存在，则退出
+        return
+    fi
+    cd $service_path
+    #查找相关服务，并终止
+    pid=$(ps -ef | grep ${name}-mq | grep -v grep | awk '{print $2}')
+    if [ ! -z $pid ]; then
+        kill - $pid
+        if [ ! $? -eq 0 ]; then
+            #kill失败
+            echo "${name}-mq: [ kill -9 $pid ] 失败"
+            return
+        fi
+    fi
+    #编译api服务 rm -f admin-mq; go build -o admin-mq admin.go
+    echo "开始编译${name}-mq ...... "
+    rm -f "${name}-mq"
+    go build -o "${name}-mq" "${name}.go"
+    echo "${name}-mq 编译完成"
+}
+
+build_swagger() {
+    name=$1
+    service_path="/www/wwwroot/luck_draw/service/v1/${name}/api/docs"
+    if [ ! -d $service_path ]; then
+        #如果不存在，则退出
+        return
+    fi
+    cd $service_path
+    #生成接口文档swagger.json
+    echo "生成接口文档swagger.json ...... "
+    goctl api plugin -plugin goctl-swagger="swagger -filename ../static/swagger.json" -api "${name}.api" -dir .
+}
+
+build_ts() {
+    name=$1
+    service_path="/www/wwwroot/luck_draw/service/v1/${name}/api/docs"
+    if [ ! -d $service_path ]; then
+        #如果不存在，则退出
+        return
+    fi
+    cd $service_path
+    #生成typescript调用文件
+    echo "生成typescript调用文件 ...... "
+    goctl api ts -api "${name}.api" -dir ../static
 }
 
 #编译所有服务二进制文件
 all_services=("captcha" "luckdraw" "admin")
 for name in ${all_services[@]}; do
     service_path="/www/wwwroot/luck_draw/service/v1/${name}"
-    #编译rpc服务
-    echo "开始编译${name}-rpc ...... "
-    rm -f "${service_path}/rpc/${name}-rpc"
-    output=$(go build -o "${service_path}/rpc/${name}-rpc" "${service_path}/rpc/${name}.go")
-    echo "${name}-rpc 编译完成"
-    #编译api服务
-    echo "开始编译${name}-api ...... "
-    rm -f "${service_path}/api/${name}-api"
-    output=$(go build -o "${service_path}/api/${name}-api" "${service_path}/api/${name}.go")
-    echo "${name}-api 编译完成"
-    #进入相关服务路径
-    cd "${service_path}/api/docs"
-    api_path="${service_path}/api/docs/${name}.api"
-    static_path="${service_path}/api/static"
-    #生成其它文件
-    echo "开始生成其它文件 ......"
-    #生成接口文档swagger
-    output=$(goctl api plugin -plugin goctl-swagger="swagger -filename ${static_path}/swagger.json" -api "${name}.api" -dir "${service_path}/api/docs/")
-    #生成前端typescript文件
-    output=$(goctl api ts -api $api_path -dir $static_path)
+    build_rpc ${name}
+    build_api ${name}
+    build_swagger ${name}
+    build_ts ${name}
 done
 
 echo "----------- Initialize successful -----------"
