@@ -1,79 +1,74 @@
 #!/bin/bash
 
-build_rpc() {
-    name=$1
-    service_path="/www/wwwroot/luck_draw/service/v1/${name}/rpc"
+#进入monitor mode
+set -m
+
+current_path=$(
+    cd $(dirname $0)
+    pwd
+)
+
+project_root="${current_path%%luck_draw*}luck_draw"
+
+run() {
+    filename=$1
+    service_path=$2
     if [ ! -d $service_path ]; then
-        #如果不存在，则退出
+        #如果目录不存在，则退出
+        echo "目录: ${service_path} 不存在"
         return
     fi
     cd $service_path
-    #查找相关服务，并终止
-    pid=$(ps -ef | grep ${name}-rpc | grep -v grep | awk '{print $2}')
-    if [ ! -z $pid ]; then
-        kill - $pid
-        if [ ! $? -eq 0 ]; then
-            #kill失败
-            echo "${name}-rpc: [ kill -9 $pid ] 失败"
-            return
-        fi
+    if [ ! -f $filename ]; then
+        #如果文件不存在，则退出
+        echo "文件: ${filename} 不存在"
+        return
     fi
-    #编译rpc服务 rm -f admin-rpc; go build -o admin-rpc admin.go
-    echo "开始编译${name}-rpc ...... "
-    rm -f "${name}-rpc"
-    go build -o "${name}-rpc" "${name}.go"
-    echo "${name}-rpc 编译完成"
-    "./${name}-rpc" &
+    "./${filename}" &
+    return
+    nohup=$("./${filename}" &)
+    index=$(echo $(awk -v a="$nohup" -v b="Starting" 'BEGIN{print index(a,b)}'))
+    if (($index == 1)); then
+        echo "启动 ${filename} 失败: $nohup"
+    else
+        echo "启动 ${filename} 成功: $nohup"
+    fi
 }
 
-build_api() {
+build_go() {
     name=$1
-    service_path="/www/wwwroot/luck_draw/service/v1/${name}/api"
-    if [ ! -d $service_path ]; then
-        #如果不存在，则退出
-        return
+    micro=$2
+    filename="${name}-${micro}"
+    if [[ -z $name ]] || [[ -z $micro ]]; then
+        echo "未输入build参数"
+        exit
     fi
-    cd $service_path
-    #查找相关服务，并终止
-    pid=$(ps -ef | grep ${name}-api | grep -v grep | awk '{print $2}')
-    if [ ! -z $pid ]; then
-        kill - $pid
-        if [ ! $? -eq 0 ]; then
-            #kill失败
-            echo "${name}-api: [ kill -9 $pid ] 失败"
-            return
-        fi
-    fi
-    #编译api服务 rm -f admin-api; go build -o admin-api admin.go
-    echo "开始编译${name}-api ...... "
-    rm -f "${name}-api"
-    go build -o "${name}-api" "${name}.go"
-    echo "${name}-api 编译完成"
-}
 
-build_mq() {
-    name=$1
-    service_path="/www/wwwroot/luck_draw/service/v1/${name}/mq"
+    service_path="${project_root}/service/v1/${name}/${micro}"
     if [ ! -d $service_path ]; then
-        #如果不存在，则退出
+        #如果不存在，说明没有这个服务，直接返回
         return
     fi
+    #存在就进入
     cd $service_path
     #查找相关服务，并终止
-    pid=$(ps -ef | grep ${name}-mq | grep -v grep | awk '{print $2}')
+    pid=$(ps -ef | grep $filename | grep -v grep | awk '{print $2}')
     if [ ! -z $pid ]; then
-        kill - $pid
+        kill -9 $pid
         if [ ! $? -eq 0 ]; then
             #kill失败
-            echo "${name}-mq: [ kill -9 $pid ] 失败"
+            echo "提示: ${filename}: [ kill -9 $pid ] 失败"
+            exit
             return
         fi
+        echo "已终止进程：${filename} $pid"
     fi
-    #编译api服务 rm -f admin-mq; go build -o admin-mq admin.go
-    echo "开始编译${name}-mq ...... "
-    rm -f "${name}-mq"
-    go build -o "${name}-mq" "${name}.go"
-    echo "${name}-mq 编译完成"
+
+    echo "开始编译${filename} ...... "
+    rm -f $filename
+    go build -o $filename "${name}.go"
+    echo "${filename} 编译完成"
+    run $filename $service_path
 }
 
 build_swagger() {
@@ -81,6 +76,7 @@ build_swagger() {
     service_path="/www/wwwroot/luck_draw/service/v1/${name}/api/docs"
     if [ ! -d $service_path ]; then
         #如果不存在，则退出
+        echo "目录: ${service_path} 不存在"
         return
     fi
     cd $service_path
@@ -94,6 +90,7 @@ build_ts() {
     service_path="/www/wwwroot/luck_draw/service/v1/${name}/api/docs"
     if [ ! -d $service_path ]; then
         #如果不存在，则退出
+        echo "目录: ${service_path} 不存在"
         return
     fi
     cd $service_path
@@ -103,11 +100,13 @@ build_ts() {
 }
 
 #编译所有服务二进制文件
-all_services=("captcha" "luckdraw" "admin")
+all_services=("captcha" "admin" "luckdraw")
+all_micros=("rpc" "mq" "api")
+
 for name in ${all_services[@]}; do
-    service_path="/www/wwwroot/luck_draw/service/v1/${name}"
-    build_rpc ${name}
-    build_api ${name}
+    for micro in ${all_micros[@]}; do
+        build_go $name $micro
+    done
     build_swagger ${name}
     build_ts ${name}
 done

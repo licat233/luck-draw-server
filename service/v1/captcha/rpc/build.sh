@@ -1,5 +1,10 @@
 #!/bin/bash
+cd /www/wwwroot/luck_draw/service/v1/captcha/rpc
+pid=$(ps -ef | grep captcha-rpc | grep -v grep | awk '{print $2}')
+if [ ! -z $pid ]; then
+    kill -9 $pid
+fi
 #编译captcha-rpc服务
-rm -f /www/wwwroot/luck_draw/service/v1/captcha/rpc/captcha-rpc
-go build -o /www/wwwroot/luck_draw/service/v1/captcha/rpc/captcha-rpc /www/wwwroot/luck_draw/service/v1/captcha/rpc/captcha.go
+rm -f captcha-rpc
+go build -o captcha-rpc captcha.go
 echo "captcha-rpc build finished"

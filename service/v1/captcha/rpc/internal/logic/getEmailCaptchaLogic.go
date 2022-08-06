@@ -74,6 +74,9 @@ func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq
 		if err == emailx.ErrTimed {
 			return nil, errorx.ExtRpcErr(err)
 		}
+		if err == emailx.ErrSendFailed {
+			return nil, errorx.ExtRpcErr(err)
+		}
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}

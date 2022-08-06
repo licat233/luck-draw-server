@@ -23,13 +23,14 @@ type Email struct {
 	Receiver []string
 }
 
-var ErrTimed = errors.New("发送验证码太频繁，请一分钟以后再试")
+var ErrTimed = errors.New("requests are too frequent. Please try again in a minute")
+var ErrSendFailed = errors.New("mail sending failed, please check email address")
 
 func FormatEmailCaptchaKey(receiver any) string {
 	return fmt.Sprintf("captchaReceiver:%v", receiver)
 }
 
-//发送验证码到邮箱，1分钟只能发送一条
+// 发送验证码到邮箱，1分钟只能发送一条
 func SendCaptcha(ctx context.Context, chaptcha string, receiver string) (err error) {
 	defer func() {
 		e := recover()
@@ -87,8 +88,8 @@ func SendCaptcha(ctx context.Context, chaptcha string, receiver string) (err err
 	email.Dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	email.Message.SetBody("text/html", emailCaptchaBody(chaptcha))
 	if err := email.Dialer.DialAndSend(email.Message); err != nil {
-		logx.Error(fmt.Sprintf("邮件发送失败:%v", err))
-		return err
+		logx.Error(fmt.Sprintf("邮件发送失败:%#+v", err))
+		return ErrSendFailed
 	}
 	if err := global.RedisX.SetexCtx(ctx, key, chaptcha, 60); err != nil {
 		return err
@@ -99,7 +100,7 @@ func SendCaptcha(ctx context.Context, chaptcha string, receiver string) (err err
 var lastSendTime time.Time
 var lastMsg string
 
-//用于给管理员发送邮件
+// 用于给管理员发送邮件
 func SendToAdmin(msg string, receivers ...string) error {
 	//【1分钟内】不允许重复发送【相同的信息】
 	if lastMsg == msg && time.Since(lastSendTime) < time.Minute {

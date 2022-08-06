@@ -1,14 +1,6 @@
 #!/bin/bash
 
 name=admin
-service_path="/www/wwwroot/luck_draw/service/v1/${name}/rpc"
-cd $service_path
-
-"./admin-rpc" &
-
-exit
-
-name=admin
 pid=$(ps -ef | grep ${name}-rpc | grep -v grep | awk '{print $2}')
 if [ ! -z $pid ]; then
     kill -9 $pid
@@ -18,7 +10,10 @@ if [ ! -z $pid ]; then
         exit
     fi
 fi
+service_path="/www/wwwroot/luck_draw/service/v1/${name}/rpc"
+cd $service_path
 
+"./${name}-rpc" &
 exit
 
 name=admin

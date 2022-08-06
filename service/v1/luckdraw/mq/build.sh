@@ -1,6 +1,11 @@
 #!/bin/bash
-rm -f /www/wwwroot/luck_draw/service/v1/luckdraw/mq/luckdraw-mq
-go build -o /www/wwwroot/luck_draw/service/v1/luckdraw/mq/luckdraw-mq /www/wwwroot/luck_draw/service/v1/luckdraw/mq/luckdraw.go
+cd /www/wwwroot/luck_draw/service/v1/luckdraw/mq
+pid=$(ps -ef | grep luckdraw-mq | grep -v grep | awk '{print $2}')
+if [ ! -z $pid ]; then
+    kill -9 $pid
+fi
+rm -f luckdraw-mq
+go build -o luckdraw-mq luckdraw.go
 
 #1.启动zookeeper服务
 #二选一

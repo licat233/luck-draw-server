@@ -60,7 +60,7 @@ func (l *EmailCaptchaLogic) EmailCaptcha(req *types.EmailCaptchaReq) (any, error
 		return nil, err
 	}
 	if !res.Success {
-		errorx.Alert("Captcha verification failed")
+		return nil, errorx.Alert("Captcha verification failed")
 	}
 
 	resp, err := l.svcCtx.CaptchaRpc.GetEmailCaptcha(l.ctx, &captcha_pb.GetEmailCaptchaReq{
