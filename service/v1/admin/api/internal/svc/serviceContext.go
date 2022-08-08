@@ -2,9 +2,10 @@ package svc
 
 import (
 	"luck-draw/service/v1/admin/api/internal/config"
-	middleware2 "luck-draw/service/v1/admin/api/internal/middleware"
+	"luck-draw/service/v1/admin/api/internal/middleware"
 	"luck-draw/service/v1/admin/rpc/admin"
 	"luck-draw/service/v1/captcha/rpc/captcha"
+	"luck-draw/service/v1/model"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -13,8 +14,8 @@ import (
 )
 
 type ServiceContext struct {
-	Config        config.Config
-	JwtMiddleware rest.Middleware
+	Config         config.Config
+	JwtMiddleware  rest.Middleware
 	RbacMiddleware rest.Middleware
 
 	CaptchaRpc captcha.Captcha
@@ -26,15 +27,15 @@ type ServiceContext struct {
 func NewServiceContext(c config.Config) *ServiceContext {
 	sqlConn := sqlx.NewMysql(c.Mysql.DataSource)
 	db, _ := sqlConn.RawDB()
-	rbacMiddleware := middleware2.NewRbacMiddleware(db, c)
+	rbacMiddleware := middleware.NewRbacMiddleware(db, c)
+	JwtBlacklistsModel := model.NewJwtBlacklistsModel(sqlConn, c.Cache)
+	AdminerModel := model.NewAdminerModel(sqlConn, c.Cache)
 	return &ServiceContext{
 		Config:         c,
-		JwtMiddleware:  middleware2.NewJwtMiddleware(c).Handle,
+		JwtMiddleware:  middleware.NewJwtMiddleware(c, JwtBlacklistsModel, AdminerModel).Handle,
 		RbacMiddleware: rbacMiddleware.Handle,
-
-		CaptchaRpc: captcha.NewCaptcha(zrpc.MustNewClient(c.CaptchaRpc)),
-		AdminRpc:   admin.NewAdmin(zrpc.MustNewClient(c.AdminRpc)),
-
+		CaptchaRpc:     captcha.NewCaptcha(zrpc.MustNewClient(c.CaptchaRpc)),
+		AdminRpc:       admin.NewAdmin(zrpc.MustNewClient(c.AdminRpc)),
 		CasbinEnforcer: rbacMiddleware.CasbinEnforcer,
 	}
 }

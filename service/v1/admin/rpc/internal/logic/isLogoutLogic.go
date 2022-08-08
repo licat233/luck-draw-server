@@ -26,7 +26,21 @@ func NewIsLogoutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *IsLogout
 
 // 是否已经注销
 func (l *IsLogoutLogic) IsLogout(in *admin_pb.IsLogoutReq) (*admin_pb.IsLogoutResp, error) {
-	exist, err := l.svcCtx.JwtBlacklistsModel.Exist(l.ctx, in.JwtToken)
+	//优先从redis中查找
+	exist, err := l.svcCtx.RedisCli.ExistsCtx(l.ctx, in.JwtToken)
+	if err != nil {
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
+	}
+
+	if exist {
+		return &admin_pb.IsLogoutResp{
+			Status: exist,
+		}, nil
+	}
+
+	//再从mysql中查找
+	exist, err = l.svcCtx.JwtBlacklistsModel.ExistByToken(l.ctx, in.JwtToken)
 	if err != nil {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

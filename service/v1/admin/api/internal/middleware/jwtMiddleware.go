@@ -1,27 +1,34 @@
 package middleware
 
 import (
+	"context"
+	"errors"
 	"luck-draw/common/ctxdata"
 	"luck-draw/common/errorx"
 	"luck-draw/common/jwtx"
 	"luck-draw/common/utils"
 	"luck-draw/service/v1/admin/api/internal/config"
-	"luck-draw/service/v1/admin/rpc/admin"
+	"luck-draw/service/v1/model"
 	"net/http"
+	"strconv"
 
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"github.com/zeromicro/go-zero/zrpc"
 )
 
 type JwtMiddleware struct {
-	Config   config.Config
-	AdminRpc admin.Admin
+	ctx                context.Context
+	Config             config.Config
+	AdminerModel       model.AdminerModel
+	JwtBlacklistsModel model.JwtBlacklistsModel
 }
 
-func NewJwtMiddleware(c config.Config) *JwtMiddleware {
+func NewJwtMiddleware(c config.Config, jwtModel model.JwtBlacklistsModel, adminerModel model.AdminerModel) *JwtMiddleware {
 	return &JwtMiddleware{
-		Config:   c,
-		AdminRpc: admin.NewAdmin(zrpc.MustNewClient(c.AdminRpc)),
+		ctx:                context.Background(),
+		Config:             c,
+		AdminerModel:       adminerModel,
+		JwtBlacklistsModel: jwtModel,
 	}
 }
 
@@ -63,15 +70,43 @@ func (m *JwtMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		// 校验token是否已被加入黑名单
-		res, err := m.AdminRpc.IsLogout(r.Context(), &admin.IsLogoutReq{
-			JwtToken: jwtToken,
-		})
-		if err != nil {
-			httpx.Error(w, err)
+		//检查用户状态
+		uidValue := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtUserId, *claims)
+		if uidValue == "" {
+			httpx.Error(w, errorx.ErrAuth)
 			return
 		}
-		if res.Status {
+		uid, err := strconv.Atoi(uidValue)
+		if err != nil {
+			logx.Error(err)
+			httpx.Error(w, errorx.ErrAuth)
+			return
+		}
+
+		adminer, err := m.AdminerModel.FindOne(m.ctx, int64(uid))
+		if err != nil && err != model.ErrNotFound {
+			logx.Error(err)
+			httpx.Error(w, errorx.InternalError(err))
+			return
+		}
+		if err == model.ErrNotFound {
+			httpx.Error(w, errorx.ErrAuth)
+			return
+		}
+		if adminer.Status == 0 {
+			httpx.Error(w, errorx.AuthError(errors.New("当前用户不可用")))
+			return
+		}
+
+		// 校验token是否已被加入黑名单
+		exist, err := m.JwtBlacklistsModel.ExistByToken(m.ctx, jwtToken)
+		if err != nil {
+			logx.Error(err)
+			httpx.Error(w, errorx.InternalError(err))
+			return
+		}
+		if exist {
+			//如果存在了，则失效
 			httpx.Error(w, errorx.ErrAuth)
 			return
 		}

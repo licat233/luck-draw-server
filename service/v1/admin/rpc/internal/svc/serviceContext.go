@@ -4,11 +4,14 @@ import (
 	"luck-draw/service/v1/admin/rpc/internal/config"
 	"luck-draw/service/v1/model"
 
+	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 type ServiceContext struct {
 	Config config.Config
+
+	RedisCli *redis.Redis
 
 	ProjectModel  model.ProjectModel
 	ActivityModel model.ActivityModel
@@ -26,7 +29,11 @@ type ServiceContext struct {
 func NewServiceContext(c config.Config) *ServiceContext {
 	sqlConn := sqlx.NewMysql(c.Mysql.DataSource)
 	return &ServiceContext{
-		Config:             c,
+		Config: c,
+		RedisCli: redis.New(c.Redis.Host, func(r *redis.Redis) {
+			r.Pass = c.Redis.Pass
+			r.Type = c.Redis.Type
+		}),
 		ProjectModel:       model.NewProjectModel(sqlConn, c.CacheRedis),
 		ActivityModel:      model.NewActivityModel(sqlConn, c.CacheRedis),
 		PrizeModel:         model.NewPrizeModel(sqlConn, c.CacheRedis),
