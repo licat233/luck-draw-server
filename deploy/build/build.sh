@@ -9,6 +9,7 @@ current_path=$(
 )
 
 project_root="${current_path%%luck_draw*}luck_draw"
+cd "${project_root}/deploy/build"
 
 run() {
     filename=$1

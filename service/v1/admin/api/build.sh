@@ -6,3 +6,6 @@ if [ ! -z $pid ]; then
 fi
 rm -f admin-api
 go build -o admin-api admin.go
+nohup=$(./admin-api &)
+echo "执行完毕:${nohup}"
+exit

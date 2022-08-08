@@ -4,10 +4,8 @@ import (
 	"context"
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
-	"luck-draw/service/v1/model"
 
 	"luck-draw/common/errorx"
-	"luck-draw/common/utils"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -28,18 +26,13 @@ func NewIsLogoutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *IsLogout
 
 // 是否已经注销
 func (l *IsLogoutLogic) IsLogout(in *admin_pb.IsLogoutReq) (*admin_pb.IsLogoutResp, error) {
-	uuid, err := utils.JwtTokenToMd5(in.JwtToken)
+	exist, err := l.svcCtx.JwtBlacklistsModel.Exist(l.ctx, in.JwtToken)
 	if err != nil {
-		return nil, errorx.SecRpcErr(err)
-	}
-
-	_, err = l.svcCtx.JwtBlacklistsModel.FindOneByUuid(l.ctx, uuid)
-	if err != nil && err != model.ErrNotFound {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
 	return &admin_pb.IsLogoutResp{
-		Status: err == nil,
+		Status: exist,
 	}, nil
 }

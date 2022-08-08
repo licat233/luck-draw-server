@@ -24,6 +24,7 @@ type (
 
 		FindCount(ctx context.Context) (int64, error)
 		FindList(ctx context.Context, pageSize, page int64) ([]*JwtBlacklists, error)
+		Exist(ctx context.Context, token string) (bool, error)
 	}
 
 	customJwtBlacklistsModel struct {
@@ -117,4 +118,11 @@ func (m *customJwtBlacklistsModel) FindList(ctx context.Context, pageSize, page 
 	default:
 		return nil, err
 	}
+}
+
+func (m *customJwtBlacklistsModel) Exist(ctx context.Context, token string) (bool, error) {
+	query := fmt.Sprintf("select count(*) as count from %s where `token`= ? limit 1", m.table)
+	var count int64
+	err := m.QueryRowNoCacheCtx(ctx, &count, query, token)
+	return count != 0, err
 }
