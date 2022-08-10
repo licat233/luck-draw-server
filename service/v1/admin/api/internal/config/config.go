@@ -21,7 +21,9 @@ type Config struct {
 		Pass string
 		Type string
 	}
-	Cache      cache.CacheConf
+
+	CacheRedis cache.CacheConf
+
 	CaptchaRpc zrpc.RpcClientConf
 	AdminRpc   zrpc.RpcClientConf
 }

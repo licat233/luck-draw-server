@@ -28,8 +28,8 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	sqlConn := sqlx.NewMysql(c.Mysql.DataSource)
 	db, _ := sqlConn.RawDB()
 	rbacMiddleware := middleware.NewRbacMiddleware(db, c)
-	JwtBlacklistsModel := model.NewJwtBlacklistsModel(sqlConn, c.Cache)
-	AdminerModel := model.NewAdminerModel(sqlConn, c.Cache)
+	JwtBlacklistsModel := model.NewJwtBlacklistsModel(sqlConn, c.CacheRedis)
+	AdminerModel := model.NewAdminerModel(sqlConn, c.CacheRedis)
 	return &ServiceContext{
 		Config:         c,
 		JwtMiddleware:  middleware.NewJwtMiddleware(c, JwtBlacklistsModel, AdminerModel).Handle,

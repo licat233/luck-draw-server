@@ -17,7 +17,7 @@ Debug: true
 
 Redis:
   Host: 127.0.0.1:6379
-  Pass: 
+  Pass:
   Type: node
 
 CaptchaRpc:
@@ -31,7 +31,11 @@ AdminRpc:
       - 127.0.0.1:2379
     Key: admin.rpc
 Cache:
-  Redis: 
+  Redis:
     - Host: 127.0.0.1:6379
       Pass: ""
       Type: node
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass: 
+    Type: node

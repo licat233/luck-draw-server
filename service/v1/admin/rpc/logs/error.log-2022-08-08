@@ -1,0 +1,12 @@
+{"@timestamp":"2022-08-05T19:48:12.712+08:00","caller":"logic/getAdminerListLogic.go:47","content":"unsupported unmarshal type","level":"error"}
+{"@timestamp":"2022-08-05T19:57:47.608+08:00","caller":"logic/getAdminerListLogic.go:47","content":"unsupported unmarshal type","level":"error"}
+{"@timestamp":"2022-08-05T20:00:04.614+08:00","caller":"logic/getAdminerListLogic.go:47","content":"unsupported unmarshal type","level":"error"}
+{"@timestamp":"2022-08-05T20:00:43.006+08:00","caller":"zrpc/server.go:90","content":"listen tcp 127.0.0.1:6003: bind: address already in use","level":"error"}
+{"@timestamp":"2022-08-05T20:00:58.350+08:00","caller":"logic/getAdminerListLogic.go:47","content":"unsupported unmarshal type","level":"error"}
+{"@timestamp":"2022-08-06T14:01:53.472+08:00","caller":"zrpc/server.go:90","content":"listen tcp 127.0.0.1:6003: bind: address already in use","level":"error"}
+{"@timestamp":"2022-08-06T14:02:52.677+08:00","caller":"zrpc/server.go:90","content":"listen tcp 127.0.0.1:6003: bind: address already in use","level":"error"}
+{"@timestamp":"2022-08-06T14:03:01.324+08:00","caller":"zrpc/server.go:90","content":"listen tcp 127.0.0.1:6003: bind: address already in use","level":"error"}
+{"@timestamp":"2022-08-06T14:03:08.995+08:00","caller":"zrpc/server.go:90","content":"listen tcp 127.0.0.1:6003: bind: address already in use","level":"error"}
+{"@timestamp":"2022-08-06T14:03:31.985+08:00","caller":"zrpc/server.go:90","content":"listen tcp 127.0.0.1:6003: bind: address already in use","level":"error"}
+{"@timestamp":"2022-08-06T14:29:56.863+08:00","caller":"zrpc/server.go:90","content":"listen tcp 127.0.0.1:6003: bind: address already in use","level":"error"}
+{"@timestamp":"2022-08-06T14:30:49.523+08:00","caller":"zrpc/server.go:90","content":"listen tcp 127.0.0.1:6003: bind: address already in use","level":"error"}

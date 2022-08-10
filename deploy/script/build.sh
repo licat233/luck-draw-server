@@ -9,7 +9,7 @@ current_path=$(
 )
 
 project_root="${current_path%%luck_draw*}luck_draw"
-cd "${project_root}/deploy/build"
+cd "${project_root}/deploy/script"
 
 run() {
     filename=$1
@@ -25,7 +25,7 @@ run() {
         echo "文件: ${filename} 不存在"
         return
     fi
-    "./${filename}" &
+    "${service_path}/${filename}" &
     return
     nohup=$("./${filename}" &)
     index=$(echo $(awk -v a="$nohup" -v b="Starting" 'BEGIN{print index(a,b)}'))

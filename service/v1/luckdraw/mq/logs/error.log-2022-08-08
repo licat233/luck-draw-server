@@ -1,0 +1,5 @@
+{"@timestamp":"2022-08-02T16:56:59.207+08:00","caller":"internal/discovbuilder.go:34","content":"bad resolver state","level":"error"}
+{"@timestamp":"2022-08-05T17:34:15.922+08:00","caller":"internal/discovbuilder.go:34","content":"bad resolver state","level":"error"}
+{"@timestamp":"2022-08-05T17:40:03.468+08:00","caller":"internal/discovbuilder.go:34","content":"bad resolver state","level":"error"}
+{"@timestamp":"2022-08-06T11:25:35.901+08:00","caller":"internal/discovbuilder.go:34","content":"bad resolver state","level":"error"}
+{"@timestamp":"2022-08-06T14:03:25.767+08:00","caller":"internal/discovbuilder.go:34","content":"bad resolver state","level":"error"}
