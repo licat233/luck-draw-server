@@ -68,12 +68,14 @@ export interface BatchIdReq {
 }
 
 export interface ListReq {
+	pageSize?: number // 页面大小
+	current?: number // 当前页码
 }
 
-export interface ListReqParams {
-	pageSize: number // 页面大小
-	current: number // 当前页码
-	keyword: string // 关键词，可选
+export interface SearchReq {
+	keyword?: string // 关键词，可选
+	pageSize?: number // 页面大小
+	current?: number // 当前页码
 }
 
 export interface JwtToken {

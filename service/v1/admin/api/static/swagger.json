@@ -150,13 +150,6 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "requestBody": {},
@@ -300,13 +293,6 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "requestBody": {},
@@ -450,13 +436,6 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "requestBody": {},
@@ -777,13 +756,6 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "requestBody": {},
@@ -927,13 +899,6 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "requestBody": {},
@@ -1077,13 +1042,6 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "requestBody": {},
@@ -1600,13 +1558,6 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "requestBody": {},
@@ -1750,13 +1701,6 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "requestBody": {},
@@ -1961,10 +1905,6 @@
           "format": "int64",
           "default": "1",
           "description": "当前页码"
-        },
-        "keyword": {
-          "type": "string",
-          "description": "关键词，可选"
         }
       },
       "title": "ListReq",
@@ -2263,6 +2203,32 @@
       "required": [
         "sub",
         "dom"
+      ]
+    },
+    "SearchReq": {
+      "type": "object",
+      "properties": {
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面大小"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码"
+        }
+      },
+      "title": "SearchReq",
+      "required": [
+        "pageSize",
+        "current"
       ]
     },
     "activity": {

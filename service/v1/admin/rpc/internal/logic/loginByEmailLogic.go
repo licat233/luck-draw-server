@@ -6,6 +6,7 @@ import (
 	"luck-draw/service/v1/admin/rpc/admin_pb"
 	"luck-draw/service/v1/admin/rpc/internal/svc"
 	"luck-draw/service/v1/model"
+	"time"
 
 	"luck-draw/common/errorx"
 
@@ -61,6 +62,14 @@ func (l *LoginByEmailLogic) LoginByEmail(in *admin_pb.LoginByEmailReq) (*admin_p
 	})
 	if err != nil {
 		return nil, err
+	}
+
+	//更新登录次数和登录时间
+	adminer.LoginCount++
+	adminer.LastLogin = time.Now()
+	if err = l.svcCtx.AdminerModel.Update(l.ctx, adminer); err != nil {
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 
 	//登录成功

@@ -63,9 +63,14 @@ type BatchIdReq struct {
 }
 
 type ListReq struct {
-	PageSize int64  `form:"pageSize,default=20,range=[1:1000]"` //页面大小
-	Page     int64  `form:"current,default=1,range=[1:]"`       //当前页码
-	KeyWord  string `form:"keyword,optional"`                   //关键词，可选
+	PageSize int64 `json:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page     int64 `json:"current,optional,default=1,range=[1:]"`       //当前页码
+}
+
+type SearchReq struct {
+	Keyword  string `json:"keyword,optional"`                            //关键词，可选
+	PageSize int64  `json:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page     int64  `json:"current,optional,default=1,range=[1:]"`       //当前页码
 }
 
 type JwtToken struct {

@@ -57,10 +57,10 @@ export function currentUser() {
 
 /**
  * @description "获取活动列表"
- * @param params
+ * @param req
  */
-export function list(params: components.ListReqParams) {
-	return webapi.get<components.BaseResp>("/v1/api/admin/activity/list", params)
+export function list(req: components.ListReq) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/activity/list", req)
 }
 
 /**
@@ -97,10 +97,10 @@ export function del(req: components.ActivityDelReq) {
 
 /**
  * @description "获取管理员列表"
- * @param params
+ * @param req
  */
-export function list(params: components.ListReqParams) {
-	return webapi.get<components.BaseResp>("/v1/api/admin/adminer/list", params)
+export function list(req: components.ListReq) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/adminer/list", req)
 }
 
 /**
@@ -145,10 +145,10 @@ export function modify(req: components.AdminerModifyReq) {
 
 /**
  * @description "获取抽奖者列表"
- * @param params
+ * @param req
  */
-export function list(params: components.ListReqParams) {
-	return webapi.get<components.BaseResp>("/v1/api/admin/lucker/list", params)
+export function list(req: components.ListReq) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/lucker/list", req)
 }
 
 /**
@@ -185,10 +185,10 @@ export function del(req: components.LuckerDelReq) {
 
 /**
  * @description "获取奖品列表"
- * @param params
+ * @param req
  */
-export function list(params: components.ListReqParams) {
-	return webapi.get<components.BaseResp>("/v1/api/admin/prize/list", params)
+export function list(req: components.ListReq) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/prize/list", req)
 }
 
 /**
@@ -225,10 +225,10 @@ export function del(req: components.PrizeDelReq) {
 
 /**
  * @description "获取奖品池列表"
- * @param params
+ * @param req
  */
-export function list(params: components.ListReqParams) {
-	return webapi.get<components.BaseResp>("/v1/api/admin/PrizesPool/list", params)
+export function list(req: components.ListReq) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/PrizesPool/list", req)
 }
 
 /**
@@ -265,10 +265,10 @@ export function del(req: components.PrizesPoolDelReq) {
 
 /**
  * @description "获取项目列表"
- * @param params
+ * @param req
  */
-export function list(params: components.ListReqParams) {
-	return webapi.get<components.BaseResp>("/v1/api/admin/project/list", params)
+export function list(req: components.ListReq) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/project/list", req)
 }
 
 /**
@@ -406,10 +406,10 @@ export function getPermissionsForUserInDomain(req: components.RoleAndDomainReq) 
 
 /**
  * @description "获取用户列表"
- * @param params
+ * @param req
  */
-export function list(params: components.ListReqParams) {
-	return webapi.get<components.BaseResp>("/v1/api/admin/user/list", params)
+export function list(req: components.ListReq) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/user/list", req)
 }
 
 /**
@@ -446,10 +446,10 @@ export function del(req: components.UserDelReq) {
 
 /**
  * @description "获取用户池列表"
- * @param params
+ * @param req
  */
-export function list(params: components.ListReqParams) {
-	return webapi.get<components.BaseResp>("/v1/api/admin/usersPool/list", params)
+export function list(req: components.ListReq) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/usersPool/list", req)
 }
 
 /**
