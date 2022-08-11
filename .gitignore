@@ -18,7 +18,6 @@
 */.DS_Store
 *.log
 
-
 # 忽略掉所有文件
 # *
 # # 取消忽略所有带有后缀名的文件
@@ -33,3 +32,6 @@ luckdraw-api
 luckdraw-mq
 admin-rpc
 admin-api
+
+# Go workspace file
+go.work
