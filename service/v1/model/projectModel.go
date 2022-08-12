@@ -102,8 +102,8 @@ func (m *customProjectModel) Insert(ctx context.Context, data *Project) (sql.Res
 	luckDrawProjectIdKey := m.formatPrimary(data.Id)
 	luckDrawProjectUuidKey := m.formatUuidKey(data.Uuid)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, projectRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Status, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, projectRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Status)
 	}, luckDrawProjectIdKey, luckDrawProjectUuidKey)
 	return ret, err
 }
@@ -113,7 +113,7 @@ func (m *customProjectModel) Update(ctx context.Context, data *Project) error {
 	luckDrawProjectUuidKey := m.formatUuidKey(data.Uuid)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ? and `is_deleted` = '0'", m.table, projectRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Status, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Name, data.Status, data.Id)
 	}, luckDrawProjectIdKey, luckDrawProjectUuidKey)
 	return err
 }

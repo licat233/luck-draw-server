@@ -118,7 +118,7 @@ backupshell
 
 source ~/.bash_profile
 version=$(go env GOVERSION)
-if [ ! $version = $update_version ]; then
+if [ ! $version -eq $update_version ]; then
     echo "---------- ${version} -> ${update_version} 升级失败  ---------"
     exit
 fi

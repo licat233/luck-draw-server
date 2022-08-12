@@ -107,7 +107,7 @@ func (m *customJwtBlacklistsModel) Insert(ctx context.Context, data *JwtBlacklis
 	luckDrawJwtBlacklistsUuidKey := m.formatTokenKey(data.Uuid)
 	luckDrawJwtBlacklistsTokenKey := m.formatTokenKey(data.Token)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, jwtBlacklistsRowsExpectAutoSet)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, jwtBlacklistsRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.Uuid, data.Token, data.Platform, data.Ip, data.ExpireAt, data.CreateAt, data.UpdateAt)
 	}, luckDrawJwtBlacklistsUuidKey, luckDrawJwtBlacklistsIdKey, luckDrawJwtBlacklistsTokenKey)
 	return ret, err

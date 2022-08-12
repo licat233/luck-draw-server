@@ -103,8 +103,8 @@ func (m *customPrizesPoolModel) Insert(ctx context.Context, data *PrizesPool) (s
 	luckDrawPrizesPoolIdKey := m.formatPrimary(data.Id)
 	luckDrawPrizesPoolUuidKey := m.formatUuidKey(data.Uuid)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, prizesPoolRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.PrizeId, data.LuckValue, data.Status, data.GradeName, data.IsWin, data.Number, data.Remain, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, prizesPoolRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.PrizeId, data.LuckValue, data.Status, data.GradeName, data.IsWin, data.Number, data.Remain)
 	}, luckDrawPrizesPoolIdKey, luckDrawPrizesPoolUuidKey)
 	return ret, err
 }
@@ -114,7 +114,7 @@ func (m *customPrizesPoolModel) Update(ctx context.Context, data *PrizesPool) er
 	luckDrawPrizesPoolUuidKey := m.formatUuidKey(data.Uuid)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ? and `is_deleted` = '0'", m.table, prizesPoolRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.PrizeId, data.LuckValue, data.Status, data.GradeName, data.IsWin, data.Number, data.Remain, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.ActivityId, data.PrizeId, data.LuckValue, data.Status, data.GradeName, data.IsWin, data.Number, data.Remain, data.Id)
 	}, luckDrawPrizesPoolIdKey, luckDrawPrizesPoolUuidKey)
 	return err
 }

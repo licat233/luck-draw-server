@@ -105,8 +105,8 @@ func (m *customPrizeModel) Insert(ctx context.Context, data *Prize) (sql.Result,
 	luckDrawPrizeIdKey := m.formatPrimary(data.Id)
 	luckDrawPrizeUuidKey := m.formatUuidKey(data.Uuid)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, prizeRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, prizeRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status)
 	}, luckDrawPrizeIdKey, luckDrawPrizeUuidKey)
 	return ret, err
 }
@@ -116,7 +116,7 @@ func (m *customPrizeModel) Update(ctx context.Context, data *Prize) error {
 	luckDrawPrizeUuidKey := m.formatUuidKey(data.Uuid)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?  and `is_deleted` = '0'", m.table, prizeRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Name, data.Image, data.Price, data.Status, data.Id)
 	}, luckDrawPrizeIdKey, luckDrawPrizeUuidKey)
 	return err
 }

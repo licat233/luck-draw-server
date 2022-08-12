@@ -100,9 +100,34 @@ build_ts() {
     goctl api ts -api "${name}.api" -dir ../static
 }
 
+#选择要下载的版本
+service_name="$1"
+if [ -z $service_name ]; then
+    all_services=("captcha" "admin" "luckdraw")
+else
+    if [[ $service_name -eq "captcha" ]] || [[ $service_name -eq "admin" ]] || [[ $service_name -eq "luckdraw" ]]; then
+        all_services=($service_name)
+    else
+        echo "unknown service_name: ${service_name}"
+        exit
+    fi
+fi
+
+micro_name="$2"
+if [ -z $service_name ]; then
+    all_micros=("rpc" "mq" "api")
+else
+    if [[ $micro -eq "rpc" ]] || [[ $micro -eq "mq" ]] || [[ $micro -eq "api" ]]; then
+        all_micros=($micro_name)
+    else
+        echo "unknown micro_name: ${micro}"
+        exit
+    fi
+fi
+
 #编译所有服务二进制文件
-all_services=("captcha" "admin" "luckdraw")
-all_micros=("rpc" "mq" "api")
+# all_services=("captcha" "admin" "luckdraw")
+# all_micros=("rpc" "mq" "api")
 
 for name in ${all_services[@]}; do
     for micro in ${all_micros[@]}; do

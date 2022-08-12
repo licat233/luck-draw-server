@@ -3,7 +3,6 @@ package model
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"fmt"
 	"strings"
 
@@ -107,8 +106,8 @@ func (m *customUserModel) Insert(ctx context.Context, data *User) (sql.Result, e
 	luckDrawUserIdKey := m.formatPrimary(data.Id)
 	luckDrawUserUuidKey := m.formatUuidKey(data.Uuid)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Passport, data.Email, data.Phone, data.Name, data.Address, data.Score, data.Status, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Passport, data.Email, data.Phone, data.Name, data.Address, data.Score, data.Status)
 	}, luckDrawUserIdKey, luckDrawUserUuidKey)
 	return ret, err
 }
@@ -118,7 +117,7 @@ func (m *customUserModel) Update(ctx context.Context, data *User) error {
 	luckDrawUserUuidKey := m.formatUuidKey(data.Uuid)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ? and `is_deleted` = '0' ", m.table, userRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Passport, data.Email, data.Phone, data.Name, data.Address, data.Score, data.Status, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Passport, data.Email, data.Phone, data.Name, data.Address, data.Score, data.Status, data.Id)
 	}, luckDrawUserIdKey, luckDrawUserUuidKey)
 	return err
 }
@@ -161,9 +160,9 @@ func (m *customUserModel) Exists(ctx context.Context, id int64) (bool, *User, er
 	if err == ErrNotFound {
 		return false, nil, nil
 	}
-	if user == nil {
-		return false, nil, errors.New("Has found,but user == nil")
-	}
+	// if user == nil {
+	// 	return false, nil, errors.New("has found, but user == nil")
+	// }
 	if user.IsDeleted != 1 {
 		return false, nil, nil
 	}

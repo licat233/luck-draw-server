@@ -89,8 +89,8 @@ func (m *customAdminerModel) Insert(ctx context.Context, data *Adminer) (sql.Res
 	luckDrawAdminerIdKey := m.formatPrimary(data.Id)
 	luckDrawAdminerUuidKey := m.formatUuidKey(data.Uuid)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, adminerRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.LoginCount, data.LastLogin, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, adminerRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.LoginCount, data.LastLogin)
 	}, luckDrawAdminerIdKey, luckDrawAdminerUuidKey)
 	return ret, err
 }
@@ -98,9 +98,9 @@ func (m *customAdminerModel) Insert(ctx context.Context, data *Adminer) (sql.Res
 func (m *customAdminerModel) Update(ctx context.Context, data *Adminer) error {
 	luckDrawAdminerIdKey := m.formatPrimary(data.Id)
 	luckDrawAdminerUuidKey := m.formatUuidKey(data.Uuid)
+	query := fmt.Sprintf("update %s set %s where `id` = ? and `is_deleted` = '0'", m.table, adminerRowsWithPlaceHolder)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("update %s set %s where `id` = ? and `is_deleted` = '0'", m.table, adminerRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.LoginCount, data.LastLogin, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Name, data.Avatar, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.LoginCount, data.LastLogin, data.Id)
 	}, luckDrawAdminerIdKey, luckDrawAdminerUuidKey)
 	return err
 }

@@ -110,8 +110,8 @@ func (m *customLuckerModel) Insert(ctx context.Context, data *Lucker) (sql.Resul
 	luckDrawLuckerIdKey := m.formatPrimary(data.Id)
 	luckDrawLuckerUuidKey := m.formatUuidKey(data.Uuid)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, luckerRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.UserId, data.PrizesPoolId, data.Status, data.LuckDate, data.Ip, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, luckerRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.UserId, data.PrizesPoolId, data.Status, data.LuckDate, data.Ip)
 	}, luckDrawLuckerIdKey, luckDrawLuckerUuidKey)
 	return ret, err
 }
@@ -121,7 +121,7 @@ func (m *customLuckerModel) Update(ctx context.Context, data *Lucker) error {
 	luckDrawLuckerUuidKey := m.formatUuidKey(data.Uuid)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ? and `is_deleted` = '0'", m.table, luckerRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.UserId, data.PrizesPoolId, data.Status, data.LuckDate, data.Ip, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.UserId, data.PrizesPoolId, data.Status, data.LuckDate, data.Ip, data.Id)
 	}, luckDrawLuckerIdKey, luckDrawLuckerUuidKey)
 	return err
 }
