@@ -6,7 +6,7 @@ package captcha
 import (
 	"context"
 
-	"luck-draw/service/v1/captcha/rpc/captcha_pb"
+	"luck_draw-server/service/v1/captcha/rpc/captcha_pb"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

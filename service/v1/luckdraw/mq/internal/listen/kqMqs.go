@@ -2,9 +2,9 @@ package listen
 
 import (
 	"context"
-	"luck-draw/service/v1/luckdraw/mq/internal/config"
-	mqKq "luck-draw/service/v1/luckdraw/mq/internal/mqs/kq"
-	"luck-draw/service/v1/luckdraw/mq/internal/svc"
+	"luck_draw-server/service/v1/luckdraw/mq/internal/config"
+	mqKq "luck_draw-server/service/v1/luckdraw/mq/internal/mqs/kq"
+	"luck_draw-server/service/v1/luckdraw/mq/internal/svc"
 
 	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/service"

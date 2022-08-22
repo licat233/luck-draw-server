@@ -3,7 +3,7 @@ package logic
 import (
 	"context"
 	"fmt"
-	"luck-draw/common/utils"
+	"luck_draw-server/common/utils"
 	"net/http"
 	"strconv"
 

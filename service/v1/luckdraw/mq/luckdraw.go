@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"luck-draw/common/errorx"
-	"luck-draw/common/initialize"
-	"luck-draw/service/v1/luckdraw/mq/internal/config"
-	"luck-draw/service/v1/luckdraw/mq/internal/listen"
+	"luck_draw-server/common/errorx"
+	"luck_draw-server/common/initialize"
+	"luck_draw-server/service/v1/luckdraw/mq/internal/config"
+	"luck_draw-server/service/v1/luckdraw/mq/internal/listen"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"

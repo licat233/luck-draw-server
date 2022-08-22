@@ -6,7 +6,7 @@ package admin
 import (
 	"context"
 
-	"luck-draw/service/v1/admin/rpc/admin_pb"
+	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

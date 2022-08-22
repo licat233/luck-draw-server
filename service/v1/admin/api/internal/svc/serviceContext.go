@@ -1,11 +1,11 @@
 package svc
 
 import (
-	"luck-draw/service/v1/admin/api/internal/config"
-	"luck-draw/service/v1/admin/api/internal/middleware"
-	"luck-draw/service/v1/admin/rpc/admin"
-	"luck-draw/service/v1/captcha/rpc/captcha"
-	"luck-draw/service/v1/model"
+	"luck_draw-server/service/v1/admin/api/internal/config"
+	"luck_draw-server/service/v1/admin/api/internal/middleware"
+	"luck_draw-server/service/v1/admin/rpc/admin"
+	"luck_draw-server/service/v1/captcha/rpc/captcha"
+	"luck_draw-server/service/v1/model"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"

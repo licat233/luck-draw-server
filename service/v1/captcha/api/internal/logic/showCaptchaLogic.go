@@ -4,12 +4,12 @@ import (
 	"context"
 	"encoding/base64"
 	"errors"
-	"luck-draw/service/v1/captcha/api/internal/svc"
-	"luck-draw/service/v1/captcha/rpc/captcha_pb"
+	"luck_draw-server/service/v1/captcha/api/internal/svc"
+	"luck_draw-server/service/v1/captcha/rpc/captcha_pb"
 	"net/http"
 	"strings"
 
-	"luck-draw/common/errorx"
+	"luck_draw-server/common/errorx"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

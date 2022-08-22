@@ -2,9 +2,9 @@ package middleware
 
 import (
 	"database/sql"
-	"luck-draw/common/global"
-	"luck-draw/service/v1/admin/api/internal/config"
-	"luck-draw/service/v1/admin/rpc/admin"
+	"luck_draw-server/common/global"
+	"luck_draw-server/service/v1/admin/api/internal/config"
+	"luck_draw-server/service/v1/admin/rpc/admin"
 	"net/http"
 	"path"
 

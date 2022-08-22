@@ -1,11 +1,11 @@
 package initialize
 
 import (
-	"luck-draw/common/global"
-	"luck-draw/common/jwtx"
-	"luck-draw/common/redisx"
-	"luck-draw/common/utils"
-	"luck-draw/common/viperx"
+	"luck_draw-server/common/global"
+	"luck_draw-server/common/jwtx"
+	"luck_draw-server/common/redisx"
+	"luck_draw-server/common/utils"
+	"luck_draw-server/common/viperx"
 	"time"
 
 	"github.com/zeromicro/go-zero/core/stores/sqlx"

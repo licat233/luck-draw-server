@@ -3,10 +3,10 @@ package logic
 import (
 	"context"
 
-	"luck-draw/common/ctxdata"
-	"luck-draw/common/respx"
-	"luck-draw/service/v1/admin/api/internal/svc"
-	"luck-draw/service/v1/admin/rpc/admin_pb"
+	"luck_draw-server/common/ctxdata"
+	"luck_draw-server/common/respx"
+	"luck_draw-server/service/v1/admin/api/internal/svc"
+	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

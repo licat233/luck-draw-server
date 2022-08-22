@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#只能在Linux下执行
+
 #执行命令
 #chmod a+x goinstall.sh
 #./goinstall.sh

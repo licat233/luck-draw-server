@@ -2,7 +2,7 @@ package utils_test
 
 import (
 	"fmt"
-	"luck-draw/common/utils"
+	"luck_draw-server/common/utils"
 	"testing"
 )
 

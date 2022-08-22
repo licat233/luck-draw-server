@@ -2,9 +2,9 @@ package logic
 
 import (
 	"context"
-	"luck-draw/service/v1/captcha/rpc/captcha"
-	"luck-draw/service/v1/captcha/rpc/captcha_pb"
-	"luck-draw/service/v1/captcha/rpc/internal/svc"
+	"luck_draw-server/service/v1/captcha/rpc/captcha"
+	"luck_draw-server/service/v1/captcha/rpc/captcha_pb"
+	"luck_draw-server/service/v1/captcha/rpc/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

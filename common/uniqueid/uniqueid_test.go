@@ -2,7 +2,7 @@ package uniqueid_test
 
 import (
 	"fmt"
-	"luck-draw/common/uniqueid"
+	"luck_draw-server/common/uniqueid"
 	"testing"
 )
 

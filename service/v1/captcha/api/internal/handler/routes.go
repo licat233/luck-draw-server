@@ -4,7 +4,7 @@ package handler
 import (
 	"net/http"
 
-	"luck-draw/service/v1/captcha/api/internal/svc"
+	"luck_draw-server/service/v1/captcha/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )

@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	"luck-draw/common/ctxdata"
-	"luck-draw/common/errorx"
-	"luck-draw/common/jwtx"
-	"luck-draw/common/utils"
-	"luck-draw/service/v1/luckdraw/api/internal/config"
+	"luck_draw-server/common/ctxdata"
+	"luck_draw-server/common/errorx"
+	"luck_draw-server/common/jwtx"
+	"luck_draw-server/common/utils"
+	"luck_draw-server/service/v1/luckdraw/api/internal/config"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/core/logx"

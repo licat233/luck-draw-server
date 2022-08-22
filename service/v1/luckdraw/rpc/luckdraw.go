@@ -3,12 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
-	"luck-draw/common/errorx"
-	"luck-draw/common/initialize"
-	"luck-draw/service/v1/luckdraw/rpc/internal/config"
-	"luck-draw/service/v1/luckdraw/rpc/internal/server"
-	"luck-draw/service/v1/luckdraw/rpc/internal/svc"
-	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
+	"luck_draw-server/common/errorx"
+	"luck_draw-server/common/initialize"
+	"luck_draw-server/service/v1/luckdraw/rpc/internal/config"
+	"luck_draw-server/service/v1/luckdraw/rpc/internal/server"
+	"luck_draw-server/service/v1/luckdraw/rpc/internal/svc"
+	"luck_draw-server/service/v1/luckdraw/rpc/luckdraw_pb"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"

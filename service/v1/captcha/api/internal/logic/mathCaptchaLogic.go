@@ -2,11 +2,11 @@ package logic
 
 import (
 	"context"
-	"luck-draw/common/errorx"
-	"luck-draw/common/respx"
-	"luck-draw/service/v1/captcha/api/internal/svc"
-	"luck-draw/service/v1/captcha/api/internal/types"
-	"luck-draw/service/v1/captcha/rpc/captcha_pb"
+	"luck_draw-server/common/errorx"
+	"luck_draw-server/common/respx"
+	"luck_draw-server/service/v1/captcha/api/internal/svc"
+	"luck_draw-server/service/v1/captcha/api/internal/types"
+	"luck_draw-server/service/v1/captcha/rpc/captcha_pb"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/core/logx"

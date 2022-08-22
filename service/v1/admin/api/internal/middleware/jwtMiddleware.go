@@ -3,12 +3,12 @@ package middleware
 import (
 	"context"
 	"errors"
-	"luck-draw/common/ctxdata"
-	"luck-draw/common/errorx"
-	"luck-draw/common/jwtx"
-	"luck-draw/common/utils"
-	"luck-draw/service/v1/admin/api/internal/config"
-	"luck-draw/service/v1/model"
+	"luck_draw-server/common/ctxdata"
+	"luck_draw-server/common/errorx"
+	"luck_draw-server/common/jwtx"
+	"luck_draw-server/common/utils"
+	"luck_draw-server/service/v1/admin/api/internal/config"
+	"luck_draw-server/service/v1/model"
 	"net/http"
 	"strconv"
 

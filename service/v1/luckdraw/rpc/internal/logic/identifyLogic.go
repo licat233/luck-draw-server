@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
-	"luck-draw/service/v1/luckdraw/rpc/internal/svc"
-	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
+	"luck_draw-server/service/v1/luckdraw/rpc/internal/svc"
+	"luck_draw-server/service/v1/luckdraw/rpc/luckdraw_pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

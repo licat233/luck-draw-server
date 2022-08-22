@@ -1,5 +1,18 @@
 #!/bin/bash
 
+set -m
+
+current_path=$(
+    cd $(dirname $0) || exit
+    pwd
+)
+
+project_root="${current_path%%luck_draw*}luck_draw"
+
+echo project_root
+
+exit
+
 nohup="Starting server at"
 index=$(echo $(awk -v a="$nohup" -v b="Starting" 'BEGIN{print index(a,b)}'))
 echo $index
@@ -9,6 +22,8 @@ else
     echo "启动失败"
 fi
 exit
+
+
 
 current_path=$(
     cd $(dirname $0)

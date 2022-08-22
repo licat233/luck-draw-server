@@ -8,7 +8,7 @@ current_path=$(
     pwd
 )
 
-project_root="${current_path%%luck_draw*}luck_draw"
+project_root="${current_path%%luck_draw*}luck_draw-server"
 cd "${project_root}/deploy/script"
 
 run() {
@@ -25,7 +25,9 @@ run() {
         echo "文件: ${filename} 不存在"
         return
     fi
-    "${service_path}/${filename}" &
+    echo "启动 ${filename} 服务"
+    rm -f "${service_path}/nohup.out"
+    nohup "${service_path}/${filename}" &
     return
     nohup=$("./${filename}" &)
     index=$(echo $(awk -v a="$nohup" -v b="Starting" 'BEGIN{print index(a,b)}'))
@@ -74,7 +76,7 @@ build_go() {
 
 build_swagger() {
     name=$1
-    service_path="/www/wwwroot/luck_draw/service/v1/${name}/api/docs"
+    service_path="${project_root}/service/v1/${name}/api/docs"
     if [ ! -d $service_path ]; then
         #如果不存在，则退出
         echo "目录: ${service_path} 不存在"
@@ -88,7 +90,7 @@ build_swagger() {
 
 build_ts() {
     name=$1
-    service_path="/www/wwwroot/luck_draw/service/v1/${name}/api/docs"
+    service_path="${project_root}/service/v1/${name}/api/docs"
     if [ ! -d $service_path ]; then
         #如果不存在，则退出
         echo "目录: ${service_path} 不存在"
@@ -126,11 +128,11 @@ else
 fi
 
 #编译所有服务二进制文件
-# all_services=("captcha" "admin" "luckdraw")
-# all_micros=("rpc" "mq" "api")
+all_services=("captcha" "admin" "luckdraw")
+all_micros=("rpc" "mq" "api")
 
-for name in ${all_services[@]}; do
-    for micro in ${all_micros[@]}; do
+for name in ${all_services[*]}; do
+    for micro in ${all_micros[*]}; do
         build_go $name $micro
     done
     build_swagger ${name}

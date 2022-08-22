@@ -2,14 +2,14 @@ package logic
 
 import (
 	"context"
-	"luck-draw/service/v1/admin/api/internal/svc"
-	"luck-draw/service/v1/admin/rpc/admin_pb"
+	"luck_draw-server/service/v1/admin/api/internal/svc"
+	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/core/logx"
-	"luck-draw/common/jwtx"
-	"luck-draw/common/respx"
-	"luck-draw/common/utils"
+	"luck_draw-server/common/jwtx"
+	"luck_draw-server/common/respx"
+	"luck_draw-server/common/utils"
 )
 
 type LogoutLogic struct {

@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
-	"luck-draw/common/global"
+	"luck_draw-server/common/global"
 	"strings"
 	"time"
 

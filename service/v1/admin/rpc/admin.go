@@ -3,18 +3,18 @@ package main
 import (
 	"flag"
 	"fmt"
-	"luck-draw/service/v1/admin/rpc/admin_pb"
-	"luck-draw/service/v1/admin/rpc/internal/config"
-	"luck-draw/service/v1/admin/rpc/internal/server"
-	"luck-draw/service/v1/admin/rpc/internal/svc"
+	"luck_draw-server/service/v1/admin/rpc/admin_pb"
+	"luck_draw-server/service/v1/admin/rpc/internal/config"
+	"luck_draw-server/service/v1/admin/rpc/internal/server"
+	"luck_draw-server/service/v1/admin/rpc/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"luck-draw/common/errorx"
-	"luck-draw/common/initialize"
+	"luck_draw-server/common/errorx"
+	"luck_draw-server/common/initialize"
 )
 
 var configFile = flag.String("f", "etc/admin.yaml", "the config file")

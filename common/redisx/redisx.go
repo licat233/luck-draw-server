@@ -2,7 +2,7 @@ package redisx
 
 import (
 	"context"
-	"luck-draw/common/global"
+	"luck_draw-server/common/global"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/zeromicro/go-zero/core/logx"

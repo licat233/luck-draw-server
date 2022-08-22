@@ -2,7 +2,7 @@ package viperx
 
 import (
 	"fmt"
-	"luck-draw/common/utils"
+	"luck_draw-server/common/utils"
 	"path"
 
 	"github.com/spf13/viper"

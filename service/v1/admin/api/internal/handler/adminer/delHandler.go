@@ -1,9 +1,9 @@
 package adminer
 
 import (
-	"luck-draw/service/v1/admin/api/internal/logic/adminer"
-	"luck-draw/service/v1/admin/api/internal/svc"
-	"luck-draw/service/v1/admin/api/internal/types"
+	"luck_draw-server/service/v1/admin/api/internal/logic/adminer"
+	"luck_draw-server/service/v1/admin/api/internal/svc"
+	"luck_draw-server/service/v1/admin/api/internal/types"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"

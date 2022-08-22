@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"luck-draw/service/v1/admin/rpc/admin_pb"
-	"luck-draw/service/v1/admin/rpc/internal/logic"
-	"luck-draw/service/v1/admin/rpc/internal/svc"
+	"luck_draw-server/service/v1/admin/rpc/admin_pb"
+	"luck_draw-server/service/v1/admin/rpc/internal/logic"
+	"luck_draw-server/service/v1/admin/rpc/internal/svc"
 )
 
 type AdminServer struct {

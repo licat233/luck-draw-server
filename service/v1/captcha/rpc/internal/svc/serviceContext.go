@@ -1,7 +1,7 @@
 package svc
 
 import (
-	"luck-draw/service/v1/captcha/rpc/internal/config"
+	"luck_draw-server/service/v1/captcha/rpc/internal/config"
 	"time"
 
 	"github.com/mojocn/base64Captcha"

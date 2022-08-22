@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"luck-draw/service/v1/luckdraw/api/internal/logic"
-	"luck-draw/service/v1/luckdraw/api/internal/svc"
-	"luck-draw/service/v1/luckdraw/api/internal/types"
+	"luck_draw-server/service/v1/luckdraw/api/internal/logic"
+	"luck_draw-server/service/v1/luckdraw/api/internal/svc"
+	"luck_draw-server/service/v1/luckdraw/api/internal/types"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"

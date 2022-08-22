@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"luck-draw/service/v1/captcha/rpc/captcha_pb"
-	"luck-draw/service/v1/captcha/rpc/internal/logic"
-	"luck-draw/service/v1/captcha/rpc/internal/svc"
+	"luck_draw-server/service/v1/captcha/rpc/captcha_pb"
+	"luck_draw-server/service/v1/captcha/rpc/internal/logic"
+	"luck_draw-server/service/v1/captcha/rpc/internal/svc"
 )
 
 type CaptchaServer struct {

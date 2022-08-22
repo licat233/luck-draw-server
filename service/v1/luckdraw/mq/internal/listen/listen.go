@@ -2,8 +2,8 @@ package listen
 
 import (
 	"context"
-	"luck-draw/service/v1/luckdraw/mq/internal/config"
-	"luck-draw/service/v1/luckdraw/mq/internal/svc"
+	"luck_draw-server/service/v1/luckdraw/mq/internal/config"
+	"luck_draw-server/service/v1/luckdraw/mq/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/service"
 )

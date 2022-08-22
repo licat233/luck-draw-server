@@ -2,10 +2,10 @@ package rbac
 
 import (
 	"context"
-	"luck-draw/service/v1/admin/api/internal/svc"
+	"luck_draw-server/service/v1/admin/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
-	"luck-draw/common/respx"
+	"luck_draw-server/common/respx"
 )
 
 type GetAllPolicyLogic struct {

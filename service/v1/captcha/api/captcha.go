@@ -3,13 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"luck-draw/service/v1/captcha/api/internal/config"
-	"luck-draw/service/v1/captcha/api/internal/handler"
-	"luck-draw/service/v1/captcha/api/internal/svc"
+	"luck_draw-server/service/v1/captcha/api/internal/config"
+	"luck_draw-server/service/v1/captcha/api/internal/handler"
+	"luck_draw-server/service/v1/captcha/api/internal/svc"
 	"net/http"
 
-	"luck-draw/common/errorx"
-	"luck-draw/common/initialize"
+	"luck_draw-server/common/errorx"
+	"luck_draw-server/common/initialize"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"

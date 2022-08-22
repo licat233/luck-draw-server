@@ -3,9 +3,9 @@ package test
 import (
 	"context"
 	"fmt"
-	"luck-draw/common/global"
-	"luck-draw/common/initialize"
-	"luck-draw/service/v1/model"
+	"luck_draw-server/common/global"
+	"luck_draw-server/common/initialize"
+	"luck_draw-server/service/v1/model"
 	"testing"
 
 	"github.com/zeromicro/go-zero/core/stores/cache"

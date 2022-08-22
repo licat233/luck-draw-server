@@ -5,7 +5,7 @@ package luckdraw
 
 import (
 	"context"
-	luckdraw_pb2 "luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
+	luckdraw_pb2 "luck_draw-server/service/v1/luckdraw/rpc/luckdraw_pb"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

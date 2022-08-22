@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"luck-draw/service/v1/admin/api/internal/logic"
-	"luck-draw/service/v1/admin/api/internal/svc"
+	"luck_draw-server/service/v1/admin/api/internal/logic"
+	"luck_draw-server/service/v1/admin/api/internal/svc"
 )
 
 func currentUserHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

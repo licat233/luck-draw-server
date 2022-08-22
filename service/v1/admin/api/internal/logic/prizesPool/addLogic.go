@@ -2,12 +2,12 @@ package prizesPool
 
 import (
 	"context"
-	"luck-draw/service/v1/admin/api/internal/svc"
-	"luck-draw/service/v1/admin/api/internal/types"
-	"luck-draw/service/v1/admin/rpc/admin_pb"
+	"luck_draw-server/service/v1/admin/api/internal/svc"
+	"luck_draw-server/service/v1/admin/api/internal/types"
+	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 
-	"luck-draw/common/respx"
-	"luck-draw/common/utils"
+	"luck_draw-server/common/respx"
+	"luck_draw-server/common/utils"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

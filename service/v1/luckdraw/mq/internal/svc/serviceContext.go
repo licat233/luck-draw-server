@@ -1,9 +1,9 @@
 package svc
 
 import (
-	"luck-draw/service/v1/luckdraw/mq/internal/config"
-	"luck-draw/service/v1/luckdraw/rpc/luckdraw"
-	"luck-draw/service/v1/model"
+	"luck_draw-server/service/v1/luckdraw/mq/internal/config"
+	"luck_draw-server/service/v1/luckdraw/rpc/luckdraw"
+	"luck_draw-server/service/v1/model"
 
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/zrpc"

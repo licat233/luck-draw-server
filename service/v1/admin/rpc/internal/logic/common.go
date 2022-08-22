@@ -2,9 +2,9 @@ package logic
 
 import (
 	"errors"
-	"luck-draw/common/utils"
-	"luck-draw/service/v1/admin/rpc/admin_pb"
-	"luck-draw/service/v1/model"
+	"luck_draw-server/common/utils"
+	"luck_draw-server/service/v1/admin/rpc/admin_pb"
+	"luck_draw-server/service/v1/model"
 )
 
 func newStatusResponse() *admin_pb.StatusResp {

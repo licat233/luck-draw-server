@@ -3,15 +3,15 @@ package logic
 import (
 	"context"
 	"errors"
-	"luck-draw/service/v1/luckdraw/api/internal/svc"
-	"luck-draw/service/v1/luckdraw/api/internal/types"
-	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
+	"luck_draw-server/service/v1/luckdraw/api/internal/svc"
+	"luck_draw-server/service/v1/luckdraw/api/internal/types"
+	"luck_draw-server/service/v1/luckdraw/rpc/luckdraw_pb"
 	"net/http"
 
-	"luck-draw/common/ctxdata"
-	"luck-draw/common/errorx"
-	"luck-draw/common/respx"
-	"luck-draw/common/utils"
+	"luck_draw-server/common/ctxdata"
+	"luck_draw-server/common/errorx"
+	"luck_draw-server/common/respx"
+	"luck_draw-server/common/utils"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/core/logx"

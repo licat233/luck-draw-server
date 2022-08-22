@@ -1,8 +1,8 @@
 package jwtx
 
 import (
-	"luck-draw/common/global"
-	"luck-draw/service/v1/model"
+	"luck_draw-server/common/global"
+	"luck_draw-server/service/v1/model"
 
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/redis"

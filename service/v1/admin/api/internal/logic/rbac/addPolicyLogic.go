@@ -3,11 +3,11 @@ package rbac
 import (
 	"context"
 	"errors"
-	"luck-draw/service/v1/admin/api/internal/svc"
-	"luck-draw/service/v1/admin/api/internal/types"
+	"luck_draw-server/service/v1/admin/api/internal/svc"
+	"luck_draw-server/service/v1/admin/api/internal/types"
 
-	"luck-draw/common/errorx"
-	"luck-draw/common/respx"
+	"luck_draw-server/common/errorx"
+	"luck_draw-server/common/respx"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

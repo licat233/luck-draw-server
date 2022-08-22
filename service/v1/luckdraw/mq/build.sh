@@ -1,5 +1,10 @@
 #!/bin/bash
-cd /www/wwwroot/luck_draw/service/v1/luckdraw/mq
+set -m
+current_path=$(
+    cd $(dirname $0)
+    pwd
+)
+cd $current_path
 pid=$(ps -ef | grep luckdraw-mq | grep -v grep | awk '{print $2}')
 if [ ! -z $pid ]; then
     kill -9 $pid

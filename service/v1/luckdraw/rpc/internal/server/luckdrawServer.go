@@ -5,9 +5,9 @@ package server
 
 import (
 	"context"
-	logic2 "luck-draw/service/v1/luckdraw/rpc/internal/logic"
-	"luck-draw/service/v1/luckdraw/rpc/internal/svc"
-	luckdraw_pb2 "luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
+	logic2 "luck_draw-server/service/v1/luckdraw/rpc/internal/logic"
+	"luck_draw-server/service/v1/luckdraw/rpc/internal/svc"
+	luckdraw_pb2 "luck_draw-server/service/v1/luckdraw/rpc/luckdraw_pb"
 )
 
 type LuckdrawServer struct {

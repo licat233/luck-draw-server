@@ -3,13 +3,13 @@ package logic
 import (
 	"context"
 	"fmt"
-	"luck-draw/service/v1/captcha/rpc/captcha_pb"
-	"luck-draw/service/v1/captcha/rpc/internal/svc"
+	"luck_draw-server/service/v1/captcha/rpc/captcha_pb"
+	"luck_draw-server/service/v1/captcha/rpc/internal/svc"
 	"strings"
 	"time"
 
-	"luck-draw/common/emailx"
-	"luck-draw/common/errorx"
+	"luck_draw-server/common/emailx"
+	"luck_draw-server/common/errorx"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/core/logx"

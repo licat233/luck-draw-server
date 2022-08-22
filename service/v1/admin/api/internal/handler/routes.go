@@ -4,16 +4,16 @@ package handler
 import (
 	"net/http"
 
-	activity "luck-draw/service/v1/admin/api/internal/handler/activity"
-	adminer "luck-draw/service/v1/admin/api/internal/handler/adminer"
-	lucker "luck-draw/service/v1/admin/api/internal/handler/lucker"
-	prize "luck-draw/service/v1/admin/api/internal/handler/prize"
-	prizesPool "luck-draw/service/v1/admin/api/internal/handler/prizesPool"
-	project "luck-draw/service/v1/admin/api/internal/handler/project"
-	rbac "luck-draw/service/v1/admin/api/internal/handler/rbac"
-	user "luck-draw/service/v1/admin/api/internal/handler/user"
-	usersPool "luck-draw/service/v1/admin/api/internal/handler/usersPool"
-	"luck-draw/service/v1/admin/api/internal/svc"
+	activity "luck_draw-server/service/v1/admin/api/internal/handler/activity"
+	adminer "luck_draw-server/service/v1/admin/api/internal/handler/adminer"
+	lucker "luck_draw-server/service/v1/admin/api/internal/handler/lucker"
+	prize "luck_draw-server/service/v1/admin/api/internal/handler/prize"
+	prizesPool "luck_draw-server/service/v1/admin/api/internal/handler/prizesPool"
+	project "luck_draw-server/service/v1/admin/api/internal/handler/project"
+	rbac "luck_draw-server/service/v1/admin/api/internal/handler/rbac"
+	user "luck_draw-server/service/v1/admin/api/internal/handler/user"
+	usersPool "luck_draw-server/service/v1/admin/api/internal/handler/usersPool"
+	"luck_draw-server/service/v1/admin/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )

@@ -1,7 +1,7 @@
 package respx
 
 import (
-	"luck-draw/common/errorx"
+	"luck_draw-server/common/errorx"
 	"reflect"
 )
 

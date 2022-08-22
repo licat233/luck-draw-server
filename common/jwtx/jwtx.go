@@ -3,8 +3,8 @@ package jwtx
 import (
 	"errors"
 	"fmt"
-	"luck-draw/common/errorx"
-	"luck-draw/common/utils"
+	"luck_draw-server/common/errorx"
+	"luck_draw-server/common/utils"
 	"net/http"
 	"reflect"
 

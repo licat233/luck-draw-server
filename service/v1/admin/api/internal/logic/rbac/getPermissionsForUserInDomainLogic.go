@@ -2,11 +2,11 @@ package rbac
 
 import (
 	"context"
-	"luck-draw/service/v1/admin/api/internal/svc"
-	"luck-draw/service/v1/admin/api/internal/types"
+	"luck_draw-server/service/v1/admin/api/internal/svc"
+	"luck_draw-server/service/v1/admin/api/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
-	"luck-draw/common/respx"
+	"luck_draw-server/common/respx"
 )
 
 type GetPermissionsForUserInDomainLogic struct {

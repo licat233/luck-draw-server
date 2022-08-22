@@ -1,4 +1,4 @@
-module luck-draw
+module luck_draw-server
 
 go 1.19
 

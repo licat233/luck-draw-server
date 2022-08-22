@@ -2,13 +2,13 @@ package logic
 
 import (
 	"context"
-	"luck-draw/service/v1/admin/rpc/admin_pb"
-	"luck-draw/service/v1/admin/rpc/internal/svc"
+	"luck_draw-server/service/v1/admin/rpc/admin_pb"
+	"luck_draw-server/service/v1/admin/rpc/internal/svc"
 	"time"
 
-	"luck-draw/common/ctxdata"
-	"luck-draw/common/errorx"
-	"luck-draw/common/jwtx"
+	"luck_draw-server/common/ctxdata"
+	"luck_draw-server/common/errorx"
+	"luck_draw-server/common/jwtx"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/zeromicro/go-zero/core/logx"

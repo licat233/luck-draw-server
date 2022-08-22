@@ -1,10 +1,10 @@
 package svc
 
 import (
-	"luck-draw/service/v1/captcha/rpc/captcha"
-	"luck-draw/service/v1/luckdraw/api/internal/config"
-	"luck-draw/service/v1/luckdraw/api/internal/middleware"
-	"luck-draw/service/v1/luckdraw/rpc/luckdraw"
+	"luck_draw-server/service/v1/captcha/rpc/captcha"
+	"luck_draw-server/service/v1/luckdraw/api/internal/config"
+	"luck_draw-server/service/v1/luckdraw/api/internal/middleware"
+	"luck_draw-server/service/v1/luckdraw/rpc/luckdraw"
 
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/zrpc"

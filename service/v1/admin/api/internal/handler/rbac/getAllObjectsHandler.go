@@ -1,8 +1,8 @@
 package rbac
 
 import (
-	"luck-draw/service/v1/admin/api/internal/logic/rbac"
-	"luck-draw/service/v1/admin/api/internal/svc"
+	"luck_draw-server/service/v1/admin/api/internal/logic/rbac"
+	"luck_draw-server/service/v1/admin/api/internal/svc"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"

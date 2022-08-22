@@ -2,10 +2,10 @@ package logic
 
 import (
 	"context"
-	"luck-draw/common/errorx"
-	"luck-draw/common/utils"
-	"luck-draw/service/v1/luckdraw/rpc/luckdraw_pb"
-	"luck-draw/service/v1/model"
+	"luck_draw-server/common/errorx"
+	"luck_draw-server/common/utils"
+	"luck_draw-server/service/v1/luckdraw/rpc/luckdraw_pb"
+	"luck_draw-server/service/v1/model"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

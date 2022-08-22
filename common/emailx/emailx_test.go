@@ -3,7 +3,7 @@ package emailx
 import (
 	"context"
 	"fmt"
-	"luck-draw/common/initialize"
+	"luck_draw-server/common/initialize"
 	"testing"
 
 	"github.com/pkg/errors"

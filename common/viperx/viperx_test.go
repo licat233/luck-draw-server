@@ -1,7 +1,7 @@
 package viperx_test
 
 import (
-	"luck-draw/common/viperx"
+	"luck_draw-server/common/viperx"
 	"testing"
 )
 
