@@ -89,9 +89,9 @@ Zap:
   StacktraceKey: stacktrace
   LogInConsole: true
 Email: 
-  Username: licat233@qq.com
-  Secret: myfppwmqfkombffh
-  Host: smtp.qq.com
+  Username: licat233@sina.com
+  Secret: 5e8bc93914101e81
+  Host: smtp.sina.com
   Port: 465
   Subject: 系统邮件
   Receiver: 

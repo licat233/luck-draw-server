@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -m
 
 #判断brew是否存在
@@ -24,4 +23,4 @@ current_path=$(
 
 cd "$current_path/deploy/script/"
 
-./build.sh
+./build.sh $1 $2

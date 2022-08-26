@@ -51,6 +51,8 @@ func mdAdminerToPbAdminer(mdAdminer *model.Adminer) *admin_pb.Adminer {
 		Email:        mdAdminer.Email,
 		Status:       mdAdminer.Status,
 		IsSuperAdmin: mdAdminer.IsSuperAdmin,
+		LoginCount:   mdAdminer.LoginCount,
+		LastLogin:    mdAdminer.LastLogin.Unix(),
 	}
 }
 

@@ -38,9 +38,9 @@ func (l *GetAdminerListLogic) GetAdminerList(in *admin_pb.ListReq) (*admin_pb.Ge
 		}, nil
 	}
 
-	for _, adminer := range list {
-		adminer.Password = ""
-	}
+	// for _, adminer := range list {
+	// 	adminer.Password = ""
+	// }
 
 	total, err := l.svcCtx.AdminerModel.FindCount(l.ctx)
 	if err != nil {

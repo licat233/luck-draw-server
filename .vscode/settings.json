@@ -3,5 +3,21 @@
         "Goodluck",
         "Luckdraw",
         "Lucker"
+    ],
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "xprotocol"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "luck_draw",
+            "database": "luck_draw",
+            "username": "luck_draw",
+            "password": "123123123",
+            "connectString": "luck_draw:123123123@tcp(127.0.0.1:3306)/luck_draw?parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai"
+        }
     ]
 }

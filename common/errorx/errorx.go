@@ -257,7 +257,7 @@ func New(errs ...string) (errorx *Errorx) {
 	return
 }
 
-/** ResponseErrorHandler 对接go-zero的错误处理函数，将原生错误转化为 Errorx，默认为ExternalError
+/** ResponseErrorHandler 对接go-zero的错误处理函数，将原生错误转化为 Errorx
  * err 传入的错误
  */
 func ResponseErrorHandler(err error) (int, interface{}) {
@@ -285,12 +285,12 @@ func ResponseErrorHandler(err error) (int, interface{}) {
 		return http.StatusOK, StatusErrToErrorx(se.GRPCStatus()).Data()
 	}
 
-	//原生错误，我们默认把原生error作为internalError返回
-	//原生错误可能是服务器内部panic错误，将这样的错误抛出给前端，是很不利的
-	//所有返回的错误应该尽量使用 errorx.New()
-	//日志收集一下
-	logx.Error(fmt.Sprintf("未知错误: %+v", err))
-	return http.StatusOK, internalError(ServerErrorMsg, err).Data()
+	/** 20220826修正：
+	 * ①httpx.Parse(r, &req)返回原生error，为request错误，默认
+	 * ②业务代码panic返回的error不经过错误处理，为internal server错误
+	 */
+
+	return http.StatusOK, externalError(RequestErrorMsg, err).Data()
 }
 
 /**需要注意的是：rpc中返回的status.Error Internael错误没有traceMessage，只有一个message**/

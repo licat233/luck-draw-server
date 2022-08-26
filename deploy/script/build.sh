@@ -102,8 +102,9 @@ build_ts() {
     goctl api ts -api "${name}.api" -dir ../static
 }
 
-#选择要下载的版本
-service_name="$1"
+#选择要构建的服务
+service_name=$1
+all_services=()
 if [ -z $service_name ]; then
     all_services=("captcha" "admin" "luckdraw")
 else
@@ -115,8 +116,10 @@ else
     fi
 fi
 
-micro_name="$2"
-if [ -z $service_name ]; then
+#选择要构建的子服务
+micro_name=$2
+all_micros=()
+if [ -z $micro_name ]; then
     all_micros=("rpc" "mq" "api")
 else
     if [[ $micro -eq "rpc" ]] || [[ $micro -eq "mq" ]] || [[ $micro -eq "api" ]]; then
@@ -127,10 +130,7 @@ else
     fi
 fi
 
-#编译所有服务二进制文件
-all_services=("captcha" "admin" "luckdraw")
-all_micros=("rpc" "mq" "api")
-
+#开始遍历编译
 for name in ${all_services[*]}; do
     for micro in ${all_micros[*]}; do
         build_go $name $micro
