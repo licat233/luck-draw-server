@@ -36,6 +36,11 @@ func (l *DelAdminerLogic) DelAdminer(in *admin_pb.ItemReq) (*admin_pb.StatusResp
 		return nil, errorx.ExtRpcErr(errors.New("adminer not found"))
 	}
 
+	if data.Id == 1 {
+		//初始账号，不能删除
+		return nil, errorx.ExtRpcErr(errors.New("this account cannot be deleted"))
+	}
+
 	err = l.svcCtx.AdminerModel.DeleteSoft(l.ctx, data)
 	if err != nil {
 		logx.Error(err)
