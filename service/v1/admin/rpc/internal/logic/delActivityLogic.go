@@ -29,7 +29,8 @@ func NewDelActivityLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelAc
 func (l *DelActivityLogic) DelActivity(in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
 	data, err := l.svcCtx.ActivityModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
 		return nil, errorx.ExtRpcErr(errors.New("activity not found"))
@@ -37,7 +38,8 @@ func (l *DelActivityLogic) DelActivity(in *admin_pb.ItemReq) (*admin_pb.StatusRe
 
 	err = l.svcCtx.ActivityModel.DeleteSoft(l.ctx, data)
 	if err != nil {
-
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
 	}
 	return newStatusResponse(), nil
 }
