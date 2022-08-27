@@ -2,6 +2,7 @@ package adminer
 
 import (
 	"context"
+	"errors"
 	"luck_draw-server/service/v1/admin/api/internal/svc"
 	"luck_draw-server/service/v1/admin/api/internal/types"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
@@ -28,6 +29,13 @@ func NewModifyLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ModifyLogi
 }
 
 func (l *ModifyLogic) Modify(req *types.AdminerModifyReq) (any, error) {
+	ok, err := SuperAdminerIdentify(l.ctx, l.svcCtx)
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return nil, errorx.AccessError(nil, errors.New("no request permission"))
+	}
 	if req.Name == "" {
 		return nil, errorx.ErrInvalidParam
 	}

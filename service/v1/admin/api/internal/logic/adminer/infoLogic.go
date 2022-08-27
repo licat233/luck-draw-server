@@ -2,10 +2,12 @@ package adminer
 
 import (
 	"context"
+	"errors"
 	"luck_draw-server/service/v1/admin/api/internal/svc"
 	"luck_draw-server/service/v1/admin/api/internal/types"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 
+	"luck_draw-server/common/errorx"
 	"luck_draw-server/common/respx"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -26,6 +28,13 @@ func NewInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *InfoLogic {
 }
 
 func (l *InfoLogic) Info(req *types.AdminerGetReq) (any, error) {
+	ok, err := SuperAdminerIdentify(l.ctx, l.svcCtx)
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return nil, errorx.AccessError(nil, errors.New("no request permission"))
+	}
 	resp, err := l.svcCtx.AdminRpc.GetAdminer(l.ctx, &admin_pb.ItemReq{
 		Id: req.Id,
 	})

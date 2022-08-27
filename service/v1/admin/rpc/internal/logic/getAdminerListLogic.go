@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 	"luck_draw-server/service/v1/admin/rpc/internal/svc"
 	"luck_draw-server/service/v1/model"
@@ -48,8 +47,6 @@ func (l *GetAdminerListLogic) GetAdminerList(in *admin_pb.ListReq) (*admin_pb.Ge
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
-
-	fmt.Printf("%+v", *list[0])
 
 	return &admin_pb.GetAdminerListResp{
 		Data:  mdAdminerListToPbAdminerList(list),

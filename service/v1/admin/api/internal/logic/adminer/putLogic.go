@@ -2,6 +2,7 @@ package adminer
 
 import (
 	"context"
+	"errors"
 
 	"luck_draw-server/common/errorx"
 	"luck_draw-server/common/respx"
@@ -27,10 +28,17 @@ func NewPutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutLogic {
 }
 
 func (l *PutLogic) Put(req *types.AdminerPutReq) (any, error) {
+	ok, err := SuperAdminerIdentify(l.ctx, l.svcCtx)
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return nil, errorx.AccessError(nil, errors.New("no request permission"))
+	}
 	if req.Name == "" {
 		return nil, errorx.ErrInvalidParam
 	}
-	_, err := l.svcCtx.AdminRpc.PutAdminer(l.ctx, &admin_pb.Adminer{
+	_, err = l.svcCtx.AdminRpc.PutAdminer(l.ctx, &admin_pb.Adminer{
 		Id:           req.Id,
 		Uuid:         req.Uuid,
 		Name:         req.Name,
