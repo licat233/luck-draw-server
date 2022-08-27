@@ -8,8 +8,8 @@ import (
 	"time"
 )
 
-//expToNumber 科学计算数字转int64
-//例： ExpNum = 1.641020629e+09
+// expToNumber 科学计算数字转int64
+// 例： ExpNum = 1.641020629e+09
 func ExpToNumber(ExpNum string) (int64, error) {
 	if res, err := strconv.ParseInt(ExpNum, 10, 64); err == nil {
 		return res, nil
@@ -27,8 +27,21 @@ func ExpToNumber(ExpNum string) (int64, error) {
 	return res, nil
 }
 
-func Int64ToTime(num int64) (time.Time, error) {
-	return time.ParseInLocation("2006-01-02 15:04:05", strconv.FormatInt(num, 10), time.Local)
+func Int64ToTime(timestamp int64) time.Time {
+	numstr := fmt.Sprint(timestamp)
+	length := len(numstr)
+	if length < 10 {
+		return time.Now().Local()
+	}
+	if length == 13 {
+		numstr = numstr[:10]
+	}
+	timestamp, _ = strconv.ParseInt(numstr, 10, 0)
+	return time.Unix(timestamp, 0).Local()
+}
+
+func StrToTime(timestr string) (time.Time, error) {
+	return time.ParseInLocation("2006-01-02 15:04:05", timestr, time.Local)
 }
 
 func TimeToInt64(t time.Time) int64 {
@@ -36,10 +49,7 @@ func TimeToInt64(t time.Time) int64 {
 }
 
 func Int64ToBool(n int64) bool {
-	if n == 0 {
-		return false
-	}
-	return true
+	return n != 0
 }
 
 func BoolToInt64(ok bool) int64 {
@@ -56,7 +66,7 @@ func JwtTokenToMd5(token string) (string, error) {
 	return Md5V(token), nil
 }
 
-//StructToSlice 结构体转切片
+// StructToSlice 结构体转切片
 func StructToSlice(f interface{}) []string {
 	v := reflect.ValueOf(f)
 	ss := make([]string, v.NumField())

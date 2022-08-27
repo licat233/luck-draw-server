@@ -5,14 +5,15 @@ package server
 
 import (
 	"context"
-	logic2 "luck_draw-server/service/v1/luckdraw/rpc/internal/logic"
+
+	"luck_draw-server/service/v1/luckdraw/rpc/internal/logic"
 	"luck_draw-server/service/v1/luckdraw/rpc/internal/svc"
-	luckdraw_pb2 "luck_draw-server/service/v1/luckdraw/rpc/luckdraw_pb"
+	"luck_draw-server/service/v1/luckdraw/rpc/luckdraw_pb"
 )
 
 type LuckdrawServer struct {
 	svcCtx *svc.ServiceContext
-	luckdraw_pb2.UnimplementedLuckdrawServer
+	luckdraw_pb.UnimplementedLuckdrawServer
 }
 
 func NewLuckdrawServer(svcCtx *svc.ServiceContext) *LuckdrawServer {
@@ -22,43 +23,43 @@ func NewLuckdrawServer(svcCtx *svc.ServiceContext) *LuckdrawServer {
 }
 
 // 获取某活动的奖品
-func (s *LuckdrawServer) GetActivePrizes(ctx context.Context, in *luckdraw_pb2.ActivePrizesReq) (*luckdraw_pb2.ActivePrizesResp, error) {
-	l := logic2.NewGetActivePrizesLogic(ctx, s.svcCtx)
+func (s *LuckdrawServer) GetActivePrizes(ctx context.Context, in *luckdraw_pb.ActivePrizesReq) (*luckdraw_pb.ActivePrizesResp, error) {
+	l := logic.NewGetActivePrizesLogic(ctx, s.svcCtx)
 	return l.GetActivePrizes(in)
 }
 
 // 查询某用户在某活动里的中奖名单
-func (s *LuckdrawServer) GetLuckerList(ctx context.Context, in *luckdraw_pb2.GetLuckerListReq) (*luckdraw_pb2.GetLuckerListResp, error) {
-	l := logic2.NewGetLuckerListLogic(ctx, s.svcCtx)
+func (s *LuckdrawServer) GetLuckerList(ctx context.Context, in *luckdraw_pb.GetLuckerListReq) (*luckdraw_pb.GetLuckerListResp, error) {
+	l := logic.NewGetLuckerListLogic(ctx, s.svcCtx)
 	return l.GetLuckerList(in)
 }
 
 // 抽奖凭证校验，验证用户身份，颁发jwt
-func (s *LuckdrawServer) Identify(ctx context.Context, in *luckdraw_pb2.IdentifyReq) (*luckdraw_pb2.IdentifyResp, error) {
-	l := logic2.NewIdentifyLogic(ctx, s.svcCtx)
+func (s *LuckdrawServer) Identify(ctx context.Context, in *luckdraw_pb.IdentifyReq) (*luckdraw_pb.IdentifyResp, error) {
+	l := logic.NewIdentifyLogic(ctx, s.svcCtx)
 	return l.Identify(in)
 }
 
 // 抽取奖品
-func (s *LuckdrawServer) Goodluck(ctx context.Context, in *luckdraw_pb2.GoodluckReq) (*luckdraw_pb2.GoodluckResp, error) {
-	l := logic2.NewGoodluckLogic(ctx, s.svcCtx)
+func (s *LuckdrawServer) Goodluck(ctx context.Context, in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.GoodluckResp, error) {
+	l := logic.NewGoodluckLogic(ctx, s.svcCtx)
 	return l.Goodluck(in)
 }
 
 // 根据passport查询用户的中奖信息
-func (s *LuckdrawServer) SearchLucker(ctx context.Context, in *luckdraw_pb2.SearchLuckerReq) (*luckdraw_pb2.SearchLuckerResp, error) {
-	l := logic2.NewSearchLuckerLogic(ctx, s.svcCtx)
+func (s *LuckdrawServer) SearchLucker(ctx context.Context, in *luckdraw_pb.SearchLuckerReq) (*luckdraw_pb.SearchLuckerResp, error) {
+	l := logic.NewSearchLuckerLogic(ctx, s.svcCtx)
 	return l.SearchLucker(in)
 }
 
 // 用户确认认领奖品名单，记得把剩余的改为弃领状态
-func (s *LuckdrawServer) SelectPrizes(ctx context.Context, in *luckdraw_pb2.SelectPrizesReq) (*luckdraw_pb2.SelectPrizesResp, error) {
-	l := logic2.NewSelectPrizesLogic(ctx, s.svcCtx)
+func (s *LuckdrawServer) SelectPrizes(ctx context.Context, in *luckdraw_pb.SelectPrizesReq) (*luckdraw_pb.SelectPrizesResp, error) {
+	l := logic.NewSelectPrizesLogic(ctx, s.svcCtx)
 	return l.SelectPrizes(in)
 }
 
 // 生产jwtToken
-func (s *LuckdrawServer) GenerateToken(ctx context.Context, in *luckdraw_pb2.GenerateTokenReq) (*luckdraw_pb2.GenerateTokenResp, error) {
-	l := logic2.NewGenerateTokenLogic(ctx, s.svcCtx)
+func (s *LuckdrawServer) GenerateToken(ctx context.Context, in *luckdraw_pb.GenerateTokenReq) (*luckdraw_pb.GenerateTokenResp, error) {
+	l := logic.NewGenerateTokenLogic(ctx, s.svcCtx)
 	return l.GenerateToken(in)
 }

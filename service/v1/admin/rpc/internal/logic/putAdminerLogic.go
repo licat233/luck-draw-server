@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 	"luck_draw-server/service/v1/admin/rpc/internal/svc"
 	"luck_draw-server/service/v1/model"
@@ -31,11 +30,6 @@ func (l *PutAdminerLogic) PutAdminer(in *admin_pb.Adminer) (*admin_pb.StatusResp
 	if in == nil {
 		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
-	//时间戳转化为time.Time
-	lastLogin, err := utils.Int64ToTime(in.LastLogin)
-	if err != nil {
-		return nil, errorx.ExtRpcErr(fmt.Errorf("lastLoginTime convert error, err:%v", err))
-	}
 
 	data := &model.Adminer{
 		Id:           in.Id,
@@ -47,10 +41,10 @@ func (l *PutAdminerLogic) PutAdminer(in *admin_pb.Adminer) (*admin_pb.StatusResp
 		Status:       in.Status,
 		IsSuperAdmin: in.IsSuperAdmin,
 		LoginCount:   in.LoginCount,
-		LastLogin:    lastLogin,
+		LastLogin:    utils.Int64ToTime(in.LastLogin),
 	}
 
-	if err = l.svcCtx.AdminerModel.Update(l.ctx, data); err != nil {
+	if err := l.svcCtx.AdminerModel.Update(l.ctx, data); err != nil {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}

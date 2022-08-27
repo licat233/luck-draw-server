@@ -32,16 +32,12 @@ func (l *AddLuckerLogic) AddLucker(in *admin_pb.Lucker) (*admin_pb.AddLuckerResp
 		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
 
-	luckdate, err := utils.Int64ToTime(in.LuckDate)
-	if err != nil {
-		return nil, errorx.SecRpcErr(errorx.ErrInvalidParam)
-	}
 	data := &model.Lucker{
 		Uuid:         uniqueid.NewUUID(),
 		UserId:       in.UserId,
 		PrizesPoolId: in.PrizesPoolId,
 		Status:       int64(in.Status),
-		LuckDate:     luckdate,
+		LuckDate:     utils.Int64ToTime(in.LuckDate),
 		Ip:           in.Ip,
 	}
 	result, err := l.svcCtx.LuckerModel.Insert(l.ctx, data)

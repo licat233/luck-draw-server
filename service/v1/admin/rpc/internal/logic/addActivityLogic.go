@@ -31,14 +31,6 @@ func (l *AddActivityLogic) AddActivity(in *admin_pb.Activity) (*admin_pb.AddActi
 	if in == nil {
 		return nil, errorx.ExtRpcErr(errorx.ErrEmptyParam)
 	}
-	startTime, err := utils.Int64ToTime(in.StartTime)
-	if err != nil {
-		return nil, errorx.ExtRpcErr(errorx.ErrInvalidParam)
-	}
-	endTime, err := utils.Int64ToTime(in.EndTime)
-	if err != nil {
-		return nil, errorx.ExtRpcErr(errorx.ErrInvalidParam)
-	}
 
 	data := &model.Activity{
 		Uuid:      uniqueid.NewUUID(),
@@ -48,8 +40,8 @@ func (l *AddActivityLogic) AddActivity(in *admin_pb.Activity) (*admin_pb.AddActi
 		Pattern:   int64(in.Pattern),
 		MaxCount:  in.MaxCount,
 		MaxPrizes: in.MaxPrizes,
-		StartTime: startTime,
-		EndTime:   endTime,
+		StartTime: utils.Int64ToTime(in.StartTime),
+		EndTime:   utils.Int64ToTime(in.EndTime),
 	}
 	result, err := l.svcCtx.ActivityModel.Insert(l.ctx, data)
 	if err != nil {

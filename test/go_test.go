@@ -3,7 +3,14 @@ package test
 import (
 	"fmt"
 	"testing"
+	"time"
 )
+
+func Test_unix(t *testing.T) {
+	var timestamp int64 = 1661245897000
+	res := time.Unix(timestamp, 0)
+	fmt.Println(res)
+}
 
 func Test_study(t *testing.T) {
 	type A struct {

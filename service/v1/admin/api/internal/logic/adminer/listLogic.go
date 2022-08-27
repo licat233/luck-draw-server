@@ -2,6 +2,7 @@ package adminer
 
 import (
 	"context"
+	"fmt"
 	"luck_draw-server/service/v1/admin/api/internal/svc"
 	"luck_draw-server/service/v1/admin/api/internal/types"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
@@ -33,5 +34,6 @@ func (l *ListLogic) List(req *types.ListReq) (any, error) {
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println(resp.Data[0])
 	return respx.DefaultListResp(resp.Data, resp.Total, req.PageSize, req.Page, err)
 }

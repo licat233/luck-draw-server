@@ -9,7 +9,75 @@ current_path=$(
 )
 
 project_root="${current_path%%luck_draw*}luck_draw-server"
-cd "${project_root}/deploy/script"
+script_path="${project_root}/deploy/script"
+if [ ! -d $script_path ]; then
+    #如果目录不存在，则退出
+    echo "目录: ${script_path} 不存在"
+    return
+fi
+cd $script_path
+
+gen_api() {
+    name=$1
+    micro=$2
+    if [ "$micro" != "api" ]; then
+        return
+    fi
+    service_path="${project_root}/service/v1/${name}/api/docs"
+    if [ ! -d $service_path ]; then
+        #如果目录不存在，则退出
+        echo "目录: ${service_path} 不存在"
+        return
+    fi
+    cd $service_path
+    filename="${name}.api"
+    if [ ! -f $filename ]; then
+        #如果文件不存在，则退出
+        echo "文件: ${filename} 不存在"
+        return
+    fi
+    echo -e "\n开始生成${name}-${micro}服务..."
+    nohup=$(goctl api go -api $filename -dir=../ -style goZero)
+    echo "${name}-${micro}服务生成完成!"
+    #生成接口文档swagger.json
+    echo "生成接口文档swagger.json ...... "
+    goctl api plugin -plugin goctl-swagger="swagger -filename ../static/swagger.json" -api "${name}.api" -dir .
+    #生成typescript调用文件
+    echo "生成typescript调用文件 ...... "
+    goctl api ts -api "${name}.api" -dir ../static
+}
+
+gen_rpc() {
+    name=$1
+    micro=$2
+    if [ "$micro" != "rpc" ]; then
+        return
+    fi
+    service_path="${project_root}/service/v1/${name}/rpc/docs"
+    if [ ! -d $service_path ]; then
+        #如果目录不存在，则退出
+        echo "目录: ${service_path} 不存在"
+        return
+    fi
+    cd $service_path
+    filename="${name}.proto"
+    if [ ! -f $filename ]; then
+        #如果文件不存在，则退出
+        echo "文件: ${filename} 不存在"
+        return
+    fi
+    echo -e "\n开始生成${name}-${micro}服务..."
+    nohup=$(goctl rpc protoc $filename --go_out=../ --go-grpc_out=../ --zrpc_out=../ -style goZero)
+    pb_path="${project_root}/service/v1/${name}/rpc/${name}_pb"
+    if [ ! -d $pb_path ]; then
+        #如果目录不存在，则退出
+        echo "目录: ${pb_path} 不存在!!!"
+        return
+    fi
+    cd $pb_path
+    sed -i "" 's/,omitempty//g' "${name}.pb.go"
+    echo "${name}-${micro}服务生成完成!"
+}
 
 run() {
     filename=$1
@@ -25,7 +93,7 @@ run() {
         echo "文件: ${filename} 不存在"
         return
     fi
-    echo "启动 ${filename} 服务"
+    echo "后台启动 ${filename} 服务"
     rm -f "${service_path}/nohup.out"
     nohup "${service_path}/${filename}" &
     return
@@ -67,53 +135,25 @@ build_go() {
         echo "已终止进程：${filename} $pid"
     fi
 
-    echo "开始编译${filename} ...... "
+    echo -e "\n开始编译${filename} ...... "
     rm -f $filename
     go build -o $filename "${name}.go"
     echo "${filename} 编译完成"
     run $filename $service_path
 }
 
-build_swagger() {
-    name=$1
-    service_path="${project_root}/service/v1/${name}/api/docs"
-    if [ ! -d $service_path ]; then
-        #如果不存在，则退出
-        echo "目录: ${service_path} 不存在"
-        return
-    fi
-    cd $service_path
-    #生成接口文档swagger.json
-    echo "生成接口文档swagger.json ...... "
-    goctl api plugin -plugin goctl-swagger="swagger -filename ../static/swagger.json" -api "${name}.api" -dir .
-}
 
-build_ts() {
-    name=$1
-    service_path="${project_root}/service/v1/${name}/api/docs"
-    if [ ! -d $service_path ]; then
-        #如果不存在，则退出
-        echo "目录: ${service_path} 不存在"
-        return
-    fi
-    cd $service_path
-    #生成typescript调用文件
-    echo "生成typescript调用文件 ...... "
-    goctl api ts -api "${name}.api" -dir ../static
-}
 
 #选择要构建的服务
 service_name=$1
 all_services=()
 if [ -z $service_name ]; then
     all_services=("captcha" "admin" "luckdraw")
+elif [[ "$service_name" = "captcha" ]] || [[ "$service_name" = "admin" ]] || [[ "$service_name" = "luckdraw" ]]; then
+    all_services=($service_name)
 else
-    if [[ $service_name -eq "captcha" ]] || [[ $service_name -eq "admin" ]] || [[ $service_name -eq "luckdraw" ]]; then
-        all_services=($service_name)
-    else
-        echo "unknown service_name: ${service_name}"
-        exit
-    fi
+    echo "unknown service_name: ${service_name}"
+    exit
 fi
 
 #选择要构建的子服务
@@ -121,22 +161,20 @@ micro_name=$2
 all_micros=()
 if [ -z $micro_name ]; then
     all_micros=("rpc" "mq" "api")
+elif [[ "$micro_name" = "rpc" ]] || [[ "$micro_name" = "mq" ]] || [[ "$micro_name" = "api" ]]; then
+    all_micros=($micro_name)
 else
-    if [[ $micro -eq "rpc" ]] || [[ $micro -eq "mq" ]] || [[ $micro -eq "api" ]]; then
-        all_micros=($micro_name)
-    else
-        echo "unknown micro_name: ${micro}"
-        exit
-    fi
+    echo "unknown micro_name: ${micro_name}"
+    exit
 fi
 
 #开始遍历编译
 for name in ${all_services[*]}; do
     for micro in ${all_micros[*]}; do
+        gen_rpc $name $micro
+        gen_api $name $micro
         build_go $name $micro
     done
-    build_swagger ${name}
-    build_ts ${name}
 done
 
 echo "----------- Initialize successful -----------"

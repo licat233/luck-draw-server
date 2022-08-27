@@ -5,36 +5,37 @@ package luckdraw
 
 import (
 	"context"
-	luckdraw_pb2 "luck_draw-server/service/v1/luckdraw/rpc/luckdraw_pb"
+
+	"luck_draw-server/service/v1/luckdraw/rpc/luckdraw_pb"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 )
 
 type (
-	ActivePrizesReq   = luckdraw_pb2.ActivePrizesReq
-	ActivePrizesResp  = luckdraw_pb2.ActivePrizesResp
-	Activity          = luckdraw_pb2.Activity
-	GenerateTokenReq  = luckdraw_pb2.GenerateTokenReq
-	GenerateTokenResp = luckdraw_pb2.GenerateTokenResp
-	GetLuckerListReq  = luckdraw_pb2.GetLuckerListReq
-	GetLuckerListResp = luckdraw_pb2.GetLuckerListResp
-	GoodluckReq       = luckdraw_pb2.GoodluckReq
-	GoodluckResp      = luckdraw_pb2.GoodluckResp
-	IdentifyReq       = luckdraw_pb2.IdentifyReq
-	IdentifyResp      = luckdraw_pb2.IdentifyResp
-	JwtData           = luckdraw_pb2.JwtData
-	JwtToken          = luckdraw_pb2.JwtToken
-	Lucker            = luckdraw_pb2.Lucker
-	LuckerDetail      = luckdraw_pb2.LuckerDetail
-	Prize             = luckdraw_pb2.Prize
-	PrizesPool        = luckdraw_pb2.PrizesPool
-	SearchLuckerReq   = luckdraw_pb2.SearchLuckerReq
-	SearchLuckerResp  = luckdraw_pb2.SearchLuckerResp
-	SelectPrizesReq   = luckdraw_pb2.SelectPrizesReq
-	SelectPrizesResp  = luckdraw_pb2.SelectPrizesResp
-	User              = luckdraw_pb2.User
-	UsersPool         = luckdraw_pb2.UsersPool
+	ActivePrizesReq   = luckdraw_pb.ActivePrizesReq
+	ActivePrizesResp  = luckdraw_pb.ActivePrizesResp
+	Activity          = luckdraw_pb.Activity
+	GenerateTokenReq  = luckdraw_pb.GenerateTokenReq
+	GenerateTokenResp = luckdraw_pb.GenerateTokenResp
+	GetLuckerListReq  = luckdraw_pb.GetLuckerListReq
+	GetLuckerListResp = luckdraw_pb.GetLuckerListResp
+	GoodluckReq       = luckdraw_pb.GoodluckReq
+	GoodluckResp      = luckdraw_pb.GoodluckResp
+	IdentifyReq       = luckdraw_pb.IdentifyReq
+	IdentifyResp      = luckdraw_pb.IdentifyResp
+	JwtData           = luckdraw_pb.JwtData
+	JwtToken          = luckdraw_pb.JwtToken
+	Lucker            = luckdraw_pb.Lucker
+	LuckerDetail      = luckdraw_pb.LuckerDetail
+	Prize             = luckdraw_pb.Prize
+	PrizesPool        = luckdraw_pb.PrizesPool
+	SearchLuckerReq   = luckdraw_pb.SearchLuckerReq
+	SearchLuckerResp  = luckdraw_pb.SearchLuckerResp
+	SelectPrizesReq   = luckdraw_pb.SelectPrizesReq
+	SelectPrizesResp  = luckdraw_pb.SelectPrizesResp
+	User              = luckdraw_pb.User
+	UsersPool         = luckdraw_pb.UsersPool
 
 	Luckdraw interface {
 		// 获取某活动的奖品
@@ -66,42 +67,42 @@ func NewLuckdraw(cli zrpc.Client) Luckdraw {
 
 // 获取某活动的奖品
 func (m *defaultLuckdraw) GetActivePrizes(ctx context.Context, in *ActivePrizesReq, opts ...grpc.CallOption) (*ActivePrizesResp, error) {
-	client := luckdraw_pb2.NewLuckdrawClient(m.cli.Conn())
+	client := luckdraw_pb.NewLuckdrawClient(m.cli.Conn())
 	return client.GetActivePrizes(ctx, in, opts...)
 }
 
 // 查询某用户在某活动里的中奖名单
 func (m *defaultLuckdraw) GetLuckerList(ctx context.Context, in *GetLuckerListReq, opts ...grpc.CallOption) (*GetLuckerListResp, error) {
-	client := luckdraw_pb2.NewLuckdrawClient(m.cli.Conn())
+	client := luckdraw_pb.NewLuckdrawClient(m.cli.Conn())
 	return client.GetLuckerList(ctx, in, opts...)
 }
 
 // 抽奖凭证校验，验证用户身份，颁发jwt
 func (m *defaultLuckdraw) Identify(ctx context.Context, in *IdentifyReq, opts ...grpc.CallOption) (*IdentifyResp, error) {
-	client := luckdraw_pb2.NewLuckdrawClient(m.cli.Conn())
+	client := luckdraw_pb.NewLuckdrawClient(m.cli.Conn())
 	return client.Identify(ctx, in, opts...)
 }
 
 // 抽取奖品
 func (m *defaultLuckdraw) Goodluck(ctx context.Context, in *GoodluckReq, opts ...grpc.CallOption) (*GoodluckResp, error) {
-	client := luckdraw_pb2.NewLuckdrawClient(m.cli.Conn())
+	client := luckdraw_pb.NewLuckdrawClient(m.cli.Conn())
 	return client.Goodluck(ctx, in, opts...)
 }
 
 // 根据passport查询用户的中奖信息
 func (m *defaultLuckdraw) SearchLucker(ctx context.Context, in *SearchLuckerReq, opts ...grpc.CallOption) (*SearchLuckerResp, error) {
-	client := luckdraw_pb2.NewLuckdrawClient(m.cli.Conn())
+	client := luckdraw_pb.NewLuckdrawClient(m.cli.Conn())
 	return client.SearchLucker(ctx, in, opts...)
 }
 
 // 用户确认认领奖品名单，记得把剩余的改为弃领状态
 func (m *defaultLuckdraw) SelectPrizes(ctx context.Context, in *SelectPrizesReq, opts ...grpc.CallOption) (*SelectPrizesResp, error) {
-	client := luckdraw_pb2.NewLuckdrawClient(m.cli.Conn())
+	client := luckdraw_pb.NewLuckdrawClient(m.cli.Conn())
 	return client.SelectPrizes(ctx, in, opts...)
 }
 
 // 生产jwtToken
 func (m *defaultLuckdraw) GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error) {
-	client := luckdraw_pb2.NewLuckdrawClient(m.cli.Conn())
+	client := luckdraw_pb.NewLuckdrawClient(m.cli.Conn())
 	return client.GenerateToken(ctx, in, opts...)
 }

@@ -2,7 +2,7 @@
 set -m
 
 #判断brew是否存在
-if command -v brew >/dev/null 2>&1; then
+if false && command -v brew >/dev/null 2>&1; then
     #启动redis
     brew services start redis
 

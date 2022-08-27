@@ -31,16 +31,6 @@ func (l *PutActivityLogic) PutActivity(in *admin_pb.Activity) (*admin_pb.StatusR
 	if in == nil {
 		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
-	//开始时间戳转化为time.Time
-	startTime, err := utils.Int64ToTime(in.StartTime)
-	if err != nil {
-		return nil, errorx.ExtRpcErr(errorx.ErrInvalidParam)
-	}
-	//结束时间戳转化为time.Time
-	endTime, err := utils.Int64ToTime(in.EndTime)
-	if err != nil {
-		return nil, errorx.ExtRpcErr(errorx.ErrInvalidParam)
-	}
 	//构建model.activity
 	activity := &model.Activity{
 		Id:        in.Id,
@@ -51,12 +41,12 @@ func (l *PutActivityLogic) PutActivity(in *admin_pb.Activity) (*admin_pb.StatusR
 		Pattern:   int64(in.Pattern),
 		MaxCount:  in.MaxCount,
 		MaxPrizes: in.MaxPrizes,
-		StartTime: startTime,
-		EndTime:   endTime,
+		StartTime: utils.Int64ToTime(in.StartTime),
+		EndTime:   utils.Int64ToTime(in.EndTime),
 	}
 
 	//更新数据
-	if err = l.svcCtx.ActivityModel.Update(l.ctx, activity); err != nil {
+	if err := l.svcCtx.ActivityModel.Update(l.ctx, activity); err != nil {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
