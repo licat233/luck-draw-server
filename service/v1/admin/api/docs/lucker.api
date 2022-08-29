@@ -66,4 +66,8 @@ service admin-api {
     @doc "删除抽奖者"
 	@handler del 
 	delete /(luckerDelReq) returns(BaseResp)
+
+    @doc "枚举列表"
+	@handler enumList
+	get /enumList returns([]Enum)
 }

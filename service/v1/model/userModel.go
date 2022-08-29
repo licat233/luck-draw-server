@@ -140,6 +140,9 @@ func (m *customUserModel) FindCount(ctx context.Context) (int64, error) {
 
 func (m *customUserModel) FindList(ctx context.Context, pageSize, page int64) ([]*User, error) {
 	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0' limit %v,%v", userRows, m.table, (page-1)*pageSize, pageSize)
+	if pageSize < 0 || page < 0 {
+		query = fmt.Sprintf("select %s from %s where `is_deleted`= '0'", projectRows, m.table)
+	}
 	var resp []*User
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {

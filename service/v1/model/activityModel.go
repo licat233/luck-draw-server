@@ -121,6 +121,9 @@ func (m *customActivityModel) FindCount(ctx context.Context) (int64, error) {
 
 func (m *customActivityModel) FindList(ctx context.Context, pageSize, page int64) ([]*Activity, error) {
 	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0' limit %v,%v", activityRows, m.table, (page-1)*pageSize, pageSize)
+	if pageSize < 0 || page < 0 {
+		query = fmt.Sprintf("select %s from %s where `is_deleted`= '0'", projectRows, m.table)
+	}
 	var resp []*Activity
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {

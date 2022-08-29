@@ -95,6 +95,11 @@ export interface EmailCaptchaVerifyReq {
 	solution: string
 }
 
+export interface Enum {
+	label: string
+	value: string
+}
+
 export interface Activity {
 	id: number // 表主键
 	uuid: string // 唯一识别码

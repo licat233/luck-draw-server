@@ -90,6 +90,11 @@ type EmailCaptchaVerifyReq struct {
 	Solution  string `json:"solution"`
 }
 
+type Enum struct {
+	Label string `json:"label"`
+	Value string `json:"value"`
+}
+
 type Activity struct {
 	Id        int64  `json:"id"`         // 表主键
 	Uuid      string `json:"uuid"`       // 唯一识别码

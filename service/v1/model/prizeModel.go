@@ -188,6 +188,9 @@ func (m *customPrizeModel) FindsByUserAndActivityAndStatus(ctx context.Context, 
 
 func (m *customPrizeModel) FindList(ctx context.Context, pageSize, page int64) ([]*Prize, error) {
 	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0' limit %v,%v", prizeRows, m.table, (page-1)*pageSize, pageSize)
+	if pageSize < 0 || page < 0 {
+		query = fmt.Sprintf("select %s from %s where `is_deleted`= '0'", projectRows, m.table)
+	}
 	var resp []*Prize
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {

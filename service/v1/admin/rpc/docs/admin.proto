@@ -210,7 +210,7 @@ message ItemReq{
 message StatusResp {
 }
 
-//添加单挑数据响应
+//添加单条数据响应
 message AddActivityResp{
   Activity activity = 1;
 }
@@ -243,7 +243,7 @@ message AddUsersPoolResp{
   UsersPool users_pool = 1;
 }
 
-//获取单挑数据响应
+//获取单条数据响应
 message GetActivityResp{
   Activity activity = 1;
 }
@@ -317,6 +317,20 @@ message GetUsersPoolListResp {
   int64 total = 2;
 }
 
+//枚举基本类型
+message Enum {
+  string label = 1;
+  string value = 2;
+}
+
+message EnumListReq{
+}
+
+//枚举列表
+message EnumListResp{
+  repeated Enum data = 1;
+}
+
 
 service Admin {
   //生产token
@@ -383,5 +397,12 @@ service Admin {
   rpc AddUsersPool (UsersPool) returns (AddUsersPoolResp);
   rpc PutUsersPool (UsersPool) returns (StatusResp);
   rpc DelUsersPool (ItemReq) returns (StatusResp);
+
+  rpc GetAdminerEnumList (EnumListReq) returns (EnumListResp);
+  rpc GetProjectEnumList (EnumListReq) returns (EnumListResp);
+  rpc GetActivityEnumList (EnumListReq) returns (EnumListResp);
+  rpc GetPrizeEnumList (EnumListReq) returns (EnumListResp);
+  rpc GetLuckerEnumList (EnumListReq) returns (EnumListResp);
+  rpc GetUserEnumList (EnumListReq) returns (EnumListResp);
 }
 

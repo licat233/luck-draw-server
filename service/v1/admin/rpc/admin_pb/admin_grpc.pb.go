@@ -78,6 +78,12 @@ type AdminClient interface {
 	AddUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*AddUsersPoolResp, error)
 	PutUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*StatusResp, error)
 	DelUsersPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
+	GetAdminerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+	GetProjectEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+	GetActivityEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+	GetPrizeEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+	GetLuckerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+	GetUserEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 }
 
 type adminClient struct {
@@ -520,6 +526,60 @@ func (c *adminClient) DelUsersPool(ctx context.Context, in *ItemReq, opts ...grp
 	return out, nil
 }
 
+func (c *adminClient) GetAdminerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+	out := new(EnumListResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetAdminerEnumList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminClient) GetProjectEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+	out := new(EnumListResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetProjectEnumList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminClient) GetActivityEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+	out := new(EnumListResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetActivityEnumList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminClient) GetPrizeEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+	out := new(EnumListResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetPrizeEnumList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminClient) GetLuckerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+	out := new(EnumListResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetLuckerEnumList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminClient) GetUserEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+	out := new(EnumListResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetUserEnumList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdminServer is the server API for Admin service.
 // All implementations must embed UnimplementedAdminServer
 // for forward compatibility
@@ -580,6 +640,12 @@ type AdminServer interface {
 	AddUsersPool(context.Context, *UsersPool) (*AddUsersPoolResp, error)
 	PutUsersPool(context.Context, *UsersPool) (*StatusResp, error)
 	DelUsersPool(context.Context, *ItemReq) (*StatusResp, error)
+	GetAdminerEnumList(context.Context, *EnumListReq) (*EnumListResp, error)
+	GetProjectEnumList(context.Context, *EnumListReq) (*EnumListResp, error)
+	GetActivityEnumList(context.Context, *EnumListReq) (*EnumListResp, error)
+	GetPrizeEnumList(context.Context, *EnumListReq) (*EnumListResp, error)
+	GetLuckerEnumList(context.Context, *EnumListReq) (*EnumListResp, error)
+	GetUserEnumList(context.Context, *EnumListReq) (*EnumListResp, error)
 	mustEmbedUnimplementedAdminServer()
 }
 
@@ -730,6 +796,24 @@ func (UnimplementedAdminServer) PutUsersPool(context.Context, *UsersPool) (*Stat
 }
 func (UnimplementedAdminServer) DelUsersPool(context.Context, *ItemReq) (*StatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelUsersPool not implemented")
+}
+func (UnimplementedAdminServer) GetAdminerEnumList(context.Context, *EnumListReq) (*EnumListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAdminerEnumList not implemented")
+}
+func (UnimplementedAdminServer) GetProjectEnumList(context.Context, *EnumListReq) (*EnumListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProjectEnumList not implemented")
+}
+func (UnimplementedAdminServer) GetActivityEnumList(context.Context, *EnumListReq) (*EnumListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetActivityEnumList not implemented")
+}
+func (UnimplementedAdminServer) GetPrizeEnumList(context.Context, *EnumListReq) (*EnumListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPrizeEnumList not implemented")
+}
+func (UnimplementedAdminServer) GetLuckerEnumList(context.Context, *EnumListReq) (*EnumListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLuckerEnumList not implemented")
+}
+func (UnimplementedAdminServer) GetUserEnumList(context.Context, *EnumListReq) (*EnumListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserEnumList not implemented")
 }
 func (UnimplementedAdminServer) mustEmbedUnimplementedAdminServer() {}
 
@@ -1608,6 +1692,114 @@ func _Admin_DelUsersPool_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Admin_GetAdminerEnumList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EnumListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).GetAdminerEnumList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/GetAdminerEnumList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).GetAdminerEnumList(ctx, req.(*EnumListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Admin_GetProjectEnumList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EnumListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).GetProjectEnumList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/GetProjectEnumList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).GetProjectEnumList(ctx, req.(*EnumListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Admin_GetActivityEnumList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EnumListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).GetActivityEnumList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/GetActivityEnumList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).GetActivityEnumList(ctx, req.(*EnumListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Admin_GetPrizeEnumList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EnumListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).GetPrizeEnumList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/GetPrizeEnumList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).GetPrizeEnumList(ctx, req.(*EnumListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Admin_GetLuckerEnumList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EnumListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).GetLuckerEnumList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/GetLuckerEnumList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).GetLuckerEnumList(ctx, req.(*EnumListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Admin_GetUserEnumList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EnumListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).GetUserEnumList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/GetUserEnumList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).GetUserEnumList(ctx, req.(*EnumListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Admin_ServiceDesc is the grpc.ServiceDesc for Admin service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1806,6 +1998,30 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DelUsersPool",
 			Handler:    _Admin_DelUsersPool_Handler,
+		},
+		{
+			MethodName: "GetAdminerEnumList",
+			Handler:    _Admin_GetAdminerEnumList_Handler,
+		},
+		{
+			MethodName: "GetProjectEnumList",
+			Handler:    _Admin_GetProjectEnumList_Handler,
+		},
+		{
+			MethodName: "GetActivityEnumList",
+			Handler:    _Admin_GetActivityEnumList_Handler,
+		},
+		{
+			MethodName: "GetPrizeEnumList",
+			Handler:    _Admin_GetPrizeEnumList_Handler,
+		},
+		{
+			MethodName: "GetLuckerEnumList",
+			Handler:    _Admin_GetLuckerEnumList_Handler,
+		},
+		{
+			MethodName: "GetUserEnumList",
+			Handler:    _Admin_GetUserEnumList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

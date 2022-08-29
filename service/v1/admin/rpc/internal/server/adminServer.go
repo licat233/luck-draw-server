@@ -269,3 +269,33 @@ func (s *AdminServer) DelUsersPool(ctx context.Context, in *admin_pb.ItemReq) (*
 	l := logic.NewDelUsersPoolLogic(ctx, s.svcCtx)
 	return l.DelUsersPool(in)
 }
+
+func (s *AdminServer) GetAdminerEnumList(ctx context.Context, in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
+	l := logic.NewGetAdminerEnumListLogic(ctx, s.svcCtx)
+	return l.GetAdminerEnumList(in)
+}
+
+func (s *AdminServer) GetProjectEnumList(ctx context.Context, in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
+	l := logic.NewGetProjectEnumListLogic(ctx, s.svcCtx)
+	return l.GetProjectEnumList(in)
+}
+
+func (s *AdminServer) GetActivityEnumList(ctx context.Context, in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
+	l := logic.NewGetActivityEnumListLogic(ctx, s.svcCtx)
+	return l.GetActivityEnumList(in)
+}
+
+func (s *AdminServer) GetPrizeEnumList(ctx context.Context, in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
+	l := logic.NewGetPrizeEnumListLogic(ctx, s.svcCtx)
+	return l.GetPrizeEnumList(in)
+}
+
+func (s *AdminServer) GetLuckerEnumList(ctx context.Context, in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
+	l := logic.NewGetLuckerEnumListLogic(ctx, s.svcCtx)
+	return l.GetLuckerEnumList(in)
+}
+
+func (s *AdminServer) GetUserEnumList(ctx context.Context, in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
+	l := logic.NewGetUserEnumListLogic(ctx, s.svcCtx)
+	return l.GetUserEnumList(in)
+}

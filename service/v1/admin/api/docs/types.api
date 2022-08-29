@@ -71,3 +71,8 @@ type EmailCaptchaVerifyReq {
 	CaptchaId string `json:"captcha_id"`
 	Solution  string `json:"solution"`
 }
+
+type Enum {
+	Label string `json:"label"`
+	Value string `json:"value"`
+}

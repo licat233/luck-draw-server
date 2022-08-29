@@ -23,6 +23,9 @@ type (
 	AddUserResp           = admin_pb.AddUserResp
 	AddUsersPoolResp      = admin_pb.AddUsersPoolResp
 	Adminer               = admin_pb.Adminer
+	Enum                  = admin_pb.Enum
+	EnumListReq           = admin_pb.EnumListReq
+	EnumListResp          = admin_pb.EnumListResp
 	ExsitEmailReq         = admin_pb.ExsitEmailReq
 	ExsitEmailResp        = admin_pb.ExsitEmailResp
 	FindByEmailReq        = admin_pb.FindByEmailReq
@@ -125,6 +128,12 @@ type (
 		AddUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*AddUsersPoolResp, error)
 		PutUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*StatusResp, error)
 		DelUsersPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
+		GetAdminerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+		GetProjectEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+		GetActivityEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+		GetPrizeEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+		GetLuckerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+		GetUserEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 	}
 
 	defaultAdmin struct {
@@ -384,4 +393,34 @@ func (m *defaultAdmin) PutUsersPool(ctx context.Context, in *UsersPool, opts ...
 func (m *defaultAdmin) DelUsersPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.DelUsersPool(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) GetAdminerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.GetAdminerEnumList(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) GetProjectEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.GetProjectEnumList(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) GetActivityEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.GetActivityEnumList(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) GetPrizeEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.GetPrizeEnumList(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) GetLuckerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.GetLuckerEnumList(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) GetUserEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.GetUserEnumList(ctx, in, opts...)
 }

@@ -88,4 +88,8 @@ service admin-api {
 	@doc "管理员修改自己的账号信息"
 	@handler modify
 	post /modify(adminerModifyReq) returns(BaseResp)
+
+  @doc "枚举列表"
+	@handler enumList
+	get /enumList returns([]Enum)
 }

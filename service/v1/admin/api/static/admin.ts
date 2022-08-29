@@ -96,6 +96,13 @@ export function del(req: components.ActivityDelReq) {
 }
 
 /**
+ * @description "枚举列表"
+ */
+export function enumList() {
+	return webapi.get<Array<components.Enum>>("/v1/api/admin/activity/enumList")
+}
+
+/**
  * @description "获取管理员列表"
  * @param req
  */
@@ -144,6 +151,13 @@ export function modify(req: components.AdminerModifyReq) {
 }
 
 /**
+ * @description "枚举列表"
+ */
+export function enumList() {
+	return webapi.get<Array<components.Enum>>("/v1/api/admin/adminer/enumList")
+}
+
+/**
  * @description "获取抽奖者列表"
  * @param req
  */
@@ -184,6 +198,13 @@ export function del(req: components.LuckerDelReq) {
 }
 
 /**
+ * @description "枚举列表"
+ */
+export function enumList() {
+	return webapi.get<Array<components.Enum>>("/v1/api/admin/lucker/enumList")
+}
+
+/**
  * @description "获取奖品列表"
  * @param req
  */
@@ -221,6 +242,13 @@ export function put(req: components.PrizePutReq) {
  */
 export function del(req: components.PrizeDelReq) {
 	return webapi.delete<components.BaseResp>("/v1/api/admin/prize", req)
+}
+
+/**
+ * @description "枚举列表"
+ */
+export function enumList() {
+	return webapi.get<Array<components.Enum>>("/v1/api/admin/prize/enumList")
 }
 
 /**
@@ -301,6 +329,13 @@ export function put(req: components.ProjectPutReq) {
  */
 export function del(req: components.ProjectDelReq) {
 	return webapi.delete<components.BaseResp>("/v1/api/admin/project", req)
+}
+
+/**
+ * @description "枚举列表"
+ */
+export function enumList() {
+	return webapi.get<Array<components.Enum>>("/v1/api/admin/project/enumList")
 }
 
 /**
@@ -442,6 +477,13 @@ export function put(req: components.UserPutReq) {
  */
 export function del(req: components.UserDelReq) {
 	return webapi.delete<components.BaseResp>("/v1/api/admin/user", req)
+}
+
+/**
+ * @description "枚举列表"
+ */
+export function enumList() {
+	return webapi.get<Array<components.Enum>>("/v1/api/admin/user/enumList")
 }
 
 /**

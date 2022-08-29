@@ -75,5 +75,9 @@ service admin-api {
   @doc "删除活动"
   @handler del 
   delete /(activityDelReq) returns(BaseResp)
+
+  @doc "枚举列表"
+	@handler enumList
+	get /enumList returns([]Enum)
 }
 

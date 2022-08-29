@@ -263,6 +263,24 @@
         ]
       }
     },
+    "/v1/api/admin/activity/enumList": {
+      "get": {
+        "summary": "枚举列表",
+        "operationId": "enumList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/[]Enum"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "activity"
+        ]
+      }
+    },
     "/v1/api/admin/activity/list": {
       "get": {
         "summary": "获取活动列表",
@@ -400,6 +418,24 @@
             }
           }
         ],
+        "requestBody": {},
+        "tags": [
+          "adminer"
+        ]
+      }
+    },
+    "/v1/api/admin/adminer/enumList": {
+      "get": {
+        "summary": "枚举列表",
+        "operationId": "enumList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/[]Enum"
+            }
+          }
+        },
         "requestBody": {},
         "tags": [
           "adminer"
@@ -726,6 +762,24 @@
         ]
       }
     },
+    "/v1/api/admin/lucker/enumList": {
+      "get": {
+        "summary": "枚举列表",
+        "operationId": "enumList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/[]Enum"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "lucker"
+        ]
+      }
+    },
     "/v1/api/admin/lucker/list": {
       "get": {
         "summary": "获取抽奖者列表",
@@ -869,6 +923,24 @@
         ]
       }
     },
+    "/v1/api/admin/prize/enumList": {
+      "get": {
+        "summary": "枚举列表",
+        "operationId": "enumList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/[]Enum"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "prize"
+        ]
+      }
+    },
     "/v1/api/admin/prize/list": {
       "get": {
         "summary": "获取奖品列表",
@@ -1006,6 +1078,24 @@
             }
           }
         ],
+        "requestBody": {},
+        "tags": [
+          "project"
+        ]
+      }
+    },
+    "/v1/api/admin/project/enumList": {
+      "get": {
+        "summary": "枚举列表",
+        "operationId": "enumList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/[]Enum"
+            }
+          }
+        },
         "requestBody": {},
         "tags": [
           "project"
@@ -1528,6 +1618,24 @@
         ]
       }
     },
+    "/v1/api/admin/user/enumList": {
+      "get": {
+        "summary": "枚举列表",
+        "operationId": "enumList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/[]Enum"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "user"
+        ]
+      }
+    },
     "/v1/api/admin/user/list": {
       "get": {
         "summary": "获取用户列表",
@@ -1854,6 +1962,22 @@
         "email",
         "captcha_id",
         "solution"
+      ]
+    },
+    "Enum": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": "Enum",
+      "required": [
+        "label",
+        "value"
       ]
     },
     "IdReq": {
