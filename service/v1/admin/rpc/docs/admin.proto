@@ -320,7 +320,7 @@ message GetUsersPoolListResp {
 //枚举基本类型
 message Enum {
   string label = 1;
-  string value = 2;
+  int64 value = 2;
 }
 
 message EnumListReq{

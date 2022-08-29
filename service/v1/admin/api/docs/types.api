@@ -74,5 +74,5 @@ type EmailCaptchaVerifyReq {
 
 type Enum {
 	Label string `json:"label"`
-	Value string `json:"value"`
+	Value int64 `json:"value"`
 }

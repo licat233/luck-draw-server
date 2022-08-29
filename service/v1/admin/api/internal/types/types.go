@@ -92,7 +92,7 @@ type EmailCaptchaVerifyReq struct {
 
 type Enum struct {
 	Label string `json:"label"`
-	Value string `json:"value"`
+	Value int64  `json:"value"`
 }
 
 type Activity struct {

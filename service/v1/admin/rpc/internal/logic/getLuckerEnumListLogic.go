@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 
 	"luck_draw-server/common/errorx"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
@@ -35,8 +34,8 @@ func (l *GetLuckerEnumListLogic) GetLuckerEnumList(in *admin_pb.EnumListReq) (*a
 	data := []*admin_pb.Enum{}
 	for _, item := range list {
 		data = append(data, &admin_pb.Enum{
-			Label: fmt.Sprint(item.Id),
-			Value: item.Uuid,
+			Label: item.Uuid,
+			Value: item.Id,
 		})
 	}
 	return &admin_pb.EnumListResp{

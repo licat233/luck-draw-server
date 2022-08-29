@@ -1971,7 +1971,8 @@
           "type": "string"
         },
         "value": {
-          "type": "string"
+          "type": "integer",
+          "format": "int64"
         }
       },
       "title": "Enum",

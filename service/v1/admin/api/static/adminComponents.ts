@@ -97,7 +97,7 @@ export interface EmailCaptchaVerifyReq {
 
 export interface Enum {
 	label: string
-	value: string
+	value: number
 }
 
 export interface Activity {
