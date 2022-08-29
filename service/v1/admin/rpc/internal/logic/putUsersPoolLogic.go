@@ -35,7 +35,7 @@ func (l *PutUsersPoolLogic) PutUsersPool(in *admin_pb.UsersPool) (*admin_pb.Stat
 		Uuid:       in.Uuid,
 		ActivityId: in.ActivityId,
 		UserId:     in.UserId,
-		Status:     int64(in.Status),
+		Status:     in.Status,
 		Score:      in.Score,
 	}
 

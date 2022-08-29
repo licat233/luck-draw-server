@@ -29,7 +29,7 @@ func (l *AddLogic) Add(req *types.UsersPoolAddReq) (any, error) {
 	resp, err := l.svcCtx.AdminRpc.AddUsersPool(l.ctx, &admin_pb.UsersPool{
 		ActivityId: req.ActivityId,
 		UserId:     req.UserId,
-		Status:     int32(req.Status),
+		Status:     req.Status,
 		Score:      req.Score,
 	})
 	if err != nil {

@@ -32,7 +32,7 @@ func (l *AddLogic) Add(req *types.ProjectAddReq) (any, error) {
 	}
 	resp, err := l.svcCtx.AdminRpc.AddProject(l.ctx, &admin_pb.Project{
 		Name:   req.Name,
-		Status: int32(req.Status),
+		Status: req.Status,
 	})
 	if err != nil {
 		return nil, err

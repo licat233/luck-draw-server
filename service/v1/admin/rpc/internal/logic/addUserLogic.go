@@ -39,7 +39,7 @@ func (l *AddUserLogic) AddUser(in *admin_pb.User) (*admin_pb.AddUserResp, error)
 		Name:     in.Name,
 		Address:  in.Address,
 		Score:    in.Score,
-		Status:   int64(in.Status),
+		Status:   in.Status,
 	}
 	result, err := l.svcCtx.UserModel.Insert(l.ctx, data)
 	if err != nil {

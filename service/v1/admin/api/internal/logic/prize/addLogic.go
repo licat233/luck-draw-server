@@ -34,7 +34,7 @@ func (l *AddLogic) Add(req *types.PrizeAddReq) (any, error) {
 		Name:   req.Name,
 		Image:  req.Image,
 		Price:  req.Price,
-		Status: int32(req.Status),
+		Status: req.Status,
 	})
 	if err != nil {
 		return nil, err

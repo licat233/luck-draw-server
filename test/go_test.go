@@ -6,6 +6,23 @@ import (
 	"time"
 )
 
+type A struct {
+	Name string
+}
+
+type B struct {
+	Name string
+}
+
+func TestX(t *testing.T) {
+	a := A{
+		Name: "licat",
+	}
+	b := B(a)
+	_ = b
+	fmt.Printf("b: %+v", b)
+}
+
 func Test_unix(t *testing.T) {
 	var timestamp int64 = 1661245897000
 	res := time.Unix(timestamp, 0)

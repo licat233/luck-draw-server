@@ -36,7 +36,7 @@ func (l *PutPrizeLogic) PutPrize(in *admin_pb.Prize) (*admin_pb.StatusResp, erro
 		Name:   in.Name,
 		Image:  in.Image,
 		Price:  in.Price,
-		Status: int64(in.Status),
+		Status: in.Status,
 	}
 
 	if err := l.svcCtx.PrizeModel.Update(l.ctx, data); err != nil {

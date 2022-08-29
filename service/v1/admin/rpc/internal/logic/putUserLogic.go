@@ -39,8 +39,10 @@ func (l *PutUserLogic) PutUser(in *admin_pb.User) (*admin_pb.StatusResp, error) 
 		Name:     in.Name,
 		Address:  in.Address,
 		Score:    in.Score,
-		Status:   int64(in.Status),
+		Status:   in.Status,
 	}
+
+	// muser := model.User(in)
 
 	if err := l.svcCtx.UserModel.Update(l.ctx, data); err != nil {
 		logx.Error(err)

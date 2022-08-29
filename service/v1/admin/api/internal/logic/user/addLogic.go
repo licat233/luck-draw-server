@@ -37,7 +37,7 @@ func (l *AddLogic) Add(req *types.UserAddReq) (any, error) {
 		Name:     req.Name,
 		Address:  req.Address,
 		Score:    req.Score,
-		Status:   int32(req.Status),
+		Status:   req.Status,
 	})
 	if err != nil {
 		return nil, err

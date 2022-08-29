@@ -39,7 +39,7 @@ func (l *PutLogic) Put(req *types.UserPutReq) (any, error) {
 		Name:     req.Name,
 		Address:  req.Address,
 		Score:    req.Score,
-		Status:   int32(req.Status),
+		Status:   req.Status,
 	})
 	if err != nil {
 		return nil, err

@@ -31,7 +31,7 @@ func (l *PutLogic) Put(req *types.LuckerPutReq) (any, error) {
 		Uuid:         req.Uuid,
 		UserId:       req.Id,
 		PrizesPoolId: req.PrizesPoolId,
-		Status:       int32(req.Status),
+		Status:       req.Status,
 		LuckDate:     req.LuckDate,
 		Ip:           req.Ip,
 	})

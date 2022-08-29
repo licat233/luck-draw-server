@@ -36,7 +36,7 @@ func (l *AddPrizeLogic) AddPrize(in *admin_pb.Prize) (*admin_pb.AddPrizeResp, er
 		Name:   in.Name,
 		Image:  in.Image,
 		Price:  in.Price,
-		Status: int64(in.Status),
+		Status: in.Status,
 	}
 	result, err := l.svcCtx.PrizeModel.Insert(l.ctx, data)
 	if err != nil {

@@ -34,7 +34,7 @@ func (l *PutLogic) Put(req *types.ProjectPutReq) (any, error) {
 		Id:     req.Id,
 		Uuid:   req.Uuid,
 		Name:   req.Name,
-		Status: int32(req.Status),
+		Status: req.Status,
 	})
 	if err != nil {
 		return nil, err

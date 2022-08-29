@@ -29,7 +29,7 @@ func (l *AddLogic) Add(req *types.LuckerAddReq) (any, error) {
 	resp, err := l.svcCtx.AdminRpc.AddLucker(l.ctx, &admin_pb.Lucker{
 		UserId:       req.UserId,
 		PrizesPoolId: req.PrizesPoolId,
-		Status:       int32(req.Status),
+		Status:       req.Status,
 		LuckDate:     0,
 		Ip:           req.Ip,
 	})

@@ -34,8 +34,8 @@ func (l *AddLogic) Add(req *types.ActivityAddReq) (any, error) {
 	resp, err := l.svcCtx.AdminRpc.AddActivity(l.ctx, &admin_pb.Activity{
 		Name:      req.Name,
 		ProjectId: req.ProjectId,
-		Status:    false,
-		Pattern:   int32(req.Pattern),
+		Status:    0,
+		Pattern:   req.Pattern,
 		MaxCount:  req.MaxCount,
 		MaxPrizes: req.MaxPrizes,
 		StartTime: req.StartTime,

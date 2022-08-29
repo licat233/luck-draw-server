@@ -36,7 +36,7 @@ func (l *PutLuckerLogic) PutLucker(in *admin_pb.Lucker) (*admin_pb.StatusResp, e
 		Uuid:         in.Uuid,
 		UserId:       in.UserId,
 		PrizesPoolId: in.PrizesPoolId,
-		Status:       int64(in.Status),
+		Status:       in.Status,
 		LuckDate:     utils.Int64ToTime(in.LuckDate),
 		Ip:           in.Ip,
 	}

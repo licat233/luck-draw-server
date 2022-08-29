@@ -5,7 +5,6 @@ import (
 
 	"luck_draw-server/common/errorx"
 	"luck_draw-server/common/respx"
-	"luck_draw-server/common/utils"
 	"luck_draw-server/service/v1/admin/api/internal/svc"
 	"luck_draw-server/service/v1/admin/api/internal/types"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
@@ -36,8 +35,8 @@ func (l *PutLogic) Put(req *types.ActivityPutReq) (any, error) {
 		Uuid:      req.Uuid,
 		Name:      req.Name,
 		ProjectId: req.ProjectId,
-		Status:    utils.Int64ToBool(req.Status),
-		Pattern:   int32(req.Pattern),
+		Status:    req.Status,
+		Pattern:   req.Pattern,
 		MaxCount:  req.MaxCount,
 		MaxPrizes: req.MaxPrizes,
 		StartTime: req.StartTime,

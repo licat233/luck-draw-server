@@ -31,7 +31,7 @@ func (l *AddLogic) Add(req *types.PrizesPoolAddReq) (any, error) {
 		ActivityId: req.ActivityId,
 		PrizeId:    req.PrizeId,
 		LuckValue:  req.LuckValue,
-		Status:     int32(req.Status),
+		Status:     req.Status,
 		GradeName:  req.GradeName,
 		IsWin:      utils.Int64ToBool(req.IsWin),
 		Number:     req.Number,

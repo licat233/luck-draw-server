@@ -34,7 +34,7 @@ func (l *PutProjectLogic) PutProject(in *admin_pb.Project) (*admin_pb.StatusResp
 		Id:     in.Id,
 		Uuid:   in.Uuid,
 		Name:   in.Name,
-		Status: int64(in.Status),
+		Status: in.Status,
 	}
 
 	if err := l.svcCtx.ProjectModel.Update(l.ctx, data); err != nil {

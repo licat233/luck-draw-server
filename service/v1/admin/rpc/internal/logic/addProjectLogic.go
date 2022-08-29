@@ -34,7 +34,7 @@ func (l *AddProjectLogic) AddProject(in *admin_pb.Project) (*admin_pb.AddProject
 	data := &model.Project{
 		Uuid:   uniqueid.NewUUID(),
 		Name:   in.Name,
-		Status: int64(in.Status),
+		Status: in.Status,
 	}
 	result, err := l.svcCtx.ProjectModel.Insert(l.ctx, data)
 	if err != nil {

@@ -97,8 +97,8 @@ type Activity struct {
 	ProjectId int64  `json:"project_id"` // 项目id
 	Status    int64  `json:"status"`     // 活动状态，是否在举办，默认关闭，需手动开启
 	Pattern   int64  `json:"pattern"`    // 方案: 0私密的，1公开的
-	MaxCount  int64  `json:"max_count"`  // 最大抽奖次数：-1表示无限制，0表示不可抽奖
-	MaxPrizes int64  `json:"max_prizes"` // 最大抽奖次数：-1表示无限制，0表示不可抽奖
+	MaxCount  int64  `json:"max_count"`  // 单人最大抽奖次数：-1表示无限制，0表示不可抽奖
+	MaxPrizes int64  `json:"max_prizes"` // 单人最大获奖数：-1表示无限制，0表示不可抽奖
 	StartTime int64  `json:"start_time"` // 活动开始时间
 	EndTime   int64  `json:"end_time"`   // 活动结束时间
 	CreateAt  int64  `json:"create_at"`  // 创建时间
@@ -116,8 +116,8 @@ type ActivityAddReq struct {
 	ProjectId int64  `json:"project_id"` // 项目id
 	Status    int64  `json:"status"`     // 活动状态，是否在举办，默认关闭，需手动开启
 	Pattern   int64  `json:"pattern"`    // 方案: 0私密的，1公开的
-	MaxCount  int64  `json:"max_count"`  // 最大抽奖次数：-1表示无限制，0表示不可抽奖
-	MaxPrizes int64  `json:"max_prizes"` // 最大抽奖次数：-1表示无限制，0表示不可抽奖
+	MaxCount  int64  `json:"max_count"`  // 单人最大抽奖次数：-1表示无限制，0表示不可抽奖
+	MaxPrizes int64  `json:"max_prizes"` // 单人最大获奖数：-1表示无限制，0表示不可抽奖
 	StartTime int64  `json:"start_time"` // 活动开始时间
 	EndTime   int64  `json:"end_time"`   // 活动结束时间
 }
@@ -129,8 +129,8 @@ type ActivityPutReq struct {
 	ProjectId int64  `json:"project_id"` // 项目id
 	Status    int64  `json:"status"`     // 活动状态，是否在举办，默认关闭，需手动开启
 	Pattern   int64  `json:"pattern"`    // 方案: 0私密的，1公开的
-	MaxCount  int64  `json:"max_count"`  // 最大抽奖次数：-1表示无限制，0表示不可抽奖
-	MaxPrizes int64  `json:"max_prizes"` // 最大抽奖次数：-1表示无限制，0表示不可抽奖
+	MaxCount  int64  `json:"max_count"`  // 单人最大抽奖次数：-1表示无限制，0表示不可抽奖
+	MaxPrizes int64  `json:"max_prizes"` // 单人最大获奖数：-1表示无限制，0表示不可抽奖
 	StartTime int64  `json:"start_time"` // 活动开始时间
 	EndTime   int64  `json:"end_time"`   // 活动结束时间
 }

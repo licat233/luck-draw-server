@@ -36,7 +36,7 @@ func (l *PutLogic) Put(req *types.PrizePutReq) (any, error) {
 		Name:   req.Name,
 		Image:  req.Image,
 		Price:  req.Price,
-		Status: int32(req.Status),
+		Status: req.Status,
 	})
 	if err != nil {
 		return nil, err

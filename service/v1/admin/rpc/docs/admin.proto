@@ -9,10 +9,10 @@ message Activity {
   string uuid = 2;
   string name = 3;
   int64 project_id = 4;
-  bool status = 5; //活动状态，是否在举办，默认关闭，需手动开启
-  int32 pattern = 6; //方案: 0私密的，1公开的
-  int64 max_count = 7; //最大抽奖次数：-1表示无限制，0表示不可抽奖
-  int64 max_prizes = 8; //最大领奖数:  -1表示无限制，0表示不可领奖
+  int64 status = 5; //活动状态，是否在举办，默认关闭，需手动开启
+  int64 pattern = 6; //方案: 0私密的，1公开的
+  int64 max_count = 7; //单人最大抽奖次数：-1表示无限制，0表示不可抽奖
+  int64 max_prizes = 8; //单人最大获奖数:  -1表示无限制，0表示不可领奖
   int64 start_time = 9; //活动开始时间
   int64 end_time = 10; //活动结束时间
 }
@@ -36,7 +36,7 @@ message Lucker {
   string uuid = 2;
   int64 user_id = 3;
   int64 prizes_pool_id = 4;
-  int32 status = 5;
+  int64 status = 5;
   int64 luck_date = 6;
   string ip = 7;
 }
@@ -47,7 +47,7 @@ message Prize {
   string name = 3;
   string image = 4;
   double price = 5;
-  int32 status = 6;
+  int64 status = 6;
 }
 
 message PrizesPool {
@@ -56,7 +56,7 @@ message PrizesPool {
   int64 activity_id = 3;
   int64 prize_id = 4;
   int64 luck_value = 5;
-  int32 status = 6;
+  int64 status = 6;
   string grade_name = 7;
   bool is_win = 8;
   int64 number = 9;
@@ -67,7 +67,7 @@ message Project {
   int64 id = 1;
   string uuid = 2;
   string name = 3;
-  int32 status = 4;
+  int64 status = 4;
 }
 
 message User {
@@ -79,7 +79,7 @@ message User {
   string name = 6;
   string address = 7;
   int64 score = 8;
-  int32 status = 9;
+  int64 status = 9;
 }
 
 message UsersPool {
@@ -87,7 +87,7 @@ message UsersPool {
   string uuid = 2;
   int64 activity_id = 3;
   int64 user_id = 4;
-  int32 status = 5;
+  int64 status = 5;
   int64 score = 6;
 }
 

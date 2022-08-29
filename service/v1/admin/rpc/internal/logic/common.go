@@ -20,8 +20,8 @@ func mdActivityToPbActivity(mdActivity *model.Activity) *admin_pb.Activity {
 		Uuid:      mdActivity.Uuid,
 		Name:      mdActivity.Name,
 		ProjectId: mdActivity.ProjectId,
-		Status:    utils.Int64ToBool(mdActivity.Status),
-		Pattern:   int32(mdActivity.Pattern),
+		Status:    mdActivity.Status,
+		Pattern:   mdActivity.Pattern,
 		MaxCount:  mdActivity.MaxCount,
 		MaxPrizes: mdActivity.MaxPrizes,
 		StartTime: mdActivity.StartTime.Unix(),
@@ -73,7 +73,7 @@ func mdLuckerToPbLucker(mdLucker *model.Lucker) *admin_pb.Lucker {
 		Uuid:         mdLucker.Uuid,
 		UserId:       mdLucker.UserId,
 		PrizesPoolId: mdLucker.PrizesPoolId,
-		Status:       int32(mdLucker.Status),
+		Status:       mdLucker.Status,
 		LuckDate:     mdLucker.LuckDate.Unix(),
 		Ip:           mdLucker.Ip,
 	}
@@ -97,7 +97,7 @@ func mdPrizeToPbPrize(mdPrize *model.Prize) *admin_pb.Prize {
 		Name:   mdPrize.Name,
 		Image:  mdPrize.Image,
 		Price:  mdPrize.Price,
-		Status: int32(mdPrize.Status),
+		Status: mdPrize.Status,
 	}
 }
 
@@ -119,7 +119,7 @@ func mdPrizesPoolToPbPrizesPool(mdPrizesPool *model.PrizesPool) *admin_pb.Prizes
 		ActivityId: mdPrizesPool.ActivityId,
 		PrizeId:    mdPrizesPool.PrizeId,
 		LuckValue:  mdPrizesPool.LuckValue,
-		Status:     int32(mdPrizesPool.Status),
+		Status:     mdPrizesPool.Status,
 		GradeName:  mdPrizesPool.GradeName,
 		IsWin:      utils.Int64ToBool(mdPrizesPool.IsWin),
 		Number:     mdPrizesPool.Number,
@@ -143,7 +143,7 @@ func mdProjectToPbProject(mdProject *model.Project) *admin_pb.Project {
 		Id:     mdProject.Id,
 		Uuid:   mdProject.Uuid,
 		Name:   mdProject.Name,
-		Status: int32(mdProject.Status),
+		Status: mdProject.Status,
 	}
 }
 
@@ -168,7 +168,7 @@ func mdUserToPbUser(mdUser *model.User) *admin_pb.User {
 		Name:     mdUser.Name,
 		Address:  mdUser.Address,
 		Score:    mdUser.Status,
-		Status:   int32(mdUser.Status),
+		Status:   mdUser.Status,
 	}
 }
 
@@ -189,7 +189,7 @@ func mdUsersPoolToPbUsersPool(mdUsersPool *model.UsersPool) *admin_pb.UsersPool 
 		Uuid:       mdUsersPool.Uuid,
 		ActivityId: mdUsersPool.ActivityId,
 		UserId:     mdUsersPool.UserId,
-		Status:     int32(mdUsersPool.Status),
+		Status:     mdUsersPool.Status,
 		Score:      mdUsersPool.Score,
 	}
 }

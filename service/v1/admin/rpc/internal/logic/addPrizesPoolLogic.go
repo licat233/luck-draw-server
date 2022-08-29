@@ -37,7 +37,7 @@ func (l *AddPrizesPoolLogic) AddPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.A
 		ActivityId: in.ActivityId,
 		PrizeId:    in.PrizeId,
 		LuckValue:  in.LuckValue,
-		Status:     int64(in.Status),
+		Status:     in.Status,
 		GradeName:  in.GradeName,
 		IsWin:      utils.BoolToInt64(in.IsWin),
 		Number:     in.Number,

@@ -31,7 +31,7 @@ func (l *PutLogic) Put(req *types.UsersPoolPutReq) (any, error) {
 		Uuid:       req.Uuid,
 		ActivityId: req.ActivityId,
 		UserId:     req.UserId,
-		Status:     int32(req.Status),
+		Status:     req.Status,
 		Score:      req.Score,
 	})
 	if err != nil {

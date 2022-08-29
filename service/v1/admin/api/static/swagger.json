@@ -2265,12 +2265,12 @@
         "max_count": {
           "type": "integer",
           "format": "int64",
-          "description": " 最大抽奖次数：-1表示无限制，0表示不可抽奖"
+          "description": " 单人最大抽奖次数：-1表示无限制，0表示不可抽奖"
         },
         "max_prizes": {
           "type": "integer",
           "format": "int64",
-          "description": " 最大抽奖次数：-1表示无限制，0表示不可抽奖"
+          "description": " 单人最大获奖数：-1表示无限制，0表示不可抽奖"
         },
         "start_time": {
           "type": "integer",
@@ -2346,12 +2346,12 @@
         "max_count": {
           "type": "integer",
           "format": "int64",
-          "description": " 最大抽奖次数：-1表示无限制，0表示不可抽奖"
+          "description": " 单人最大抽奖次数：-1表示无限制，0表示不可抽奖"
         },
         "max_prizes": {
           "type": "integer",
           "format": "int64",
-          "description": " 最大抽奖次数：-1表示无限制，0表示不可抽奖"
+          "description": " 单人最大获奖数：-1表示无限制，0表示不可抽奖"
         },
         "start_time": {
           "type": "integer",
@@ -2436,12 +2436,12 @@
         "max_count": {
           "type": "integer",
           "format": "int64",
-          "description": " 最大抽奖次数：-1表示无限制，0表示不可抽奖"
+          "description": " 单人最大抽奖次数：-1表示无限制，0表示不可抽奖"
         },
         "max_prizes": {
           "type": "integer",
           "format": "int64",
-          "description": " 最大抽奖次数：-1表示无限制，0表示不可抽奖"
+          "description": " 单人最大获奖数：-1表示无限制，0表示不可抽奖"
         },
         "start_time": {
           "type": "integer",

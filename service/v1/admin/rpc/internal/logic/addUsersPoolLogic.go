@@ -35,7 +35,7 @@ func (l *AddUsersPoolLogic) AddUsersPool(in *admin_pb.UsersPool) (*admin_pb.AddU
 		Uuid:       uniqueid.NewUUID(),
 		ActivityId: in.ActivityId,
 		UserId:     in.UserId,
-		Status:     int64(in.Status),
+		Status:     in.Status,
 		Score:      in.Score,
 	}
 

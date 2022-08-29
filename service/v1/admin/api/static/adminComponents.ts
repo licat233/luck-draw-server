@@ -102,8 +102,8 @@ export interface Activity {
 	project_id: number // 项目id
 	status: number // 活动状态，是否在举办，默认关闭，需手动开启
 	pattern: number // 方案: 0私密的，1公开的
-	max_count: number // 最大抽奖次数：-1表示无限制，0表示不可抽奖
-	max_prizes: number // 最大抽奖次数：-1表示无限制，0表示不可抽奖
+	max_count: number // 单人最大抽奖次数：-1表示无限制，0表示不可抽奖
+	max_prizes: number // 单人最大获奖数：-1表示无限制，0表示不可抽奖
 	start_time: number // 活动开始时间
 	end_time: number // 活动结束时间
 	create_at: number // 创建时间
@@ -121,8 +121,8 @@ export interface ActivityAddReq {
 	project_id: number // 项目id
 	status: number // 活动状态，是否在举办，默认关闭，需手动开启
 	pattern: number // 方案: 0私密的，1公开的
-	max_count: number // 最大抽奖次数：-1表示无限制，0表示不可抽奖
-	max_prizes: number // 最大抽奖次数：-1表示无限制，0表示不可抽奖
+	max_count: number // 单人最大抽奖次数：-1表示无限制，0表示不可抽奖
+	max_prizes: number // 单人最大获奖数：-1表示无限制，0表示不可抽奖
 	start_time: number // 活动开始时间
 	end_time: number // 活动结束时间
 }
@@ -134,8 +134,8 @@ export interface ActivityPutReq {
 	project_id: number // 项目id
 	status: number // 活动状态，是否在举办，默认关闭，需手动开启
 	pattern: number // 方案: 0私密的，1公开的
-	max_count: number // 最大抽奖次数：-1表示无限制，0表示不可抽奖
-	max_prizes: number // 最大抽奖次数：-1表示无限制，0表示不可抽奖
+	max_count: number // 单人最大抽奖次数：-1表示无限制，0表示不可抽奖
+	max_prizes: number // 单人最大获奖数：-1表示无限制，0表示不可抽奖
 	start_time: number // 活动开始时间
 	end_time: number // 活动结束时间
 }
