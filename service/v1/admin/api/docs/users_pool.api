@@ -14,7 +14,7 @@ type usersPool {
 }
 
 type usersPoolGetReq {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type usersPoolAddReq {

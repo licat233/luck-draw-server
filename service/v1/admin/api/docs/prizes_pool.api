@@ -18,7 +18,7 @@ type PrizesPool {
 }
 
 type PrizesPoolGetReq {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type PrizesPoolAddReq {

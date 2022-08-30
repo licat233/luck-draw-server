@@ -17,7 +17,7 @@ type user {
 }
 
 type userGetReq {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type userAddReq {

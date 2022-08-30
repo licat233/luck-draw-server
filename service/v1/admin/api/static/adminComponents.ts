@@ -60,6 +60,9 @@ export interface DownloadReqParams {
 }
 
 export interface IdReq {
+}
+
+export interface IdReqParams {
 	id: number
 }
 
@@ -68,14 +71,20 @@ export interface BatchIdReq {
 }
 
 export interface ListReq {
-	pageSize?: number // 页面大小
-	current?: number // 当前页码
+}
+
+export interface ListReqParams {
+	pageSize: number // 页面大小
+	current: number // 当前页码
 }
 
 export interface SearchReq {
-	keyword?: string // 关键词，可选
-	pageSize?: number // 页面大小
-	current?: number // 当前页码
+}
+
+export interface SearchReqParams {
+	keyword: string // 关键词，可选
+	pageSize: number // 页面大小
+	current: number // 当前页码
 }
 
 export interface JwtToken {
@@ -118,6 +127,9 @@ export interface Activity {
 }
 
 export interface ActivityGetReq {
+}
+
+export interface ActivityGetReqParams {
 	id: number
 }
 
@@ -168,6 +180,9 @@ export interface Adminer {
 }
 
 export interface AdminerGetReq {
+}
+
+export interface AdminerGetReqParams {
 	id: number
 }
 
@@ -222,6 +237,9 @@ export interface Lucker {
 }
 
 export interface LuckerGetReq {
+}
+
+export interface LuckerGetReqParams {
 	id: number
 }
 
@@ -261,6 +279,9 @@ export interface Prize {
 }
 
 export interface PrizeGetReq {
+}
+
+export interface PrizeGetReqParams {
 	id: number
 }
 
@@ -302,6 +323,9 @@ export interface PrizesPool {
 }
 
 export interface PrizesPoolGetReq {
+}
+
+export interface PrizesPoolGetReqParams {
 	id: number
 }
 
@@ -345,6 +369,9 @@ export interface Project {
 }
 
 export interface ProjectGetReq {
+}
+
+export interface ProjectGetReqParams {
 	id: number
 }
 
@@ -401,6 +428,9 @@ export interface User {
 }
 
 export interface UserGetReq {
+}
+
+export interface UserGetReqParams {
 	id: number
 }
 
@@ -444,6 +474,9 @@ export interface UsersPool {
 }
 
 export interface UsersPoolGetReq {
+}
+
+export interface UsersPoolGetReqParams {
 	id: number
 }
 

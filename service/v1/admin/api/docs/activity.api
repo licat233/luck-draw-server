@@ -18,7 +18,7 @@ type activity {
 }
 
 type activityGetReq {
-  Id int64 `json:"id"`
+  Id int64 `form:"id"`
 }
 
 type activityAddReq {  

@@ -15,14 +15,14 @@ type lucker {
 }
 
 type luckerGetReq {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type luckerAddReq {
 	UserId       int64     `json:"user_id"`        // 中奖用户id
 	PrizesPoolId int64     `json:"prizes_pool_id"` // 抽中的奖品池id
 	Status       int64     `json:"status"`         // 状态: -1放弃领奖，0未领奖，1已领奖
-	LuckDate     int64 `json:"luck_date"`      // 抽奖时间
+	LuckDate     int64     `json:"luck_date"`      // 抽奖时间
 	Ip           string    `json:"ip"`             // ip地址
 }
 

@@ -12,7 +12,7 @@ type project {
 }
 
 type projectGetReq {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type projectAddReq {

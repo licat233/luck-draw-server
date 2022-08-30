@@ -55,7 +55,7 @@ type DownloadReq struct {
 }
 
 type IdReq struct {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type BatchIdReq struct {
@@ -63,14 +63,14 @@ type BatchIdReq struct {
 }
 
 type ListReq struct {
-	PageSize int64 `json:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
-	Page     int64 `json:"current,optional,default=1,range=[1:]"`       //当前页码
+	PageSize int64 `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page     int64 `form:"current,optional,default=1,range=[1:]"`       //当前页码
 }
 
 type SearchReq struct {
-	Keyword  string `json:"keyword,optional"`                            //关键词，可选
-	PageSize int64  `json:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
-	Page     int64  `json:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword  string `form:"keyword,optional"`                            //关键词，可选
+	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page     int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
 }
 
 type JwtToken struct {
@@ -113,7 +113,7 @@ type Activity struct {
 }
 
 type ActivityGetReq struct {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type ActivityAddReq struct {
@@ -163,7 +163,7 @@ type Adminer struct {
 }
 
 type AdminerGetReq struct {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type AdminerAddReq struct {
@@ -217,7 +217,7 @@ type Lucker struct {
 }
 
 type LuckerGetReq struct {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type LuckerAddReq struct {
@@ -256,7 +256,7 @@ type Prize struct {
 }
 
 type PrizeGetReq struct {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type PrizeAddReq struct {
@@ -297,7 +297,7 @@ type PrizesPool struct {
 }
 
 type PrizesPoolGetReq struct {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type PrizesPoolAddReq struct {
@@ -340,7 +340,7 @@ type Project struct {
 }
 
 type ProjectGetReq struct {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type ProjectAddReq struct {
@@ -396,7 +396,7 @@ type User struct {
 }
 
 type UserGetReq struct {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type UserAddReq struct {
@@ -439,7 +439,7 @@ type UsersPool struct {
 }
 
 type UsersPoolGetReq struct {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type UsersPoolAddReq struct {

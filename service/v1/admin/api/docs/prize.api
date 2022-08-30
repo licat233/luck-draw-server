@@ -14,7 +14,7 @@ type prize {
 }
 
 type prizeGetReq {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type prizeAddReq {
