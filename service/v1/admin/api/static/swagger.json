@@ -150,6 +150,13 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "requestBody": {},
@@ -311,6 +318,13 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "requestBody": {},
@@ -472,6 +486,13 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "requestBody": {},
@@ -810,6 +831,13 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "requestBody": {},
@@ -971,6 +999,13 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "requestBody": {},
@@ -1132,6 +1167,13 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "requestBody": {},
@@ -1666,6 +1708,13 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "requestBody": {},
@@ -1809,6 +1858,13 @@
             "type": "integer",
             "format": "int64",
             "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "requestBody": {},
@@ -1968,11 +2024,10 @@
       "type": "object",
       "properties": {
         "label": {
-          "type": "string"
+          "type": "object"
         },
         "value": {
-          "type": "integer",
-          "format": "int64"
+          "type": "object"
         }
       },
       "title": "Enum",
@@ -2030,6 +2085,10 @@
           "format": "int64",
           "default": "1",
           "description": "当前页码"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
         }
       },
       "title": "ListReq",
@@ -2109,21 +2168,17 @@
           "format": "int64",
           "description": " 是否可用，0不可用，1可用"
         },
-        "grade_name": {
-          "type": "string",
-          "description": " 等级名称，如：一等奖"
-        },
-        "is_win": {
+        "grade_id": {
           "type": "integer",
           "format": "int64",
-          "description": " 是否中奖"
+          "description": " 等级id，如：一等奖"
         },
         "number": {
           "type": "integer",
           "format": "int64",
           "description": " 奖品总数量"
         },
-        "remain": {
+        "remainder": {
           "type": "integer",
           "format": "int64",
           "description": " 奖品剩余数量"
@@ -2157,10 +2212,9 @@
         "prize_id",
         "luck_value",
         "status",
-        "grade_name",
-        "is_win",
+        "grade_id",
         "number",
-        "remain",
+        "remainder",
         "create_at",
         "update_at",
         "is_deleted",
@@ -2190,21 +2244,17 @@
           "format": "int64",
           "description": " 是否可用，0不可用，1可用"
         },
-        "grade_name": {
-          "type": "string",
-          "description": " 等级名称，如：一等奖"
-        },
-        "is_win": {
+        "grade_id": {
           "type": "integer",
           "format": "int64",
-          "description": " 是否中奖"
+          "description": " 等级id，如：一等奖"
         },
         "number": {
           "type": "integer",
           "format": "int64",
           "description": " 奖品总数量"
         },
-        "remain": {
+        "remainder": {
           "type": "integer",
           "format": "int64",
           "description": " 奖品剩余数量"
@@ -2216,10 +2266,9 @@
         "prize_id",
         "luck_value",
         "status",
-        "grade_name",
-        "is_win",
+        "grade_id",
         "number",
-        "remain"
+        "remainder"
       ]
     },
     "PrizesPoolDelReq": {
@@ -2280,21 +2329,17 @@
           "format": "int64",
           "description": " 是否可用，0不可用，1可用"
         },
-        "grade_name": {
-          "type": "string",
-          "description": " 等级名称，如：一等奖"
-        },
-        "is_win": {
+        "grade_id": {
           "type": "integer",
           "format": "int64",
-          "description": " 是否中奖"
+          "description": " 等级id，如：一等奖"
         },
         "number": {
           "type": "integer",
           "format": "int64",
           "description": " 奖品总数量"
         },
-        "remain": {
+        "remainder": {
           "type": "integer",
           "format": "int64",
           "description": " 奖品剩余数量"
@@ -2308,10 +2353,9 @@
         "prize_id",
         "luck_value",
         "status",
-        "grade_name",
-        "is_win",
+        "grade_id",
         "number",
-        "remain"
+        "remainder"
       ]
     },
     "RoleAndDomainReq": {

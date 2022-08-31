@@ -19,6 +19,7 @@ type ServiceContext struct {
 	LuckerModel     model.LuckerModel
 	PrizesPoolModel model.PrizesPoolModel
 	UsersPoolModel  model.UsersPoolModel
+	PrizeGradeModel model.PrizeGradeModel
 
 	KqueueGoodluckStatusHandlerClient *kq.Pusher
 }
@@ -34,6 +35,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		LuckerModel:     model.NewLuckerModel(sqlConn, c.CacheRedis),
 		PrizesPoolModel: model.NewPrizesPoolModel(sqlConn, c.CacheRedis),
 		UsersPoolModel:  model.NewUsersPoolModel(sqlConn, c.CacheRedis),
+		PrizeGradeModel: model.NewPrizeGradeModel(sqlConn, c.CacheRedis),
 
 		KqueueGoodluckStatusHandlerClient: kq.NewPusher(c.KqGoodluckConf.Brokers, c.KqGoodluckConf.Topic),
 	}

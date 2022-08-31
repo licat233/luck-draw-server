@@ -26,7 +26,7 @@ func NewGetActivityListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 }
 
 func (l *GetActivityListLogic) GetActivityList(in *admin_pb.ListReq) (*admin_pb.GetActivityListResp, error) {
-	list, err := l.svcCtx.ActivityModel.FindList(l.ctx, in.PageSize, in.Page)
+	list, err := l.svcCtx.ActivityModel.FindList(l.ctx, in.PageSize, in.Page, in.Keyword)
 	if err != nil && err != model.ErrNotFound {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

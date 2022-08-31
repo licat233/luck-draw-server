@@ -58,7 +58,7 @@ func convertActivity(mdActivity *model.Activity) *luckdraw_pb.Activity {
 		Name:      mdActivity.Name,
 		ProjectId: mdActivity.ProjectId,
 		Status:    utils.Int64ToBool(mdActivity.Status),
-		Pattern:   int32(mdActivity.Pattern),
+		Pattern:   mdActivity.Pattern,
 		MaxCount:  mdActivity.MaxCount,
 		MaxPrizes: mdActivity.MaxPrizes,
 		StartTime: mdActivity.StartTime.Unix(),
@@ -76,7 +76,7 @@ func convertPrize(mdPrize *model.Prize) *luckdraw_pb.Prize {
 		Name:   mdPrize.Name,
 		Image:  mdPrize.Image,
 		Price:  mdPrize.Price,
-		Status: int32(mdPrize.Status),
+		Status: mdPrize.Status,
 	}
 }
 
@@ -90,11 +90,10 @@ func convertPrizesPool(mdPrizesPool *model.PrizesPool) *luckdraw_pb.PrizesPool {
 		ActivityId: mdPrizesPool.ActivityId,
 		PrizeId:    mdPrizesPool.PrizeId,
 		LuckValue:  mdPrizesPool.LuckValue,
-		Status:     int32(mdPrizesPool.Status),
-		GradeName:  mdPrizesPool.GradeName,
-		IsWin:      utils.Int64ToBool(mdPrizesPool.IsWin),
+		Status:     mdPrizesPool.Status,
+		GradeId:    mdPrizesPool.GradeId,
 		Number:     mdPrizesPool.Number,
-		Remain:     mdPrizesPool.Remain,
+		Remainder:  mdPrizesPool.Remainder,
 	}
 }
 
@@ -111,7 +110,7 @@ func convertUser(mdUser *model.User) *luckdraw_pb.User {
 		Name:     mdUser.Name,
 		Address:  mdUser.Address,
 		Score:    mdUser.Score,
-		Status:   int32(mdUser.Status),
+		Status:   mdUser.Status,
 	}
 }
 
@@ -124,7 +123,7 @@ func convertLucker(mdLucker *model.Lucker) *luckdraw_pb.Lucker {
 		Uuid:         mdLucker.Uuid,
 		UserId:       mdLucker.UserId,
 		PrizesPoolId: mdLucker.PrizesPoolId,
-		Status:       int32(mdLucker.Status),
+		Status:       mdLucker.Status,
 		LuckDate:     mdLucker.LuckDate.Unix(),
 		Ip:           mdLucker.Ip,
 	}
@@ -176,7 +175,7 @@ func convertLuckerDetail(mdLuckerDetail *model.LuckerDetail) *luckdraw_pb.Lucker
 			Uuid:         mdLuckerDetail.LuckerUuid,
 			UserId:       mdLuckerDetail.UserId,
 			PrizesPoolId: mdLuckerDetail.PrizesPoolId,
-			Status:       int32(mdLuckerDetail.LuckerStatus),
+			Status:       mdLuckerDetail.LuckerStatus,
 			LuckDate:     mdLuckerDetail.LuckDate.Unix(),
 		},
 		PrizesPool: &luckdraw_pb.PrizesPool{
@@ -185,11 +184,10 @@ func convertLuckerDetail(mdLuckerDetail *model.LuckerDetail) *luckdraw_pb.Lucker
 			ActivityId: mdLuckerDetail.ActivityId,
 			PrizeId:    mdLuckerDetail.PrizeId,
 			LuckValue:  mdLuckerDetail.PrizesPoolLuckValue,
-			Status:     int32(mdLuckerDetail.PrizesPoolStatus),
-			GradeName:  mdLuckerDetail.PrizesPoolGradeName,
-			IsWin:      utils.Int64ToBool(mdLuckerDetail.PrizesPoolIsWin),
+			Status:     mdLuckerDetail.PrizesPoolStatus,
+			GradeId:    mdLuckerDetail.PrizesPoolGradeId,
 			Number:     mdLuckerDetail.PrizesPoolNumber,
-			Remain:     mdLuckerDetail.PrizesPoolRemain,
+			Remainder:  mdLuckerDetail.PrizesPoolRemainder,
 		},
 		Activity: &luckdraw_pb.Activity{
 			Id:        mdLuckerDetail.ActivityId,
@@ -197,7 +195,7 @@ func convertLuckerDetail(mdLuckerDetail *model.LuckerDetail) *luckdraw_pb.Lucker
 			Name:      mdLuckerDetail.ActivityName,
 			ProjectId: mdLuckerDetail.ActivityProjectId,
 			Status:    utils.Int64ToBool(mdLuckerDetail.ActivityStatus),
-			Pattern:   int32(mdLuckerDetail.ActivityPattern),
+			Pattern:   mdLuckerDetail.ActivityPattern,
 			MaxCount:  mdLuckerDetail.ActivityMaxCount,
 			MaxPrizes: mdLuckerDetail.ActivityMaxPrizes,
 			StartTime: mdLuckerDetail.ActivityStartTime.Unix(),
@@ -209,7 +207,12 @@ func convertLuckerDetail(mdLuckerDetail *model.LuckerDetail) *luckdraw_pb.Lucker
 			Name:   mdLuckerDetail.PrizeName,
 			Image:  mdLuckerDetail.PrizeImage,
 			Price:  mdLuckerDetail.PrizePrice,
-			Status: int32(mdLuckerDetail.PrizeStatus),
+			Status: mdLuckerDetail.PrizeStatus,
+		},
+		PrizeGrade: &luckdraw_pb.PrizeGrade{
+			Id:    mdLuckerDetail.GradeId,
+			Name:  mdLuckerDetail.GradeName,
+			Iswin: mdLuckerDetail.IsWin,
 		},
 	}
 }

@@ -25,7 +25,7 @@ type (
 		FindOneByUuid(ctx context.Context, uuid string) (*User, error)
 
 		FindCount(ctx context.Context) (int64, error)
-		FindList(ctx context.Context, pageSize, page int64) ([]*User, error)
+		FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*User, error)
 		Exists(ctx context.Context, id int64) (bool, *User, error)
 		FindByPasspord(ctx context.Context, passport string) (*User, error)
 		FindByPhone(ctx context.Context, phone string) (*User, error)
@@ -138,11 +138,15 @@ func (m *customUserModel) FindCount(ctx context.Context) (int64, error) {
 	}
 }
 
-func (m *customUserModel) FindList(ctx context.Context, pageSize, page int64) ([]*User, error) {
-	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0' limit %v,%v", userRows, m.table, (page-1)*pageSize, pageSize)
-	if pageSize < 0 || page < 0 {
-		query = fmt.Sprintf("select %s from %s where `is_deleted`= '0'", projectRows, m.table)
+func (m *customUserModel) FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*User, error) {
+	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", userRows, m.table)
+	if strings.TrimSpace(keyword) != "" {
+		query = fmt.Sprintf("%s and `name`=%s", query, keyword)
 	}
+	if pageSize >= 0 && page >= 0 {
+		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
+	}
+
 	var resp []*User
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {

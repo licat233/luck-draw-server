@@ -29,7 +29,7 @@ type (
 	prizeModel interface {
 		Insert(ctx context.Context, data *Prize) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*Prize, error)
-		Update(ctx context.Context, newData *Prize) error
+		Update(ctx context.Context, data *Prize) error
 		Delete(ctx context.Context, id int64) error
 	}
 
@@ -88,8 +88,8 @@ func (m *defaultPrizeModel) FindOne(ctx context.Context, id int64) (*Prize, erro
 func (m *defaultPrizeModel) Insert(ctx context.Context, data *Prize) (sql.Result, error) {
 	luckDrawPrizeIdKey := fmt.Sprintf("%s%v", cacheLuckDrawPrizeIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, prizeRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, prizeRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.IsDeleted, data.DeleteAt)
 	}, luckDrawPrizeIdKey)
 	return ret, err
 }
@@ -98,7 +98,7 @@ func (m *defaultPrizeModel) Update(ctx context.Context, data *Prize) error {
 	luckDrawPrizeIdKey := fmt.Sprintf("%s%v", cacheLuckDrawPrizeIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, prizeRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.IsDeleted, data.DeleteAt, data.Id)
 	}, luckDrawPrizeIdKey)
 	return err
 }

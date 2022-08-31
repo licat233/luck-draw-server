@@ -55,12 +55,17 @@ message PrizesPool {
   string uuid = 2;
   int64 activity_id = 3;
   int64 prize_id = 4;
+  int64 grade_id = 7;
   int64 luck_value = 5;
   int64 status = 6;
-  string grade_name = 7;
-  bool is_win = 8;
-  int64 number = 9;
-  int64 remain = 10;
+  int64 number = 8;
+  int64 remainder = 9;
+}
+
+message PrizeGrade {
+  int64   id = 1;
+  string name = 2;
+  int64 is_win = 3;
 }
 
 message Project {
@@ -111,6 +116,9 @@ message LuckerDetail {
 
   //奖品信息
   Prize prize = 4;
+
+  //奖品级别
+  PrizeGrade prize_grade = 5;
 }
 
 message JwtData {
@@ -199,6 +207,7 @@ message ParseJwtTokenResp {
 message ListReq {
   int64 page_size = 1;
   int64 page = 2;
+  string keyword = 3;
 }
 
 //单个数据请求

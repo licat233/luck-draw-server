@@ -29,6 +29,7 @@ type (
 	Lucker            = luckdraw_pb.Lucker
 	LuckerDetail      = luckdraw_pb.LuckerDetail
 	Prize             = luckdraw_pb.Prize
+	PrizeGrade        = luckdraw_pb.PrizeGrade
 	PrizesPool        = luckdraw_pb.PrizesPool
 	SearchLuckerReq   = luckdraw_pb.SearchLuckerReq
 	SearchLuckerResp  = luckdraw_pb.SearchLuckerResp

@@ -29,7 +29,7 @@ type (
 	prizesPoolModel interface {
 		Insert(ctx context.Context, data *PrizesPool) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*PrizesPool, error)
-		Update(ctx context.Context, newData *PrizesPool) error
+		Update(ctx context.Context, data *PrizesPool) error
 		Delete(ctx context.Context, id int64) error
 	}
 
@@ -43,12 +43,11 @@ type (
 		Uuid       string    `db:"uuid"`        // 唯一识别码
 		ActivityId int64     `db:"activity_id"` // 活动id
 		PrizeId    int64     `db:"prize_id"`    // 奖品id
+		GradeId    int64     `db:"grade_id"`    // 奖品等级
 		LuckValue  int64     `db:"luck_value"`  // 幸运值
 		Status     int64     `db:"status"`      // 是否可用，0不可用，1可用
-		GradeName  string    `db:"grade_name"`  // 等级名称，如：一等奖
-		IsWin      int64     `db:"is_win"`      // 是否中奖
 		Number     int64     `db:"number"`      // 奖品总数量
-		Remain     int64     `db:"remain"`      // 奖品剩余数量
+		Remainder  int64     `db:"remainder"`   // 奖品剩余数量
 		CreateAt   time.Time `db:"create_at"`   // 创建时间
 		UpdateAt   time.Time `db:"update_at"`   // 更新时间
 		IsDeleted  int64     `db:"is_deleted"`  // 是否已被删除
@@ -92,8 +91,8 @@ func (m *defaultPrizesPoolModel) FindOne(ctx context.Context, id int64) (*Prizes
 func (m *defaultPrizesPoolModel) Insert(ctx context.Context, data *PrizesPool) (sql.Result, error) {
 	luckDrawPrizesPoolIdKey := fmt.Sprintf("%s%v", cacheLuckDrawPrizesPoolIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, prizesPoolRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.PrizeId, data.LuckValue, data.Status, data.GradeName, data.IsWin, data.Number, data.Remain, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, prizesPoolRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.PrizeId, data.GradeId, data.LuckValue, data.Status, data.Number, data.Remainder, data.IsDeleted, data.DeleteAt)
 	}, luckDrawPrizesPoolIdKey)
 	return ret, err
 }
@@ -102,7 +101,7 @@ func (m *defaultPrizesPoolModel) Update(ctx context.Context, data *PrizesPool) e
 	luckDrawPrizesPoolIdKey := fmt.Sprintf("%s%v", cacheLuckDrawPrizesPoolIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, prizesPoolRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.PrizeId, data.LuckValue, data.Status, data.GradeName, data.IsWin, data.Number, data.Remain, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.PrizeId, data.GradeId, data.LuckValue, data.Status, data.Number, data.Remainder, data.IsDeleted, data.DeleteAt, data.Id)
 	}, luckDrawPrizesPoolIdKey)
 	return err
 }

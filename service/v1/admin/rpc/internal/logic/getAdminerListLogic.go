@@ -26,7 +26,7 @@ func NewGetAdminerListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 }
 
 func (l *GetAdminerListLogic) GetAdminerList(in *admin_pb.ListReq) (*admin_pb.GetAdminerListResp, error) {
-	list, err := l.svcCtx.AdminerModel.FindList(l.ctx, in.PageSize, in.Page)
+	list, err := l.svcCtx.AdminerModel.FindList(l.ctx, in.PageSize, in.Page, in.Keyword)
 	if err != nil && err != model.ErrNotFound {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

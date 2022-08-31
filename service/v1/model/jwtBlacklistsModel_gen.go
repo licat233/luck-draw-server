@@ -29,7 +29,7 @@ type (
 	jwtBlacklistsModel interface {
 		Insert(ctx context.Context, data *JwtBlacklists) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*JwtBlacklists, error)
-		Update(ctx context.Context, newData *JwtBlacklists) error
+		Update(ctx context.Context, data *JwtBlacklists) error
 		Delete(ctx context.Context, id int64) error
 	}
 
@@ -86,8 +86,8 @@ func (m *defaultJwtBlacklistsModel) FindOne(ctx context.Context, id int64) (*Jwt
 func (m *defaultJwtBlacklistsModel) Insert(ctx context.Context, data *JwtBlacklists) (sql.Result, error) {
 	luckDrawJwtBlacklistsIdKey := fmt.Sprintf("%s%v", cacheLuckDrawJwtBlacklistsIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, jwtBlacklistsRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Token, data.Platform, data.Ip, data.ExpireAt, data.CreateAt, data.UpdateAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, jwtBlacklistsRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Token, data.Platform, data.Ip, data.ExpireAt)
 	}, luckDrawJwtBlacklistsIdKey)
 	return ret, err
 }
@@ -96,7 +96,7 @@ func (m *defaultJwtBlacklistsModel) Update(ctx context.Context, data *JwtBlackli
 	luckDrawJwtBlacklistsIdKey := fmt.Sprintf("%s%v", cacheLuckDrawJwtBlacklistsIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, jwtBlacklistsRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Token, data.Platform, data.Ip, data.ExpireAt, data.CreateAt, data.UpdateAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Token, data.Platform, data.Ip, data.ExpireAt, data.Id)
 	}, luckDrawJwtBlacklistsIdKey)
 	return err
 }

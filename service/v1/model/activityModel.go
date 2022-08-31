@@ -27,7 +27,7 @@ type (
 		FindOneByUuid(ctx context.Context, uuid string) (*Activity, error)
 
 		FindCount(ctx context.Context) (int64, error)
-		FindList(ctx context.Context, pageSize, page int64) ([]*Activity, error)
+		FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Activity, error)
 	}
 
 	customActivityModel struct {
@@ -119,10 +119,13 @@ func (m *customActivityModel) FindCount(ctx context.Context) (int64, error) {
 	}
 }
 
-func (m *customActivityModel) FindList(ctx context.Context, pageSize, page int64) ([]*Activity, error) {
-	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0' limit %v,%v", activityRows, m.table, (page-1)*pageSize, pageSize)
-	if pageSize < 0 || page < 0 {
-		query = fmt.Sprintf("select %s from %s where `is_deleted`= '0'", projectRows, m.table)
+func (m *customActivityModel) FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Activity, error) {
+	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", activityRows, m.table)
+	if strings.TrimSpace(keyword) != "" {
+		query = fmt.Sprintf("%s and `name`=%s", query, keyword)
+	}
+	if pageSize >= 0 && page >= 0 {
+		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
 	}
 	var resp []*Activity
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)

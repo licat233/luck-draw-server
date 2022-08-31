@@ -25,7 +25,7 @@ type (
 		FindOneByUuid(ctx context.Context, uuid string) (*Adminer, error)
 
 		FindCount(ctx context.Context) (int64, error)
-		FindList(ctx context.Context, pageSize, page int64) ([]*Adminer, error)
+		FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Adminer, error)
 		FindOneByEmail(ctx context.Context, email string) (*Adminer, error)
 		FindOneByPassport(ctx context.Context, passport string) (*Adminer, error)
 
@@ -115,11 +115,15 @@ func (m *customAdminerModel) FindCount(ctx context.Context) (int64, error) {
 	return count, err
 }
 
-func (m *customAdminerModel) FindList(ctx context.Context, pageSize, page int64) ([]*Adminer, error) {
-	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0' limit %v,%v", adminerRows, m.table, (page-1)*pageSize, pageSize)
-	if pageSize < 0 || page < 0 {
-		query = fmt.Sprintf("select %s from %s where `is_deleted`= '0'", projectRows, m.table)
+func (m *customAdminerModel) FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Adminer, error) {
+	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", adminerRows, m.table)
+	if strings.TrimSpace(keyword) != "" {
+		query = fmt.Sprintf("%s and `name`=%s", query, keyword)
 	}
+	if pageSize >= 0 && page >= 0 {
+		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
+	}
+
 	var resp []*Adminer
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {

@@ -26,7 +26,7 @@ func NewGetAdminerEnumListLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 }
 
 func (l *GetAdminerEnumListLogic) GetAdminerEnumList(in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
-	list, err := l.svcCtx.AdminerModel.FindList(l.ctx, -1, -1)
+	list, err := l.svcCtx.AdminerModel.FindList(l.ctx, -1, -1, "")
 	if err != nil && err != model.ErrNotFound {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

@@ -7,7 +7,6 @@ import (
 	"luck_draw-server/service/v1/model"
 
 	"luck_draw-server/common/errorx"
-	"luck_draw-server/common/utils"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -36,12 +35,11 @@ func (l *PutPrizesPoolLogic) PutPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.S
 		Uuid:       in.Uuid,
 		ActivityId: in.ActivityId,
 		PrizeId:    in.PrizeId,
+		GradeId:    in.GradeId,
 		LuckValue:  in.LuckValue,
 		Status:     in.Status,
-		GradeName:  in.GradeName,
-		IsWin:      utils.BoolToInt64(in.IsWin),
 		Number:     in.Number,
-		Remain:     in.Remain,
+		Remainder:  in.Remainder,
 	}
 
 	if err := l.svcCtx.PrizesPoolModel.Update(l.ctx, data); err != nil {

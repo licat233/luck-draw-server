@@ -29,7 +29,7 @@ type (
 	luckerModel interface {
 		Insert(ctx context.Context, data *Lucker) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*Lucker, error)
-		Update(ctx context.Context, newData *Lucker) error
+		Update(ctx context.Context, data *Lucker) error
 		Delete(ctx context.Context, id int64) error
 	}
 
@@ -89,8 +89,8 @@ func (m *defaultLuckerModel) FindOne(ctx context.Context, id int64) (*Lucker, er
 func (m *defaultLuckerModel) Insert(ctx context.Context, data *Lucker) (sql.Result, error) {
 	luckDrawLuckerIdKey := fmt.Sprintf("%s%v", cacheLuckDrawLuckerIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, luckerRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.UserId, data.PrizesPoolId, data.Status, data.LuckDate, data.Ip, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, luckerRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.UserId, data.PrizesPoolId, data.Status, data.LuckDate, data.Ip, data.IsDeleted, data.DeleteAt)
 	}, luckDrawLuckerIdKey)
 	return ret, err
 }
@@ -99,7 +99,7 @@ func (m *defaultLuckerModel) Update(ctx context.Context, data *Lucker) error {
 	luckDrawLuckerIdKey := fmt.Sprintf("%s%v", cacheLuckDrawLuckerIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, luckerRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.UserId, data.PrizesPoolId, data.Status, data.LuckDate, data.Ip, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.UserId, data.PrizesPoolId, data.Status, data.LuckDate, data.Ip, data.IsDeleted, data.DeleteAt, data.Id)
 	}, luckDrawLuckerIdKey)
 	return err
 }

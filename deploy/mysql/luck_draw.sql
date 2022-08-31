@@ -1,17 +1,17 @@
 /*
  Navicat MySQL Data Transfer
 
- Source Server         : 2h4g8g-mysql-luck_draw
+ Source Server         : luck_draw
  Source Server Type    : MySQL
- Source Server Version : 80024
- Source Host           : 119.91.140.95:3306
+ Source Server Version : 80030
+ Source Host           : localhost:3306
  Source Schema         : luck_draw
 
  Target Server Type    : MySQL
- Target Server Version : 80024
+ Target Server Version : 80030
  File Encoding         : 65001
 
- Date: 21/08/2022 22:22:41
+ Date: 30/08/2022 16:23:51
 */
 
 SET NAMES utf8mb4;
@@ -29,7 +29,7 @@ CREATE TABLE `activity` (
   `status` tinyint NOT NULL DEFAULT '0' COMMENT '活动状态，是否在举办，默认关闭，需手动开启',
   `pattern` tinyint NOT NULL DEFAULT '0' COMMENT '方案: 0私密的，1公开的',
   `max_count` int NOT NULL DEFAULT '1' COMMENT '最大抽奖次数：-1表示无限制，0表示不可抽奖',
-  `max_prizes` int NOT NULL DEFAULT '1' COMMENT '最大抽奖次数：-1表示无限制，0表示不可抽奖',
+  `max_prizes` int NOT NULL DEFAULT '1' COMMENT '最大抽奖次数：-1表示无限制，0表示不可中奖',
   `start_time` datetime NOT NULL COMMENT '活动开始时间',
   `end_time` datetime NOT NULL COMMENT '活动结束时间',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -39,14 +39,15 @@ CREATE TABLE `activity` (
   PRIMARY KEY (`id`),
   KEY `uuid` (`uuid`),
   KEY `project_id` (`project_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='活动';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='活动';
 
 -- ----------------------------
 -- Records of activity
 -- ----------------------------
 BEGIN;
-INSERT INTO `activity` VALUES (1, 'eC3cD3fC3hR0dQ7cA6oD0gC1dA5aJ2kC1aY2', '618购物节', 1, 1, 0, 1, 1, '2022-07-07 17:38:50', '2022-07-31 17:38:52', '2022-07-07 17:38:56', '2022-07-07 17:38:56', 0, '2005-01-02 15:04:05');
+INSERT INTO `activity` VALUES (1, 'eC3cD3fC3hR0dQ7cA6oD0gC1dA5aJ2kC1aY2', '618购物节', 1, 0, 0, 1, 1, '2022-07-07 17:38:50', '2022-07-31 17:38:52', '2022-07-07 17:38:56', '2022-08-29 11:34:43', 0, '2005-01-02 15:04:05');
 INSERT INTO `activity` VALUES (2, 'aJ1eI3bA2iG1cC5lJ0bG0qA7aK2aC0aG8cY0', '七夕促销', 1, 1, 1, 1, 1, '2022-07-07 17:39:39', '2022-08-31 17:39:41', '2022-07-07 17:39:46', '2022-07-07 17:39:46', 0, '2005-01-02 15:04:05');
+INSERT INTO `activity` VALUES (3, 'cbabd3d3-f30c-4b9c-b167-a8670dc0b71a', '中秋活动', 1, 0, 0, 1, 1, '2022-08-30 14:56:10', '2022-08-31 14:56:14', '2022-08-30 14:59:43', '2022-08-30 14:59:43', 0, '2005-01-02 15:04:05');
 COMMIT;
 
 -- ----------------------------
@@ -77,23 +78,8 @@ CREATE TABLE `adminer` (
 -- Records of adminer
 -- ----------------------------
 BEGIN;
-INSERT INTO `adminer` VALUES (1, '3a37bef3-65da-4d1f-9acf-f13b308ad213', '超管', 'https://img.alicdn.com/imgextra/i2/917298378/O1CN010hGXaf2BlAzexJ8cM_!!917298378.png', 'licat', 'licat233', '1697470538@qq.com', 1, 1, 5, '2022-08-12 18:18:27', '2022-07-29 09:47:08', '2022-08-12 18:18:26', 0, '2005-01-02 15:04:05');
+INSERT INTO `adminer` VALUES (1, '3a37bef3-65da-4d1f-9acf-f13b308ad213', '超管', 'https://img.alicdn.com/imgextra/i2/917298378/O1CN010hGXaf2BlAzexJ8cM_!!917298378.png', 'licat', 'licat233', '1697470538@qq.com', 1, 1, 6, '2022-08-23 17:11:37', '2022-07-29 09:47:08', '2022-08-27 16:51:02', 0, '2005-01-02 15:04:05');
 COMMIT;
-
--- ----------------------------
--- Table structure for casbin_rule
--- ----------------------------
-DROP TABLE IF EXISTS `casbin_rule`;
-CREATE TABLE `casbin_rule` (
-  `p_type` varchar(32) NOT NULL DEFAULT '',
-  `v0` varchar(255) NOT NULL DEFAULT '',
-  `v1` varchar(255) NOT NULL DEFAULT '',
-  `v2` varchar(255) NOT NULL DEFAULT '',
-  `v3` varchar(255) NOT NULL DEFAULT '',
-  `v4` varchar(255) NOT NULL DEFAULT '',
-  `v5` varchar(255) NOT NULL DEFAULT '',
-  KEY `idx_casbin_rule` (`p_type`,`v0`,`v1`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Table structure for jwt_blacklists
@@ -101,7 +87,7 @@ CREATE TABLE `casbin_rule` (
 DROP TABLE IF EXISTS `jwt_blacklists`;
 CREATE TABLE `jwt_blacklists` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` varchar(254) COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户或者管理员的唯一识别码',
+  `uuid` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户或者管理员的唯一识别码',
   `token` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'jwt-token',
   `platform` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '绑定平台',
   `ip` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0.0.0.0' COMMENT '绑定ip',
@@ -123,6 +109,7 @@ CREATE TABLE `lucker` (
   `prizes_pool_id` int NOT NULL COMMENT '抽中的奖品池id',
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态: -1放弃领奖，0未领奖，1已领奖',
   `luck_date` datetime NOT NULL COMMENT '抽奖时间',
+  `ip` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0.0.0.0' COMMENT 'ip地址',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已被删除',
@@ -137,7 +124,7 @@ CREATE TABLE `lucker` (
 -- Records of lucker
 -- ----------------------------
 BEGIN;
-INSERT INTO `lucker` VALUES (1, 'cL0bQ7aA0bC0aC0jA2aD0jA6jL8oL0fF2dI1', 1, 1, 1, '2022-07-07 17:49:13', '2022-07-07 17:49:15', '2022-07-07 17:49:15', 0, '2005-01-02 15:04:05');
+INSERT INTO `lucker` VALUES (1, 'cL0bQ7aA0bC0aC0jA2aD0jA6jL8oL0fF2dI1', 1, 1, 1, '2022-07-07 17:49:13', '', '2022-07-07 17:49:15', '2022-08-30 16:22:52', 0, '2005-01-02 15:04:05');
 COMMIT;
 
 -- ----------------------------
@@ -246,13 +233,14 @@ CREATE TABLE `project` (
   `delete_at` datetime NOT NULL DEFAULT '2005-01-02 15:04:05' COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `uuid` (`uuid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='项目';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='项目';
 
 -- ----------------------------
 -- Records of project
 -- ----------------------------
 BEGIN;
-INSERT INTO `project` VALUES (1, 'aD6aC0aS0aK0dJ0jK2bB1aL0oM2bD0hJ0mC2', '植题祛斑', 1, '2022-07-07 17:37:52', '2022-07-07 17:38:06', 0, '2005-01-02 15:04:05');
+INSERT INTO `project` VALUES (1, 'aD6aC0aS0aK0dJ0jK2bB1aL0oM2bD0hJ0mC2', '植题祛斑', 1, '2022-07-07 17:37:52', '2022-08-29 10:01:45', 0, '2005-01-02 15:04:05');
+INSERT INTO `project` VALUES (2, '3994f0a9-7de6-4c1c-8189-074e2af328f3', '李中医祛斑', 0, '2022-08-29 10:08:57', '2022-08-29 10:08:57', 0, '2005-01-02 15:04:05');
 COMMIT;
 
 -- ----------------------------

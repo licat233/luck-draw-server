@@ -63,8 +63,9 @@ type BatchIdReq struct {
 }
 
 type ListReq struct {
-	PageSize int64 `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
-	Page     int64 `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page     int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword  string `form:"keyword,optional"`                            //关键词，可选
 }
 
 type SearchReq struct {
@@ -91,8 +92,8 @@ type EmailCaptchaVerifyReq struct {
 }
 
 type Enum struct {
-	Label string `json:"label"`
-	Value int64  `json:"value"`
+	Label interface{} `json:"label"`
+	Value interface{} `json:"value"`
 }
 
 type Activity struct {
@@ -286,10 +287,9 @@ type PrizesPool struct {
 	PrizeId    int64  `json:"prize_id"`    // 奖品id
 	LuckValue  int64  `json:"luck_value"`  // 幸运值
 	Status     int64  `json:"status"`      // 是否可用，0不可用，1可用
-	GradeName  string `json:"grade_name"`  // 等级名称，如：一等奖
-	IsWin      int64  `json:"is_win"`      // 是否中奖
+	GradeId    int64  `json:"grade_id"`    // 等级id，如：一等奖
 	Number     int64  `json:"number"`      // 奖品总数量
-	Remain     int64  `json:"remain"`      // 奖品剩余数量
+	Remainder  int64  `json:"remainder"`   // 奖品剩余数量
 	CreateAt   int64  `json:"create_at"`   // 创建时间
 	UpdateAt   int64  `json:"update_at"`   // 更新时间
 	IsDeleted  int64  `json:"is_deleted"`  // 是否已被删除
@@ -301,14 +301,13 @@ type PrizesPoolGetReq struct {
 }
 
 type PrizesPoolAddReq struct {
-	ActivityId int64  `json:"activity_id"` // 活动id
-	PrizeId    int64  `json:"prize_id"`    // 奖品id
-	LuckValue  int64  `json:"luck_value"`  // 幸运值
-	Status     int64  `json:"status"`      // 是否可用，0不可用，1可用
-	GradeName  string `json:"grade_name"`  // 等级名称，如：一等奖
-	IsWin      int64  `json:"is_win"`      // 是否中奖
-	Number     int64  `json:"number"`      // 奖品总数量
-	Remain     int64  `json:"remain"`      // 奖品剩余数量
+	ActivityId int64 `json:"activity_id"` // 活动id
+	PrizeId    int64 `json:"prize_id"`    // 奖品id
+	LuckValue  int64 `json:"luck_value"`  // 幸运值
+	Status     int64 `json:"status"`      // 是否可用，0不可用，1可用
+	GradeId    int64 `json:"grade_id"`    // 等级id，如：一等奖
+	Number     int64 `json:"number"`      // 奖品总数量
+	Remainder  int64 `json:"remainder"`   // 奖品剩余数量
 }
 
 type PrizesPoolPutReq struct {
@@ -318,10 +317,9 @@ type PrizesPoolPutReq struct {
 	PrizeId    int64  `json:"prize_id"`    // 奖品id
 	LuckValue  int64  `json:"luck_value"`  // 幸运值
 	Status     int64  `json:"status"`      // 是否可用，0不可用，1可用
-	GradeName  string `json:"grade_name"`  // 等级名称，如：一等奖
-	IsWin      int64  `json:"is_win"`      // 是否中奖
+	GradeId    int64  `json:"grade_id"`    // 等级id，如：一等奖
 	Number     int64  `json:"number"`      // 奖品总数量
-	Remain     int64  `json:"remain"`      // 奖品剩余数量
+	Remainder  int64  `json:"remainder"`   // 奖品剩余数量
 }
 
 type PrizesPoolDelReq struct {

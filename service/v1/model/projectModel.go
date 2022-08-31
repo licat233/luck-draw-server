@@ -25,7 +25,7 @@ type (
 		FindOneByUuid(ctx context.Context, uuid string) (*Project, error)
 
 		FindCount(ctx context.Context) (int64, error)
-		FindList(ctx context.Context, pageSize, page int64) ([]*Project, error)
+		FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Project, error)
 	}
 
 	customProjectModel struct {
@@ -134,10 +134,13 @@ func (m *customProjectModel) FindCount(ctx context.Context) (int64, error) {
 	}
 }
 
-func (m *customProjectModel) FindList(ctx context.Context, pageSize, page int64) ([]*Project, error) {
-	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0' limit %v,%v", projectRows, m.table, (page-1)*pageSize, pageSize)
-	if pageSize < 0 || page < 0 {
-		query = fmt.Sprintf("select %s from %s where `is_deleted`= '0'", projectRows, m.table)
+func (m *customProjectModel) FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Project, error) {
+	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", projectRows, m.table)
+	if strings.TrimSpace(keyword) != "" {
+		query = fmt.Sprintf("%s and `name`=%s", query, keyword)
+	}
+	if pageSize >= 0 && page >= 0 {
+		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
 	}
 
 	var resp []*Project

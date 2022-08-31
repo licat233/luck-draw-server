@@ -76,6 +76,7 @@ export interface ListReq {
 export interface ListReqParams {
 	pageSize: number // 页面大小
 	current: number // 当前页码
+	keyword: string // 关键词，可选
 }
 
 export interface SearchReq {
@@ -105,8 +106,8 @@ export interface EmailCaptchaVerifyReq {
 }
 
 export interface Enum {
-	label: string
-	value: number
+	label: any
+	value: any
 }
 
 export interface Activity {
@@ -312,10 +313,9 @@ export interface PrizesPool {
 	prize_id: number // 奖品id
 	luck_value: number // 幸运值
 	status: number // 是否可用，0不可用，1可用
-	grade_name: string // 等级名称，如：一等奖
-	is_win: number // 是否中奖
+	grade_id: number // 等级id，如：一等奖
 	number: number // 奖品总数量
-	remain: number // 奖品剩余数量
+	remainder: number // 奖品剩余数量
 	create_at: number // 创建时间
 	update_at: number // 更新时间
 	is_deleted: number // 是否已被删除
@@ -334,10 +334,9 @@ export interface PrizesPoolAddReq {
 	prize_id: number // 奖品id
 	luck_value: number // 幸运值
 	status: number // 是否可用，0不可用，1可用
-	grade_name: string // 等级名称，如：一等奖
-	is_win: number // 是否中奖
+	grade_id: number // 等级id，如：一等奖
 	number: number // 奖品总数量
-	remain: number // 奖品剩余数量
+	remainder: number // 奖品剩余数量
 }
 
 export interface PrizesPoolPutReq {
@@ -347,10 +346,9 @@ export interface PrizesPoolPutReq {
 	prize_id: number // 奖品id
 	luck_value: number // 幸运值
 	status: number // 是否可用，0不可用，1可用
-	grade_name: string // 等级名称，如：一等奖
-	is_win: number // 是否中奖
+	grade_id: number // 等级id，如：一等奖
 	number: number // 奖品总数量
-	remain: number // 奖品剩余数量
+	remainder: number // 奖品剩余数量
 }
 
 export interface PrizesPoolDelReq {

@@ -29,7 +29,7 @@ type (
 	userModel interface {
 		Insert(ctx context.Context, data *User) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*User, error)
-		Update(ctx context.Context, newData *User) error
+		Update(ctx context.Context, data *User) error
 		Delete(ctx context.Context, id int64) error
 	}
 
@@ -91,8 +91,8 @@ func (m *defaultUserModel) FindOne(ctx context.Context, id int64) (*User, error)
 func (m *defaultUserModel) Insert(ctx context.Context, data *User) (sql.Result, error) {
 	luckDrawUserIdKey := fmt.Sprintf("%s%v", cacheLuckDrawUserIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Passport, data.Email, data.Phone, data.Name, data.Address, data.Score, data.Status, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Passport, data.Email, data.Phone, data.Name, data.Address, data.Score, data.Status, data.IsDeleted, data.DeleteAt)
 	}, luckDrawUserIdKey)
 	return ret, err
 }
@@ -101,7 +101,7 @@ func (m *defaultUserModel) Update(ctx context.Context, data *User) error {
 	luckDrawUserIdKey := fmt.Sprintf("%s%v", cacheLuckDrawUserIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Passport, data.Email, data.Phone, data.Name, data.Address, data.Score, data.Status, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Passport, data.Email, data.Phone, data.Name, data.Address, data.Score, data.Status, data.IsDeleted, data.DeleteAt, data.Id)
 	}, luckDrawUserIdKey)
 	return err
 }

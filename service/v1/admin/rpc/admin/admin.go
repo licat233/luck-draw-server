@@ -65,6 +65,7 @@ type (
 	ParseJwtTokenResp     = admin_pb.ParseJwtTokenResp
 	Policy                = admin_pb.Policy
 	Prize                 = admin_pb.Prize
+	PrizeGrade            = admin_pb.PrizeGrade
 	PrizesPool            = admin_pb.PrizesPool
 	Project               = admin_pb.Project
 	StatusResp            = admin_pb.StatusResp

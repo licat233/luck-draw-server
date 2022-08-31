@@ -18,12 +18,12 @@ type BaseResp {
 	Page      int64 `json:"current,optional"`   // 【选填】当前页码，current与antd前端对接
 	TotalPage int64 `json:"totalPage,optional"` // 【选填】自增项，总共有多少页，根据前端的pageSize来计算
 	//如果是失败响应，附带debug信息
-	ErrorCode    int    `json:"errorCode,optional"`          // 【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功
-	ErrorMessage string `json:"errorMessage,optional"`       // 【选填】向用户显示消息
-	TraceMessage string `json:"traceMessage,optional"`       // 【选填】调试错误信息，请勿在生产环境下使用，可有可无
-	ShowType     int    `json:"showType,optional"` // 【选填】错误显示类型：0.不提示错误;1.警告信息提示；2.错误信息提示；4.通知提示；9.页面跳转
-	TraceId      string `json:"traceId,optional"`            // 【选填】方便后端故障排除：唯一的请求ID
-	Host         string `json:"host,optional"`               // 【选填】方便后端故障排除：当前访问服务器的主机
+	ErrorCode    int    `json:"errorCode,optional"`    // 【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功
+	ErrorMessage string `json:"errorMessage,optional"` // 【选填】向用户显示消息
+	TraceMessage string `json:"traceMessage,optional"` // 【选填】调试错误信息，请勿在生产环境下使用，可有可无
+	ShowType     int    `json:"showType,optional"`     // 【选填】错误显示类型：0.不提示错误;1.警告信息提示；2.错误信息提示；4.通知提示；9.页面跳转
+	TraceId      string `json:"traceId,optional"`      // 【选填】方便后端故障排除：唯一的请求ID
+	Host         string `json:"host,optional"`         // 【选填】方便后端故障排除：当前访问服务器的主机
 }
 
 //下载响应
@@ -45,11 +45,12 @@ type BatchIdReq {
 type ListReq {
 	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
 	Page     int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword  string `form:"keyword,optional"`                            //关键词，可选
 }
 
 //通用页面数据请求
 type SearchReq {
-	Keyword  string `form:"keyword,optional"`                   //关键词，可选
+	Keyword  string `form:"keyword,optional"`                            //关键词，可选
 	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
 	Page     int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
 }
@@ -73,6 +74,6 @@ type EmailCaptchaVerifyReq {
 }
 
 type Enum {
-	Label string `json:"label"`
-	Value int64 `json:"value"`
+	Label interface{} `json:"label"`
+	Value interface{} `json:"value"`
 }

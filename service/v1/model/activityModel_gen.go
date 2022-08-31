@@ -29,7 +29,7 @@ type (
 	activityModel interface {
 		Insert(ctx context.Context, data *Activity) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*Activity, error)
-		Update(ctx context.Context, newData *Activity) error
+		Update(ctx context.Context, data *Activity) error
 		Delete(ctx context.Context, id int64) error
 	}
 
@@ -46,7 +46,7 @@ type (
 		Status    int64     `db:"status"`     // 活动状态，是否在举办，默认关闭，需手动开启
 		Pattern   int64     `db:"pattern"`    // 方案: 0私密的，1公开的
 		MaxCount  int64     `db:"max_count"`  // 最大抽奖次数：-1表示无限制，0表示不可抽奖
-		MaxPrizes int64     `db:"max_prizes"` // 最大抽奖次数：-1表示无限制，0表示不可抽奖
+		MaxPrizes int64     `db:"max_prizes"` // 最大抽奖次数：-1表示无限制，0表示不可中奖
 		StartTime time.Time `db:"start_time"` // 活动开始时间
 		EndTime   time.Time `db:"end_time"`   // 活动结束时间
 		CreateAt  time.Time `db:"create_at"`  // 创建时间
@@ -92,8 +92,8 @@ func (m *defaultActivityModel) FindOne(ctx context.Context, id int64) (*Activity
 func (m *defaultActivityModel) Insert(ctx context.Context, data *Activity) (sql.Result, error) {
 	luckDrawActivityIdKey := fmt.Sprintf("%s%v", cacheLuckDrawActivityIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, activityRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, activityRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.IsDeleted, data.DeleteAt)
 	}, luckDrawActivityIdKey)
 	return ret, err
 }
@@ -102,7 +102,7 @@ func (m *defaultActivityModel) Update(ctx context.Context, data *Activity) error
 	luckDrawActivityIdKey := fmt.Sprintf("%s%v", cacheLuckDrawActivityIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, activityRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.IsDeleted, data.DeleteAt, data.Id)
 	}, luckDrawActivityIdKey)
 	return err
 }

@@ -7,7 +7,6 @@ import (
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 
 	"luck_draw-server/common/respx"
-	"luck_draw-server/common/utils"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -30,12 +29,11 @@ func (l *AddLogic) Add(req *types.PrizesPoolAddReq) (any, error) {
 	resp, err := l.svcCtx.AdminRpc.AddPrizesPool(l.ctx, &admin_pb.PrizesPool{
 		ActivityId: req.ActivityId,
 		PrizeId:    req.PrizeId,
+		GradeId:    req.GradeId,
 		LuckValue:  req.LuckValue,
 		Status:     req.Status,
-		GradeName:  req.GradeName,
-		IsWin:      utils.Int64ToBool(req.IsWin),
 		Number:     req.Number,
-		Remain:     req.Remain,
+		Remainder:  req.Remainder,
 	})
 	if err != nil {
 		return nil, err

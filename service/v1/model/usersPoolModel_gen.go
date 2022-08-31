@@ -29,7 +29,7 @@ type (
 	usersPoolModel interface {
 		Insert(ctx context.Context, data *UsersPool) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*UsersPool, error)
-		Update(ctx context.Context, newData *UsersPool) error
+		Update(ctx context.Context, data *UsersPool) error
 		Delete(ctx context.Context, id int64) error
 	}
 
@@ -88,8 +88,8 @@ func (m *defaultUsersPoolModel) FindOne(ctx context.Context, id int64) (*UsersPo
 func (m *defaultUsersPoolModel) Insert(ctx context.Context, data *UsersPool) (sql.Result, error) {
 	luckDrawUsersPoolIdKey := fmt.Sprintf("%s%v", cacheLuckDrawUsersPoolIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, usersPoolRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.UserId, data.Status, data.Score, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, usersPoolRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.UserId, data.Status, data.Score, data.IsDeleted, data.DeleteAt)
 	}, luckDrawUsersPoolIdKey)
 	return ret, err
 }
@@ -98,7 +98,7 @@ func (m *defaultUsersPoolModel) Update(ctx context.Context, data *UsersPool) err
 	luckDrawUsersPoolIdKey := fmt.Sprintf("%s%v", cacheLuckDrawUsersPoolIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, usersPoolRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.UserId, data.Status, data.Score, data.CreateAt, data.UpdateAt, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.UserId, data.Status, data.Score, data.IsDeleted, data.DeleteAt, data.Id)
 	}, luckDrawUsersPoolIdKey)
 	return err
 }

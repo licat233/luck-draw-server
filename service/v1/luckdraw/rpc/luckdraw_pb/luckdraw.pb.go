@@ -33,7 +33,7 @@ type User struct {
 	Name     string `protobuf:"bytes,6,opt,name=name,proto3" json:"name"`
 	Address  string `protobuf:"bytes,7,opt,name=address,proto3" json:"address"`
 	Score    int64  `protobuf:"varint,8,opt,name=score,proto3" json:"score"`
-	Status   int32  `protobuf:"varint,9,opt,name=status,proto3" json:"status"`
+	Status   int64  `protobuf:"varint,9,opt,name=status,proto3" json:"status"`
 }
 
 func (x *User) Reset() {
@@ -124,7 +124,7 @@ func (x *User) GetScore() int64 {
 	return 0
 }
 
-func (x *User) GetStatus() int32 {
+func (x *User) GetStatus() int64 {
 	if x != nil {
 		return x.Status
 	}
@@ -141,7 +141,7 @@ type Prize struct {
 	Name   string  `protobuf:"bytes,3,opt,name=name,proto3" json:"name"`
 	Image  string  `protobuf:"bytes,4,opt,name=image,proto3" json:"image"`
 	Price  float64 `protobuf:"fixed64,5,opt,name=price,proto3" json:"price"`
-	Status int32   `protobuf:"varint,6,opt,name=status,proto3" json:"status"`
+	Status int64   `protobuf:"varint,6,opt,name=status,proto3" json:"status"`
 }
 
 func (x *Prize) Reset() {
@@ -211,7 +211,7 @@ func (x *Prize) GetPrice() float64 {
 	return 0
 }
 
-func (x *Prize) GetStatus() int32 {
+func (x *Prize) GetStatus() int64 {
 	if x != nil {
 		return x.Status
 	}
@@ -228,7 +228,7 @@ type Activity struct {
 	Name      string `protobuf:"bytes,3,opt,name=name,proto3" json:"name"`
 	ProjectId int64  `protobuf:"varint,4,opt,name=project_id,json=projectId,proto3" json:"project_id"`
 	Status    bool   `protobuf:"varint,5,opt,name=status,proto3" json:"status"`                        //活动状态，是否在举办，默认关闭，需手动开启
-	Pattern   int32  `protobuf:"varint,6,opt,name=pattern,proto3" json:"pattern"`                      //方案: 0私密的，1公开的
+	Pattern   int64  `protobuf:"varint,6,opt,name=pattern,proto3" json:"pattern"`                      //方案: 0私密的，1公开的
 	MaxCount  int64  `protobuf:"varint,7,opt,name=max_count,json=maxCount,proto3" json:"max_count"`    //最大抽奖次数：-1表示无限制，0表示不可抽奖
 	MaxPrizes int64  `protobuf:"varint,8,opt,name=max_prizes,json=maxPrizes,proto3" json:"max_prizes"` //最大领奖数:  -1表示无限制，0表示不可领奖
 	StartTime int64  `protobuf:"varint,9,opt,name=start_time,json=startTime,proto3" json:"start_time"` //活动开始时间
@@ -302,7 +302,7 @@ func (x *Activity) GetStatus() bool {
 	return false
 }
 
-func (x *Activity) GetPattern() int32 {
+func (x *Activity) GetPattern() int64 {
 	if x != nil {
 		return x.Pattern
 	}
@@ -346,7 +346,7 @@ type Lucker struct {
 	Uuid         string `protobuf:"bytes,2,opt,name=uuid,proto3" json:"uuid"`
 	UserId       int64  `protobuf:"varint,3,opt,name=user_id,json=userId,proto3" json:"user_id"`
 	PrizesPoolId int64  `protobuf:"varint,4,opt,name=prizes_pool_id,json=prizesPoolId,proto3" json:"prizes_pool_id"`
-	Status       int32  `protobuf:"varint,5,opt,name=status,proto3" json:"status"`
+	Status       int64  `protobuf:"varint,5,opt,name=status,proto3" json:"status"`
 	LuckDate     int64  `protobuf:"varint,6,opt,name=luck_date,json=luckDate,proto3" json:"luck_date"`
 	Ip           string `protobuf:"bytes,7,opt,name=ip,proto3" json:"ip"`
 }
@@ -411,7 +411,7 @@ func (x *Lucker) GetPrizesPoolId() int64 {
 	return 0
 }
 
-func (x *Lucker) GetStatus() int32 {
+func (x *Lucker) GetStatus() int64 {
 	if x != nil {
 		return x.Status
 	}
@@ -442,11 +442,10 @@ type PrizesPool struct {
 	ActivityId int64  `protobuf:"varint,3,opt,name=activity_id,json=activityId,proto3" json:"activity_id"`
 	PrizeId    int64  `protobuf:"varint,4,opt,name=prize_id,json=prizeId,proto3" json:"prize_id"`
 	LuckValue  int64  `protobuf:"varint,5,opt,name=luck_value,json=luckValue,proto3" json:"luck_value"`
-	Status     int32  `protobuf:"varint,6,opt,name=status,proto3" json:"status"`
-	GradeName  string `protobuf:"bytes,7,opt,name=grade_name,json=gradeName,proto3" json:"grade_name"`
-	IsWin      bool   `protobuf:"varint,8,opt,name=is_win,json=isWin,proto3" json:"is_win"`
-	Number     int64  `protobuf:"varint,9,opt,name=number,proto3" json:"number"`
-	Remain     int64  `protobuf:"varint,10,opt,name=remain,proto3" json:"remain"`
+	Status     int64  `protobuf:"varint,6,opt,name=status,proto3" json:"status"`
+	GradeId    int64  `protobuf:"varint,7,opt,name=grade_id,json=gradeId,proto3" json:"grade_id"`
+	Number     int64  `protobuf:"varint,8,opt,name=number,proto3" json:"number"`
+	Remainder  int64  `protobuf:"varint,9,opt,name=remainder,proto3" json:"remainder"`
 }
 
 func (x *PrizesPool) Reset() {
@@ -516,25 +515,18 @@ func (x *PrizesPool) GetLuckValue() int64 {
 	return 0
 }
 
-func (x *PrizesPool) GetStatus() int32 {
+func (x *PrizesPool) GetStatus() int64 {
 	if x != nil {
 		return x.Status
 	}
 	return 0
 }
 
-func (x *PrizesPool) GetGradeName() string {
+func (x *PrizesPool) GetGradeId() int64 {
 	if x != nil {
-		return x.GradeName
+		return x.GradeId
 	}
-	return ""
-}
-
-func (x *PrizesPool) GetIsWin() bool {
-	if x != nil {
-		return x.IsWin
-	}
-	return false
+	return 0
 }
 
 func (x *PrizesPool) GetNumber() int64 {
@@ -544,9 +536,9 @@ func (x *PrizesPool) GetNumber() int64 {
 	return 0
 }
 
-func (x *PrizesPool) GetRemain() int64 {
+func (x *PrizesPool) GetRemainder() int64 {
 	if x != nil {
-		return x.Remain
+		return x.Remainder
 	}
 	return 0
 }
@@ -560,7 +552,7 @@ type UsersPool struct {
 	Uuid       string `protobuf:"bytes,2,opt,name=uuid,proto3" json:"uuid"`
 	ActivityId int64  `protobuf:"varint,3,opt,name=activity_id,json=activityId,proto3" json:"activity_id"`
 	UserId     int64  `protobuf:"varint,4,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	Status     int32  `protobuf:"varint,5,opt,name=status,proto3" json:"status"`
+	Status     int64  `protobuf:"varint,5,opt,name=status,proto3" json:"status"`
 	Score      int64  `protobuf:"varint,6,opt,name=score,proto3" json:"score"`
 }
 
@@ -624,7 +616,7 @@ func (x *UsersPool) GetUserId() int64 {
 	return 0
 }
 
-func (x *UsersPool) GetStatus() int32 {
+func (x *UsersPool) GetStatus() int64 {
 	if x != nil {
 		return x.Status
 	}
@@ -634,6 +626,69 @@ func (x *UsersPool) GetStatus() int32 {
 func (x *UsersPool) GetScore() int64 {
 	if x != nil {
 		return x.Score
+	}
+	return 0
+}
+
+type PrizeGrade struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id    int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
+	Name  string `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
+	Iswin int64  `protobuf:"varint,3,opt,name=iswin,proto3" json:"iswin"`
+}
+
+func (x *PrizeGrade) Reset() {
+	*x = PrizeGrade{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_luckdraw_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PrizeGrade) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PrizeGrade) ProtoMessage() {}
+
+func (x *PrizeGrade) ProtoReflect() protoreflect.Message {
+	mi := &file_luckdraw_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PrizeGrade.ProtoReflect.Descriptor instead.
+func (*PrizeGrade) Descriptor() ([]byte, []int) {
+	return file_luckdraw_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *PrizeGrade) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *PrizeGrade) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *PrizeGrade) GetIswin() int64 {
+	if x != nil {
+		return x.Iswin
 	}
 	return 0
 }
@@ -651,12 +706,14 @@ type LuckerDetail struct {
 	Activity *Activity `protobuf:"bytes,3,opt,name=activity,proto3" json:"activity"`
 	// 奖品信息
 	Prize *Prize `protobuf:"bytes,4,opt,name=prize,proto3" json:"prize"`
+	// 奖品等级
+	PrizeGrade *PrizeGrade `protobuf:"bytes,5,opt,name=prize_grade,json=prizeGrade,proto3" json:"prize_grade"`
 }
 
 func (x *LuckerDetail) Reset() {
 	*x = LuckerDetail{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[6]
+		mi := &file_luckdraw_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -669,7 +726,7 @@ func (x *LuckerDetail) String() string {
 func (*LuckerDetail) ProtoMessage() {}
 
 func (x *LuckerDetail) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[6]
+	mi := &file_luckdraw_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -682,7 +739,7 @@ func (x *LuckerDetail) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LuckerDetail.ProtoReflect.Descriptor instead.
 func (*LuckerDetail) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{6}
+	return file_luckdraw_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *LuckerDetail) GetLucker() *Lucker {
@@ -713,6 +770,13 @@ func (x *LuckerDetail) GetPrize() *Prize {
 	return nil
 }
 
+func (x *LuckerDetail) GetPrizeGrade() *PrizeGrade {
+	if x != nil {
+		return x.PrizeGrade
+	}
+	return nil
+}
+
 // 公开的请求
 type ActivePrizesReq struct {
 	state         protoimpl.MessageState
@@ -725,7 +789,7 @@ type ActivePrizesReq struct {
 func (x *ActivePrizesReq) Reset() {
 	*x = ActivePrizesReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[7]
+		mi := &file_luckdraw_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -738,7 +802,7 @@ func (x *ActivePrizesReq) String() string {
 func (*ActivePrizesReq) ProtoMessage() {}
 
 func (x *ActivePrizesReq) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[7]
+	mi := &file_luckdraw_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -751,7 +815,7 @@ func (x *ActivePrizesReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ActivePrizesReq.ProtoReflect.Descriptor instead.
 func (*ActivePrizesReq) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{7}
+	return file_luckdraw_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ActivePrizesReq) GetActivityUuid() string {
@@ -772,7 +836,7 @@ type ActivePrizesResp struct {
 func (x *ActivePrizesResp) Reset() {
 	*x = ActivePrizesResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[8]
+		mi := &file_luckdraw_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -785,7 +849,7 @@ func (x *ActivePrizesResp) String() string {
 func (*ActivePrizesResp) ProtoMessage() {}
 
 func (x *ActivePrizesResp) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[8]
+	mi := &file_luckdraw_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -798,7 +862,7 @@ func (x *ActivePrizesResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ActivePrizesResp.ProtoReflect.Descriptor instead.
 func (*ActivePrizesResp) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{8}
+	return file_luckdraw_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *ActivePrizesResp) GetPrizes() []*Prize {
@@ -820,7 +884,7 @@ type GetLuckerListReq struct {
 func (x *GetLuckerListReq) Reset() {
 	*x = GetLuckerListReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[9]
+		mi := &file_luckdraw_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -833,7 +897,7 @@ func (x *GetLuckerListReq) String() string {
 func (*GetLuckerListReq) ProtoMessage() {}
 
 func (x *GetLuckerListReq) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[9]
+	mi := &file_luckdraw_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -846,7 +910,7 @@ func (x *GetLuckerListReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetLuckerListReq.ProtoReflect.Descriptor instead.
 func (*GetLuckerListReq) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{9}
+	return file_luckdraw_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetLuckerListReq) GetUserId() int64 {
@@ -874,7 +938,7 @@ type GetLuckerListResp struct {
 func (x *GetLuckerListResp) Reset() {
 	*x = GetLuckerListResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[10]
+		mi := &file_luckdraw_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -887,7 +951,7 @@ func (x *GetLuckerListResp) String() string {
 func (*GetLuckerListResp) ProtoMessage() {}
 
 func (x *GetLuckerListResp) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[10]
+	mi := &file_luckdraw_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -900,7 +964,7 @@ func (x *GetLuckerListResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetLuckerListResp.ProtoReflect.Descriptor instead.
 func (*GetLuckerListResp) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{10}
+	return file_luckdraw_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *GetLuckerListResp) GetLuckerDetails() []*LuckerDetail {
@@ -923,7 +987,7 @@ type JwtData struct {
 func (x *JwtData) Reset() {
 	*x = JwtData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[11]
+		mi := &file_luckdraw_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -936,7 +1000,7 @@ func (x *JwtData) String() string {
 func (*JwtData) ProtoMessage() {}
 
 func (x *JwtData) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[11]
+	mi := &file_luckdraw_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -949,7 +1013,7 @@ func (x *JwtData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use JwtData.ProtoReflect.Descriptor instead.
 func (*JwtData) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{11}
+	return file_luckdraw_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *JwtData) GetUserId() int64 {
@@ -985,7 +1049,7 @@ type JwtToken struct {
 func (x *JwtToken) Reset() {
 	*x = JwtToken{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[12]
+		mi := &file_luckdraw_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -998,7 +1062,7 @@ func (x *JwtToken) String() string {
 func (*JwtToken) ProtoMessage() {}
 
 func (x *JwtToken) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[12]
+	mi := &file_luckdraw_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1011,7 +1075,7 @@ func (x *JwtToken) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use JwtToken.ProtoReflect.Descriptor instead.
 func (*JwtToken) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{12}
+	return file_luckdraw_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *JwtToken) GetAccessToken() string {
@@ -1040,7 +1104,7 @@ type IdentifyReq struct {
 func (x *IdentifyReq) Reset() {
 	*x = IdentifyReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[13]
+		mi := &file_luckdraw_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1053,7 +1117,7 @@ func (x *IdentifyReq) String() string {
 func (*IdentifyReq) ProtoMessage() {}
 
 func (x *IdentifyReq) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[13]
+	mi := &file_luckdraw_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1066,7 +1130,7 @@ func (x *IdentifyReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IdentifyReq.ProtoReflect.Descriptor instead.
 func (*IdentifyReq) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{13}
+	return file_luckdraw_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *IdentifyReq) GetPassport() string {
@@ -1095,7 +1159,7 @@ type IdentifyResp struct {
 func (x *IdentifyResp) Reset() {
 	*x = IdentifyResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[14]
+		mi := &file_luckdraw_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1108,7 +1172,7 @@ func (x *IdentifyResp) String() string {
 func (*IdentifyResp) ProtoMessage() {}
 
 func (x *IdentifyResp) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[14]
+	mi := &file_luckdraw_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1121,7 +1185,7 @@ func (x *IdentifyResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IdentifyResp.ProtoReflect.Descriptor instead.
 func (*IdentifyResp) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{14}
+	return file_luckdraw_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *IdentifyResp) GetStatus() bool {
@@ -1153,7 +1217,7 @@ type GoodluckReq struct {
 func (x *GoodluckReq) Reset() {
 	*x = GoodluckReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[15]
+		mi := &file_luckdraw_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1166,7 +1230,7 @@ func (x *GoodluckReq) String() string {
 func (*GoodluckReq) ProtoMessage() {}
 
 func (x *GoodluckReq) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[15]
+	mi := &file_luckdraw_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1179,7 +1243,7 @@ func (x *GoodluckReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GoodluckReq.ProtoReflect.Descriptor instead.
 func (*GoodluckReq) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{15}
+	return file_luckdraw_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GoodluckReq) GetUserId() int64 {
@@ -1222,7 +1286,7 @@ type GoodluckResp struct {
 func (x *GoodluckResp) Reset() {
 	*x = GoodluckResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[16]
+		mi := &file_luckdraw_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1235,7 +1299,7 @@ func (x *GoodluckResp) String() string {
 func (*GoodluckResp) ProtoMessage() {}
 
 func (x *GoodluckResp) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[16]
+	mi := &file_luckdraw_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1248,7 +1312,7 @@ func (x *GoodluckResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GoodluckResp.ProtoReflect.Descriptor instead.
 func (*GoodluckResp) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{16}
+	return file_luckdraw_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *GoodluckResp) GetUser() *User {
@@ -1276,7 +1340,7 @@ type SearchLuckerReq struct {
 func (x *SearchLuckerReq) Reset() {
 	*x = SearchLuckerReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[17]
+		mi := &file_luckdraw_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1289,7 +1353,7 @@ func (x *SearchLuckerReq) String() string {
 func (*SearchLuckerReq) ProtoMessage() {}
 
 func (x *SearchLuckerReq) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[17]
+	mi := &file_luckdraw_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1302,7 +1366,7 @@ func (x *SearchLuckerReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchLuckerReq.ProtoReflect.Descriptor instead.
 func (*SearchLuckerReq) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{17}
+	return file_luckdraw_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *SearchLuckerReq) GetPassport() string {
@@ -1324,7 +1388,7 @@ type SearchLuckerResp struct {
 func (x *SearchLuckerResp) Reset() {
 	*x = SearchLuckerResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[18]
+		mi := &file_luckdraw_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1337,7 +1401,7 @@ func (x *SearchLuckerResp) String() string {
 func (*SearchLuckerResp) ProtoMessage() {}
 
 func (x *SearchLuckerResp) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[18]
+	mi := &file_luckdraw_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1350,7 +1414,7 @@ func (x *SearchLuckerResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchLuckerResp.ProtoReflect.Descriptor instead.
 func (*SearchLuckerResp) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{18}
+	return file_luckdraw_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *SearchLuckerResp) GetUser() *User {
@@ -1381,7 +1445,7 @@ type SelectPrizesReq struct {
 func (x *SelectPrizesReq) Reset() {
 	*x = SelectPrizesReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[19]
+		mi := &file_luckdraw_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1394,7 +1458,7 @@ func (x *SelectPrizesReq) String() string {
 func (*SelectPrizesReq) ProtoMessage() {}
 
 func (x *SelectPrizesReq) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[19]
+	mi := &file_luckdraw_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1407,7 +1471,7 @@ func (x *SelectPrizesReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SelectPrizesReq.ProtoReflect.Descriptor instead.
 func (*SelectPrizesReq) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{19}
+	return file_luckdraw_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *SelectPrizesReq) GetUserId() int64 {
@@ -1449,7 +1513,7 @@ type SelectPrizesResp struct {
 func (x *SelectPrizesResp) Reset() {
 	*x = SelectPrizesResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[20]
+		mi := &file_luckdraw_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1462,7 +1526,7 @@ func (x *SelectPrizesResp) String() string {
 func (*SelectPrizesResp) ProtoMessage() {}
 
 func (x *SelectPrizesResp) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[20]
+	mi := &file_luckdraw_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1475,7 +1539,7 @@ func (x *SelectPrizesResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SelectPrizesResp.ProtoReflect.Descriptor instead.
 func (*SelectPrizesResp) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{20}
+	return file_luckdraw_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *SelectPrizesResp) GetPrizes() []*Prize {
@@ -1496,7 +1560,7 @@ type GenerateTokenReq struct {
 func (x *GenerateTokenReq) Reset() {
 	*x = GenerateTokenReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[21]
+		mi := &file_luckdraw_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1509,7 +1573,7 @@ func (x *GenerateTokenReq) String() string {
 func (*GenerateTokenReq) ProtoMessage() {}
 
 func (x *GenerateTokenReq) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[21]
+	mi := &file_luckdraw_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1522,7 +1586,7 @@ func (x *GenerateTokenReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GenerateTokenReq.ProtoReflect.Descriptor instead.
 func (*GenerateTokenReq) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{21}
+	return file_luckdraw_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *GenerateTokenReq) GetJwtData() *JwtData {
@@ -1543,7 +1607,7 @@ type GenerateTokenResp struct {
 func (x *GenerateTokenResp) Reset() {
 	*x = GenerateTokenResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_luckdraw_proto_msgTypes[22]
+		mi := &file_luckdraw_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1556,7 +1620,7 @@ func (x *GenerateTokenResp) String() string {
 func (*GenerateTokenResp) ProtoMessage() {}
 
 func (x *GenerateTokenResp) ProtoReflect() protoreflect.Message {
-	mi := &file_luckdraw_proto_msgTypes[22]
+	mi := &file_luckdraw_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1569,7 +1633,7 @@ func (x *GenerateTokenResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GenerateTokenResp.ProtoReflect.Descriptor instead.
 func (*GenerateTokenResp) Descriptor() ([]byte, []int) {
-	return file_luckdraw_proto_rawDescGZIP(), []int{22}
+	return file_luckdraw_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *GenerateTokenResp) GetJwtToken() *JwtToken {
@@ -1596,7 +1660,7 @@ var file_luckdraw_proto_rawDesc = []byte{
 	0x72, 0x65, 0x73, 0x73, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72,
 	0x65, 0x73, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x18, 0x08, 0x20, 0x01,
 	0x28, 0x03, 0x52, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61,
-	0x74, 0x75, 0x73, 0x18, 0x09, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75,
+	0x74, 0x75, 0x73, 0x18, 0x09, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75,
 	0x73, 0x22, 0x83, 0x01, 0x0a, 0x05, 0x50, 0x72, 0x69, 0x7a, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69,
 	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x75,
 	0x75, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x75, 0x75, 0x69, 0x64, 0x12,
@@ -1604,7 +1668,7 @@ var file_luckdraw_proto_rawDesc = []byte{
 	0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x18, 0x04, 0x20, 0x01,
 	0x28, 0x09, 0x52, 0x05, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x72, 0x69,
 	0x63, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x01, 0x52, 0x05, 0x70, 0x72, 0x69, 0x63, 0x65, 0x12,
-	0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x06, 0x20, 0x01, 0x28, 0x05, 0x52,
+	0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x06, 0x20, 0x01, 0x28, 0x03, 0x52,
 	0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x89, 0x02, 0x0a, 0x08, 0x41, 0x63, 0x74, 0x69,
 	0x76, 0x69, 0x74, 0x79, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03,
 	0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x75, 0x75, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01,
@@ -1614,7 +1678,7 @@ var file_luckdraw_proto_rawDesc = []byte{
 	0x52, 0x09, 0x70, 0x72, 0x6f, 0x6a, 0x65, 0x63, 0x74, 0x49, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x73,
 	0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x05, 0x20, 0x01, 0x28, 0x08, 0x52, 0x06, 0x73, 0x74, 0x61,
 	0x74, 0x75, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x70, 0x61, 0x74, 0x74, 0x65, 0x72, 0x6e, 0x18, 0x06,
-	0x20, 0x01, 0x28, 0x05, 0x52, 0x07, 0x70, 0x61, 0x74, 0x74, 0x65, 0x72, 0x6e, 0x12, 0x1b, 0x0a,
+	0x20, 0x01, 0x28, 0x03, 0x52, 0x07, 0x70, 0x61, 0x74, 0x74, 0x65, 0x72, 0x6e, 0x12, 0x1b, 0x0a,
 	0x09, 0x6d, 0x61, 0x78, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x07, 0x20, 0x01, 0x28, 0x03,
 	0x52, 0x08, 0x6d, 0x61, 0x78, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x6d, 0x61,
 	0x78, 0x5f, 0x70, 0x72, 0x69, 0x7a, 0x65, 0x73, 0x18, 0x08, 0x20, 0x01, 0x28, 0x03, 0x52, 0x09,
@@ -1630,10 +1694,10 @@ var file_luckdraw_proto_rawDesc = []byte{
 	0x72, 0x69, 0x7a, 0x65, 0x73, 0x5f, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x04, 0x20,
 	0x01, 0x28, 0x03, 0x52, 0x0c, 0x70, 0x72, 0x69, 0x7a, 0x65, 0x73, 0x50, 0x6f, 0x6f, 0x6c, 0x49,
 	0x64, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x05, 0x20, 0x01, 0x28,
-	0x05, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1b, 0x0a, 0x09, 0x6c, 0x75, 0x63,
+	0x03, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1b, 0x0a, 0x09, 0x6c, 0x75, 0x63,
 	0x6b, 0x5f, 0x64, 0x61, 0x74, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x6c, 0x75,
 	0x63, 0x6b, 0x44, 0x61, 0x74, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x70, 0x18, 0x07, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x02, 0x69, 0x70, 0x22, 0x89, 0x02, 0x0a, 0x0a, 0x50, 0x72, 0x69, 0x7a, 0x65,
+	0x28, 0x09, 0x52, 0x02, 0x69, 0x70, 0x22, 0xf4, 0x01, 0x0a, 0x0a, 0x50, 0x72, 0x69, 0x7a, 0x65,
 	0x73, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x03, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x75, 0x75, 0x69, 0x64, 0x18, 0x02, 0x20,
 	0x01, 0x28, 0x09, 0x52, 0x04, 0x75, 0x75, 0x69, 0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x61, 0x63, 0x74,
@@ -1643,37 +1707,44 @@ var file_luckdraw_proto_rawDesc = []byte{
 	0x69, 0x7a, 0x65, 0x49, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x6c, 0x75, 0x63, 0x6b, 0x5f, 0x76, 0x61,
 	0x6c, 0x75, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x03, 0x52, 0x09, 0x6c, 0x75, 0x63, 0x6b, 0x56,
 	0x61, 0x6c, 0x75, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x06,
-	0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1d, 0x0a, 0x0a,
-	0x67, 0x72, 0x61, 0x64, 0x65, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x09, 0x67, 0x72, 0x61, 0x64, 0x65, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x15, 0x0a, 0x06, 0x69,
-	0x73, 0x5f, 0x77, 0x69, 0x6e, 0x18, 0x08, 0x20, 0x01, 0x28, 0x08, 0x52, 0x05, 0x69, 0x73, 0x57,
-	0x69, 0x6e, 0x12, 0x16, 0x0a, 0x06, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x09, 0x20, 0x01,
-	0x28, 0x03, 0x52, 0x06, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x65,
-	0x6d, 0x61, 0x69, 0x6e, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x72, 0x65, 0x6d, 0x61,
-	0x69, 0x6e, 0x22, 0x97, 0x01, 0x0a, 0x09, 0x55, 0x73, 0x65, 0x72, 0x73, 0x50, 0x6f, 0x6f, 0x6c,
-	0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64,
-	0x12, 0x12, 0x0a, 0x04, 0x75, 0x75, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
-	0x75, 0x75, 0x69, 0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79,
-	0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x61, 0x63, 0x74, 0x69, 0x76,
-	0x69, 0x74, 0x79, 0x49, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x69, 0x64,
-	0x18, 0x04, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x16,
-	0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x05, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06,
-	0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x18,
-	0x06, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x22, 0xde, 0x01, 0x0a,
-	0x0c, 0x4c, 0x75, 0x63, 0x6b, 0x65, 0x72, 0x44, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x12, 0x2e, 0x0a,
-	0x06, 0x6c, 0x75, 0x63, 0x6b, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e,
-	0x6c, 0x75, 0x63, 0x6b, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x4c,
-	0x75, 0x63, 0x6b, 0x65, 0x72, 0x52, 0x06, 0x6c, 0x75, 0x63, 0x6b, 0x65, 0x72, 0x12, 0x3b, 0x0a,
-	0x0b, 0x70, 0x72, 0x69, 0x7a, 0x65, 0x73, 0x5f, 0x70, 0x6f, 0x6f, 0x6c, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x6c, 0x75, 0x63, 0x6b, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x2e, 0x50, 0x72, 0x69, 0x7a, 0x65, 0x73, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x0a,
-	0x70, 0x72, 0x69, 0x7a, 0x65, 0x73, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x34, 0x0a, 0x08, 0x61, 0x63,
-	0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x6c,
-	0x75, 0x63, 0x6b, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x41, 0x63,
-	0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x52, 0x08, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79,
-	0x12, 0x2b, 0x0a, 0x05, 0x70, 0x72, 0x69, 0x7a, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x15, 0x2e, 0x6c, 0x75, 0x63, 0x6b, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x2e, 0x50, 0x72, 0x69, 0x7a, 0x65, 0x52, 0x05, 0x70, 0x72, 0x69, 0x7a, 0x65, 0x22, 0x36, 0x0a,
+	0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x19, 0x0a, 0x08,
+	0x67, 0x72, 0x61, 0x64, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x03, 0x52, 0x07,
+	0x67, 0x72, 0x61, 0x64, 0x65, 0x49, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x6e, 0x75, 0x6d, 0x62, 0x65,
+	0x72, 0x18, 0x08, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12,
+	0x1c, 0x0a, 0x09, 0x72, 0x65, 0x6d, 0x61, 0x69, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x09, 0x20, 0x01,
+	0x28, 0x03, 0x52, 0x09, 0x72, 0x65, 0x6d, 0x61, 0x69, 0x6e, 0x64, 0x65, 0x72, 0x22, 0x97, 0x01,
+	0x0a, 0x09, 0x55, 0x73, 0x65, 0x72, 0x73, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x0e, 0x0a, 0x02, 0x69,
+	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x75,
+	0x75, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x75, 0x75, 0x69, 0x64, 0x12,
+	0x1f, 0x0a, 0x0b, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x5f, 0x69, 0x64, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x49, 0x64,
+	0x12, 0x17, 0x0a, 0x07, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28,
+	0x03, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61,
+	0x74, 0x75, 0x73, 0x18, 0x05, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75,
+	0x73, 0x12, 0x14, 0x0a, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x03,
+	0x52, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x22, 0x46, 0x0a, 0x0a, 0x50, 0x72, 0x69, 0x7a, 0x65,
+	0x47, 0x72, 0x61, 0x64, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x03, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x69, 0x73, 0x77,
+	0x69, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x69, 0x73, 0x77, 0x69, 0x6e, 0x22,
+	0x9b, 0x02, 0x0a, 0x0c, 0x4c, 0x75, 0x63, 0x6b, 0x65, 0x72, 0x44, 0x65, 0x74, 0x61, 0x69, 0x6c,
+	0x12, 0x2e, 0x0a, 0x06, 0x6c, 0x75, 0x63, 0x6b, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x16, 0x2e, 0x6c, 0x75, 0x63, 0x6b, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x2e, 0x4c, 0x75, 0x63, 0x6b, 0x65, 0x72, 0x52, 0x06, 0x6c, 0x75, 0x63, 0x6b, 0x65, 0x72,
+	0x12, 0x3b, 0x0a, 0x0b, 0x70, 0x72, 0x69, 0x7a, 0x65, 0x73, 0x5f, 0x70, 0x6f, 0x6f, 0x6c, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x6c, 0x75, 0x63, 0x6b, 0x64, 0x72, 0x61, 0x77,
+	0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x50, 0x72, 0x69, 0x7a, 0x65, 0x73, 0x50, 0x6f, 0x6f,
+	0x6c, 0x52, 0x0a, 0x70, 0x72, 0x69, 0x7a, 0x65, 0x73, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x34, 0x0a,
+	0x08, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x18, 0x2e, 0x6c, 0x75, 0x63, 0x6b, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x2e, 0x41, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x52, 0x08, 0x61, 0x63, 0x74, 0x69, 0x76,
+	0x69, 0x74, 0x79, 0x12, 0x2b, 0x0a, 0x05, 0x70, 0x72, 0x69, 0x7a, 0x65, 0x18, 0x04, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x15, 0x2e, 0x6c, 0x75, 0x63, 0x6b, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x2e, 0x50, 0x72, 0x69, 0x7a, 0x65, 0x52, 0x05, 0x70, 0x72, 0x69, 0x7a, 0x65,
+	0x12, 0x3b, 0x0a, 0x0b, 0x70, 0x72, 0x69, 0x7a, 0x65, 0x5f, 0x67, 0x72, 0x61, 0x64, 0x65, 0x18,
+	0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x6c, 0x75, 0x63, 0x6b, 0x64, 0x72, 0x61, 0x77,
+	0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x50, 0x72, 0x69, 0x7a, 0x65, 0x47, 0x72, 0x61, 0x64,
+	0x65, 0x52, 0x0a, 0x70, 0x72, 0x69, 0x7a, 0x65, 0x47, 0x72, 0x61, 0x64, 0x65, 0x22, 0x36, 0x0a,
 	0x0f, 0x41, 0x63, 0x74, 0x69, 0x76, 0x65, 0x50, 0x72, 0x69, 0x7a, 0x65, 0x73, 0x52, 0x65, 0x71,
 	0x12, 0x23, 0x0a, 0x0d, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74, 0x79, 0x5f, 0x75, 0x75, 0x69,
 	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x61, 0x63, 0x74, 0x69, 0x76, 0x69, 0x74,
@@ -1816,7 +1887,7 @@ func file_luckdraw_proto_rawDescGZIP() []byte {
 	return file_luckdraw_proto_rawDescData
 }
 
-var file_luckdraw_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
+var file_luckdraw_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_luckdraw_proto_goTypes = []interface{}{
 	(*User)(nil),              // 0: luckdraw_proto.User
 	(*Prize)(nil),             // 1: luckdraw_proto.Prize
@@ -1824,59 +1895,61 @@ var file_luckdraw_proto_goTypes = []interface{}{
 	(*Lucker)(nil),            // 3: luckdraw_proto.Lucker
 	(*PrizesPool)(nil),        // 4: luckdraw_proto.PrizesPool
 	(*UsersPool)(nil),         // 5: luckdraw_proto.UsersPool
-	(*LuckerDetail)(nil),      // 6: luckdraw_proto.LuckerDetail
-	(*ActivePrizesReq)(nil),   // 7: luckdraw_proto.ActivePrizesReq
-	(*ActivePrizesResp)(nil),  // 8: luckdraw_proto.ActivePrizesResp
-	(*GetLuckerListReq)(nil),  // 9: luckdraw_proto.GetLuckerListReq
-	(*GetLuckerListResp)(nil), // 10: luckdraw_proto.GetLuckerListResp
-	(*JwtData)(nil),           // 11: luckdraw_proto.JwtData
-	(*JwtToken)(nil),          // 12: luckdraw_proto.JwtToken
-	(*IdentifyReq)(nil),       // 13: luckdraw_proto.IdentifyReq
-	(*IdentifyResp)(nil),      // 14: luckdraw_proto.IdentifyResp
-	(*GoodluckReq)(nil),       // 15: luckdraw_proto.GoodluckReq
-	(*GoodluckResp)(nil),      // 16: luckdraw_proto.GoodluckResp
-	(*SearchLuckerReq)(nil),   // 17: luckdraw_proto.SearchLuckerReq
-	(*SearchLuckerResp)(nil),  // 18: luckdraw_proto.SearchLuckerResp
-	(*SelectPrizesReq)(nil),   // 19: luckdraw_proto.SelectPrizesReq
-	(*SelectPrizesResp)(nil),  // 20: luckdraw_proto.SelectPrizesResp
-	(*GenerateTokenReq)(nil),  // 21: luckdraw_proto.GenerateTokenReq
-	(*GenerateTokenResp)(nil), // 22: luckdraw_proto.GenerateTokenResp
+	(*PrizeGrade)(nil),        // 6: luckdraw_proto.PrizeGrade
+	(*LuckerDetail)(nil),      // 7: luckdraw_proto.LuckerDetail
+	(*ActivePrizesReq)(nil),   // 8: luckdraw_proto.ActivePrizesReq
+	(*ActivePrizesResp)(nil),  // 9: luckdraw_proto.ActivePrizesResp
+	(*GetLuckerListReq)(nil),  // 10: luckdraw_proto.GetLuckerListReq
+	(*GetLuckerListResp)(nil), // 11: luckdraw_proto.GetLuckerListResp
+	(*JwtData)(nil),           // 12: luckdraw_proto.JwtData
+	(*JwtToken)(nil),          // 13: luckdraw_proto.JwtToken
+	(*IdentifyReq)(nil),       // 14: luckdraw_proto.IdentifyReq
+	(*IdentifyResp)(nil),      // 15: luckdraw_proto.IdentifyResp
+	(*GoodluckReq)(nil),       // 16: luckdraw_proto.GoodluckReq
+	(*GoodluckResp)(nil),      // 17: luckdraw_proto.GoodluckResp
+	(*SearchLuckerReq)(nil),   // 18: luckdraw_proto.SearchLuckerReq
+	(*SearchLuckerResp)(nil),  // 19: luckdraw_proto.SearchLuckerResp
+	(*SelectPrizesReq)(nil),   // 20: luckdraw_proto.SelectPrizesReq
+	(*SelectPrizesResp)(nil),  // 21: luckdraw_proto.SelectPrizesResp
+	(*GenerateTokenReq)(nil),  // 22: luckdraw_proto.GenerateTokenReq
+	(*GenerateTokenResp)(nil), // 23: luckdraw_proto.GenerateTokenResp
 }
 var file_luckdraw_proto_depIdxs = []int32{
 	3,  // 0: luckdraw_proto.LuckerDetail.lucker:type_name -> luckdraw_proto.Lucker
 	4,  // 1: luckdraw_proto.LuckerDetail.prizes_pool:type_name -> luckdraw_proto.PrizesPool
 	2,  // 2: luckdraw_proto.LuckerDetail.activity:type_name -> luckdraw_proto.Activity
 	1,  // 3: luckdraw_proto.LuckerDetail.prize:type_name -> luckdraw_proto.Prize
-	1,  // 4: luckdraw_proto.ActivePrizesResp.prizes:type_name -> luckdraw_proto.Prize
-	6,  // 5: luckdraw_proto.GetLuckerListResp.lucker_details:type_name -> luckdraw_proto.LuckerDetail
-	11, // 6: luckdraw_proto.IdentifyReq.jwt_data:type_name -> luckdraw_proto.JwtData
-	12, // 7: luckdraw_proto.IdentifyResp.jwt_token:type_name -> luckdraw_proto.JwtToken
-	0,  // 8: luckdraw_proto.GoodluckResp.user:type_name -> luckdraw_proto.User
-	6,  // 9: luckdraw_proto.GoodluckResp.lucker_detail:type_name -> luckdraw_proto.LuckerDetail
-	0,  // 10: luckdraw_proto.SearchLuckerResp.user:type_name -> luckdraw_proto.User
-	6,  // 11: luckdraw_proto.SearchLuckerResp.lucker_details:type_name -> luckdraw_proto.LuckerDetail
-	1,  // 12: luckdraw_proto.SelectPrizesResp.prizes:type_name -> luckdraw_proto.Prize
-	11, // 13: luckdraw_proto.GenerateTokenReq.jwt_data:type_name -> luckdraw_proto.JwtData
-	12, // 14: luckdraw_proto.GenerateTokenResp.jwt_token:type_name -> luckdraw_proto.JwtToken
-	7,  // 15: luckdraw_proto.Luckdraw.GetActivePrizes:input_type -> luckdraw_proto.ActivePrizesReq
-	9,  // 16: luckdraw_proto.Luckdraw.GetLuckerList:input_type -> luckdraw_proto.GetLuckerListReq
-	13, // 17: luckdraw_proto.Luckdraw.Identify:input_type -> luckdraw_proto.IdentifyReq
-	15, // 18: luckdraw_proto.Luckdraw.Goodluck:input_type -> luckdraw_proto.GoodluckReq
-	17, // 19: luckdraw_proto.Luckdraw.SearchLucker:input_type -> luckdraw_proto.SearchLuckerReq
-	19, // 20: luckdraw_proto.Luckdraw.SelectPrizes:input_type -> luckdraw_proto.SelectPrizesReq
-	21, // 21: luckdraw_proto.Luckdraw.GenerateToken:input_type -> luckdraw_proto.GenerateTokenReq
-	8,  // 22: luckdraw_proto.Luckdraw.GetActivePrizes:output_type -> luckdraw_proto.ActivePrizesResp
-	10, // 23: luckdraw_proto.Luckdraw.GetLuckerList:output_type -> luckdraw_proto.GetLuckerListResp
-	14, // 24: luckdraw_proto.Luckdraw.Identify:output_type -> luckdraw_proto.IdentifyResp
-	16, // 25: luckdraw_proto.Luckdraw.Goodluck:output_type -> luckdraw_proto.GoodluckResp
-	18, // 26: luckdraw_proto.Luckdraw.SearchLucker:output_type -> luckdraw_proto.SearchLuckerResp
-	20, // 27: luckdraw_proto.Luckdraw.SelectPrizes:output_type -> luckdraw_proto.SelectPrizesResp
-	22, // 28: luckdraw_proto.Luckdraw.GenerateToken:output_type -> luckdraw_proto.GenerateTokenResp
-	22, // [22:29] is the sub-list for method output_type
-	15, // [15:22] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	6,  // 4: luckdraw_proto.LuckerDetail.prize_grade:type_name -> luckdraw_proto.PrizeGrade
+	1,  // 5: luckdraw_proto.ActivePrizesResp.prizes:type_name -> luckdraw_proto.Prize
+	7,  // 6: luckdraw_proto.GetLuckerListResp.lucker_details:type_name -> luckdraw_proto.LuckerDetail
+	12, // 7: luckdraw_proto.IdentifyReq.jwt_data:type_name -> luckdraw_proto.JwtData
+	13, // 8: luckdraw_proto.IdentifyResp.jwt_token:type_name -> luckdraw_proto.JwtToken
+	0,  // 9: luckdraw_proto.GoodluckResp.user:type_name -> luckdraw_proto.User
+	7,  // 10: luckdraw_proto.GoodluckResp.lucker_detail:type_name -> luckdraw_proto.LuckerDetail
+	0,  // 11: luckdraw_proto.SearchLuckerResp.user:type_name -> luckdraw_proto.User
+	7,  // 12: luckdraw_proto.SearchLuckerResp.lucker_details:type_name -> luckdraw_proto.LuckerDetail
+	1,  // 13: luckdraw_proto.SelectPrizesResp.prizes:type_name -> luckdraw_proto.Prize
+	12, // 14: luckdraw_proto.GenerateTokenReq.jwt_data:type_name -> luckdraw_proto.JwtData
+	13, // 15: luckdraw_proto.GenerateTokenResp.jwt_token:type_name -> luckdraw_proto.JwtToken
+	8,  // 16: luckdraw_proto.Luckdraw.GetActivePrizes:input_type -> luckdraw_proto.ActivePrizesReq
+	10, // 17: luckdraw_proto.Luckdraw.GetLuckerList:input_type -> luckdraw_proto.GetLuckerListReq
+	14, // 18: luckdraw_proto.Luckdraw.Identify:input_type -> luckdraw_proto.IdentifyReq
+	16, // 19: luckdraw_proto.Luckdraw.Goodluck:input_type -> luckdraw_proto.GoodluckReq
+	18, // 20: luckdraw_proto.Luckdraw.SearchLucker:input_type -> luckdraw_proto.SearchLuckerReq
+	20, // 21: luckdraw_proto.Luckdraw.SelectPrizes:input_type -> luckdraw_proto.SelectPrizesReq
+	22, // 22: luckdraw_proto.Luckdraw.GenerateToken:input_type -> luckdraw_proto.GenerateTokenReq
+	9,  // 23: luckdraw_proto.Luckdraw.GetActivePrizes:output_type -> luckdraw_proto.ActivePrizesResp
+	11, // 24: luckdraw_proto.Luckdraw.GetLuckerList:output_type -> luckdraw_proto.GetLuckerListResp
+	15, // 25: luckdraw_proto.Luckdraw.Identify:output_type -> luckdraw_proto.IdentifyResp
+	17, // 26: luckdraw_proto.Luckdraw.Goodluck:output_type -> luckdraw_proto.GoodluckResp
+	19, // 27: luckdraw_proto.Luckdraw.SearchLucker:output_type -> luckdraw_proto.SearchLuckerResp
+	21, // 28: luckdraw_proto.Luckdraw.SelectPrizes:output_type -> luckdraw_proto.SelectPrizesResp
+	23, // 29: luckdraw_proto.Luckdraw.GenerateToken:output_type -> luckdraw_proto.GenerateTokenResp
+	23, // [23:30] is the sub-list for method output_type
+	16, // [16:23] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_luckdraw_proto_init() }
@@ -1958,7 +2031,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LuckerDetail); i {
+			switch v := v.(*PrizeGrade); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1970,7 +2043,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ActivePrizesReq); i {
+			switch v := v.(*LuckerDetail); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1982,7 +2055,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ActivePrizesResp); i {
+			switch v := v.(*ActivePrizesReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1994,7 +2067,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetLuckerListReq); i {
+			switch v := v.(*ActivePrizesResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2006,7 +2079,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetLuckerListResp); i {
+			switch v := v.(*GetLuckerListReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2018,7 +2091,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*JwtData); i {
+			switch v := v.(*GetLuckerListResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2030,7 +2103,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*JwtToken); i {
+			switch v := v.(*JwtData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2042,7 +2115,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*IdentifyReq); i {
+			switch v := v.(*JwtToken); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2054,7 +2127,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*IdentifyResp); i {
+			switch v := v.(*IdentifyReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2066,7 +2139,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GoodluckReq); i {
+			switch v := v.(*IdentifyResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2078,7 +2151,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GoodluckResp); i {
+			switch v := v.(*GoodluckReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2090,7 +2163,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SearchLuckerReq); i {
+			switch v := v.(*GoodluckResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2102,7 +2175,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SearchLuckerResp); i {
+			switch v := v.(*SearchLuckerReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2114,7 +2187,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SelectPrizesReq); i {
+			switch v := v.(*SearchLuckerResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2126,7 +2199,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SelectPrizesResp); i {
+			switch v := v.(*SelectPrizesReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2138,7 +2211,7 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GenerateTokenReq); i {
+			switch v := v.(*SelectPrizesResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2150,6 +2223,18 @@ func file_luckdraw_proto_init() {
 			}
 		}
 		file_luckdraw_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GenerateTokenReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_luckdraw_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GenerateTokenResp); i {
 			case 0:
 				return &v.state
@@ -2168,7 +2253,7 @@ func file_luckdraw_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_luckdraw_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   23,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

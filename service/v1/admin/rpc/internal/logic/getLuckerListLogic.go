@@ -26,7 +26,7 @@ func NewGetLuckerListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 }
 
 func (l *GetLuckerListLogic) GetLuckerList(in *admin_pb.ListReq) (*admin_pb.GetLuckerListResp, error) {
-	list, err := l.svcCtx.LuckerModel.FindList(l.ctx, in.PageSize, in.Page)
+	list, err := l.svcCtx.LuckerModel.FindList(l.ctx, in.PageSize, in.Page, in.Keyword)
 	if err != nil && err != model.ErrNotFound {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

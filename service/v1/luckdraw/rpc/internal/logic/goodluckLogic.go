@@ -16,6 +16,7 @@ import (
 	"luck_draw-server/common/errorx"
 	"luck_draw-server/common/kqueue"
 	"luck_draw-server/common/uniqueid"
+	"luck_draw-server/common/utils"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -134,8 +135,20 @@ func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.Good
 	// }
 	*/
 
+	//查询是否是否中奖
+	grade, err := l.svcCtx.PrizeGradeModel.FindOne(l.ctx, PrizesPool.GradeId)
+	if err != nil && err != model.ErrNotFound {
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
+	}
+	if err == model.ErrNotFound {
+		logx.Error(err)
+		return nil, errorx.IntRpcErr(err)
+	}
+	isWin := utils.Int64ToBool(grade.IsWin)
+
 	//交给mq去处理
-	if err := l.kqUpdateUserScore(user.Id, PrizesPool.IsWin); err != nil {
+	if err := l.kqUpdateUserScore(user.Id, isWin); err != nil {
 		logx.Errorf("l.kqUpdateUserScore(user.Id, PrizesPool.IsWin) error: %v", err)
 	}
 

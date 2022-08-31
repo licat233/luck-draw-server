@@ -13,9 +13,11 @@ import (
 	"github.com/zeromicro/go-zero/core/stringx"
 )
 
-var _ LuckerModel = (*customLuckerModel)(nil)
-var LuckerTableName = "lucker"
-var cacheLuckDrawLuckerUuidPrefix = "cache:luckDraw:lucker:uuid:"
+var (
+	_                             LuckerModel = (*customLuckerModel)(nil)
+	LuckerTableName                           = "lucker"
+	cacheLuckDrawLuckerUuidPrefix             = "cache:luckDraw:lucker:uuid:"
+)
 
 type (
 	// LuckerModel is an interface to be customized, add more methods here,
@@ -25,7 +27,7 @@ type (
 		DeleteSoft(ctx context.Context, data *Lucker) error
 		FindOneByUuid(ctx context.Context, uuid string) (*Lucker, error)
 
-		FindList(ctx context.Context, pageSize, page int64) ([]*Lucker, error)
+		FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Lucker, error)
 		FindsByUserId(ctx context.Context, userId int64) ([]*Lucker, error)
 		FindCount(ctx context.Context) (int64, error)
 		UpdateStatus(ctx context.Context, id, status int64) error
@@ -142,10 +144,13 @@ func (m *customLuckerModel) FindCount(ctx context.Context) (int64, error) {
 	}
 }
 
-func (m *customLuckerModel) FindList(ctx context.Context, pageSize, page int64) ([]*Lucker, error) {
-	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0' limit %v,%v", luckerRows, m.table, (page-1)*pageSize, pageSize)
-	if pageSize < 0 || page < 0 {
-		query = fmt.Sprintf("select %s from %s where `is_deleted`= '0'", projectRows, m.table)
+func (m *customLuckerModel) FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Lucker, error) {
+	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", luckerRows, m.table)
+	if strings.TrimSpace(keyword) != "" {
+		query = fmt.Sprintf("%s and `name`=%s", query, keyword)
+	}
+	if pageSize >= 0 && page >= 0 {
+		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
 	}
 	var resp []*Lucker
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
@@ -254,7 +259,12 @@ func (m *customLuckerModel) FindDetails(ctx context.Context, options *FindDetail
 		Fields:    builder.RawFieldNames(&Prize{}),
 		Connector: "_",
 	}
-	expectQuery := multiTableQuery(luckerInfo, prizesPoolInfo, activityInfo, prizeInfo)
+	prizeGradeInfo := &TableInfo{
+		TableName: PrizeGradeTableName,
+		Fields:    builder.RawFieldNames(&PrizeGrade{}),
+		Connector: "_",
+	}
+	expectQuery := multiTableQuery(luckerInfo, prizesPoolInfo, activityInfo, prizeInfo, prizeGradeInfo)
 
 	var bindsQuery []string
 	var ages []any
@@ -281,11 +291,25 @@ func (m *customLuckerModel) FindDetails(ctx context.Context, options *FindDetail
 		pageQuery = fmt.Sprintf(" limit %v,%v", (page-1)*pageSize, pageSize)
 	}
 
-	findDetails := fmt.Sprintf("SELECT %s ", expectQuery)
+	//基础查询
+	baseQuery := fmt.Sprintf("SELECT %s FROM %s", expectQuery, LuckerTableName)
 
-	baseQuery := fmt.Sprintf("FROM %s LEFT JOIN %s ON %s.prizes_pool_id = %s.id LEFT JOIN %s ON %s.activity_id = %s.id LEFT JOIN %s ON %s.prize_id = %s.id WHERE %s.is_deleted = 0 AND %s.is_deleted = 0 AND %s.is_deleted = 0 AND %s.is_deleted = 0", LuckerTableName, PrizesPoolTableName, LuckerTableName, PrizesPoolTableName, ActivityTableName, PrizesPoolTableName, ActivityTableName, PrizeTableName, PrizesPoolTableName, PrizeTableName, LuckerTableName, PrizesPoolTableName, ActivityTableName, PrizeTableName)
+	var builderstr strings.Builder
+	//关联查询
+	builderstr.WriteString(fmt.Sprintf(" LEFT JOIN %s ON %s.prizes_pool_id = %s.id", PrizesPoolTableName, LuckerTableName, PrizesPoolTableName))
+	builderstr.WriteString(fmt.Sprintf(" LEFT JOIN %s ON %s.prizes_pool_id = %s.id", ActivityTableName, PrizesPoolTableName, ActivityTableName))
+	builderstr.WriteString(fmt.Sprintf(" LEFT JOIN %s ON %s.prizes_pool_id = %s.id", PrizeTableName, PrizesPoolTableName, PrizeTableName))
+	builderstr.WriteString(fmt.Sprintf(" LEFT JOIN %s ON %s.prizes_pool_id = %s.id", PrizeGradeTableName, PrizesPoolTableName, PrizeGradeTableName))
 
-	queryList := fmt.Sprintf("%s %s %s %s", findDetails, baseQuery, bindQuery, pageQuery)
+	//条件查询
+	builderstr.WriteString(fmt.Sprintf(" WHERE %s.is_deleted = 0 AND %s.is_deleted = 0 AND %s.is_deleted = 0 AND %s.is_deleted = 0 AND %s.is_deleted = 0", LuckerTableName, PrizesPoolTableName, ActivityTableName, PrizeTableName, PrizeGradeTableName))
+	//绑定查询
+	builderstr.WriteString(bindQuery)
+	//页面查询
+	builderstr.WriteString(pageQuery)
+
+	mainQuery := builderstr.String()
+	queryList := fmt.Sprintf("%s %s", baseQuery, mainQuery)
 
 	err = m.QueryRowsNoCacheCtx(ctx, &resp, queryList, ages...)
 	switch err {
@@ -293,7 +317,6 @@ func (m *customLuckerModel) FindDetails(ctx context.Context, options *FindDetail
 		if !isPageQuery {
 			return
 		}
-		break
 	case sqlc.ErrNotFound:
 		err = ErrNotFound
 		return
@@ -301,8 +324,8 @@ func (m *customLuckerModel) FindDetails(ctx context.Context, options *FindDetail
 		return
 	}
 
-	findCount := fmt.Sprintf("SELECT count(*) ")
-	queryCount := fmt.Sprintf("%s %s %s", findCount, baseQuery, bindQuery)
+	baseQuery = fmt.Sprintf("SELECT count(*) FROM %s", LuckerTableName)
+	queryCount := fmt.Sprintf("%s %s", baseQuery, mainQuery)
 
 	err = m.QueryRowsNoCacheCtx(ctx, &total, queryCount, ages...)
 	switch err {

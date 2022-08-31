@@ -74,3 +74,11 @@ func VerifyActivity(activity *Activity) error {
 	}
 	return nil
 }
+
+//TODO: 后面有时间再实现
+// /** LuckerDetails 查询中奖详细信息
+//  */
+// func (m *customLuckerModel) LuckerDetails(ctx context.Context, options *FindDetailsOptions) (resp []*LuckerDetails, total int64, err error) {
+// 	//最优方案，先遍历出固定的表数据，比如prizeGrade
+
+// }

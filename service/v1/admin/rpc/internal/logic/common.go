@@ -2,7 +2,6 @@ package logic
 
 import (
 	"errors"
-	"luck_draw-server/common/utils"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 	"luck_draw-server/service/v1/model"
 )
@@ -118,12 +117,11 @@ func mdPrizesPoolToPbPrizesPool(mdPrizesPool *model.PrizesPool) *admin_pb.Prizes
 		Uuid:       mdPrizesPool.Uuid,
 		ActivityId: mdPrizesPool.ActivityId,
 		PrizeId:    mdPrizesPool.PrizeId,
+		GradeId:    mdPrizesPool.GradeId,
 		LuckValue:  mdPrizesPool.LuckValue,
 		Status:     mdPrizesPool.Status,
-		GradeName:  mdPrizesPool.GradeName,
-		IsWin:      utils.Int64ToBool(mdPrizesPool.IsWin),
 		Number:     mdPrizesPool.Number,
-		Remain:     mdPrizesPool.Remain,
+		Remainder:  mdPrizesPool.Remainder,
 	}
 }
 

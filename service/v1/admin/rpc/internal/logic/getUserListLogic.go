@@ -26,7 +26,7 @@ func NewGetUserListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 }
 
 func (l *GetUserListLogic) GetUserList(in *admin_pb.ListReq) (*admin_pb.GetUserListResp, error) {
-	list, err := l.svcCtx.UserModel.FindList(l.ctx, in.PageSize, in.Page)
+	list, err := l.svcCtx.UserModel.FindList(l.ctx, in.PageSize, in.Page, in.Keyword)
 	if err != nil && err != model.ErrNotFound {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

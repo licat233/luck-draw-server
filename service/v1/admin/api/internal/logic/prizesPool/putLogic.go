@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"luck_draw-server/common/respx"
-	"luck_draw-server/common/utils"
 	"luck_draw-server/service/v1/admin/api/internal/svc"
 	"luck_draw-server/service/v1/admin/api/internal/types"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
@@ -32,12 +31,11 @@ func (l *PutLogic) Put(req *types.PrizesPoolPutReq) (any, error) {
 		Uuid:       req.Uuid,
 		ActivityId: req.ActivityId,
 		PrizeId:    req.PrizeId,
+		GradeId:    req.GradeId,
 		LuckValue:  req.LuckValue,
 		Status:     req.Status,
-		GradeName:  req.GradeName,
-		IsWin:      utils.Int64ToBool(req.IsWin),
 		Number:     req.Number,
-		Remain:     req.Remain,
+		Remainder:  req.Remainder,
 	})
 	if err != nil {
 		return nil, err
