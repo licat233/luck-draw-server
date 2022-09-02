@@ -29,6 +29,7 @@ func (l *ListLogic) List(req *types.ListReq) (any, error) {
 	resp, err := l.svcCtx.AdminRpc.GetProjectList(l.ctx, &admin_pb.ListReq{
 		PageSize: req.PageSize,
 		Page:     req.Page,
+		Keyword:  req.Keyword,
 	})
 	if err != nil {
 		return nil, err

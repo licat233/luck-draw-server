@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/zeromicro/go-zero/core/stores/cache"
@@ -29,6 +30,7 @@ type (
 		FindsByUserAndActivity(ctx context.Context, userId, activityId int64) ([]*Prize, error)
 		FindsByUserAndActivityAndStatus(ctx context.Context, userId, activityId, Status int64) ([]*Prize, error)
 		FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Prize, error)
+		FindInIds(ctx context.Context, prizesIds []int64) ([]*Prize, error)
 	}
 
 	customPrizeModel struct {
@@ -189,12 +191,31 @@ func (m *customPrizeModel) FindsByUserAndActivityAndStatus(ctx context.Context, 
 func (m *customPrizeModel) FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Prize, error) {
 	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", prizeRows, m.table)
 	if strings.TrimSpace(keyword) != "" {
-		query = fmt.Sprintf("%s and `name`=%s", query, keyword)
+		query = query + " and `name` like '%" + keyword + "%'"
 	}
-	if pageSize >= 0 && page >= 0 {
+	if pageSize > 0 && page > 0 {
 		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
 	}
 
+	var resp []*Prize
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *customPrizeModel) FindInIds(ctx context.Context, prizesIds []int64) ([]*Prize, error) {
+	var temps []string
+	for _, id := range prizesIds {
+		temps = append(temps, strconv.Itoa(int(id)))
+	}
+	whereSql := strings.Join(temps, ",")
+	query := fmt.Sprintf("select %s from %s where `is_deleted` = '0' and `id` in(%s)", prizeRows, m.table, whereSql)
 	var resp []*Prize
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {

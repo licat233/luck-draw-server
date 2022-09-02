@@ -21,6 +21,7 @@ type ServiceContext struct {
 	LuckerModel     model.LuckerModel
 	PrizesPoolModel model.PrizesPoolModel
 	UsersPoolModel  model.UsersPoolModel
+	PrizeGradeModel model.PrizeGradeModel
 
 	AdminerModel       model.AdminerModel
 	JwtBlacklistsModel model.JwtBlacklistsModel
@@ -41,6 +42,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		LuckerModel:        model.NewLuckerModel(sqlConn, c.CacheRedis),
 		PrizesPoolModel:    model.NewPrizesPoolModel(sqlConn, c.CacheRedis),
 		UsersPoolModel:     model.NewUsersPoolModel(sqlConn, c.CacheRedis),
+		PrizeGradeModel:    model.NewPrizeGradeModel(sqlConn, c.CacheRedis),
 		AdminerModel:       model.NewAdminerModel(sqlConn, c.CacheRedis),
 		JwtBlacklistsModel: model.NewJwtBlacklistsModel(sqlConn, c.CacheRedis),
 	}

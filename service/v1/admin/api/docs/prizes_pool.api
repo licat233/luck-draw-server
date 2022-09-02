@@ -37,13 +37,17 @@ type PrizesPoolPutReq {
 	PrizeId    int64     `json:"prize_id"`    // 奖品id
 	LuckValue  int64     `json:"luck_value"`  // 幸运值
 	Status     int64     `json:"status"`      // 是否可用，0不可用，1可用
-	GradeId    int64     `json:"grade_id"`       // 等级id，如：一等奖
+	GradeId    int64     `json:"grade_id"`    // 等级id，如：一等奖
 	Number     int64     `json:"number"`      // 奖品总数量
 	Remainder  int64     `json:"remainder"`      // 奖品剩余数量
 }
 
 type PrizesPoolDelReq {
 	Id int64 `json:"id"`
+}
+
+type searchPrizesPool {
+	ActivityId int64 `form:"activity_id,optional,default=-1"`  //所属活动id，-1表示无限制
 }
 
 @server(
@@ -72,4 +76,8 @@ service admin-api {
     @doc "删除奖品池"
 	@handler del 
 	delete /(PrizesPoolDelReq) returns(BaseResp)
+
+	@doc "获取某活动的奖品池"
+	@handler searchPrizesPool
+	get /search(searchPrizesPool) returns(BaseResp)
 }

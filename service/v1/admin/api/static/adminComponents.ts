@@ -162,6 +162,13 @@ export interface ActivityDelReq {
 	id: number
 }
 
+export interface ProjectActivityReq {
+}
+
+export interface ProjectActivityReqParams {
+	project_id: number // 所属项目id，-1表示无限制
+}
+
 export interface Adminer {
 	id: number // 表主键
 	uuid: string // 唯一识别码
@@ -266,6 +273,25 @@ export interface LuckerDelReq {
 	id: number
 }
 
+export interface LuckerDetailsReq {
+}
+
+export interface LuckerDetailsReqParams {
+	user_id: number // 用户id， -1表示不用 UserId 查询
+	activity_id: number // 活动id, -1表示不用 activityId 查询
+	pageSize: number // 页面大小
+	current: number // 当前页码
+}
+
+export interface LuckerDetails {
+	lucker: Lucker // 幸运者信息，中奖信息
+	prizes_pool: PrizesPool // 奖品池信息，奖品池信息
+	prize: Prize // 奖品信息，中奖产品
+	prize_grade: PrizeGrade // 奖品级别，中奖级别
+	activity: Activity // 活动信息，中奖活动，
+	project: Project // 项目信息，中奖项目，
+}
+
 export interface Prize {
 	id: number // 表主键
 	uuid: string // 唯一识别码
@@ -303,6 +329,45 @@ export interface PrizePutReq {
 }
 
 export interface PrizeDelReq {
+	id: number
+}
+
+export interface ActivityPrizesReq {
+}
+
+export interface ActivityPrizesReqParams {
+	activity_id: number // 所属活动id，-1表示无限制
+}
+
+export interface PrizeGrade {
+	id: number // 表主键
+	name: string // 级别名称
+	is_win: number // 是否中奖
+	create_at: number // 创建时间
+	update_at: number // 更新时间
+	is_deleted: number // 是否已被删除
+	delete_at: number // 删除时间
+}
+
+export interface PrizeGradeGetReq {
+}
+
+export interface PrizeGradeGetReqParams {
+	id: number
+}
+
+export interface PrizeGradeAddReq {
+	name: string // 级别名称
+	is_win: number // 是否中奖
+}
+
+export interface PrizeGradePutReq {
+	id: number // 表主键
+	name: string // 级别名称
+	is_win: number // 是否中奖
+}
+
+export interface PrizeGradeDelReq {
 	id: number
 }
 
@@ -353,6 +418,13 @@ export interface PrizesPoolPutReq {
 
 export interface PrizesPoolDelReq {
 	id: number
+}
+
+export interface SearchPrizesPool {
+}
+
+export interface SearchPrizesPoolParams {
+	activity_id: number // 所属活动id，-1表示无限制
 }
 
 export interface Project {

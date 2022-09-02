@@ -42,7 +42,7 @@ type (
 		Id           int64     `db:"id"`             // 表主键
 		Uuid         string    `db:"uuid"`           // 唯一识别码
 		UserId       int64     `db:"user_id"`        // 中奖用户id
-		PrizesPoolId int64     `db:"prizes_pool_id"` // 抽中的奖品池id
+		PrizesPoolId int64     `db:"prizes_pool_id"` // 所属奖品池id
 		Status       int64     `db:"status"`         // 状态: -1放弃领奖，0未领奖，1已领奖
 		LuckDate     time.Time `db:"luck_date"`      // 抽奖时间
 		Ip           string    `db:"ip"`             // ip地址

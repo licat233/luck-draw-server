@@ -6,31 +6,8 @@ ServerConfig:
   Debug: true
 #静态资源服务配置
 StaticConfig:
-  Domain: localhost
-  Root:
-    Path: public
-    Upload:
-      Path: upload
-      Images:
-        Path: images
-        Avatar:
-          Path: avatar
-      Collect:
-        Path: collect
-    Static:
-      Path: static
-      Js:
-        Path: js
-      Css:
-        Path: css
-      Images:
-        Path: images
-      Svg:
-        Path: svg
-      Json:
-        Path: json
-      Txt:
-        Path: txt
+  Domain: luckdraw.com
+  Root: static
 #验证码配置
 Captcha:
   KeyLong: 6

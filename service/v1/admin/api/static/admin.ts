@@ -56,6 +56,27 @@ export function currentUser() {
 }
 
 /**
+ * @description "上传头像"
+ */
+export function uploadAvatar() {
+	return webapi.post<components.BaseResp>("/v1/api/admin/uploadAvatar")
+}
+
+/**
+ * @description "上传logo"
+ */
+export function uploadLogo() {
+	return webapi.post<components.BaseResp>("/v1/api/admin/uploadLogo")
+}
+
+/**
+ * @description "上传图片"
+ */
+export function uploadImg() {
+	return webapi.post<components.BaseResp>("/v1/api/admin/uploadImg")
+}
+
+/**
  * @description "获取活动列表"
  * @param params
  */
@@ -100,6 +121,14 @@ export function del(req: components.ActivityDelReq) {
  */
 export function enumList() {
 	return webapi.get<Array<components.Enum>>("/v1/api/admin/activity/enumList")
+}
+
+/**
+ * @description "指定项目的活动"
+ * @param params
+ */
+export function projectActivity(params: components.ProjectActivityReqParams) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/activity/projectActivity", params)
 }
 
 /**
@@ -158,7 +187,7 @@ export function enumList() {
 }
 
 /**
- * @description "获取抽奖者列表"
+ * @description "获取抽奖单列表"
  * @param params
  */
 export function list(params: components.ListReqParams) {
@@ -166,7 +195,15 @@ export function list(params: components.ListReqParams) {
 }
 
 /**
- * @description "获取抽奖者信息"
+ * @description "获取抽奖单详细列表"
+ * @param params
+ */
+export function luckerDetails(params: components.LuckerDetailsReqParams) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/lucker/details", params)
+}
+
+/**
+ * @description "获取抽奖单信息"
  * @param params
  */
 export function info(params: components.LuckerGetReqParams) {
@@ -174,7 +211,7 @@ export function info(params: components.LuckerGetReqParams) {
 }
 
 /**
- * @description "添加抽奖者"
+ * @description "添加抽奖单"
  * @param req
  */
 export function add(req: components.LuckerAddReq) {
@@ -182,7 +219,7 @@ export function add(req: components.LuckerAddReq) {
 }
 
 /**
- * @description "编辑抽奖者"
+ * @description "编辑抽奖单"
  * @param req
  */
 export function put(req: components.LuckerPutReq) {
@@ -190,7 +227,7 @@ export function put(req: components.LuckerPutReq) {
 }
 
 /**
- * @description "删除抽奖者"
+ * @description "删除抽奖单"
  * @param req
  */
 export function del(req: components.LuckerDelReq) {
@@ -252,6 +289,61 @@ export function enumList() {
 }
 
 /**
+ * @description "获取某活动奖品池的奖品"
+ * @param params
+ */
+export function activityPrizes(params: components.ActivityPrizesReqParams) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/prize/activityPrizes", params)
+}
+
+/**
+ * @description "获取奖品级别列表"
+ * @param params
+ */
+export function list(params: components.ListReqParams) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/prizeGrade/list", params)
+}
+
+/**
+ * @description "获取奖品级别信息"
+ * @param params
+ */
+export function info(params: components.PrizeGradeGetReqParams) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/prizeGrade", params)
+}
+
+/**
+ * @description "添加奖品级别"
+ * @param req
+ */
+export function add(req: components.PrizeGradeAddReq) {
+	return webapi.post<components.BaseResp>("/v1/api/admin/prizeGrade", req)
+}
+
+/**
+ * @description "编辑奖品级别"
+ * @param req
+ */
+export function put(req: components.PrizeGradePutReq) {
+	return webapi.put<components.BaseResp>("/v1/api/admin/prizeGrade", req)
+}
+
+/**
+ * @description "删除奖品级别"
+ * @param req
+ */
+export function del(req: components.PrizeGradeDelReq) {
+	return webapi.delete<components.BaseResp>("/v1/api/admin/prizeGrade", req)
+}
+
+/**
+ * @description "枚举列表"
+ */
+export function enumList() {
+	return webapi.get<Array<components.Enum>>("/v1/api/admin/prizeGrade/enumList")
+}
+
+/**
  * @description "获取奖品池列表"
  * @param params
  */
@@ -289,6 +381,14 @@ export function put(req: components.PrizesPoolPutReq) {
  */
 export function del(req: components.PrizesPoolDelReq) {
 	return webapi.delete<components.BaseResp>("/v1/api/admin/PrizesPool", req)
+}
+
+/**
+ * @description "获取某活动的奖品池"
+ * @param params
+ */
+export function searchPrizesPool(params: components.SearchPrizesPoolParams) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/PrizesPool/search", params)
 }
 
 /**

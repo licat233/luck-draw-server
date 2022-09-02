@@ -1,6 +1,6 @@
 syntax = "v1"
 
-type usersPool {
+type UsersPool {
 	Id         int64     `json:"id"`          // 表主键
 	Uuid       string    `json:"uuid"`        // 唯一识别码
 	ActivityId int64     `json:"activity_id"` // 活动id
@@ -13,18 +13,18 @@ type usersPool {
 	DeleteAt   int64     `json:"delete_at"`   // 删除时间
 }
 
-type usersPoolGetReq {
+type UsersPoolGetReq {
 	Id int64 `form:"id"`
 }
 
-type usersPoolAddReq {
+type UsersPoolAddReq {
 	ActivityId int64     `json:"activity_id"` // 活动id
 	UserId     int64     `json:"user_id"`     // 奖品id
 	Status     int64     `json:"status"`      // 状态：-1已被禁止,0未授权，1已授权
 	Score      int64     `json:"score"`       // 用户在当前活动的积分
 }
 
-type usersPoolPutReq {  
+type UsersPoolPutReq {  
 	Id         int64     `json:"id"`          // 表主键
 	Uuid       string    `json:"uuid"`        // 唯一识别码
 	ActivityId int64     `json:"activity_id"` // 活动id
@@ -33,7 +33,7 @@ type usersPoolPutReq {
 	Score      int64     `json:"score"`       // 用户在当前活动的积分
 }
 
-type usersPoolDelReq {
+type UsersPoolDelReq {
 	Id int64 `json:"id"`
 }
 
@@ -50,18 +50,18 @@ service admin-api {
 
 	@doc "获取用户池信息"
 	@handler info 
-	get /(usersPoolGetReq) returns(BaseResp)
+	get /(UsersPoolGetReq) returns(BaseResp)
 
     @doc "添加用户池"
 	@handler add 
-	post /(usersPoolAddReq) returns(BaseResp)
+	post /(UsersPoolAddReq) returns(BaseResp)
 
     @doc "编辑用户池"
 	@handler put 
-	put /(usersPoolPutReq) returns(BaseResp)
+	put /(UsersPoolPutReq) returns(BaseResp)
 
     @doc "删除用户池"
 	@handler del 
-	delete /(usersPoolDelReq) returns(BaseResp)
+	delete /(UsersPoolDelReq) returns(BaseResp)
 }
 

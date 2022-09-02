@@ -27,6 +27,7 @@ type (
 		FindCount(ctx context.Context) (int64, error)
 		FindByActivityUuid(ctx context.Context, activityUuid string) ([]*PrizesPool, error)
 		FindList(ctx context.Context, pageSize, page int64) ([]*PrizesPool, error)
+		FindsByActivityId(ctx context.Context, activityId int64) ([]*PrizesPool, error)
 	}
 
 	customPrizesPoolModel struct {
@@ -135,6 +136,28 @@ func (m *customPrizesPoolModel) FindCount(ctx context.Context) (int64, error) {
 	}
 }
 
+func (m *customPrizesPoolModel) FindsByActivityId(ctx context.Context, activityId int64) ([]*PrizesPool, error) {
+	var resp []*PrizesPool
+	var err error
+
+	if activityId == -1 {
+		query := fmt.Sprintf("select %s from %s where `is_deleted` = '0'", prizesPoolRows, m.table)
+		err = m.QueryRowsNoCacheCtx(ctx, &resp, query)
+	} else {
+		query := fmt.Sprintf("select %s from %s where `activity_id` = ? and `is_deleted` = '0'", prizesPoolRows, m.table)
+		err = m.QueryRowsNoCacheCtx(ctx, &resp, query, activityId)
+	}
+
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 // 获取某活动奖品池内的奖品
 // TODO：为了避免复杂性，一般先依据activityUUID查询到activity_id，再根据activity_id进行查询
 // TODO：但在此处，我们直接使用关联查询，一劳永逸
@@ -154,7 +177,7 @@ func (m *customPrizesPoolModel) FindByActivityUuid(ctx context.Context, activity
 
 func (m *customPrizesPoolModel) FindList(ctx context.Context, pageSize, page int64) ([]*PrizesPool, error) {
 	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", prizesPoolRows, m.table)
-	if pageSize >= 0 && page >= 0 {
+	if pageSize > 0 && page > 0 {
 		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
 	}
 

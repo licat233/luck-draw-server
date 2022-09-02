@@ -1,6 +1,6 @@
 syntax = "v1"
 
-type activity {
+type Activity {
   	Id        int64     `json:"id"`         // 表主键
 		Uuid      string    `json:"uuid"`       // 唯一识别码
 		Name      string    `json:"name"`       // 活动名称
@@ -17,11 +17,11 @@ type activity {
 		DeleteAt  int64     `json:"delete_at"`  // 删除时间
 }
 
-type activityGetReq {
+type ActivityGetReq {
   Id int64 `form:"id"`
 }
 
-type activityAddReq {  
+type ActivityAddReq {  
   Name      string    `json:"name"`       // 活动名称
   ProjectId int64     `json:"project_id"` // 项目id
   Status    int64     `json:"status"`     // 活动状态，是否在举办，默认关闭，需手动开启
@@ -32,7 +32,7 @@ type activityAddReq {
   EndTime   int64     `json:"end_time"`   // 活动结束时间
 }
 
-type activityPutReq {  
+type ActivityPutReq {  
   Id        int64     `json:"id"`         // 表主键
   Uuid      string    `json:"uuid"`       // 唯一识别码
   Name      string    `json:"name"`       // 活动名称
@@ -45,8 +45,12 @@ type activityPutReq {
   EndTime   int64     `json:"end_time"`   // 活动结束时间
 }
 
-type activityDelReq {
+type ActivityDelReq {
   Id int64 `json:"id"`
+}
+
+type projectActivityReq {
+  ProjectId int64 `form:"project_id,optional,default=-1"`  //所属项目id，-1表示无限制
 }
 
 @server(
@@ -62,22 +66,27 @@ service admin-api {
 
   @doc "获取活动信息"
   @handler info 
-  get /(activityGetReq) returns(BaseResp)
+  get /(ActivityGetReq) returns(BaseResp)
 
   @doc "添加活动"
   @handler add 
-  post /(activityAddReq) returns(BaseResp)
+  post /(ActivityAddReq) returns(BaseResp)
 
   @doc "编辑活动"
   @handler put 
-  put /(activityPutReq) returns(BaseResp)
+  put /(ActivityPutReq) returns(BaseResp)
 
   @doc "删除活动"
   @handler del 
-  delete /(activityDelReq) returns(BaseResp)
+  delete /(ActivityDelReq) returns(BaseResp)
 
   @doc "枚举列表"
 	@handler enumList
 	get /enumList returns([]Enum)
+
+  @doc "指定项目的活动"
+  @handler projectActivity
+  get /projectActivity (projectActivityReq) returns(BaseResp)
+  
 }
 

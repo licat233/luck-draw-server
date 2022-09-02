@@ -35,6 +35,7 @@ func (l *PutAdminerLogic) PutAdminer(in *admin_pb.Adminer) (*admin_pb.StatusResp
 		Id:           in.Id,
 		Uuid:         in.Uuid,
 		Name:         in.Name,
+		Avatar:       in.Avatar,
 		Passport:     in.Passport,
 		Password:     in.Password,
 		Email:        in.Email,

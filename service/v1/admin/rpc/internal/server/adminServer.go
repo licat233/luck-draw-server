@@ -95,6 +95,11 @@ func (s *AdminServer) DelActivity(ctx context.Context, in *admin_pb.ItemReq) (*a
 	return l.DelActivity(in)
 }
 
+func (s *AdminServer) ProjectActivity(ctx context.Context, in *admin_pb.ProjectActivityReq) (*admin_pb.ProjectActivityResp, error) {
+	l := logic.NewProjectActivityLogic(ctx, s.svcCtx)
+	return l.ProjectActivity(in)
+}
+
 func (s *AdminServer) GetAdminerList(ctx context.Context, in *admin_pb.ListReq) (*admin_pb.GetAdminerListResp, error) {
 	l := logic.NewGetAdminerListLogic(ctx, s.svcCtx)
 	return l.GetAdminerList(in)
@@ -123,6 +128,11 @@ func (s *AdminServer) DelAdminer(ctx context.Context, in *admin_pb.ItemReq) (*ad
 func (s *AdminServer) GetLuckerList(ctx context.Context, in *admin_pb.ListReq) (*admin_pb.GetLuckerListResp, error) {
 	l := logic.NewGetLuckerListLogic(ctx, s.svcCtx)
 	return l.GetLuckerList(in)
+}
+
+func (s *AdminServer) GetLuckerDetailsList(ctx context.Context, in *admin_pb.GetLuckerDetailsReq) (*admin_pb.GetLuckerDetailsResp, error) {
+	l := logic.NewGetLuckerDetailsListLogic(ctx, s.svcCtx)
+	return l.GetLuckerDetailsList(in)
 }
 
 func (s *AdminServer) GetLucker(ctx context.Context, in *admin_pb.ItemReq) (*admin_pb.GetLuckerResp, error) {
@@ -170,6 +180,36 @@ func (s *AdminServer) DelPrize(ctx context.Context, in *admin_pb.ItemReq) (*admi
 	return l.DelPrize(in)
 }
 
+func (s *AdminServer) ActivityPrizes(ctx context.Context, in *admin_pb.ActivityPrizesReq) (*admin_pb.ActivityPrizesResp, error) {
+	l := logic.NewActivityPrizesLogic(ctx, s.svcCtx)
+	return l.ActivityPrizes(in)
+}
+
+func (s *AdminServer) GetPrizeGradeList(ctx context.Context, in *admin_pb.ListReq) (*admin_pb.GetPrizeGradeListResp, error) {
+	l := logic.NewGetPrizeGradeListLogic(ctx, s.svcCtx)
+	return l.GetPrizeGradeList(in)
+}
+
+func (s *AdminServer) GetPrizeGrade(ctx context.Context, in *admin_pb.ItemReq) (*admin_pb.GetPrizeGradeResp, error) {
+	l := logic.NewGetPrizeGradeLogic(ctx, s.svcCtx)
+	return l.GetPrizeGrade(in)
+}
+
+func (s *AdminServer) AddPrizeGrade(ctx context.Context, in *admin_pb.PrizeGrade) (*admin_pb.AddPrizeGradeResp, error) {
+	l := logic.NewAddPrizeGradeLogic(ctx, s.svcCtx)
+	return l.AddPrizeGrade(in)
+}
+
+func (s *AdminServer) PutPrizeGrade(ctx context.Context, in *admin_pb.PrizeGrade) (*admin_pb.StatusResp, error) {
+	l := logic.NewPutPrizeGradeLogic(ctx, s.svcCtx)
+	return l.PutPrizeGrade(in)
+}
+
+func (s *AdminServer) DelPrizeGrade(ctx context.Context, in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
+	l := logic.NewDelPrizeGradeLogic(ctx, s.svcCtx)
+	return l.DelPrizeGrade(in)
+}
+
 func (s *AdminServer) GetPrizesPoolList(ctx context.Context, in *admin_pb.ListReq) (*admin_pb.GetPrizesPoolListResp, error) {
 	l := logic.NewGetPrizesPoolListLogic(ctx, s.svcCtx)
 	return l.GetPrizesPoolList(in)
@@ -193,6 +233,11 @@ func (s *AdminServer) PutPrizesPool(ctx context.Context, in *admin_pb.PrizesPool
 func (s *AdminServer) DelPrizesPool(ctx context.Context, in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
 	l := logic.NewDelPrizesPoolLogic(ctx, s.svcCtx)
 	return l.DelPrizesPool(in)
+}
+
+func (s *AdminServer) SearchPrizesPool(ctx context.Context, in *admin_pb.SearchPrizesPoolReq) (*admin_pb.SearchPrizesPoolResp, error) {
+	l := logic.NewSearchPrizesPoolLogic(ctx, s.svcCtx)
+	return l.SearchPrizesPool(in)
 }
 
 func (s *AdminServer) GetProjectList(ctx context.Context, in *admin_pb.ListReq) (*admin_pb.GetProjectListResp, error) {

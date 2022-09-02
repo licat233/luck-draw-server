@@ -1,6 +1,6 @@
 syntax = "v1"
 
-type user {
+type User {
 	Id        int64     `json:"id"`         // 表主键
 	Uuid      string    `json:"uuid"`       // 唯一识别码
 	Passport  string    `json:"passport"`   // 凭证，可以是手机号或者社交账号，一般是由客户填入
@@ -16,11 +16,11 @@ type user {
 	DeleteAt  int64     `json:"delete_at"`  // 删除时间
 }
 
-type userGetReq {
+type UserGetReq {
 	Id int64 `form:"id"`
 }
 
-type userAddReq {
+type UserAddReq {
 	Passport  string    `json:"passport"`   // 凭证，可以是手机号或者社交账号，一般是由客户填入
 	Email     string    `json:"email"`      // 邮箱
 	Phone     string    `json:"phone"`      // 手机号
@@ -30,7 +30,7 @@ type userAddReq {
 	Status    int64     `json:"status"`     // 状态:-1已经封禁，0未授权，1已授权
 }
 
-type userPutReq {  
+type UserPutReq {  
 	Id        int64     `json:"id"`         // 表主键
 	Uuid      string    `json:"uuid"`       // 唯一识别码
 	Passport  string    `json:"passport"`   // 凭证，可以是手机号或者社交账号，一般是由客户填入
@@ -42,7 +42,7 @@ type userPutReq {
 	Status    int64     `json:"status"`     // 状态:-1已经封禁，0未授权，1已授权
 }
 
-type userDelReq {
+type UserDelReq {
 	Id int64 `json:"id"`
 }
 
@@ -59,19 +59,19 @@ service admin-api {
 
 	@doc "获取用户信息"
 	@handler info 
-	get /(userGetReq) returns(BaseResp)
+	get /(UserGetReq) returns(BaseResp)
 
     @doc "添加用户"
 	@handler add 
-	post /(userAddReq) returns(BaseResp)
+	post /(UserAddReq) returns(BaseResp)
 
     @doc "编辑用户"
 	@handler put 
-	put /(userPutReq) returns(BaseResp)
+	put /(UserPutReq) returns(BaseResp)
 
     @doc "删除用户"
 	@handler del 
-	delete /(userDelReq) returns(BaseResp)
+	delete /(UserDelReq) returns(BaseResp)
 
     @doc "枚举列表"
 	@handler enumList

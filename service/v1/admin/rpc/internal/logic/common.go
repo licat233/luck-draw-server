@@ -108,6 +108,25 @@ func mdPrizeListToPbPrizeList(mdPrizeList []*model.Prize) []*admin_pb.Prize {
 	return pbPrizeList
 }
 
+func mdPrizeGradeToPbPrizeGrade(mdPrizeGrade *model.PrizeGrade) *admin_pb.PrizeGrade {
+	if mdPrizeGrade == nil {
+		return nil
+	}
+	return &admin_pb.PrizeGrade{
+		Id:    mdPrizeGrade.Id,
+		Name:  mdPrizeGrade.Name,
+		IsWin: 0,
+	}
+}
+
+func mdPrizeGradeListToPbPrizeGradeList(mdPrizeGradeList []*model.PrizeGrade) []*admin_pb.PrizeGrade {
+	pbPrizeGradeList := make([]*admin_pb.PrizeGrade, 0, len(mdPrizeGradeList))
+	for _, mdPrizeGrade := range mdPrizeGradeList {
+		pbPrizeGradeList = append(pbPrizeGradeList, mdPrizeGradeToPbPrizeGrade(mdPrizeGrade))
+	}
+	return pbPrizeGradeList
+}
+
 func mdPrizesPoolToPbPrizesPool(mdPrizesPool *model.PrizesPool) *admin_pb.PrizesPool {
 	if mdPrizesPool == nil {
 		return nil

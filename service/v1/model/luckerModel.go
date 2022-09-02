@@ -28,7 +28,8 @@ type (
 		FindOneByUuid(ctx context.Context, uuid string) (*Lucker, error)
 
 		FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Lucker, error)
-		FindsByUserId(ctx context.Context, userId int64) ([]*Lucker, error)
+		FindsByUserId(ctx context.Context, userId int64, pageSize, page int64) ([]*Lucker, error)
+		FindCountByUserId(ctx context.Context, userId int64) (int64, error)
 		FindCount(ctx context.Context) (int64, error)
 		UpdateStatus(ctx context.Context, id, status int64) error
 		UpdateSomeStatusById(ctx context.Context, ids []int64, status int64) error
@@ -36,6 +37,10 @@ type (
 		FindDetails(ctx context.Context, options *FindDetailsOptions) (resp []*LuckerDetail, total int64, err error)
 		FindByUserAndActivity(ctx context.Context, UserId, ActivityId int64) ([]*Lucker, error)
 		FindCountByUserAndActivity(ctx context.Context, UserId, ActivityId int64) (int64, error)
+		FindsByPrizesPoolId(ctx context.Context, prizesPoolIds []int64, pageSize, page int64) ([]*Lucker, error)
+		FindCountByPrizesPoolId(ctx context.Context, prizesPoolIds []int64) (int64, error)
+		FindsByPrizesPoolIdAndUserId(ctx context.Context, prizesPoolIds []int64, userId, pageSize, page int64) ([]*Lucker, error)
+		FindCountByPrizesPoolIdAndUserId(ctx context.Context, prizesPoolIds []int64, userId int64) (int64, error)
 	}
 
 	customLuckerModel struct {
@@ -147,9 +152,9 @@ func (m *customLuckerModel) FindCount(ctx context.Context) (int64, error) {
 func (m *customLuckerModel) FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Lucker, error) {
 	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", luckerRows, m.table)
 	if strings.TrimSpace(keyword) != "" {
-		query = fmt.Sprintf("%s and `name`=%s", query, keyword)
+		query = query + " and `name` like '%" + keyword + "%'"
 	}
-	if pageSize >= 0 && page >= 0 {
+	if pageSize > 0 && page > 0 {
 		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
 	}
 	var resp []*Lucker
@@ -164,9 +169,12 @@ func (m *customLuckerModel) FindList(ctx context.Context, pageSize, page int64, 
 	}
 }
 
-func (m *customLuckerModel) FindsByUserId(ctx context.Context, userId int64) ([]*Lucker, error) {
+func (m *customLuckerModel) FindsByUserId(ctx context.Context, userId int64, pageSize, page int64) ([]*Lucker, error) {
 	var resp []*Lucker
 	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `is_deleted` = '0'", luckerRows, m.table)
+	if pageSize > 0 && page > 0 {
+		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
+	}
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userId)
 	switch err {
 	case nil:
@@ -175,6 +183,108 @@ func (m *customLuckerModel) FindsByUserId(ctx context.Context, userId int64) ([]
 		return nil, ErrNotFound
 	default:
 		return nil, err
+	}
+}
+
+func (m *customLuckerModel) FindCountByUserId(ctx context.Context, userId int64) (int64, error) {
+	var count int64
+	query := fmt.Sprintf("select count(*) from %s where `user_id` = ? and `is_deleted` = '0'", m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &count, query, userId)
+	switch err {
+	case nil:
+		return count, nil
+	case sqlc.ErrNotFound:
+		return count, ErrNotFound
+	default:
+		return count, err
+	}
+}
+
+func (m *customLuckerModel) FindsByPrizesPoolId(ctx context.Context, prizesPoolIds []int64, pageSize, page int64) ([]*Lucker, error) {
+	var resp []*Lucker
+	var temps []string
+	for _, prizesPoolId := range prizesPoolIds {
+		temps = append(temps, fmt.Sprint(prizesPoolId))
+	}
+	whereSql := strings.Join(temps, ",")
+	query := fmt.Sprintf("select %s from %s where `is_deleted` = '0' and `prizes_pool_id` in(%s)", luckerRows, m.table, whereSql)
+	if pageSize > 0 && page > 0 {
+		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
+	}
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *customLuckerModel) FindCountByPrizesPoolId(ctx context.Context, prizesPoolIds []int64) (int64, error) {
+	var count int64
+	var temps []string
+	for _, prizesPoolId := range prizesPoolIds {
+		temps = append(temps, fmt.Sprint(prizesPoolId))
+	}
+	whereSql := strings.Join(temps, ",")
+	query := fmt.Sprintf("select count(*) from %s where `is_deleted` = '0' and `prizes_pool_id` in(%s)", m.table, whereSql)
+	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
+	switch err {
+	case nil:
+		return count, nil
+	case sqlc.ErrNotFound:
+		return count, ErrNotFound
+	default:
+		return count, err
+	}
+}
+
+func (m *customLuckerModel) FindsByPrizesPoolIdAndUserId(ctx context.Context, prizesPoolIds []int64, userId, pageSize, page int64) ([]*Lucker, error) {
+	var resp []*Lucker
+	var temps []string
+	if len(prizesPoolIds) == 0 {
+		return nil, nil
+	}
+	for _, prizesPoolId := range prizesPoolIds {
+		temps = append(temps, fmt.Sprint(prizesPoolId))
+	}
+	whereSql := strings.Join(temps, ",")
+	query := fmt.Sprintf("select %s from %s where `is_deleted` = '0' and `user_id` = ? and `prizes_pool_id` in(%s)", luckerRows, m.table, whereSql)
+	if pageSize > 0 && page > 0 {
+		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
+	}
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userId)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *customLuckerModel) FindCountByPrizesPoolIdAndUserId(ctx context.Context, prizesPoolIds []int64, userId int64) (int64, error) {
+	var count int64
+	var temps []string
+	if len(prizesPoolIds) == 0 {
+		return 0, nil
+	}
+	for _, prizesPoolId := range prizesPoolIds {
+		temps = append(temps, fmt.Sprint(prizesPoolId))
+	}
+	whereSql := strings.Join(temps, ",")
+	query := fmt.Sprintf("select count(*) from %s where `is_deleted` = '0' and `user_id` = ? and `prizes_pool_id` in(%s)", m.table, whereSql)
+	err := m.QueryRowsNoCacheCtx(ctx, &count, query, userId)
+	switch err {
+	case nil:
+		return count, nil
+	case sqlc.ErrNotFound:
+		return count, ErrNotFound
+	default:
+		return count, err
 	}
 }
 
@@ -324,7 +434,7 @@ func (m *customLuckerModel) FindDetails(ctx context.Context, options *FindDetail
 		return
 	}
 
-	baseQuery = fmt.Sprintf("SELECT count(*) FROM %s", LuckerTableName)
+	baseQuery = fmt.Sprintf("SELECT count(*) FROM %s where is_deleted = 0", LuckerTableName)
 	queryCount := fmt.Sprintf("%s %s", baseQuery, mainQuery)
 
 	err = m.QueryRowsNoCacheCtx(ctx, &total, queryCount, ages...)
@@ -340,7 +450,7 @@ func (m *customLuckerModel) FindDetails(ctx context.Context, options *FindDetail
 }
 
 func (m *customLuckerModel) FindByUserAndActivity(ctx context.Context, UserId, ActivityId int64) ([]*Lucker, error) {
-	query := fmt.Sprintf("select %s from %s where user_id = ? and activity_id = ?", luckerRows, m.table)
+	query := fmt.Sprintf("select %s from %s where user_id = ? and activity_id = ? and is_deleted = '0'", luckerRows, m.table)
 	var resp []*Lucker
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, UserId, ActivityId)
 	switch err {
@@ -354,7 +464,7 @@ func (m *customLuckerModel) FindByUserAndActivity(ctx context.Context, UserId, A
 }
 
 func (m *customLuckerModel) FindCountByUserAndActivity(ctx context.Context, UserId, ActivityId int64) (int64, error) {
-	query := fmt.Sprintf("select count(*) from %s where user_id = ? and activity_id = ?", m.table)
+	query := fmt.Sprintf("select count(*) from %s where user_id = ? and activity_id = ? and is_deleted = '0'", m.table)
 	var resp int64
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, UserId, ActivityId)
 	switch err {

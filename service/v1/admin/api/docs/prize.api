@@ -1,6 +1,6 @@
 syntax = "v1"
 
-type prize {
+type Prize {
 	Id        int64     `json:"id"`         // 表主键
 	Uuid      string    `json:"uuid"`       // 唯一识别码
 	Name      string    `json:"name"`       // 奖品名称
@@ -13,18 +13,18 @@ type prize {
 	DeleteAt  int64     `json:"delete_at"`  // 删除时间
 }
 
-type prizeGetReq {
+type PrizeGetReq {
 	Id int64 `form:"id"`
 }
 
-type prizeAddReq {
+type PrizeAddReq {
 	Name      string    `json:"name"`       // 奖品名称
 	Image     string    `json:"image"`      // 奖品图片
 	Price     float64   `json:"price"`      // 奖品价格
 	Status    int64     `json:"status"`     // 是否可用
 }
 
-type prizePutReq {
+type PrizePutReq {
 	Id        int64     `json:"id"`         // 表主键
 	Uuid      string    `json:"uuid"`       // 唯一识别码
 	Name      string    `json:"name"`       // 奖品名称
@@ -33,8 +33,12 @@ type prizePutReq {
 	Status    int64     `json:"status"`     // 是否可用
 }
 
-type prizeDelReq {
+type PrizeDelReq {
 	Id int64 `json:"id"`
+}
+
+type ActivityPrizesReq {
+  ActivityId int64 `form:"activity_id,optional,default=-1"`  //所属活动id，-1表示无限制
 }
 
 @server(
@@ -50,21 +54,25 @@ service admin-api {
 
 	@doc "获取奖品信息"
 	@handler info 
-	get /(prizeGetReq) returns(BaseResp)
+	get /(PrizeGetReq) returns(BaseResp)
 
     @doc "添加奖品"
 	@handler add 
-	post /(prizeAddReq) returns(BaseResp)
+	post /(PrizeAddReq) returns(BaseResp)
 
     @doc "编辑奖品"
 	@handler put 
-	put /(prizePutReq) returns(BaseResp)
+	put /(PrizePutReq) returns(BaseResp)
 
     @doc "删除奖品"
 	@handler del 
-	delete /(prizeDelReq) returns(BaseResp)
+	delete /(PrizeDelReq) returns(BaseResp)
 
     @doc "枚举列表"
 	@handler enumList
 	get /enumList returns([]Enum)
+
+	@doc "获取某活动奖品池的奖品"
+	@handler ActivityPrizes
+	get /activityPrizes(ActivityPrizesReq) returns(BaseResp)
 }

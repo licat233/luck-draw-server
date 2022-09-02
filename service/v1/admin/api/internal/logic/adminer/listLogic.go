@@ -38,6 +38,7 @@ func (l *ListLogic) List(req *types.ListReq) (any, error) {
 	resp, err := l.svcCtx.AdminRpc.GetAdminerList(l.ctx, &admin_pb.ListReq{
 		PageSize: req.PageSize,
 		Page:     req.Page,
+		Keyword:  req.Keyword,
 	})
 	if err != nil {
 		return nil, err

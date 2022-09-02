@@ -119,6 +119,9 @@ message LuckerDetail {
 
   //奖品级别
   PrizeGrade prize_grade = 5;
+
+  //项目信息
+  Project project = 6;
 }
 
 message JwtData {
@@ -210,6 +213,13 @@ message ListReq {
   string keyword = 3;
 }
 
+message GetLuckerDetailsReq {
+  int64 user_id = 1; //用户id， -1表示不用 UserId 查询
+  int64 activity_id = 2; //活动id, -1表示不用 activityId 查询
+  int64 page_size = 3;
+  int64 page = 4;
+}
+
 //单个数据请求
 message ItemReq{
   int64 id = 1;
@@ -234,6 +244,10 @@ message AddLuckerResp{
 
 message AddPrizeResp{
   Prize prize = 1;
+}
+
+message AddPrizeGradeResp {
+  PrizeGrade prize_grade = 1;
 }
 
 message AddPrizesPoolResp{
@@ -269,6 +283,10 @@ message GetPrizeResp{
   Prize prize = 1;
 }
 
+message GetPrizeGradeResp{
+  PrizeGrade prize_grade = 1;
+}
+
 message GetPrizesPoolResp{
   PrizesPool prizes_pool = 1;
 }
@@ -301,8 +319,18 @@ message GetLuckerListResp {
   int64 total = 2;
 }
 
+message GetLuckerDetailsResp {
+  repeated LuckerDetail data = 1;
+  int64 total = 2;
+}
+
 message GetPrizeListResp {
   repeated Prize data = 1;
+  int64 total = 2;
+}
+
+message GetPrizeGradeListResp {
+  repeated PrizeGrade data = 1;
   int64 total = 2;
 }
 
@@ -340,6 +368,30 @@ message EnumListResp{
   repeated Enum data = 1;
 }
 
+//搜索请求
+message SearchPrizesPoolReq{
+  int64 activity_id = 1;
+}
+
+message SearchPrizesPoolResp {
+  repeated PrizesPool data = 1;
+}
+
+message ActivityPrizesReq {
+  int64 activity_id = 1;
+}
+
+message ActivityPrizesResp {
+  repeated Prize data = 1;
+}
+
+message ProjectActivityReq {
+  int64 project_id = 1;
+}
+
+message ProjectActivityResp {
+  repeated Activity data = 1;
+}
 
 service Admin {
   //生产token
@@ -364,6 +416,7 @@ service Admin {
   rpc AddActivity (Activity) returns (AddActivityResp);
   rpc PutActivity (Activity) returns (StatusResp);
   rpc DelActivity (ItemReq) returns (StatusResp);
+  rpc ProjectActivity (ProjectActivityReq) returns (ProjectActivityResp);
 
   rpc GetAdminerList (ListReq) returns (GetAdminerListResp);
   rpc GetAdminer (ItemReq) returns (GetAdminerResp);
@@ -372,6 +425,7 @@ service Admin {
   rpc DelAdminer (ItemReq) returns (StatusResp);
 
   rpc GetLuckerList (ListReq) returns (GetLuckerListResp);
+  rpc GetLuckerDetailsList (GetLuckerDetailsReq) returns (GetLuckerDetailsResp);
   rpc GetLucker (ItemReq) returns (GetLuckerResp);
   rpc AddLucker (Lucker) returns (AddLuckerResp);
   rpc PutLucker (Lucker) returns (StatusResp);
@@ -382,12 +436,20 @@ service Admin {
   rpc AddPrize (Prize) returns (AddPrizeResp);
   rpc PutPrize (Prize) returns (StatusResp);
   rpc DelPrize (ItemReq) returns (StatusResp);
+  rpc ActivityPrizes (ActivityPrizesReq) returns (ActivityPrizesResp);
+
+  rpc GetPrizeGradeList (ListReq) returns (GetPrizeGradeListResp);
+  rpc GetPrizeGrade (ItemReq) returns (GetPrizeGradeResp);
+  rpc AddPrizeGrade (PrizeGrade) returns (AddPrizeGradeResp);
+  rpc PutPrizeGrade (PrizeGrade) returns (StatusResp);
+  rpc DelPrizeGrade (ItemReq) returns (StatusResp);
 
   rpc GetPrizesPoolList (ListReq) returns (GetPrizesPoolListResp);
   rpc GetPrizesPool (ItemReq) returns (GetPrizesPoolResp);
   rpc AddPrizesPool (PrizesPool) returns (AddPrizesPoolResp);
   rpc PutPrizesPool (PrizesPool) returns (StatusResp);
   rpc DelPrizesPool (ItemReq) returns (StatusResp);
+  rpc SearchPrizesPool (SearchPrizesPoolReq) returns (SearchPrizesPoolResp);
 
   rpc GetProjectList (ListReq) returns (GetProjectListResp);
   rpc GetProject (ItemReq) returns (GetProjectResp);

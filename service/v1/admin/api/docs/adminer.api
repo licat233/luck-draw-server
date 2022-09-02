@@ -1,6 +1,6 @@
 syntax = "v1"
 
-type adminer {
+type Adminer {
 	Id           int64     `json:"id"`             // 表主键
 	Uuid         string    `json:"uuid"`           // 唯一识别码
 	Name         string    `json:"name"`           // 管理员名称
@@ -18,11 +18,11 @@ type adminer {
 	DeleteAt     int64     `json:"delete_at"`      // 删除时间
 }
 
-type adminerGetReq {
+type AdminerGetReq {
 	Id int64 `form:"id"`
 }
 
-type adminerAddReq {
+type AdminerAddReq {
 	Name         string       `json:"name"`           // 管理员名称
 	Avatar       string       `json:"avatar"`         // 头像
 	Passport     string       `json:"passport"`       // 账号
@@ -32,7 +32,7 @@ type adminerAddReq {
 	IsSuperAdmin int64        `json:"is_super_admin,default=0"` // 是否为超级管理员
 }
 
-type adminerPutReq {
+type AdminerPutReq {
 	Id           int64        `json:"id"`             // 表主键
 	Uuid         string       `json:"uuid"`           // 唯一识别码
 	Name         string       `json:"name"`           // 管理员名称
@@ -46,11 +46,11 @@ type adminerPutReq {
 	LastLogin int64 `json:"last_login,default=0"`  //最后一次登录时间
 }
 
-type adminerDelReq {
+type AdminerDelReq {
 	Id int64 `json:"id"`
 }
 
-type adminerModifyReq {
+type AdminerModifyReq {
 	Name         string       `json:"name"`           // 管理员名称
 	Avatar       string       `json:"avatar"`         // 头像
 	Passport     string       `json:"passport"`       // 账号
@@ -71,25 +71,25 @@ service admin-api {
 
 	@doc "获取管理员信息"
 	@handler info 
-	get /(adminerGetReq) returns(BaseResp)
+	get /(AdminerGetReq) returns(BaseResp)
 
     @doc "添加管理员"
 	@handler add 
-	post /(adminerAddReq) returns(BaseResp)
+	post /(AdminerAddReq) returns(BaseResp)
 
     @doc "编辑管理员"
 	@handler put 
-	put /(adminerPutReq) returns(BaseResp)
+	put /(AdminerPutReq) returns(BaseResp)
 
     @doc "删除管理员"
 	@handler del 
-	delete /(adminerDelReq) returns(BaseResp)
+	delete /(AdminerDelReq) returns(BaseResp)
 
 	@doc "管理员修改自己的账号信息"
 	@handler modify
-	post /modify(adminerModifyReq) returns(BaseResp)
+	post /modify(AdminerModifyReq) returns(BaseResp)
 
-  @doc "枚举列表"
+    @doc "枚举列表"
 	@handler enumList
-	get /enumList returns([]Enum)
+	get /enumList returns([]Enum)	
 }

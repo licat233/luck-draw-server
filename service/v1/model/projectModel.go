@@ -137,9 +137,9 @@ func (m *customProjectModel) FindCount(ctx context.Context) (int64, error) {
 func (m *customProjectModel) FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Project, error) {
 	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", projectRows, m.table)
 	if strings.TrimSpace(keyword) != "" {
-		query = fmt.Sprintf("%s and `name`=%s", query, keyword)
+		query = query + " and `name` like '%" + keyword + "%'"
 	}
-	if pageSize >= 0 && page >= 0 {
+	if pageSize > 0 && page > 0 {
 		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
 	}
 

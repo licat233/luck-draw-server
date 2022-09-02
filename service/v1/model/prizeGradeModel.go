@@ -21,6 +21,9 @@ type (
 	PrizeGradeModel interface {
 		prizeGradeModel
 		DeleteSoft(ctx context.Context, data *PrizeGrade) error
+
+		FindCount(ctx context.Context) (int64, error)
+		FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*PrizeGrade, error)
 	}
 
 	customPrizeGradeModel struct {
@@ -67,7 +70,7 @@ func (m *customPrizeGradeModel) FindOne(ctx context.Context, id int64) (*PrizeGr
 	luckDrawPrizeGradeIdKey := m.formatPrimary(id)
 	var resp PrizeGrade
 	err := m.QueryRowCtx(ctx, &resp, luckDrawPrizeGradeIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
-		query := fmt.Sprintf("select %s from %s where `id` = ? where `is_deleted` = '0' limit 1", prizeGradeRows, m.table)
+		query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' limit 1", prizeGradeRows, m.table)
 		return conn.QueryRowCtx(ctx, v, query, id)
 	})
 	switch err {
@@ -92,7 +95,7 @@ func (m *customPrizeGradeModel) Insert(ctx context.Context, data *PrizeGrade) (s
 func (m *customPrizeGradeModel) Update(ctx context.Context, data *PrizeGrade) error {
 	luckDrawPrizeGradeIdKey := m.formatPrimary(data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, prizeGradeRowsWithPlaceHolder)
+		query := fmt.Sprintf("update %s set %s where `id` = ? and `is_deleted` = '0'", m.table, prizeGradeRowsWithPlaceHolder)
 		return conn.ExecCtx(ctx, query, data.Name, data.IsWin, data.Id)
 	}, luckDrawPrizeGradeIdKey)
 	return err
@@ -114,9 +117,12 @@ func (m *customPrizeGradeModel) FindCount(ctx context.Context) (int64, error) {
 	}
 }
 
-func (m *customPrizeGradeModel) FindList(ctx context.Context, pageSize, page int64) ([]*PrizeGrade, error) {
+func (m *customPrizeGradeModel) FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*PrizeGrade, error) {
 	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", prizeGradeRows, m.table)
-	if pageSize >= 0 && page >= 0 {
+	if strings.TrimSpace(keyword) != "" {
+		query = query + " and `name` like '%" + keyword + "%'"
+	}
+	if pageSize > 0 && page > 0 {
 		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
 	}
 

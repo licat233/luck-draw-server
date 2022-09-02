@@ -145,6 +145,10 @@ type ActivityDelReq struct {
 	Id int64 `json:"id"`
 }
 
+type ProjectActivityReq struct {
+	ProjectId int64 `form:"project_id,optional,default=-1"` //所属项目id，-1表示无限制
+}
+
 type Adminer struct {
 	Id           int64  `json:"id"`             // 表主键
 	Uuid         string `json:"uuid"`           // 唯一识别码
@@ -243,6 +247,22 @@ type LuckerDelReq struct {
 	Id int64 `json:"id"`
 }
 
+type LuckerDetailsReq struct {
+	UserId     int64 `form:"user_id,optional,default=-1"`                 //用户id， -1表示不用 UserId 查询
+	ActivityId int64 `form:"activity_id,optional,default=-1"`             //活动id, -1表示不用 activityId 查询
+	PageSize   int64 `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page       int64 `form:"current,optional,default=1,range=[1:]"`       //当前页码
+}
+
+type LuckerDetails struct {
+	Lucker     Lucker     `json:"lucker"`      //幸运者信息，中奖信息
+	PrizesPool PrizesPool `json:"prizes_pool"` //奖品池信息，奖品池信息
+	Prize      Prize      `json:"prize"`       //奖品信息，中奖产品
+	PrizeGrade PrizeGrade `json:"prize_grade"` //奖品级别，中奖级别
+	Activity   Activity   `json:"activity"`    //活动信息，中奖活动，
+	Project    Project    `json:"project"`     //项目信息，中奖项目，
+}
+
 type Prize struct {
 	Id        int64   `json:"id"`         // 表主键
 	Uuid      string  `json:"uuid"`       // 唯一识别码
@@ -277,6 +297,39 @@ type PrizePutReq struct {
 }
 
 type PrizeDelReq struct {
+	Id int64 `json:"id"`
+}
+
+type ActivityPrizesReq struct {
+	ActivityId int64 `form:"activity_id,optional,default=-1"` //所属活动id，-1表示无限制
+}
+
+type PrizeGrade struct {
+	Id        int64  `json:"id"`         // 表主键
+	Name      string `json:"name"`       // 级别名称
+	IsWin     int64  `json:"is_win"`     // 是否中奖
+	CreateAt  int64  `json:"create_at"`  // 创建时间
+	UpdateAt  int64  `json:"update_at"`  // 更新时间
+	IsDeleted int64  `json:"is_deleted"` // 是否已被删除
+	DeleteAt  int64  `json:"delete_at"`  // 删除时间
+}
+
+type PrizeGradeGetReq struct {
+	Id int64 `form:"id"`
+}
+
+type PrizeGradeAddReq struct {
+	Name  string `json:"name"`   // 级别名称
+	IsWin int64  `json:"is_win"` // 是否中奖
+}
+
+type PrizeGradePutReq struct {
+	Id    int64  `json:"id"`     // 表主键
+	Name  string `json:"name"`   // 级别名称
+	IsWin int64  `json:"is_win"` // 是否中奖
+}
+
+type PrizeGradeDelReq struct {
 	Id int64 `json:"id"`
 }
 
@@ -324,6 +377,10 @@ type PrizesPoolPutReq struct {
 
 type PrizesPoolDelReq struct {
 	Id int64 `json:"id"`
+}
+
+type SearchPrizesPool struct {
+	ActivityId int64 `form:"activity_id,optional,default=-1"` //所属活动id，-1表示无限制
 }
 
 type Project struct {

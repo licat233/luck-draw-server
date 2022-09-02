@@ -8,6 +8,7 @@ import (
 	adminer "luck_draw-server/service/v1/admin/api/internal/handler/adminer"
 	lucker "luck_draw-server/service/v1/admin/api/internal/handler/lucker"
 	prize "luck_draw-server/service/v1/admin/api/internal/handler/prize"
+	prizeGrade "luck_draw-server/service/v1/admin/api/internal/handler/prizeGrade"
 	prizesPool "luck_draw-server/service/v1/admin/api/internal/handler/prizesPool"
 	project "luck_draw-server/service/v1/admin/api/internal/handler/project"
 	rbac "luck_draw-server/service/v1/admin/api/internal/handler/rbac"
@@ -64,6 +65,21 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/currentUser",
 					Handler: currentUserHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/uploadAvatar",
+					Handler: uploadAvatarHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/uploadLogo",
+					Handler: uploadLogoHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/uploadImg",
+					Handler: uploadImgHandler(serverCtx),
+				},
 			}...,
 		),
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
@@ -103,6 +119,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodGet,
 					Path:    "/enumList",
 					Handler: activity.EnumListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/projectActivity",
+					Handler: activity.ProjectActivityHandler(serverCtx),
 				},
 			}...,
 		),
@@ -163,6 +184,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodGet,
 					Path:    "/list",
 					Handler: lucker.ListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/details",
+					Handler: lucker.LuckerDetailsHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
@@ -229,10 +255,55 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/enumList",
 					Handler: prize.EnumListHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/activityPrizes",
+					Handler: prize.ActivityPrizesHandler(serverCtx),
+				},
 			}...,
 		),
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
 		rest.WithPrefix("/v1/api/admin/prize"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.JwtMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/list",
+					Handler: prizeGrade.ListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/",
+					Handler: prizeGrade.InfoHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/",
+					Handler: prizeGrade.AddHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/",
+					Handler: prizeGrade.PutHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodDelete,
+					Path:    "/",
+					Handler: prizeGrade.DelHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/enumList",
+					Handler: prizeGrade.EnumListHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
+		rest.WithPrefix("/v1/api/admin/prizeGrade"),
 	)
 
 	server.AddRoutes(
@@ -263,6 +334,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodDelete,
 					Path:    "/",
 					Handler: prizesPool.DelHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/search",
+					Handler: prizesPool.SearchPrizesPoolHandler(serverCtx),
 				},
 			}...,
 		),

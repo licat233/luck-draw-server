@@ -124,6 +124,9 @@ func ListResp(alertMsg string, listData any, totalRecord, pageSize, Page int64) 
 	if pageSize == 0 {
 		pageSize = 1
 	}
+	if alertMsg == "" {
+		alertMsg = SUCCESS_MSG
+	}
 	return &ListData{
 		Status:    true,
 		Message:   alertMsg,

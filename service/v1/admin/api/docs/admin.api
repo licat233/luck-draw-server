@@ -5,6 +5,7 @@ import "activity.api"
 import "adminer.api"
 import "lucker.api"
 import "prize.api"
+import "prize_grade.api"
 import "prizes_pool.api"
 import "project.api"
 import "rbac.api"
@@ -86,4 +87,16 @@ service admin-api {
 	@doc "获取当前用户信息"
 	@handler currentUser
 	post /currentUser returns(BaseResp)
+	
+	@doc "上传头像"
+	@handler uploadAvatar
+	post /uploadAvatar returns(BaseResp)
+	
+	@doc "上传logo"
+	@handler uploadLogo
+	post /uploadLogo returns(BaseResp)
+	
+	@doc "上传图片"
+	@handler uploadImg
+	post /uploadImg returns(BaseResp)
 }

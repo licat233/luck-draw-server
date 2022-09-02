@@ -1,6 +1,6 @@
 syntax = "v1"
 
-type project {
+type Project {
 	Id        int64     `json:"id"`         // 表主键
 	Uuid      string    `json:"uuid"`       // 唯一识别码
 	Name      string    `json:"name"`       // 项目名称
@@ -11,23 +11,23 @@ type project {
 	DeleteAt  int64     `json:"delete_at"`  // 删除时间
 }
 
-type projectGetReq {
+type ProjectGetReq {
 	Id int64 `form:"id"`
 }
 
-type projectAddReq {
+type ProjectAddReq {
 	Name       string       `json:"name"`        // 项目名称
 	Status     int64        `json:"status,default=0"`      // 项目状态
 }
 
-type projectPutReq {  
+type ProjectPutReq {  
 	Id         int64        `json:"id"`          // 表主键
 	Uuid       string       `json:"uuid"`        // 唯一识别码
 	Name       string       `json:"name"`        // 项目名称
 	Status     int64        `json:"status,default=0"`      // 项目状态
 }
 
-type projectDelReq {
+type ProjectDelReq {
 	Id int64 `json:"id"`
 }
 
@@ -44,19 +44,19 @@ service admin-api {
 
 	@doc "获取项目信息"
 	@handler info 
-	get /(projectGetReq) returns(BaseResp)
+	get /(ProjectGetReq) returns(BaseResp)
 
     @doc "添加项目"
 	@handler add 
-	post /(projectAddReq) returns(BaseResp)
+	post /(ProjectAddReq) returns(BaseResp)
 
     @doc "编辑项目"
 	@handler put 
-	put /(projectPutReq) returns(BaseResp)
+	put /(ProjectPutReq) returns(BaseResp)
 
     @doc "删除项目"
 	@handler del 
-	delete /(projectDelReq) returns(BaseResp)
+	delete /(ProjectDelReq) returns(BaseResp)
 
     @doc "枚举列表"
 	@handler enumList
