@@ -195,6 +195,7 @@ func (m *CommonModel) GetLuckerDetails(ctx context.Context, UserId, ActivityId, 
 		}
 		luckerDetailsInfo := &LuckerDetailsInfo{
 			Lucker:     lucker,
+			PrizesPool: prizesPool,
 			Prize:      prize,
 			PrizeGrade: prizeGrade,
 			Activity:   activity,
