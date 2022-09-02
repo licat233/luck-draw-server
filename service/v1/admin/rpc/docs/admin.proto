@@ -105,23 +105,26 @@ message Policy {
 
 
 message LuckerDetail {
-  //幸运者信息
+  //中奖信息
   Lucker lucker = 1;
 
+  //中奖用户信息
+  User user = 2;
+
   //奖品池信息
-  PrizesPool prizes_pool = 2;
+  PrizesPool prizes_pool = 3;
 
   //活动信息
-  Activity activity = 3;
+  Activity activity = 4;
 
   //奖品信息
-  Prize prize = 4;
+  Prize prize = 5;
 
   //奖品级别
-  PrizeGrade prize_grade = 5;
+  PrizeGrade prize_grade = 6;
 
   //项目信息
-  Project project = 6;
+  Project project = 7;
 }
 
 message JwtData {

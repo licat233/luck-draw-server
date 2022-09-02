@@ -3111,7 +3111,11 @@
       "properties": {
         "lucker": {
           "$ref": "#/definitions/Lucker",
-          "description": "幸运者信息，中奖信息"
+          "description": "中奖信息"
+        },
+        "user": {
+          "$ref": "#/definitions/User",
+          "description": "中奖用户信息"
         },
         "prizes_pool": {
           "$ref": "#/definitions/PrizesPool",
@@ -3137,6 +3141,7 @@
       "title": "LuckerDetails",
       "required": [
         "lucker",
+        "user",
         "prizes_pool",
         "prize",
         "prize_grade",

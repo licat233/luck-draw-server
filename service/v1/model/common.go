@@ -91,6 +91,8 @@ type CommonModel struct {
 type LuckerDetailsInfo struct {
 	Lucker *Lucker //中奖信息
 
+	User *User //中奖用户
+
 	PrizesPool *PrizesPool //奖品池的信息
 
 	Prize *Prize //奖品信息
@@ -168,6 +170,11 @@ func (m *CommonModel) GetLuckerDetails(ctx context.Context, UserId, ActivityId, 
 	}
 
 	for _, lucker := range luckerList {
+		user, e := m.UserModel.FindOne(ctx, lucker.UserId)
+		if e != nil && e != ErrNotFound {
+			err = e
+			return
+		}
 		prizesPool, e := m.PrizesPoolModel.FindOne(ctx, lucker.PrizesPoolId)
 		if e != nil && e != ErrNotFound {
 			err = e
@@ -195,6 +202,7 @@ func (m *CommonModel) GetLuckerDetails(ctx context.Context, UserId, ActivityId, 
 		}
 		luckerDetailsInfo := &LuckerDetailsInfo{
 			Lucker:     lucker,
+			User:       user,
 			PrizesPool: prizesPool,
 			Prize:      prize,
 			PrizeGrade: prizeGrade,

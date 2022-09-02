@@ -284,7 +284,8 @@ export interface LuckerDetailsReqParams {
 }
 
 export interface LuckerDetails {
-	lucker: Lucker // 幸运者信息，中奖信息
+	lucker: Lucker // 中奖信息
+	user: User // 中奖用户信息
 	prizes_pool: PrizesPool // 奖品池信息，奖品池信息
 	prize: Prize // 奖品信息，中奖产品
 	prize_grade: PrizeGrade // 奖品级别，中奖级别

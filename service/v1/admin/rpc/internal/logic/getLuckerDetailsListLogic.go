@@ -47,6 +47,7 @@ func (l *GetLuckerDetailsListLogic) GetLuckerDetailsList(in *admin_pb.GetLuckerD
 	for _, lucker := range list {
 		data = append(data, &admin_pb.LuckerDetail{
 			Lucker:     mdLuckerToPbLucker(lucker.Lucker),
+			User:       mdUserToPbUser(lucker.User),
 			PrizesPool: mdPrizesPoolToPbPrizesPool(lucker.PrizesPool),
 			Activity:   mdActivityToPbActivity(lucker.Activity),
 			Prize:      mdPrizeToPbPrize(lucker.Prize),

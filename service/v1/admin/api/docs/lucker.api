@@ -48,7 +48,8 @@ type LuckerDetailsReq{
 }
 
 type LuckerDetails {
-	Lucker     Lucker       `json:"lucker"`      //幸运者信息，中奖信息
+	Lucker     Lucker       `json:"lucker"`      //中奖信息
+	User       User        `json:"user"`         //中奖用户信息
 	PrizesPool PrizesPool  `json:"prizes_pool"`  //奖品池信息，奖品池信息
 	Prize      Prize        `json:"prize"`       //奖品信息，中奖产品
 	PrizeGrade PrizeGrade  `json:"prize_grade"`  //奖品级别，中奖级别
