@@ -1,5 +1,10 @@
 package utils
 
+import (
+	"strconv"
+	"strings"
+)
+
 func RemoveDuplicatesForInt64(ids []int64) []int64 {
 	// 只需要检查key，因此value使用空结构体，不占内存
 	processed := make(map[int64]struct{})
@@ -42,7 +47,7 @@ func RemoveDuplicatesForString(uuids []string) []string {
 	return uniqUuids
 }
 
-//SliceCompare 切片比较
+// SliceCompare 切片比较
 func SliceCompareInt64(sliceA, sliceB []int64) bool {
 	if len(sliceA) != len(sliceB) {
 		return false
@@ -261,4 +266,13 @@ func SliceContainString(sourceSlice []string, targetSlice ...string) bool {
 		}
 	}
 	return true
+}
+
+func SliceIntToString(slice []int64, spacer string) string {
+	var strArr []string
+	for _, number := range slice {
+		s := strconv.FormatInt(number, 10)
+		strArr = append(strArr, s)
+	}
+	return strings.Join(strArr, spacer)
 }

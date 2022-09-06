@@ -30,6 +30,7 @@ type (
 		FindByPasspord(ctx context.Context, passport string) (*User, error)
 		FindByPhone(ctx context.Context, phone string) (*User, error)
 		FindByEmail(ctx context.Context, email string) (*User, error)
+		FindsByName(ctx context.Context, name string) ([]*User, error)
 	}
 
 	customUserModel struct {
@@ -180,7 +181,7 @@ func (m *customUserModel) Exists(ctx context.Context, id int64) (bool, *User, er
 func (m *customUserModel) FindByPasspord(ctx context.Context, passport string) (*User, error) {
 	var resp User
 	query := fmt.Sprintf("select %s from %s where `passport` = ? and `is_deleted` = '0' limit 1", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, passport)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, passport)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -194,7 +195,7 @@ func (m *customUserModel) FindByPasspord(ctx context.Context, passport string) (
 func (m *customUserModel) FindByEmail(ctx context.Context, email string) (*User, error) {
 	var resp User
 	query := fmt.Sprintf("select %s from %s where `email` = ? and `is_deleted` = '0' limit 1", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, email)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, email)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -208,10 +209,25 @@ func (m *customUserModel) FindByEmail(ctx context.Context, email string) (*User,
 func (m *customUserModel) FindByPhone(ctx context.Context, phone string) (*User, error) {
 	var resp User
 	query := fmt.Sprintf("select %s from %s where `phone` = ? and `is_deleted` = '0' limit 1", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, phone)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, phone)
 	switch err {
 	case nil:
 		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *customUserModel) FindsByName(ctx context.Context, name string) ([]*User, error) {
+	var resp []*User
+	query := fmt.Sprintf("select %s from %s where `name` like '%%%s%%' and `is_deleted` = '0'", userRows, m.table, name)
+	fmt.Println(query)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
+	switch err {
+	case nil:
+		return resp, nil
 	case sqlc.ErrNotFound:
 		return nil, ErrNotFound
 	default:

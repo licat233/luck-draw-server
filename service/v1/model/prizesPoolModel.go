@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"luck_draw-server/common/utils"
 	"strings"
 
 	"github.com/zeromicro/go-zero/core/stores/cache"
@@ -28,6 +29,11 @@ type (
 		FindByActivityUuid(ctx context.Context, activityUuid string) ([]*PrizesPool, error)
 		FindList(ctx context.Context, pageSize, page int64) ([]*PrizesPool, error)
 		FindsByActivityId(ctx context.Context, activityId int64) ([]*PrizesPool, error)
+		FindsByActivityIds(context.Context, []int64) ([]*PrizesPool, error)
+
+		FindsByActivityAndPrize(context.Context, int64, int64) ([]*PrizesPool, error)
+		TableName() string
+		Conn() sqlc.CachedConn
 	}
 
 	customPrizesPoolModel struct {
@@ -122,6 +128,10 @@ func (m *customPrizesPoolModel) Update(ctx context.Context, data *PrizesPool) er
 
 //----------------------------------------------------------------
 
+func (m *customPrizesPoolModel) TableName() string {
+	return m.table
+}
+
 func (m *customPrizesPoolModel) FindCount(ctx context.Context) (int64, error) {
 	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted`= '0'", m.table)
 	var count int64
@@ -191,4 +201,23 @@ func (m *customPrizesPoolModel) FindList(ctx context.Context, pageSize, page int
 	default:
 		return nil, err
 	}
+}
+
+func (m *customPrizesPoolModel) FindsByActivityIds(ctx context.Context, activityIds []int64) ([]*PrizesPool, error) {
+	var resp []*PrizesPool
+	where := utils.SliceIntToString(activityIds, ",")
+	query := fmt.Sprintf("select %s from %s where `activity_id` in(%s) and `is_deleted` = '0'", prizesPoolRows, m.table, where)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
+	return resp, err
+}
+
+func (m *customPrizesPoolModel) FindsByActivityAndPrize(ctx context.Context, activityId, prizeId int64) ([]*PrizesPool, error) {
+	var resp []*PrizesPool
+	query := fmt.Sprintf("select %s from %s where `activity_id` = ? and `prize_id` = ? and `is_deleted` = '0'", prizesPoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, activityId, prizeId)
+	return resp, err
+}
+
+func (m *customPrizesPoolModel) Conn() sqlc.CachedConn {
+	return m.CachedConn
 }

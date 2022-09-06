@@ -130,7 +130,7 @@ func (s *AdminServer) GetLuckerList(ctx context.Context, in *admin_pb.ListReq) (
 	return l.GetLuckerList(in)
 }
 
-func (s *AdminServer) GetLuckerDetailsList(ctx context.Context, in *admin_pb.GetLuckerDetailsReq) (*admin_pb.GetLuckerDetailsResp, error) {
+func (s *AdminServer) GetLuckerDetailsList(ctx context.Context, in *admin_pb.LuckerListReq) (*admin_pb.GetLuckerDetailsResp, error) {
 	l := logic.NewGetLuckerDetailsListLogic(ctx, s.svcCtx)
 	return l.GetLuckerDetailsList(in)
 }

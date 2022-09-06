@@ -2,7 +2,6 @@ package initialize
 
 import (
 	"luck_draw-server/common/global"
-	"luck_draw-server/common/jwtx"
 	"luck_draw-server/common/redisx"
 	"luck_draw-server/common/utils"
 	"luck_draw-server/common/viperx"
@@ -32,9 +31,9 @@ func InitTime() {
 	time.Now().In(cstSh).Format("2006-01-02 15:04:05")
 }
 
-func InitJwtBlacklistsModel() {
-	global.JwtBlacklistsModel = jwtx.NewJwtBlacklistsModel()
-}
+// func InitJwtBlacklistsModel() {
+// 	global.JwtBlacklistsModel = jwtx.NewJwtBlacklistsModel()
+// }
 
 func InitProjectRootPath() {
 	global.ProjectRootPath = utils.CurrentProjectRootPath()

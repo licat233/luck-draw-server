@@ -1,8 +1,6 @@
 package global
 
 import (
-	"luck_draw-server/service/v1/model"
-
 	"github.com/spf13/viper"
 	gzredisx "github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -15,8 +13,8 @@ var (
 	// Redis *redis.Client //全局redis
 	// CASBIN *casbin.SyncedEnforcer //全局casbin enforcer
 
-	SQLConn            sqlx.SqlConn             //gozero定义后的mysql
-	RedisX             *gzredisx.Redis          //gozero定义后的redis
-	JwtBlacklistsModel model.JwtBlacklistsModel //全局jwt黑名单model
-	ProjectRootPath    string                   //当前项目跟路径
+	SQLConn sqlx.SqlConn    //gozero定义后的mysql
+	RedisX  *gzredisx.Redis //gozero定义后的redis
+	// JwtBlacklistsModel model.JwtBlacklistsModel //全局jwt黑名单model
+	ProjectRootPath string //当前项目跟路径
 )

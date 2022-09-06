@@ -210,6 +210,9 @@ func (m *customPrizeModel) FindList(ctx context.Context, pageSize, page int64, k
 }
 
 func (m *customPrizeModel) FindInIds(ctx context.Context, prizesIds []int64) ([]*Prize, error) {
+	if len(prizesIds) == 0 {
+		return nil, nil
+	}
 	var temps []string
 	for _, id := range prizesIds {
 		temps = append(temps, strconv.Itoa(int(id)))

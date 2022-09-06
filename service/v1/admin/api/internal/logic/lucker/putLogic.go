@@ -33,7 +33,6 @@ func (l *PutLogic) Put(req *types.LuckerPutReq) (any, error) {
 		PrizesPoolId: req.PrizesPoolId,
 		Status:       req.Status,
 		LuckDate:     req.LuckDate,
-		Ip:           req.Ip,
 	})
 	if err != nil {
 		return nil, err

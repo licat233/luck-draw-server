@@ -25,12 +25,16 @@ func NewLuckerDetailsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Luc
 	}
 }
 
-func (l *LuckerDetailsLogic) LuckerDetails(req *types.LuckerDetailsReq) (any, error) {
-	in := &admin_pb.GetLuckerDetailsReq{
-		UserId:     req.UserId,
-		ActivityId: req.ActivityId,
+func (l *LuckerDetailsLogic) LuckerDetails(req *types.LuckerListReq) (any, error) {
+	in := &admin_pb.LuckerListReq{
 		PageSize:   req.PageSize,
 		Page:       req.Page,
+		UserId:     req.UserId,
+		UserName:   req.UserName,
+		ProjectId:  req.ProjectId,
+		ActivityId: req.ActivityId,
+		PrizeId:    req.PageSize,
+		Status:     req.Status,
 	}
 	resp, err := l.svcCtx.AdminRpc.GetLuckerDetailsList(l.ctx, in)
 	if err != nil {

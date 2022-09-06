@@ -36,7 +36,7 @@ message Lucker {
   string uuid = 2;
   int64 user_id = 3;
   int64 prizes_pool_id = 4;
-  int64 status = 5;
+  int64 status = 5;  //状态: 0未领奖，1已领奖，2放弃领奖
   int64 luck_date = 6;
   string ip = 7;
 }
@@ -216,13 +216,6 @@ message ListReq {
   string keyword = 3;
 }
 
-message GetLuckerDetailsReq {
-  int64 user_id = 1; //用户id， -1表示不用 UserId 查询
-  int64 activity_id = 2; //活动id, -1表示不用 activityId 查询
-  int64 page_size = 3;
-  int64 page = 4;
-}
-
 //单个数据请求
 message ItemReq{
   int64 id = 1;
@@ -396,6 +389,17 @@ message ProjectActivityResp {
   repeated Activity data = 1;
 }
 
+message LuckerListReq {
+  int64 page_size = 1;
+  int64 page =2;
+  int64 user_id = 3;
+  string user_name = 4;
+  int64 project_id = 5;
+  int64 activity_id = 6;
+  int64 prize_id = 7;
+  int64 status = 8;
+}
+
 service Admin {
   //生产token
   rpc GenerateToken (GenerateTokenReq) returns (GenerateTokenResp);
@@ -428,7 +432,7 @@ service Admin {
   rpc DelAdminer (ItemReq) returns (StatusResp);
 
   rpc GetLuckerList (ListReq) returns (GetLuckerListResp);
-  rpc GetLuckerDetailsList (GetLuckerDetailsReq) returns (GetLuckerDetailsResp);
+  rpc GetLuckerDetailsList (LuckerListReq) returns (GetLuckerDetailsResp);
   rpc GetLucker (ItemReq) returns (GetLuckerResp);
   rpc AddLucker (Lucker) returns (AddLuckerResp);
   rpc PutLucker (Lucker) returns (StatusResp);

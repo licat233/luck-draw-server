@@ -198,7 +198,7 @@ export function list(params: components.ListReqParams) {
  * @description "获取抽奖单详细列表"
  * @param params
  */
-export function luckerDetails(params: components.LuckerDetailsReqParams) {
+export function luckerDetails(params: components.LuckerListReqParams) {
 	return webapi.get<components.BaseResp>("/v1/api/admin/lucker/details", params)
 }
 

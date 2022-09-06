@@ -78,10 +78,7 @@ func DefaultStateResp(err error) (*StateData, error) {
 	if err != nil {
 		return nil, errorx.Convert(err)
 	}
-	return &StateData{
-		Status:  true,
-		Message: SUCCESS_MSG,
-	}, nil
+	return StateResp(SUCCESS_MSG, true), nil
 }
 
 // SingleResp 返回单数据响应
@@ -98,11 +95,7 @@ func DefaultSingleResp(data any, err error) (*SingleData, error) {
 	if err != nil {
 		return nil, errorx.Convert(err)
 	}
-	return &SingleData{
-		Status:  true,
-		Message: SUCCESS_MSG,
-		Data:    data,
-	}, nil
+	return SingleResp(SUCCESS_MSG, data), nil
 }
 
 /** ListResp 返回列表数据响应，用于分页查询数据
@@ -113,13 +106,16 @@ func DefaultSingleResp(data any, err error) (*SingleData, error) {
 * Current int64 当前页码
  */
 func ListResp(alertMsg string, listData any, totalRecord, pageSize, Page int64) *ListData {
-	data := listData
-	if listData != nil {
-		if reflect.TypeOf(listData).Kind().String() != "slice" {
-			data = []any{listData}
-		}
-	} else {
-		data = []any{}
+	// data := listData
+	// if listData != nil {
+	// 	if reflect.TypeOf(listData).Kind().String() != "slice" {
+	// 		data = []any{listData}
+	// 	}
+	// } else {
+	// 	data = []any{}
+	// }
+	if listData == nil || totalRecord == 0 || pageSize == 0 {
+		listData = make([]any, 0)
 	}
 	if pageSize == 0 {
 		pageSize = 1
@@ -130,7 +126,7 @@ func ListResp(alertMsg string, listData any, totalRecord, pageSize, Page int64) 
 	return &ListData{
 		Status:    true,
 		Message:   alertMsg,
-		Data:      data,
+		Data:      listData,
 		Total:     totalRecord,
 		PageSize:  pageSize,
 		Page:      Page,
@@ -149,26 +145,7 @@ func DefaultListResp(listData any, totalRecord, pageSize, Page int64, err error)
 	if err != nil {
 		return nil, errorx.Convert(err)
 	}
-	data := listData
-	if listData != nil {
-		if reflect.TypeOf(listData).Kind().String() != "slice" {
-			data = []any{listData}
-		}
-	} else {
-		data = []any{}
-	}
-	if pageSize == 0 {
-		pageSize = 1
-	}
-	return &ListData{
-		Status:    true,
-		Message:   SUCCESS_MSG,
-		Data:      data,
-		Total:     totalRecord,
-		PageSize:  pageSize,
-		Page:      Page,
-		TotalPage: (totalRecord + pageSize - 1) / pageSize,
-	}, nil
+	return ListResp(SUCCESS_MSG, listData, totalRecord, pageSize, Page), nil
 }
 
 // Msg 根据error返回不同提示信息

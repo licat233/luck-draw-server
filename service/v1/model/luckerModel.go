@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/zeromicro/go-zero/core/stores/builder"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -34,13 +33,19 @@ type (
 		UpdateStatus(ctx context.Context, id, status int64) error
 		UpdateSomeStatusById(ctx context.Context, ids []int64, status int64) error
 		UpdateSomeStatusByUuid(ctx context.Context, uuidList []string, status int64) error
-		FindDetails(ctx context.Context, options *FindDetailsOptions) (resp []*LuckerDetail, total int64, err error)
+		// FindDetails(ctx context.Context, options *FindDetailsOptions) (resp []*LuckerDetail, total int64, err error)
 		FindByUserAndActivity(ctx context.Context, UserId, ActivityId int64) ([]*Lucker, error)
 		FindCountByUserAndActivity(ctx context.Context, UserId, ActivityId int64) (int64, error)
 		FindsByPrizesPoolId(ctx context.Context, prizesPoolIds []int64, pageSize, page int64) ([]*Lucker, error)
 		FindCountByPrizesPoolId(ctx context.Context, prizesPoolIds []int64) (int64, error)
 		FindsByPrizesPoolIdAndUserId(ctx context.Context, prizesPoolIds []int64, userId, pageSize, page int64) ([]*Lucker, error)
 		FindCountByPrizesPoolIdAndUserId(ctx context.Context, prizesPoolIds []int64, userId int64) (int64, error)
+
+		FindsByUserIds(ctx context.Context, userIds []int64, pageSize, page int64) ([]*Lucker, error)
+		FindCountByUserIds(ctx context.Context, userIds []int64) (int64, error)
+
+		TableName() string
+		Conn() sqlc.CachedConn
 	}
 
 	customLuckerModel struct {
@@ -52,8 +57,8 @@ type (
 func NewLuckerModel(conn sqlx.SqlConn, c cache.CacheConf) LuckerModel {
 	//用于插入数据的字段
 	luckerRowsExpectAutoSet = strings.Join(stringx.Remove(luckerFieldNames, BaseInsertOmitField...), ",")
-	//用于更新数据的字段
-	luckerRowsWithPlaceHolder = strings.Join(stringx.Remove(luckerFieldNames, BaseUpdateOmitField...), "=?,") + "=?"
+	//用于更新数据的字段，只有创建的时候才能设置ip
+	luckerRowsWithPlaceHolder = strings.Join(stringx.Remove(luckerFieldNames, append(BaseUpdateOmitField, "ip")...), "=?,") + "=?"
 	return &customLuckerModel{
 		defaultLuckerModel: newLuckerModel(conn, c),
 	}
@@ -114,6 +119,9 @@ func (m *customLuckerModel) FindOne(ctx context.Context, id int64) (*Lucker, err
 }
 
 func (m *customLuckerModel) Insert(ctx context.Context, data *Lucker) (sql.Result, error) {
+	if data.Ip == "" {
+		data.Ip = "0.0.0.0"
+	}
 	luckDrawLuckerIdKey := m.formatPrimary(data.Id)
 	luckDrawLuckerUuidKey := m.formatUuidKey(data.Uuid)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
@@ -189,7 +197,7 @@ func (m *customLuckerModel) FindsByUserId(ctx context.Context, userId int64, pag
 func (m *customLuckerModel) FindCountByUserId(ctx context.Context, userId int64) (int64, error) {
 	var count int64
 	query := fmt.Sprintf("select count(*) from %s where `user_id` = ? and `is_deleted` = '0'", m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query, userId)
+	err := m.QueryRowNoCacheCtx(ctx, &count, query, userId)
 	switch err {
 	case nil:
 		return count, nil
@@ -201,6 +209,9 @@ func (m *customLuckerModel) FindCountByUserId(ctx context.Context, userId int64)
 }
 
 func (m *customLuckerModel) FindsByPrizesPoolId(ctx context.Context, prizesPoolIds []int64, pageSize, page int64) ([]*Lucker, error) {
+	if len(prizesPoolIds) == 0 {
+		return nil, nil
+	}
 	var resp []*Lucker
 	var temps []string
 	for _, prizesPoolId := range prizesPoolIds {
@@ -223,6 +234,9 @@ func (m *customLuckerModel) FindsByPrizesPoolId(ctx context.Context, prizesPoolI
 }
 
 func (m *customLuckerModel) FindCountByPrizesPoolId(ctx context.Context, prizesPoolIds []int64) (int64, error) {
+	if len(prizesPoolIds) == 0 {
+		return 0, nil
+	}
 	var count int64
 	var temps []string
 	for _, prizesPoolId := range prizesPoolIds {
@@ -230,7 +244,7 @@ func (m *customLuckerModel) FindCountByPrizesPoolId(ctx context.Context, prizesP
 	}
 	whereSql := strings.Join(temps, ",")
 	query := fmt.Sprintf("select count(*) from %s where `is_deleted` = '0' and `prizes_pool_id` in(%s)", m.table, whereSql)
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
+	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	switch err {
 	case nil:
 		return count, nil
@@ -277,15 +291,8 @@ func (m *customLuckerModel) FindCountByPrizesPoolIdAndUserId(ctx context.Context
 	}
 	whereSql := strings.Join(temps, ",")
 	query := fmt.Sprintf("select count(*) from %s where `is_deleted` = '0' and `user_id` = ? and `prizes_pool_id` in(%s)", m.table, whereSql)
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query, userId)
-	switch err {
-	case nil:
-		return count, nil
-	case sqlc.ErrNotFound:
-		return count, ErrNotFound
-	default:
-		return count, err
-	}
+	err := m.QueryRowNoCacheCtx(ctx, &count, query, userId)
+	return count, err
 }
 
 func (m *customLuckerModel) UpdateStatus(ctx context.Context, id, status int64) error {
@@ -329,126 +336,6 @@ func (m *customLuckerModel) UpdateSomeStatusByUuid(ctx context.Context, uuidList
 	return err
 }
 
-type FindDetailsOptions struct {
-	UserId       int64  //用户id， -1表示不用 UserId 查询
-	ActivityId   int64  //活动id, -1表示不用 activityId 查询，activityId 优先级大于 activityUUID，如果 activityId != -1，则优先以 activityId 为条件
-	ActivityUUID string //活动UUID, ""表示不用 ActivityUUID 查询
-	PageSize     int64  //页面大小, -1表示不是页查询，可等于 0，虽然没啥意义，直接返回 nil slice
-	Page         int64  //页码，-1表示不是页查询，必须大于 0
-}
-
-/** FindDetails 查询中奖名单
- */
-func (m *customLuckerModel) FindDetails(ctx context.Context, options *FindDetailsOptions) (resp []*LuckerDetail, total int64, err error) {
-	userId := options.UserId
-	activityId := options.ActivityId
-	activityUUID := options.ActivityUUID
-	pageSize := options.PageSize
-	page := options.Page
-	if pageSize == 0 {
-		return
-	}
-
-	luckerInfo := &TableInfo{
-		TableName: LuckerTableName,
-		Fields:    builder.RawFieldNames(&Lucker{}),
-		Connector: "_",
-	}
-	prizesPoolInfo := &TableInfo{
-		TableName: PrizesPoolTableName,
-		Fields:    builder.RawFieldNames(&PrizesPool{}),
-		Connector: "_",
-	}
-	activityInfo := &TableInfo{
-		TableName: ActivityTableName,
-		Fields:    builder.RawFieldNames(&Activity{}),
-		Connector: "_",
-	}
-	prizeInfo := &TableInfo{
-		TableName: PrizeTableName,
-		Fields:    builder.RawFieldNames(&Prize{}),
-		Connector: "_",
-	}
-	prizeGradeInfo := &TableInfo{
-		TableName: PrizeGradeTableName,
-		Fields:    builder.RawFieldNames(&PrizeGrade{}),
-		Connector: "_",
-	}
-	expectQuery := multiTableQuery(luckerInfo, prizesPoolInfo, activityInfo, prizeInfo, prizeGradeInfo)
-
-	var bindsQuery []string
-	var ages []any
-	if userId != -1 {
-		bindsQuery = append(bindsQuery, fmt.Sprintf("%s.user_id = ?", LuckerTableName))
-		ages = append(ages, userId)
-	}
-
-	if activityId != -1 {
-		bindsQuery = append(bindsQuery, fmt.Sprintf("%s.activity_id = ?", PrizesPoolTableName))
-		ages = append(ages, activityId)
-	} else if activityUUID != "" {
-		bindsQuery = append(bindsQuery, fmt.Sprintf("%s.uuid = ?", ActivityTableName))
-		ages = append(ages, activityUUID)
-	}
-	bindQuery := strings.Join(bindsQuery, " AND ")
-
-	var pageQuery string
-
-	var isPageQuery bool
-
-	if page > 0 && pageSize > 0 {
-		isPageQuery = true
-		pageQuery = fmt.Sprintf(" limit %v,%v", (page-1)*pageSize, pageSize)
-	}
-
-	//基础查询
-	baseQuery := fmt.Sprintf("SELECT %s FROM %s", expectQuery, LuckerTableName)
-
-	var builderstr strings.Builder
-	//关联查询
-	builderstr.WriteString(fmt.Sprintf(" LEFT JOIN %s ON %s.prizes_pool_id = %s.id", PrizesPoolTableName, LuckerTableName, PrizesPoolTableName))
-	builderstr.WriteString(fmt.Sprintf(" LEFT JOIN %s ON %s.prizes_pool_id = %s.id", ActivityTableName, PrizesPoolTableName, ActivityTableName))
-	builderstr.WriteString(fmt.Sprintf(" LEFT JOIN %s ON %s.prizes_pool_id = %s.id", PrizeTableName, PrizesPoolTableName, PrizeTableName))
-	builderstr.WriteString(fmt.Sprintf(" LEFT JOIN %s ON %s.prizes_pool_id = %s.id", PrizeGradeTableName, PrizesPoolTableName, PrizeGradeTableName))
-
-	//条件查询
-	builderstr.WriteString(fmt.Sprintf(" WHERE %s.is_deleted = 0 AND %s.is_deleted = 0 AND %s.is_deleted = 0 AND %s.is_deleted = 0 AND %s.is_deleted = 0", LuckerTableName, PrizesPoolTableName, ActivityTableName, PrizeTableName, PrizeGradeTableName))
-	//绑定查询
-	builderstr.WriteString(bindQuery)
-	//页面查询
-	builderstr.WriteString(pageQuery)
-
-	mainQuery := builderstr.String()
-	queryList := fmt.Sprintf("%s %s", baseQuery, mainQuery)
-
-	err = m.QueryRowsNoCacheCtx(ctx, &resp, queryList, ages...)
-	switch err {
-	case nil:
-		if !isPageQuery {
-			return
-		}
-	case sqlc.ErrNotFound:
-		err = ErrNotFound
-		return
-	default:
-		return
-	}
-
-	baseQuery = fmt.Sprintf("SELECT count(*) FROM %s where is_deleted = 0", LuckerTableName)
-	queryCount := fmt.Sprintf("%s %s", baseQuery, mainQuery)
-
-	err = m.QueryRowsNoCacheCtx(ctx, &total, queryCount, ages...)
-	switch err {
-	case nil:
-		return
-	case sqlc.ErrNotFound:
-		err = ErrNotFound
-		return
-	default:
-		return
-	}
-}
-
 func (m *customLuckerModel) FindByUserAndActivity(ctx context.Context, UserId, ActivityId int64) ([]*Lucker, error) {
 	query := fmt.Sprintf("select %s from %s where user_id = ? and activity_id = ? and is_deleted = '0'", luckerRows, m.table)
 	var resp []*Lucker
@@ -475,4 +362,52 @@ func (m *customLuckerModel) FindCountByUserAndActivity(ctx context.Context, User
 	default:
 		return 0, err
 	}
+}
+
+func (m *customLuckerModel) FindsByUserIds(ctx context.Context, userIds []int64, pageSize, page int64) ([]*Lucker, error) {
+	var resp []*Lucker
+	var temps []string
+	if len(userIds) == 0 {
+		return nil, nil
+	}
+	for _, userId := range userIds {
+		temps = append(temps, fmt.Sprint(userId))
+	}
+	whereSql := strings.Join(temps, ",")
+	query := fmt.Sprintf("select %s from %s where `is_deleted` = '0' and `user_id` in(%s)", luckerRows, m.table, whereSql)
+	if pageSize > 0 && page > 0 {
+		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
+	}
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *customLuckerModel) FindCountByUserIds(ctx context.Context, userIds []int64) (int64, error) {
+	var count int64
+	var temps []string
+	if len(userIds) == 0 {
+		return 0, nil
+	}
+	for _, userId := range userIds {
+		temps = append(temps, fmt.Sprint(userId))
+	}
+	whereSql := strings.Join(temps, ",")
+	query := fmt.Sprintf("select count(*) from %s where `is_deleted` = '0' and `user_id` in(%s)", luckerRows, m.table, whereSql)
+	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
+	return count, err
+}
+
+func (m *customLuckerModel) TableName() string {
+	return m.table
+}
+
+func (m *customLuckerModel) Conn() sqlc.CachedConn {
+	return m.CachedConn
 }

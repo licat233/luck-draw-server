@@ -107,7 +107,7 @@ CREATE TABLE `lucker` (
   `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '唯一识别码',
   `user_id` int NOT NULL COMMENT '中奖用户id',
   `prizes_pool_id` int NOT NULL COMMENT '抽中的奖品池id',
-  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态: -1放弃领奖，0未领奖，1已领奖',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态: 0未领奖，1已领奖，2放弃领奖',
   `luck_date` datetime NOT NULL COMMENT '抽奖时间',
   `ip` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0.0.0.0' COMMENT 'ip地址',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

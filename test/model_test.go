@@ -27,9 +27,22 @@ func Test_Model(t *testing.T) {
 	}
 	cacheRedis := []cache.NodeConf{conf}
 	sqlConn := sqlx.NewMysql(global.Viper.GetString("Mysql.DataSource"))
-	m := model.NewAdminerModel(sqlConn, cacheRedis)
+	// m := model.NewAdminerModel(sqlConn, cacheRedis)
+	// m := model.NewUserModel(sqlConn, cacheRedis)
+	m := model.NewPrizeModel(sqlConn, cacheRedis)
 	ctx := context.Background()
-	result, err := m.ExsitByEmail(ctx, "1697470538@qq.com")
-	// result, err := m.FindCount(ctx)
+	// result, err := m.ExsitByEmail(ctx, "1697470538@qq.com")
+	result, err := m.FindCount(ctx)
+	// result, err := m.FindsByName(ctx, "王")
+	if err != nil && err != model.ErrNotFound {
+		fmt.Printf("出错:%+v", err)
+		return
+	}
+
+	if err == model.ErrNotFound {
+		fmt.Printf("为找到：%+v \n", result)
+		return
+	}
+
 	fmt.Printf("result: %+v , error: %+v \n", result, err)
 }

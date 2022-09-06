@@ -39,7 +39,6 @@ type (
 	GetActivityResp       = admin_pb.GetActivityResp
 	GetAdminerListResp    = admin_pb.GetAdminerListResp
 	GetAdminerResp        = admin_pb.GetAdminerResp
-	GetLuckerDetailsReq   = admin_pb.GetLuckerDetailsReq
 	GetLuckerDetailsResp  = admin_pb.GetLuckerDetailsResp
 	GetLuckerListResp     = admin_pb.GetLuckerListResp
 	GetLuckerResp         = admin_pb.GetLuckerResp
@@ -68,6 +67,7 @@ type (
 	LogoutResp            = admin_pb.LogoutResp
 	Lucker                = admin_pb.Lucker
 	LuckerDetail          = admin_pb.LuckerDetail
+	LuckerListReq         = admin_pb.LuckerListReq
 	ParseJwtTokenReq      = admin_pb.ParseJwtTokenReq
 	ParseJwtTokenResp     = admin_pb.ParseJwtTokenResp
 	Policy                = admin_pb.Policy
@@ -112,7 +112,7 @@ type (
 		PutAdminer(ctx context.Context, in *Adminer, opts ...grpc.CallOption) (*StatusResp, error)
 		DelAdminer(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
 		GetLuckerList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetLuckerListResp, error)
-		GetLuckerDetailsList(ctx context.Context, in *GetLuckerDetailsReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error)
+		GetLuckerDetailsList(ctx context.Context, in *LuckerListReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error)
 		GetLucker(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetLuckerResp, error)
 		AddLucker(ctx context.Context, in *Lucker, opts ...grpc.CallOption) (*AddLuckerResp, error)
 		PutLucker(ctx context.Context, in *Lucker, opts ...grpc.CallOption) (*StatusResp, error)
@@ -276,7 +276,7 @@ func (m *defaultAdmin) GetLuckerList(ctx context.Context, in *ListReq, opts ...g
 	return client.GetLuckerList(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) GetLuckerDetailsList(ctx context.Context, in *GetLuckerDetailsReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error) {
+func (m *defaultAdmin) GetLuckerDetailsList(ctx context.Context, in *LuckerListReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetLuckerDetailsList(ctx, in, opts...)
 }

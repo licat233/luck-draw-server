@@ -40,8 +40,8 @@ func (l *AddActivityLogic) AddActivity(in *admin_pb.Activity) (*admin_pb.AddActi
 		Pattern:   in.Pattern,
 		MaxCount:  in.MaxCount,
 		MaxPrizes: in.MaxPrizes,
-		StartTime: utils.Int64ToTime(in.StartTime),
-		EndTime:   utils.Int64ToTime(in.EndTime),
+		StartTime: utils.Int64ToTime(utils.TimestarpHandle(in.StartTime)),
+		EndTime:   utils.Int64ToTime(utils.TimestarpHandle(in.EndTime)),
 	}
 	result, err := l.svcCtx.ActivityModel.Insert(l.ctx, data)
 	if err != nil {

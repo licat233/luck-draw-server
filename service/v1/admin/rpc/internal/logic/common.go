@@ -225,3 +225,19 @@ func verifyAdminerStatus(adminer *model.Adminer) error {
 	}
 	return nil
 }
+
+func convertLuckerDetailsList(in []*model.LuckerDetailsInfo) []*admin_pb.LuckerDetail {
+	var res []*admin_pb.LuckerDetail
+	for _, item := range in {
+		res = append(res, &admin_pb.LuckerDetail{
+			Lucker:     mdLuckerToPbLucker(item.Lucker),
+			User:       mdUserToPbUser(item.User),
+			PrizesPool: mdPrizesPoolToPbPrizesPool(item.PrizesPool),
+			Activity:   mdActivityToPbActivity(item.Activity),
+			Prize:      mdPrizeToPbPrize(item.Prize),
+			PrizeGrade: mdPrizeGradeToPbPrizeGrade(item.PrizeGrade),
+			Project:    mdProjectToPbProject(item.Project),
+		})
+	}
+	return res
+}

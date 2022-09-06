@@ -50,7 +50,7 @@ type AdminClient interface {
 	PutAdminer(ctx context.Context, in *Adminer, opts ...grpc.CallOption) (*StatusResp, error)
 	DelAdminer(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
 	GetLuckerList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetLuckerListResp, error)
-	GetLuckerDetailsList(ctx context.Context, in *GetLuckerDetailsReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error)
+	GetLuckerDetailsList(ctx context.Context, in *LuckerListReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error)
 	GetLucker(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetLuckerResp, error)
 	AddLucker(ctx context.Context, in *Lucker, opts ...grpc.CallOption) (*AddLuckerResp, error)
 	PutLucker(ctx context.Context, in *Lucker, opts ...grpc.CallOption) (*StatusResp, error)
@@ -283,7 +283,7 @@ func (c *adminClient) GetLuckerList(ctx context.Context, in *ListReq, opts ...gr
 	return out, nil
 }
 
-func (c *adminClient) GetLuckerDetailsList(ctx context.Context, in *GetLuckerDetailsReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error) {
+func (c *adminClient) GetLuckerDetailsList(ctx context.Context, in *LuckerListReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error) {
 	out := new(GetLuckerDetailsResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetLuckerDetailsList", in, out, opts...)
 	if err != nil {
@@ -702,7 +702,7 @@ type AdminServer interface {
 	PutAdminer(context.Context, *Adminer) (*StatusResp, error)
 	DelAdminer(context.Context, *ItemReq) (*StatusResp, error)
 	GetLuckerList(context.Context, *ListReq) (*GetLuckerListResp, error)
-	GetLuckerDetailsList(context.Context, *GetLuckerDetailsReq) (*GetLuckerDetailsResp, error)
+	GetLuckerDetailsList(context.Context, *LuckerListReq) (*GetLuckerDetailsResp, error)
 	GetLucker(context.Context, *ItemReq) (*GetLuckerResp, error)
 	AddLucker(context.Context, *Lucker) (*AddLuckerResp, error)
 	PutLucker(context.Context, *Lucker) (*StatusResp, error)
@@ -812,7 +812,7 @@ func (UnimplementedAdminServer) DelAdminer(context.Context, *ItemReq) (*StatusRe
 func (UnimplementedAdminServer) GetLuckerList(context.Context, *ListReq) (*GetLuckerListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLuckerList not implemented")
 }
-func (UnimplementedAdminServer) GetLuckerDetailsList(context.Context, *GetLuckerDetailsReq) (*GetLuckerDetailsResp, error) {
+func (UnimplementedAdminServer) GetLuckerDetailsList(context.Context, *LuckerListReq) (*GetLuckerDetailsResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLuckerDetailsList not implemented")
 }
 func (UnimplementedAdminServer) GetLucker(context.Context, *ItemReq) (*GetLuckerResp, error) {
@@ -1315,7 +1315,7 @@ func _Admin_GetLuckerList_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _Admin_GetLuckerDetailsList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLuckerDetailsReq)
+	in := new(LuckerListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1327,7 +1327,7 @@ func _Admin_GetLuckerDetailsList_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: "/admin_proto.Admin/GetLuckerDetailsList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).GetLuckerDetailsList(ctx, req.(*GetLuckerDetailsReq))
+		return srv.(AdminServer).GetLuckerDetailsList(ctx, req.(*LuckerListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }

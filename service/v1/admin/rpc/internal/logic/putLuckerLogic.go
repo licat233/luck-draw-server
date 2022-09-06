@@ -30,14 +30,14 @@ func (l *PutLuckerLogic) PutLucker(in *admin_pb.Lucker) (*admin_pb.StatusResp, e
 	if in == nil {
 		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
-
+	lukeDate := utils.TimestarpHandle(in.LuckDate)
 	data := &model.Lucker{
 		Id:           in.Id,
 		Uuid:         in.Uuid,
 		UserId:       in.UserId,
 		PrizesPoolId: in.PrizesPoolId,
 		Status:       in.Status,
-		LuckDate:     utils.Int64ToTime(in.LuckDate),
+		LuckDate:     utils.Int64ToTime(lukeDate),
 		Ip:           in.Ip,
 	}
 

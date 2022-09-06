@@ -235,7 +235,7 @@ export interface Lucker {
 	uuid: string // 唯一识别码
 	user_id: number // 中奖用户id
 	prizes_pool_id: number // 抽中的奖品池id
-	status: number // 状态: -1放弃领奖，0未领奖，1已领奖
+	status: number // 状态: 0未领奖，1已领奖，2放弃领奖
 	luck_date: number // 抽奖时间
 	ip: string // ip地址
 	create_at: number // 创建时间
@@ -254,9 +254,8 @@ export interface LuckerGetReqParams {
 export interface LuckerAddReq {
 	user_id: number // 中奖用户id
 	prizes_pool_id: number // 抽中的奖品池id
-	status: number // 状态: -1放弃领奖，0未领奖，1已领奖
+	status: number // 状态: 0未领奖，1已领奖，2放弃领奖
 	luck_date: number // 抽奖时间
-	ip: string // ip地址
 }
 
 export interface LuckerPutReq {
@@ -264,23 +263,12 @@ export interface LuckerPutReq {
 	uuid: string // 唯一识别码
 	user_id: number // 中奖用户id
 	prizes_pool_id: number // 抽中的奖品池id
-	status: number // 状态: -1放弃领奖，0未领奖，1已领奖
+	status: number // 状态: 0未领奖，1已领奖，2放弃领奖
 	luck_date: number // 抽奖时间
-	ip: string // ip地址
 }
 
 export interface LuckerDelReq {
 	id: number
-}
-
-export interface LuckerDetailsReq {
-}
-
-export interface LuckerDetailsReqParams {
-	user_id: number // 用户id， -1表示不用 UserId 查询
-	activity_id: number // 活动id, -1表示不用 activityId 查询
-	pageSize: number // 页面大小
-	current: number // 当前页码
 }
 
 export interface LuckerDetails {
@@ -291,6 +279,21 @@ export interface LuckerDetails {
 	prize_grade: PrizeGrade // 奖品级别，中奖级别
 	activity: Activity // 活动信息，中奖活动，
 	project: Project // 项目信息，中奖项目，
+}
+
+export interface LuckerListReq {
+}
+
+export interface LuckerListReqParams {
+	user_id: number // 用户id
+	user_name: string // 用户名
+	project_id: number // 项目id
+	activity_id: number // 活动id
+	activity_id: number // 活动id
+	status: number // 状态
+	lucker_date: number // 抽奖时间
+	pageSize: number // 页面大小
+	current: number // 当前页码
 }
 
 export interface Prize {

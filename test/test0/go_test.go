@@ -1,10 +1,27 @@
-package test
+package test0
 
 import (
 	"fmt"
 	"testing"
 	"time"
+
+	"github.com/asaskevich/govalidator"
 )
+
+func Test_len(t *testing.T) {
+	data := make([]int, 0)
+	res := len(data)
+	if data == nil {
+		fmt.Println("为nil")
+	}
+	fmt.Println("结果:", res)
+}
+
+func Test_unixVali(t *testing.T) {
+	timestarp := "166217023"
+	res := govalidator.IsUnixTime(timestarp)
+	fmt.Println(res)
+}
 
 type A struct {
 	Name string

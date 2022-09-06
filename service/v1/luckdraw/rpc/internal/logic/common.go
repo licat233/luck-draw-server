@@ -129,6 +129,17 @@ func convertLucker(mdLucker *model.Lucker) *luckdraw_pb.Lucker {
 	}
 }
 
+func convertPrizeGrade(in *model.PrizeGrade) *luckdraw_pb.PrizeGrade {
+	if in == nil {
+		return nil
+	}
+	return &luckdraw_pb.PrizeGrade{
+		Id:    in.Id,
+		Name:  in.Name,
+		Iswin: in.IsWin,
+	}
+}
+
 func convertPrizes(mPrizes []*model.Prize) (pbPrizes []*luckdraw_pb.Prize) {
 	if len(mPrizes) == 0 {
 		return
@@ -165,59 +176,20 @@ func convertPrizesPoolList(mdPrizesPoolList []*model.PrizesPool) (pbPrizesPoolLi
 	return
 }
 
-func convertLuckerDetail(mdLuckerDetail *model.LuckerDetail) *luckdraw_pb.LuckerDetail {
+func convertLuckerDetail(mdLuckerDetail *model.LuckerDetailsInfo) *luckdraw_pb.LuckerDetail {
 	if mdLuckerDetail == nil {
 		return nil
 	}
 	return &luckdraw_pb.LuckerDetail{
-		Lucker: &luckdraw_pb.Lucker{
-			Id:           mdLuckerDetail.LuckerId,
-			Uuid:         mdLuckerDetail.LuckerUuid,
-			UserId:       mdLuckerDetail.UserId,
-			PrizesPoolId: mdLuckerDetail.PrizesPoolId,
-			Status:       mdLuckerDetail.LuckerStatus,
-			LuckDate:     mdLuckerDetail.LuckDate.Unix(),
-		},
-		PrizesPool: &luckdraw_pb.PrizesPool{
-			Id:         mdLuckerDetail.PrizesPoolId,
-			Uuid:       mdLuckerDetail.PrizesPoolUuid,
-			ActivityId: mdLuckerDetail.ActivityId,
-			PrizeId:    mdLuckerDetail.PrizeId,
-			LuckValue:  mdLuckerDetail.PrizesPoolLuckValue,
-			Status:     mdLuckerDetail.PrizesPoolStatus,
-			GradeId:    mdLuckerDetail.PrizesPoolGradeId,
-			Number:     mdLuckerDetail.PrizesPoolNumber,
-			Remainder:  mdLuckerDetail.PrizesPoolRemainder,
-		},
-		Activity: &luckdraw_pb.Activity{
-			Id:        mdLuckerDetail.ActivityId,
-			Uuid:      mdLuckerDetail.ActivityUuid,
-			Name:      mdLuckerDetail.ActivityName,
-			ProjectId: mdLuckerDetail.ActivityProjectId,
-			Status:    utils.Int64ToBool(mdLuckerDetail.ActivityStatus),
-			Pattern:   mdLuckerDetail.ActivityPattern,
-			MaxCount:  mdLuckerDetail.ActivityMaxCount,
-			MaxPrizes: mdLuckerDetail.ActivityMaxPrizes,
-			StartTime: mdLuckerDetail.ActivityStartTime.Unix(),
-			EndTime:   mdLuckerDetail.ActivityEndTime.Unix(),
-		},
-		Prize: &luckdraw_pb.Prize{
-			Id:     mdLuckerDetail.PrizeId,
-			Uuid:   mdLuckerDetail.PrizeUuid,
-			Name:   mdLuckerDetail.PrizeName,
-			Image:  mdLuckerDetail.PrizeImage,
-			Price:  mdLuckerDetail.PrizePrice,
-			Status: mdLuckerDetail.PrizeStatus,
-		},
-		PrizeGrade: &luckdraw_pb.PrizeGrade{
-			Id:    mdLuckerDetail.GradeId,
-			Name:  mdLuckerDetail.GradeName,
-			Iswin: mdLuckerDetail.IsWin,
-		},
+		Lucker:     convertLucker(mdLuckerDetail.Lucker),
+		PrizesPool: nil, //不能对外公开
+		Activity:   convertActivity(mdLuckerDetail.Activity),
+		Prize:      convertPrize(mdLuckerDetail.Prize),
+		PrizeGrade: convertPrizeGrade(mdLuckerDetail.PrizeGrade),
 	}
 }
 
-func convertLuckerDetailsList(mdLuckerDetailsList []*model.LuckerDetail) (res []*luckdraw_pb.LuckerDetail) {
+func convertLuckerDetailsList(mdLuckerDetailsList []*model.LuckerDetailsInfo) (res []*luckdraw_pb.LuckerDetail) {
 	for _, mdluckerDetail := range mdLuckerDetailsList {
 		pbLuckerDetail := convertLuckerDetail(mdluckerDetail)
 		if pbLuckerDetail == nil {

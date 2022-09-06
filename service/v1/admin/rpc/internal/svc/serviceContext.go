@@ -23,13 +23,15 @@ type ServiceContext struct {
 	UsersPoolModel  model.UsersPoolModel
 	PrizeGradeModel model.PrizeGradeModel
 
+	CommonModel *model.CommonModel
+
 	AdminerModel       model.AdminerModel
 	JwtBlacklistsModel model.JwtBlacklistsModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	sqlConn := sqlx.NewMysql(c.Mysql.DataSource)
-	return &ServiceContext{
+	svc := &ServiceContext{
 		Config: c,
 		RedisCli: redis.New(c.Redis.Host, func(r *redis.Redis) {
 			r.Pass = c.Redis.Pass
@@ -46,4 +48,15 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		AdminerModel:       model.NewAdminerModel(sqlConn, c.CacheRedis),
 		JwtBlacklistsModel: model.NewJwtBlacklistsModel(sqlConn, c.CacheRedis),
 	}
+	svc.CommonModel = &model.CommonModel{
+		ProjectModel:    svc.ProjectModel,
+		ActivityModel:   svc.ActivityModel,
+		PrizeModel:      svc.PrizeModel,
+		UserModel:       svc.UserModel,
+		LuckerModel:     svc.LuckerModel,
+		PrizesPoolModel: svc.PrizesPoolModel,
+		UsersPoolModel:  svc.UsersPoolModel,
+		PrizeGradeModel: svc.PrizeGradeModel,
+	}
+	return svc
 }

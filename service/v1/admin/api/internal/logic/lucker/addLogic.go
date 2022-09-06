@@ -30,8 +30,7 @@ func (l *AddLogic) Add(req *types.LuckerAddReq) (any, error) {
 		UserId:       req.UserId,
 		PrizesPoolId: req.PrizesPoolId,
 		Status:       req.Status,
-		LuckDate:     0,
-		Ip:           req.Ip,
+		LuckDate:     req.LuckDate,
 	})
 	if err != nil {
 		return nil, err

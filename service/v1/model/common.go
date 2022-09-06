@@ -4,48 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strings"
+
+	sq "github.com/Masterminds/squirrel"
 )
-
-type TableInfo struct {
-	TableName string
-	Fields    []string
-	Connector string
-}
-
-func fieldRename(tableInfo *TableInfo) string {
-	if tableInfo == nil {
-		return ""
-	}
-	var tempFields []string
-	for _, field := range tableInfo.Fields {
-		field = fmt.Sprintf("%s.%s AS %s%s%s", tableInfo.TableName, field, tableInfo.TableName, tableInfo.Connector, field)
-		tempFields = append(tempFields, field)
-	}
-	return strings.Join(tempFields, ", ")
-}
-
-func multiTableQuery(tableInfoList ...*TableInfo) string {
-	if len(tableInfoList) == 0 {
-		return ""
-	}
-	var tablesQuery []string
-	for _, tableInfo := range tableInfoList {
-		tableExpectQuery := fieldRename(tableInfo)
-		if len(tableExpectQuery) != 0 {
-			tablesQuery = append(tablesQuery, tableExpectQuery)
-		}
-	}
-	return strings.Join(tablesQuery, ", ")
-}
-
-func resetTableRows(fields []string, tableNickname string) string {
-	var list []string
-	for _, field := range fields {
-		list = append(list, fmt.Sprintf("%s.%s AS %s", tableNickname, field, field))
-	}
-	return strings.Join(list, ",")
-}
 
 func VerifyUser(user *User) error {
 	if user == nil {
@@ -104,69 +65,143 @@ type LuckerDetailsInfo struct {
 	Project *Project //项目信息
 }
 
-//TODO: 后面有时间再实现
-/** GetLuckerDetails 查询中奖详细信息
- * UserId       int64  //用户id， -1表示不用 UserId 查询
- * ActivityId   int64  //活动id, -1表示不用 activityId 查询
- * PageSize     int64  //页面大小, -1表示不是页查询，可等于 0，虽然没啥意义，直接返回 nil slice
- * Page         int64  //页码，-1表示不是页查询，必须大于 0
+/** SearchLuckerDetails 查询中奖详细信息
+ * userId       int64   //用户id，-1表示不用 UserId 查询
+ * userName     string  //用户名称， "" 表示不用 UserName 查询，优先级低于UserId
+ * projectId    int64  //项目id，-1表示不指定，
+ * activityId   int64  //活动id, -1表示不用 activityId 查询
+ * prizeId      int64  //奖品id，-1表示不指定
+ * status       int64  //状态: 0未领奖，1已领奖，2放弃领奖
+ * pageSize     int64  //页面大小, -1表示不是页查询，可等于 0，虽然没啥意义，直接返回 nil slice
+ * page         int64  //页码，-1表示不是页查询，必须大于 0
+ * 6 个关键变量，存在25种组合方式
  */
-func (m *CommonModel) GetLuckerDetails(ctx context.Context, UserId, ActivityId, PageSize, Page int64) (resp []*LuckerDetailsInfo, total int64, err error) {
+func (m *CommonModel) SearchLuckerDetails(ctx context.Context, userId int64, userName string, projectId, activityId, prizeId, status, pageSize, page int64) (resp []*LuckerDetailsInfo, total int64, err error) {
 	var luckerList []*Lucker
-	if UserId == -1 && ActivityId == -1 { //case 1
-		if luckerList, err = m.LuckerModel.FindList(ctx, PageSize, Page, ""); err != nil {
-			return
-		}
-		if total, err = m.LuckerModel.FindCount(ctx); err != nil {
-			return
-		}
-	} else if UserId == -1 && ActivityId != -1 { //case 2
-		//先查出指定活动的prizes_pool
-		prizesPools, e := m.PrizesPoolModel.FindsByActivityId(ctx, ActivityId)
+
+	luckerQuery := sq.Select(luckerRows).From(m.LuckerModel.TableName()).Where("is_deleted = 0")
+	luckerCount := sq.Select("COUNT(*)").From(m.LuckerModel.TableName()).Where("is_deleted = 0")
+
+	if userId != -1 {
+		userSql := fmt.Sprintf("user_id = %d ", userId)
+		luckerQuery = luckerQuery.Where(userSql)
+		luckerCount = luckerCount.Where(userSql)
+	}
+
+	var userIds []int64
+	if userId == -1 && userName != "" {
+		userList, e := m.UserModel.FindsByName(ctx, userName)
 		if e != nil {
 			err = e
 			return
 		}
-		if len(prizesPools) == 0 {
+		if len(userList) == 0 {
+			//不存在该用户
 			return
 		}
-		var prizesPoolIds []int64
-		for _, prizesPool := range prizesPools {
-			prizesPoolIds = append(prizesPoolIds, prizesPool.Id)
+		for _, user := range userList {
+			userIds = append(userIds, user.Id)
 		}
-		if luckerList, err = m.LuckerModel.FindsByPrizesPoolId(ctx, prizesPoolIds, PageSize, Page); err != nil {
-			return
-		}
-		if total, err = m.LuckerModel.FindCountByPrizesPoolId(ctx, prizesPoolIds); err != nil {
-			return
-		}
-	} else if UserId != -1 && ActivityId == -1 { //case 3
-		if luckerList, err = m.LuckerModel.FindsByUserId(ctx, UserId, PageSize, Page); err != nil {
-			return
-		}
-		if total, err = m.LuckerModel.FindCountByUserId(ctx, UserId); err != nil {
-			return
-		}
-	} else if UserId != -1 && ActivityId != -1 { //case 4
-		//先查出指定活动的prizes_pool
-		prizesPools, e := m.PrizesPoolModel.FindsByActivityId(ctx, ActivityId)
+		luckerQuery = luckerQuery.Where(sq.Eq{"user_id": userIds})
+		luckerCount = luckerCount.Where(sq.Eq{"user_id": userIds})
+	}
+
+	if status != -1 {
+		statusSql := fmt.Sprintf("status = %d", status)
+		luckerQuery = luckerQuery.Where(statusSql)
+		luckerCount = luckerCount.Where(statusSql)
+	}
+
+	//关键查询字段：prizes_pool_id
+	var prizesPoolList []*PrizesPool
+	if projectId != -1 && activityId == -1 { //查找项目内的所有奖品池
+		//项目活动查询
+		activityList, e := m.ActivityModel.FindsByProjectId(ctx, projectId)
 		if e != nil {
 			err = e
 			return
 		}
-		if len(prizesPools) == 0 {
+		if len(activityList) == 0 {
+			//该项目下没有活动
 			return
 		}
+		var activityIds []int64
+		for _, activity := range activityList {
+			activityIds = append(activityIds, activity.Id)
+		}
+		prizesPoolList, err = m.PrizesPoolModel.FindsByActivityIds(ctx, activityIds)
+		if err != nil {
+			return
+		}
+		if len(prizesPoolList) == 0 {
+			//该项目内的所有活动都没有奖品池
+			return
+		}
+	} else if activityId != -1 { //查找指定活动的奖品池
+		activity, e := m.ActivityModel.FindOne(ctx, activityId)
+		if e != nil && e != ErrNotFound {
+			err = e
+			return
+		}
+		if e == ErrNotFound {
+			//不存在该活动
+			return
+		}
+		if projectId != -1 && activity.ProjectId != projectId {
+			//请求的项目id与活动所属项目id不符
+			return
+		}
+		prizesPoolList, err = m.PrizesPoolModel.FindsByActivityId(ctx, activityId)
+		if err != nil {
+			return
+		}
+		if len(prizesPoolList) == 0 {
+			//该活动不存在奖品池
+			return
+		}
+	}
+
+	if len(prizesPoolList) != 0 {
 		var prizesPoolIds []int64
-		for _, prizesPool := range prizesPools {
-			prizesPoolIds = append(prizesPoolIds, prizesPool.Id)
+		for _, prizesPool := range prizesPoolList {
+			if prizeId != -1 && prizesPool.PrizeId == prizeId {
+				prizesPoolIds = append(prizesPoolIds, prizesPool.Id)
+			} else if prizeId == -1 {
+				prizesPoolIds = append(prizesPoolIds, prizesPool.Id)
+			}
 		}
-		if luckerList, err = m.LuckerModel.FindsByPrizesPoolIdAndUserId(ctx, prizesPoolIds, UserId, PageSize, Page); err != nil {
+		luckerQuery = luckerQuery.Where(sq.Eq{"prizes_pool_id": prizesPoolIds})
+		luckerCount = luckerCount.Where(sq.Eq{"prizes_pool_id": prizesPoolIds})
+	}
+
+	isPageQuery := pageSize != -1 && page > 0
+	if isPageQuery {
+		luckerQuery = luckerQuery.Offset(uint64((page - 1) * pageSize)).Limit(uint64(pageSize))
+	}
+
+	luckerQuerySql, queryArgs, e := luckerQuery.ToSql()
+	if e != nil {
+		err = e
+		return
+	}
+
+	luckerCountSql, countArgs, e := luckerCount.ToSql()
+	if e != nil {
+		err = e
+		return
+	}
+
+	err = m.LuckerModel.Conn().QueryRowsNoCacheCtx(ctx, &luckerList, luckerQuerySql, queryArgs...)
+	if err != nil {
+		return
+	}
+	if isPageQuery {
+		err = m.LuckerModel.Conn().QueryRowNoCacheCtx(ctx, &total, luckerCountSql, countArgs...)
+		if err != nil {
 			return
 		}
-		if total, err = m.LuckerModel.FindCountByPrizesPoolIdAndUserId(ctx, prizesPoolIds, UserId); err != nil {
-			return
-		}
+	} else {
+		total = int64(len(luckerList))
 	}
 
 	for _, lucker := range luckerList {

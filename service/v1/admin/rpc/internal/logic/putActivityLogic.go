@@ -31,6 +31,7 @@ func (l *PutActivityLogic) PutActivity(in *admin_pb.Activity) (*admin_pb.StatusR
 	if in == nil {
 		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
+
 	//构建model.activity
 	activity := &model.Activity{
 		Id:        in.Id,
@@ -41,8 +42,8 @@ func (l *PutActivityLogic) PutActivity(in *admin_pb.Activity) (*admin_pb.StatusR
 		Pattern:   in.Pattern,
 		MaxCount:  in.MaxCount,
 		MaxPrizes: in.MaxPrizes,
-		StartTime: utils.Int64ToTime(in.StartTime),
-		EndTime:   utils.Int64ToTime(in.EndTime),
+		StartTime: utils.Int64ToTime(utils.TimestarpHandle(in.StartTime)),
+		EndTime:   utils.Int64ToTime(utils.TimestarpHandle(in.EndTime)),
 	}
 
 	//更新数据

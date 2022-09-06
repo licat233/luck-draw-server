@@ -43,7 +43,7 @@ type (
 		Uuid         string    `db:"uuid"`           // 唯一识别码
 		UserId       int64     `db:"user_id"`        // 中奖用户id
 		PrizesPoolId int64     `db:"prizes_pool_id"` // 所属奖品池id
-		Status       int64     `db:"status"`         // 状态: -1放弃领奖，0未领奖，1已领奖
+		Status       int64     `db:"status"`         // 状态: 0未领奖，1已领奖，2弃领
 		LuckDate     time.Time `db:"luck_date"`      // 抽奖时间
 		Ip           string    `db:"ip"`             // ip地址
 		CreateAt     time.Time `db:"create_at"`      // 创建时间

@@ -856,7 +856,23 @@
         "parameters": [
           {
             "name": "user_id",
-            "description": "用户id， -1表示不用 UserId 查询",
+            "description": "用户id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "user_name",
+            "description": "用户名",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "project_id",
+            "description": "项目id",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -865,7 +881,34 @@
           },
           {
             "name": "activity_id",
-            "description": "活动id, -1表示不用 activityId 查询",
+            "description": "活动id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "activity_id",
+            "description": "活动id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "status",
+            "description": "状态",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "lucker_date",
+            "description": "抽奖时间",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -3009,7 +3052,7 @@
         "status": {
           "type": "integer",
           "format": "int64",
-          "description": " 状态: -1放弃领奖，0未领奖，1已领奖"
+          "description": " 状态: 0未领奖，1已领奖，2放弃领奖"
         },
         "luck_date": {
           "type": "integer",
@@ -3072,16 +3115,12 @@
         "status": {
           "type": "integer",
           "format": "int64",
-          "description": " 状态: -1放弃领奖，0未领奖，1已领奖"
+          "description": " 状态: 0未领奖，1已领奖，2放弃领奖"
         },
         "luck_date": {
           "type": "integer",
           "format": "int64",
           "description": " 抽奖时间"
-        },
-        "ip": {
-          "type": "string",
-          "description": " ip地址"
         }
       },
       "title": "LuckerAddReq",
@@ -3089,8 +3128,7 @@
         "user_id",
         "prizes_pool_id",
         "status",
-        "luck_date",
-        "ip"
+        "luck_date"
       ]
     },
     "LuckerDelReq": {
@@ -3149,20 +3187,61 @@
         "project"
       ]
     },
-    "LuckerDetailsReq": {
+    "LuckerGetReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "LuckerGetReq",
+      "required": [
+        "id"
+      ]
+    },
+    "LuckerListReq": {
       "type": "object",
       "properties": {
         "user_id": {
           "type": "integer",
           "format": "int64",
           "default": "-1",
-          "description": "用户id， -1表示不用 UserId 查询"
+          "description": "用户id"
+        },
+        "user_name": {
+          "type": "string",
+          "description": "用户名"
+        },
+        "project_id": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "项目id"
         },
         "activity_id": {
           "type": "integer",
           "format": "int64",
           "default": "-1",
-          "description": "活动id, -1表示不用 activityId 查询"
+          "description": "活动id"
+        },
+        "activity_id": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "活动id"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "状态"
+        },
+        "lucker_date": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "抽奖时间"
         },
         "pageSize": {
           "type": "integer",
@@ -3177,25 +3256,16 @@
           "description": "当前页码"
         }
       },
-      "title": "LuckerDetailsReq",
+      "title": "LuckerListReq",
       "required": [
         "user_id",
+        "user_name",
+        "project_id",
         "activity_id",
+        "status",
+        "lucker_date",
         "pageSize",
         "current"
-      ]
-    },
-    "LuckerGetReq": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        }
-      },
-      "title": "LuckerGetReq",
-      "required": [
-        "id"
       ]
     },
     "LuckerPutReq": {
@@ -3223,16 +3293,12 @@
         "status": {
           "type": "integer",
           "format": "int64",
-          "description": " 状态: -1放弃领奖，0未领奖，1已领奖"
+          "description": " 状态: 0未领奖，1已领奖，2放弃领奖"
         },
         "luck_date": {
           "type": "integer",
           "format": "int64",
           "description": " 抽奖时间"
-        },
-        "ip": {
-          "type": "string",
-          "description": " ip地址"
         }
       },
       "title": "LuckerPutReq",
@@ -3242,8 +3308,7 @@
         "user_id",
         "prizes_pool_id",
         "status",
-        "luck_date",
-        "ip"
+        "luck_date"
       ]
     },
     "PoliciesReq": {

@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"errors"
 	"luck_draw-server/service/v1/luckdraw/rpc/internal/svc"
 	"luck_draw-server/service/v1/luckdraw/rpc/luckdraw_pb"
 	"luck_draw-server/service/v1/model"
@@ -27,15 +28,19 @@ func NewGetLuckerListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 
 // 查询某用户在某活动里的中奖名单
 func (l *GetLuckerListLogic) GetLuckerList(in *luckdraw_pb.GetLuckerListReq) (*luckdraw_pb.GetLuckerListResp, error) {
-	//查询中奖详情名单
-	luckerDtailsList, _, err := l.svcCtx.LuckerModel.FindDetails(l.ctx, &model.FindDetailsOptions{
-		UserId:       in.UserId,
-		ActivityId:   -1,
-		ActivityUUID: in.ActivityUuid,
-		PageSize:     -1,
-		Page:         -1,
-	})
+	//这里只能查询一个用户，所以user_id不能等于-1
+	if in.UserId == -1 || in.UserId == 0 {
+		return nil, errorx.ExtRpcErr(errors.New("userId invalid"))
+	}
+	activity, err := l.svcCtx.ActivityModel.FindOneByUuid(l.ctx, in.ActivityUuid)
+	if err != nil && err != model.ErrNotFound {
+		return nil, errorx.IntRpcErr(err)
+	}
+	if err == model.ErrNotFound {
+		return nil, errorx.ExtRpcErr(errors.New("activity not found"))
+	}
 
+	luckerDtailsList, _, err := l.svcCtx.CommonModel.SearchLuckerDetails(l.ctx, in.UserId, "", activity.Id, -1, -1, -1, -1, -1)
 	if err != nil && err != model.ErrNotFound {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

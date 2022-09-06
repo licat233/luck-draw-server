@@ -21,12 +21,14 @@ type ServiceContext struct {
 	UsersPoolModel  model.UsersPoolModel
 	PrizeGradeModel model.PrizeGradeModel
 
+	CommonModel *model.CommonModel
+
 	KqueueGoodluckStatusHandlerClient *kq.Pusher
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	sqlConn := sqlx.NewMysql(c.Mysql.DataSource)
-	return &ServiceContext{
+	svc := &ServiceContext{
 		Config:          c,
 		ProjectModel:    model.NewProjectModel(sqlConn, c.CacheRedis),
 		ActivityModel:   model.NewActivityModel(sqlConn, c.CacheRedis),
@@ -37,6 +39,19 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		UsersPoolModel:  model.NewUsersPoolModel(sqlConn, c.CacheRedis),
 		PrizeGradeModel: model.NewPrizeGradeModel(sqlConn, c.CacheRedis),
 
+		CommonModel: nil,
+
 		KqueueGoodluckStatusHandlerClient: kq.NewPusher(c.KqGoodluckConf.Brokers, c.KqGoodluckConf.Topic),
 	}
+	svc.CommonModel = &model.CommonModel{
+		ProjectModel:    svc.ProjectModel,
+		ActivityModel:   svc.ActivityModel,
+		PrizeModel:      svc.PrizeModel,
+		UserModel:       svc.UserModel,
+		LuckerModel:     svc.LuckerModel,
+		PrizesPoolModel: svc.PrizesPoolModel,
+		UsersPoolModel:  svc.UsersPoolModel,
+		PrizeGradeModel: svc.PrizeGradeModel,
+	}
+	return svc
 }

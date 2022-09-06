@@ -212,7 +212,7 @@ type Lucker struct {
 	Uuid         string `json:"uuid"`           // 唯一识别码
 	UserId       int64  `json:"user_id"`        // 中奖用户id
 	PrizesPoolId int64  `json:"prizes_pool_id"` // 抽中的奖品池id
-	Status       int64  `json:"status"`         // 状态: -1放弃领奖，0未领奖，1已领奖
+	Status       int64  `json:"status"`         // 状态: 0未领奖，1已领奖，2放弃领奖
 	LuckDate     int64  `json:"luck_date"`      // 抽奖时间
 	Ip           string `json:"ip"`             // ip地址
 	CreateAt     int64  `json:"create_at"`      // 创建时间
@@ -226,11 +226,10 @@ type LuckerGetReq struct {
 }
 
 type LuckerAddReq struct {
-	UserId       int64  `json:"user_id"`        // 中奖用户id
-	PrizesPoolId int64  `json:"prizes_pool_id"` // 抽中的奖品池id
-	Status       int64  `json:"status"`         // 状态: -1放弃领奖，0未领奖，1已领奖
-	LuckDate     int64  `json:"luck_date"`      // 抽奖时间
-	Ip           string `json:"ip"`             // ip地址
+	UserId       int64 `json:"user_id"`        // 中奖用户id
+	PrizesPoolId int64 `json:"prizes_pool_id"` // 抽中的奖品池id
+	Status       int64 `json:"status"`         // 状态: 0未领奖，1已领奖，2放弃领奖
+	LuckDate     int64 `json:"luck_date"`      // 抽奖时间
 }
 
 type LuckerPutReq struct {
@@ -238,20 +237,12 @@ type LuckerPutReq struct {
 	Uuid         string `json:"uuid"`           // 唯一识别码
 	UserId       int64  `json:"user_id"`        // 中奖用户id
 	PrizesPoolId int64  `json:"prizes_pool_id"` // 抽中的奖品池id
-	Status       int64  `json:"status"`         // 状态: -1放弃领奖，0未领奖，1已领奖
+	Status       int64  `json:"status"`         // 状态: 0未领奖，1已领奖，2放弃领奖
 	LuckDate     int64  `json:"luck_date"`      // 抽奖时间
-	Ip           string `json:"ip"`             // ip地址
 }
 
 type LuckerDelReq struct {
 	Id int64 `json:"id"`
-}
-
-type LuckerDetailsReq struct {
-	UserId     int64 `form:"user_id,optional,default=-1"`                 //用户id， -1表示不用 UserId 查询
-	ActivityId int64 `form:"activity_id,optional,default=-1"`             //活动id, -1表示不用 activityId 查询
-	PageSize   int64 `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
-	Page       int64 `form:"current,optional,default=1,range=[1:]"`       //当前页码
 }
 
 type LuckerDetails struct {
@@ -262,6 +253,18 @@ type LuckerDetails struct {
 	PrizeGrade PrizeGrade `json:"prize_grade"` //奖品级别，中奖级别
 	Activity   Activity   `json:"activity"`    //活动信息，中奖活动，
 	Project    Project    `json:"project"`     //项目信息，中奖项目，
+}
+
+type LuckerListReq struct {
+	UserId     int64  `form:"user_id,optional,default=-1"`                 //用户id
+	UserName   string `form:"user_name,optional,default="`                 //用户名
+	ProjectId  int64  `form:"project_id,optional,default=-1"`              //项目id
+	ActivityId int64  `form:"activity_id,optional,default=-1"`             //活动id
+	PeizeId    int64  `form:"activity_id,optional,default=-1"`             //活动id
+	Status     int64  `form:"status,optional,default=-1"`                  //状态
+	LukerDate  int64  `form:"lucker_date,optional,default=-1"`             //抽奖时间
+	PageSize   int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page       int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
 }
 
 type Prize struct {

@@ -25,38 +25,17 @@ func NewGetLuckerDetailsListLogic(ctx context.Context, svcCtx *svc.ServiceContex
 	}
 }
 
-func (l *GetLuckerDetailsListLogic) GetLuckerDetailsList(in *admin_pb.GetLuckerDetailsReq) (*admin_pb.GetLuckerDetailsResp, error) {
-	commonModel := &model.CommonModel{
-		ProjectModel:    l.svcCtx.ProjectModel,
-		ActivityModel:   l.svcCtx.ActivityModel,
-		PrizeModel:      l.svcCtx.PrizeModel,
-		UserModel:       l.svcCtx.UserModel,
-		LuckerModel:     l.svcCtx.LuckerModel,
-		PrizesPoolModel: l.svcCtx.PrizesPoolModel,
-		UsersPoolModel:  l.svcCtx.UsersPoolModel,
-		PrizeGradeModel: l.svcCtx.PrizeGradeModel,
-	}
-	list, tatol, err := commonModel.GetLuckerDetails(l.ctx, in.UserId, in.ActivityId, in.PageSize, in.Page)
+func (l *GetLuckerDetailsListLogic) GetLuckerDetailsList(in *admin_pb.LuckerListReq) (*admin_pb.GetLuckerDetailsResp, error) {
+	list, tatol, err := l.svcCtx.CommonModel.SearchLuckerDetails(l.ctx, in.UserId, in.UserName, in.ProjectId, in.ActivityId, in.PrizeId, in.Status, in.PageSize, in.Page)
 	if err != nil && err != model.ErrNotFound {
+		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
-	if err == model.ErrNotFound {
-		return nil, nil
-	}
-	var data []*admin_pb.LuckerDetail
-	for _, lucker := range list {
-		data = append(data, &admin_pb.LuckerDetail{
-			Lucker:     mdLuckerToPbLucker(lucker.Lucker),
-			User:       mdUserToPbUser(lucker.User),
-			PrizesPool: mdPrizesPoolToPbPrizesPool(lucker.PrizesPool),
-			Activity:   mdActivityToPbActivity(lucker.Activity),
-			Prize:      mdPrizeToPbPrize(lucker.Prize),
-			PrizeGrade: mdPrizeGradeToPbPrizeGrade(lucker.PrizeGrade),
-			Project:    mdProjectToPbProject(lucker.Project),
-		})
-	}
+	// if err == model.ErrNotFound {
+	// 	return nil, nil
+	// }
 	return &admin_pb.GetLuckerDetailsResp{
-		Data:  data,
+		Data:  convertLuckerDetailsList(list),
 		Total: tatol,
 	}, nil
 }
