@@ -6,7 +6,6 @@ import (
 	"luck_draw-server/common/errorx"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 	"luck_draw-server/service/v1/admin/rpc/internal/svc"
-	"luck_draw-server/service/v1/model"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,8 +25,8 @@ func NewGetActivityEnumListLogic(ctx context.Context, svcCtx *svc.ServiceContext
 }
 
 func (l *GetActivityEnumListLogic) GetActivityEnumList(in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
-	list, err := l.svcCtx.ActivityModel.FindList(l.ctx, -1, -1, "")
-	if err != nil && err != model.ErrNotFound {
+	list, _, err := l.svcCtx.ActivityModel.FindList(l.ctx, -1, -1, "", nil)
+	if err != nil {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -25,7 +26,7 @@ type (
 		FindOneByUuid(ctx context.Context, uuid string) (*User, error)
 
 		FindCount(ctx context.Context) (int64, error)
-		FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*User, error)
+		FindList(ctx context.Context, pageSize, page int64, keyword string, user *User) (resp []*User, total int64, err error)
 		Exists(ctx context.Context, id int64) (bool, *User, error)
 		FindByPasspord(ctx context.Context, passport string) (*User, error)
 		FindByPhone(ctx context.Context, phone string) (*User, error)
@@ -139,25 +140,79 @@ func (m *customUserModel) FindCount(ctx context.Context) (int64, error) {
 	}
 }
 
-func (m *customUserModel) FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*User, error) {
-	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", userRows, m.table)
-	if strings.TrimSpace(keyword) != "" {
-		query = query + " and `name` like '%" + keyword + "%'"
+func (m *customUserModel) FindList(ctx context.Context, pageSize, page int64, keyword string, user *User) (resp []*User, total int64, err error) {
+	if pageSize == 0 {
+		return
 	}
-	if pageSize > 0 && page > 0 {
-		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
+	sq := squirrel.Select(userRows).From(m.table).Where("`is_deleted`= '0'")
+	sqCount := squirrel.Select("COUNT(*)").From(m.table).Where("`is_deleted`= '0'")
+	var mark bool
+	if user != nil {
+		//name的优先级大于keyword
+		if user.Name != "" {
+			sq = sq.Where("name LIKE ?", fmt.Sprint("%", user.Name, "%"))
+			sqCount = sqCount.Where("name LIKE ?", fmt.Sprint("%", user.Name, "%"))
+			mark = true
+		}
+		if user.Passport != "" {
+			sq = sq.Where("`passport` = ?", user.Passport)
+			sqCount = sqCount.Where("`passport` = ?", user.Passport)
+			mark = true
+		}
+		if user.Email != "" {
+			sq = sq.Where("`email` = ?", user.Email)
+			sqCount = sqCount.Where("`email` = ?", user.Email)
+			mark = true
+		}
+		if user.Phone != "" {
+			sq = sq.Where("`phone` = ?", user.Phone)
+			sqCount = sqCount.Where("`phone` = ?", user.Phone)
+			mark = true
+		}
+		if user.Address != "" {
+			sq = sq.Where("`address` = ?", user.Address)
+			sqCount = sqCount.Where("`address` = ?", user.Address)
+			mark = true
+		}
+		if user.Score != -1 {
+			sq = sq.Where("`score` = ?", user.Score)
+			sqCount = sqCount.Where("`score` = ?", user.Score)
+			mark = true
+		}
+		if user.Status != -1 {
+			sq = sq.Where("`status` = ?", user.Status)
+			sqCount = sqCount.Where("`status` = ?", user.Status)
+			mark = true
+		}
+	}
+	if !mark {
+		if keyword = strings.TrimSpace(keyword); keyword != "" {
+			sq = sq.Where("name LIKE ?", fmt.Sprint("%", keyword, "%"))
+			sqCount = sqCount.Where("name LIKE ?", fmt.Sprint("%", keyword, "%"))
+		}
 	}
 
-	var resp []*User
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
-	switch err {
-	case nil:
-		return resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
+	isPageQuery := pageSize > 0 && page > 0
+	if isPageQuery {
+		sq = sq.Offset(uint64((page - 1) * pageSize)).Limit(uint64(pageSize))
+		queryCount, agrsCount, e := sqCount.ToSql()
+		if e != nil {
+			err = e
+			return
+		}
+		if err = m.QueryRowNoCacheCtx(ctx, &total, queryCount, agrsCount...); err != nil {
+			return
+		}
 	}
+
+	query, agrs, err := sq.ToSql()
+	if err != nil {
+		return
+	}
+	if err = m.QueryRowsNoCacheCtx(ctx, &resp, query, agrs...); err != nil {
+		return
+	}
+	return
 }
 
 func (m *customUserModel) Exists(ctx context.Context, id int64) (bool, *User, error) {

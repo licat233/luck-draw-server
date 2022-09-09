@@ -25,11 +25,14 @@ func NewListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ListLogic {
 	}
 }
 
-func (l *ListLogic) List(req *types.ListReq) (any, error) {
-	resp, err := l.svcCtx.AdminRpc.GetProjectList(l.ctx, &admin_pb.ListReq{
-		PageSize: req.PageSize,
-		Page:     req.Page,
-		Keyword:  req.Keyword,
+func (l *ListLogic) List(req *types.ProjectListReq) (any, error) {
+	resp, err := l.svcCtx.AdminRpc.GetProjectList(l.ctx, &admin_pb.ProjectListReq{
+		ListReq: &admin_pb.ListReq{
+			PageSize: req.PageSize,
+			Page:     req.Page,
+			Keyword:  req.Keyword,
+		},
+		Project: &admin_pb.Project{Name: req.Name, Status: req.Status},
 	})
 	if err != nil {
 		return nil, err

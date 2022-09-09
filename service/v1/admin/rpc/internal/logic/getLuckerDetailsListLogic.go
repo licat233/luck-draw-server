@@ -4,10 +4,12 @@ import (
 	"context"
 
 	"luck_draw-server/common/errorx"
+	"luck_draw-server/common/utils"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 	"luck_draw-server/service/v1/admin/rpc/internal/svc"
 	"luck_draw-server/service/v1/model"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -25,15 +27,31 @@ func NewGetLuckerDetailsListLogic(ctx context.Context, svcCtx *svc.ServiceContex
 	}
 }
 
-func (l *GetLuckerDetailsListLogic) GetLuckerDetailsList(in *admin_pb.LuckerListReq) (*admin_pb.GetLuckerDetailsResp, error) {
-	list, tatol, err := l.svcCtx.CommonModel.SearchLuckerDetails(l.ctx, in.UserId, in.UserName, in.ProjectId, in.ActivityId, in.PrizeId, in.Status, in.PageSize, in.Page)
+func (l *GetLuckerDetailsListLogic) GetLuckerDetailsList(in *admin_pb.LuckerDetailsReq) (*admin_pb.GetLuckerDetailsResp, error) {
+	if in.Lucker != nil && in.Lucker.Ip != "" && !govalidator.IsIP(in.Lucker.Ip) {
+		return &admin_pb.GetLuckerDetailsResp{
+			Data:  []*admin_pb.LuckerDetail{},
+			Total: 0,
+		}, nil
+	}
+	list, tatol, err := l.svcCtx.CommonModel.FindsLuckerDetails(l.ctx, &model.LuckerDetailsOptions{
+		PageSize:     in.ListReq.PageSize,
+		Page:         in.ListReq.Page,
+		Keyword:      in.ListReq.Keyword,
+		Lucker:       &model.Lucker{UserId: in.Lucker.UserId, PrizesPoolId: in.Lucker.PrizesPoolId, Status: in.Lucker.Status, LuckDate: utils.Int64ToTime(in.Lucker.LuckDate), Ip: in.Lucker.Ip},
+		UserName:     in.UserName,
+		PrizeName:    in.PrizeName,
+		ProjectId:    in.ProjectId,
+		ActivityId:   in.ActivityId,
+		ActivityName: in.ActivityName,
+		PrizeId:      in.PrizeId,
+		PrizeGradeId: in.PrizeGradeId,
+	})
+
 	if err != nil && err != model.ErrNotFound {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
-	// if err == model.ErrNotFound {
-	// 	return nil, nil
-	// }
 	return &admin_pb.GetLuckerDetailsResp{
 		Data:  convertLuckerDetailsList(list),
 		Total: tatol,

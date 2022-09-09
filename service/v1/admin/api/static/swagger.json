@@ -318,8 +318,8 @@
       }
     },
     "/v1/api/admin/activity/list": {
-      "get": {
-        "summary": "获取活动列表",
+      "post": {
+        "summary": "获取活动列表，因为设计数组传参，post方式会比较合适",
         "operationId": "List",
         "responses": {
           "200": {
@@ -331,29 +331,12 @@
         },
         "parameters": [
           {
-            "name": "pageSize",
-            "description": "页面大小",
-            "in": "query",
+            "name": "body",
+            "in": "body",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "20"
-          },
-          {
-            "name": "current",
-            "description": "当前页码",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/ActivityListReq"
+            }
           }
         ],
         "requestBody": {},
@@ -551,6 +534,70 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "name",
+            "description": " 管理员名称",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "passport",
+            "description": " 账号",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "description": " 密码",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "description": " 邮箱",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "description": " 账号状态，是否可用",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "is_super_admin",
+            "description": " 是否为超级管理员",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "login_count",
+            "description": " 登录次数",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "last_login",
+            "description": " 最后一次登录时间",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
           }
         ],
         "requestBody": {},
@@ -842,7 +889,7 @@
       }
     },
     "/v1/api/admin/lucker/details": {
-      "get": {
+      "post": {
         "summary": "获取抽奖单详细列表",
         "operationId": "LuckerDetails",
         "responses": {
@@ -855,83 +902,13 @@
         },
         "parameters": [
           {
-            "name": "user_id",
-            "description": "用户id",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "user_name",
-            "description": "用户名",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "project_id",
-            "description": "项目id",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "activity_id",
-            "description": "活动id",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "activity_id",
-            "description": "活动id",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "status",
-            "description": "状态",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "lucker_date",
-            "description": "抽奖时间",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "pageSize",
-            "description": "页面大小",
-            "in": "query",
+            "name": "body",
+            "description": "通用页面数据请求",
+            "in": "body",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "20"
-          },
-          {
-            "name": "current",
-            "description": "当前页码",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
+            "schema": {
+              "$ref": "#/definitions/LuckerDetailsReq"
+            }
           }
         ],
         "requestBody": {},
@@ -995,6 +972,77 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "user_id",
+            "description": " 中奖用户id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "prizes_pool_id",
+            "description": " 抽中的奖品池id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "status",
+            "description": " 状态: 0未领奖，1已领奖，2放弃领奖",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "luck_date",
+            "description": " 抽奖时间",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "ip",
+            "description": " ip地址",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "lucker"
+        ]
+      }
+    },
+    "/v1/api/admin/lucker/putByPrize": {
+      "put": {
+        "summary": "编辑抽奖单by prize",
+        "operationId": "PutByPrize",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LuckerPutByPrizeReq"
+            }
           }
         ],
         "requestBody": {},
@@ -1192,6 +1240,31 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "name",
+            "description": " 奖品名称",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "price",
+            "description": " 奖品价格",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "double",
+            "default": "-1"
+          },
+          {
+            "name": "status",
+            "description": " 是否可用",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
           }
         ],
         "requestBody": {},
@@ -1528,6 +1601,22 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "name",
+            "description": " 项目名称",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "description": " 项目状态",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
           }
         ],
         "requestBody": {},
@@ -2123,6 +2212,59 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "passport",
+            "description": " 凭证，可以是手机号或者社交账号，一般是由客户填入",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "description": " 邮箱",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "description": " 手机号",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": " 用户名",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "address",
+            "description": " 收货地址",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "score",
+            "description": " 积分",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "status",
+            "description": " 状态:0未授权，1正常，2已冻结",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
           }
         ],
         "requestBody": {},
@@ -2454,6 +2596,131 @@
         "id"
       ]
     },
+    "ActivityListReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面大小"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "name": {
+          "type": "string",
+          "description": " 活动名称"
+        },
+        "project_id": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": " 项目id"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": " 活动状态，是否在举办，默认关闭，需手动开启"
+        },
+        "pattern": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": " 方案: 0私密的，1公开的"
+        },
+        "max_count": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-2",
+          "description": " 单人最大抽奖次数：-1表示无限制，0表示不可抽奖"
+        },
+        "max_prizes": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-2",
+          "description": " 单人最大获奖数：-1表示无限制，0表示不可抽奖"
+        },
+        "start_time": {
+          "type": "integer",
+          "format": "int64",
+          "default": "0",
+          "description": " 活动开始时间"
+        },
+        "end_time": {
+          "type": "integer",
+          "format": "int64",
+          "default": "0",
+          "description": " 活动结束时间"
+        },
+        "range_time": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": " 活动结束时间"
+        }
+      },
+      "title": "ActivityListReq",
+      "required": [
+        "pageSize",
+        "current",
+        "project_id",
+        "status",
+        "pattern",
+        "max_count",
+        "max_prizes",
+        "start_time",
+        "end_time"
+      ]
+    },
+    "ActivityPrize": {
+      "type": "object",
+      "properties": {
+        "prize": {
+          "$ref": "#/definitions/Prize",
+          "description": "奖品信息"
+        },
+        "prizes_pool": {
+          "$ref": "#/definitions/PrizesPool",
+          "description": "奖品池信息"
+        },
+        "prize_grade": {
+          "$ref": "#/definitions/PrizeGrade",
+          "description": "奖品池信息"
+        }
+      },
+      "title": "ActivityPrize",
+      "required": [
+        "prize",
+        "prizes_pool",
+        "prize_grade"
+      ]
+    },
+    "ActivityPrizeListData": {
+      "type": "object",
+      "properties": {
+        "activity_prize_list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ActivityPrize"
+          },
+          "description": "活动奖品列表"
+        }
+      },
+      "title": "ActivityPrizeListData",
+      "required": [
+        "activity_prize_list"
+      ]
+    },
     "ActivityPrizesReq": {
       "type": "object",
       "properties": {
@@ -2698,6 +2965,76 @@
       "title": "AdminerGetReq",
       "required": [
         "id"
+      ]
+    },
+    "AdminerListReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面大小"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "name": {
+          "type": "string",
+          "description": " 管理员名称"
+        },
+        "passport": {
+          "type": "string",
+          "description": " 账号"
+        },
+        "password": {
+          "type": "string",
+          "description": " 密码"
+        },
+        "email": {
+          "type": "string",
+          "description": " 邮箱"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": " 账号状态，是否可用"
+        },
+        "is_super_admin": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": " 是否为超级管理员"
+        },
+        "login_count": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": " 登录次数"
+        },
+        "last_login": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": " 最后一次登录时间"
+        }
+      },
+      "title": "AdminerListReq",
+      "required": [
+        "pageSize",
+        "current",
+        "status",
+        "is_super_admin",
+        "login_count",
+        "last_login"
       ]
     },
     "AdminerModifyReq": {
@@ -3121,6 +3458,10 @@
           "type": "integer",
           "format": "int64",
           "description": " 抽奖时间"
+        },
+        "ip": {
+          "type": "string",
+          "description": " IP地址"
         }
       },
       "title": "LuckerAddReq",
@@ -3187,22 +3528,25 @@
         "project"
       ]
     },
-    "LuckerGetReq": {
+    "LuckerDetailsReq": {
       "type": "object",
       "properties": {
-        "id": {
+        "pageSize": {
           "type": "integer",
-          "format": "int64"
-        }
-      },
-      "title": "LuckerGetReq",
-      "required": [
-        "id"
-      ]
-    },
-    "LuckerListReq": {
-      "type": "object",
-      "properties": {
+          "format": "int64",
+          "default": "20",
+          "description": "页面大小"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
         "user_id": {
           "type": "integer",
           "format": "int64",
@@ -3225,11 +3569,31 @@
           "default": "-1",
           "description": "活动id"
         },
-        "activity_id": {
+        "activity_name": {
+          "type": "string",
+          "description": "活动id"
+        },
+        "prizes_pool_id": {
           "type": "integer",
           "format": "int64",
           "default": "-1",
-          "description": "活动id"
+          "description": "奖品池id"
+        },
+        "prize_id": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "奖品id"
+        },
+        "prize_name": {
+          "type": "string",
+          "description": "奖品名"
+        },
+        "prize_grade_id": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "奖品等级id"
         },
         "status": {
           "type": "integer",
@@ -3237,12 +3601,47 @@
           "default": "-1",
           "description": "状态"
         },
-        "lucker_date": {
+        "luck_date": {
           "type": "integer",
           "format": "int64",
           "default": "-1",
           "description": "抽奖时间"
         },
+        "ip": {
+          "type": "string",
+          "description": "IP地址"
+        }
+      },
+      "title": "LuckerDetailsReq",
+      "required": [
+        "pageSize",
+        "current",
+        "user_id",
+        "project_id",
+        "activity_id",
+        "prizes_pool_id",
+        "prize_id",
+        "prize_grade_id",
+        "status",
+        "luck_date"
+      ]
+    },
+    "LuckerGetReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "LuckerGetReq",
+      "required": [
+        "id"
+      ]
+    },
+    "LuckerListReq": {
+      "type": "object",
+      "properties": {
         "pageSize": {
           "type": "integer",
           "format": "int64",
@@ -3254,18 +3653,101 @@
           "format": "int64",
           "default": "1",
           "description": "当前页码"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": " 中奖用户id"
+        },
+        "prizes_pool_id": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": " 抽中的奖品池id"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": " 状态: 0未领奖，1已领奖，2放弃领奖"
+        },
+        "luck_date": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": " 抽奖时间"
+        },
+        "ip": {
+          "type": "string",
+          "description": " ip地址"
         }
       },
       "title": "LuckerListReq",
       "required": [
+        "pageSize",
+        "current",
         "user_id",
-        "user_name",
-        "project_id",
+        "prizes_pool_id",
+        "status",
+        "luck_date"
+      ]
+    },
+    "LuckerPutByPrizeReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": " 唯一识别码"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 中奖用户id"
+        },
+        "prize_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 奖品id"
+        },
+        "activity_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 活动id"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 状态: 0未领奖，1已领奖，2放弃领奖"
+        },
+        "luck_date": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 抽奖时间"
+        },
+        "ip": {
+          "type": "string",
+          "description": " IP地址"
+        }
+      },
+      "title": "LuckerPutByPrizeReq",
+      "required": [
+        "id",
+        "uuid",
+        "user_id",
+        "prize_id",
         "activity_id",
         "status",
-        "lucker_date",
-        "pageSize",
-        "current"
+        "luck_date"
       ]
     },
     "LuckerPutReq": {
@@ -3299,6 +3781,10 @@
           "type": "integer",
           "format": "int64",
           "description": " 抽奖时间"
+        },
+        "ip": {
+          "type": "string",
+          "description": " IP地址"
         }
       },
       "title": "LuckerPutReq",
@@ -3588,6 +4074,50 @@
         "id",
         "name",
         "is_win"
+      ]
+    },
+    "PrizeListReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面大小"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "name": {
+          "type": "string",
+          "description": " 奖品名称"
+        },
+        "price": {
+          "type": "number",
+          "format": "double",
+          "default": "-1",
+          "description": " 奖品价格"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": " 是否可用"
+        }
+      },
+      "title": "PrizeListReq",
+      "required": [
+        "pageSize",
+        "current",
+        "price",
+        "status"
       ]
     },
     "PrizePutReq": {
@@ -3953,6 +4483,43 @@
         "id"
       ]
     },
+    "ProjectListReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面大小"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "name": {
+          "type": "string",
+          "description": " 项目名称"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": " 项目状态"
+        }
+      },
+      "title": "ProjectListReq",
+      "required": [
+        "pageSize",
+        "current",
+        "status"
+      ]
+    },
     "ProjectPutReq": {
       "type": "object",
       "properties": {
@@ -4066,7 +4633,7 @@
         "status": {
           "type": "integer",
           "format": "int64",
-          "description": " 状态:-1已经封禁，0未授权，1已授权"
+          "description": " 状态:0未授权，1正常，2已冻结"
         },
         "create_at": {
           "type": "integer",
@@ -4137,7 +4704,7 @@
         "status": {
           "type": "integer",
           "format": "int64",
-          "description": " 状态:-1已经封禁，0未授权，1已授权"
+          "description": " 状态:0未授权，1正常，2已冻结"
         }
       },
       "title": "UserAddReq",
@@ -4175,6 +4742,66 @@
       "title": "UserGetReq",
       "required": [
         "id"
+      ]
+    },
+    "UserListReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面大小"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "passport": {
+          "type": "string",
+          "description": " 凭证，可以是手机号或者社交账号，一般是由客户填入"
+        },
+        "email": {
+          "type": "string",
+          "description": " 邮箱"
+        },
+        "phone": {
+          "type": "string",
+          "description": " 手机号"
+        },
+        "name": {
+          "type": "string",
+          "description": " 用户名"
+        },
+        "address": {
+          "type": "string",
+          "description": " 收货地址"
+        },
+        "score": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": " 积分"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": " 状态:0未授权，1正常，2已冻结"
+        }
+      },
+      "title": "UserListReq",
+      "required": [
+        "pageSize",
+        "current",
+        "score",
+        "status"
       ]
     },
     "UserPutReq": {
@@ -4217,7 +4844,7 @@
         "status": {
           "type": "integer",
           "format": "int64",
-          "description": " 状态:-1已经封禁，0未授权，1已授权"
+          "description": " 状态:0未授权，1正常，2已冻结"
         }
       },
       "title": "UserPutReq",
@@ -4258,7 +4885,7 @@
         "status": {
           "type": "integer",
           "format": "int64",
-          "description": " 状态：-1已被禁止,0未授权，1已授权"
+          "description": " 状态:0未授权，1正常，2已冻结"
         },
         "score": {
           "type": "integer",
@@ -4316,7 +4943,7 @@
         "status": {
           "type": "integer",
           "format": "int64",
-          "description": " 状态：-1已被禁止,0未授权，1已授权"
+          "description": " 状态:0未授权，1正常，2已冻结"
         },
         "score": {
           "type": "integer",
@@ -4383,7 +5010,7 @@
         "status": {
           "type": "integer",
           "format": "int64",
-          "description": " 状态：-1已被禁止,0未授权，1已授权"
+          "description": " 状态:0未授权，1正常，2已冻结"
         },
         "score": {
           "type": "integer",

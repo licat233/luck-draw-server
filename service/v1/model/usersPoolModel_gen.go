@@ -43,7 +43,7 @@ type (
 		Uuid       string    `db:"uuid"`        // 唯一识别码
 		ActivityId int64     `db:"activity_id"` // 活动id
 		UserId     int64     `db:"user_id"`     // 奖品id
-		Status     int64     `db:"status"`      // 状态：-1已被禁止,0未授权，1已授权
+		Status     int64     `db:"status"`      // 状态:0未授权，1正常，2已冻结
 		Score      int64     `db:"score"`       // 用户在当前活动的积分
 		CreateAt   time.Time `db:"create_at"`   // 创建时间
 		UpdateAt   time.Time `db:"update_at"`   // 更新时间

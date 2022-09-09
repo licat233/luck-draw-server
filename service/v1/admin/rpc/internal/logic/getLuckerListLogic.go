@@ -2,12 +2,14 @@ package logic
 
 import (
 	"context"
+	"errors"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 	"luck_draw-server/service/v1/admin/rpc/internal/svc"
 	"luck_draw-server/service/v1/model"
 
 	"luck_draw-server/common/errorx"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -25,18 +27,18 @@ func NewGetLuckerListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 	}
 }
 
-func (l *GetLuckerListLogic) GetLuckerList(in *admin_pb.ListReq) (*admin_pb.GetLuckerListResp, error) {
-	list, err := l.svcCtx.LuckerModel.FindList(l.ctx, in.PageSize, in.Page, in.Keyword)
-	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
-		return nil, errorx.IntRpcErr(err)
+func (l *GetLuckerListLogic) GetLuckerList(in *admin_pb.LuckerListReq) (*admin_pb.GetLuckerListResp, error) {
+	if in.Lucker != nil && in.Lucker.Ip != "" && !govalidator.IsIP(in.Lucker.Ip) {
+		return nil, errorx.ExtRpcErr(errors.New("ip field invalid"))
 	}
-	if err == model.ErrNotFound {
-		return &admin_pb.GetLuckerListResp{
-			Data: nil,
-		}, nil
-	}
-	total, err := l.svcCtx.LuckerModel.FindCount(l.ctx)
+	luckDate := timeHandler(in.Lucker.LuckDate)
+	list, total, err := l.svcCtx.LuckerModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, &model.Lucker{
+		UserId:       in.Lucker.UserId,
+		PrizesPoolId: in.Lucker.PrizesPoolId,
+		Status:       in.Lucker.Status,
+		LuckDate:     luckDate,
+		Ip:           in.Lucker.Ip,
+	})
 	if err != nil {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

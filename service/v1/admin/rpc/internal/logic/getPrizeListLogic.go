@@ -25,18 +25,12 @@ func NewGetPrizeListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetP
 	}
 }
 
-func (l *GetPrizeListLogic) GetPrizeList(in *admin_pb.ListReq) (*admin_pb.GetPrizeListResp, error) {
-	list, err := l.svcCtx.PrizeModel.FindList(l.ctx, in.PageSize, in.Page, in.Keyword)
-	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
-		return nil, errorx.IntRpcErr(err)
-	}
-	if err == model.ErrNotFound {
-		return &admin_pb.GetPrizeListResp{
-			Data: nil,
-		}, nil
-	}
-	total, err := l.svcCtx.PrizeModel.FindCount(l.ctx)
+func (l *GetPrizeListLogic) GetPrizeList(in *admin_pb.PrizeListReq) (*admin_pb.GetPrizeListResp, error) {
+	list, total, err := l.svcCtx.PrizeModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, &model.Prize{
+		Name:   in.Prize.Name,
+		Price:  in.Prize.Price,
+		Status: in.Prize.Status,
+	})
 	if err != nil {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

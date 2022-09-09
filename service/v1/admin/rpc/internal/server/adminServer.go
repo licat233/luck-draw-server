@@ -70,7 +70,7 @@ func (s *AdminServer) ParseJwtToken(ctx context.Context, in *admin_pb.ParseJwtTo
 	return l.ParseJwtToken(in)
 }
 
-func (s *AdminServer) GetActivityList(ctx context.Context, in *admin_pb.ListReq) (*admin_pb.GetActivityListResp, error) {
+func (s *AdminServer) GetActivityList(ctx context.Context, in *admin_pb.ActivityListReq) (*admin_pb.GetActivityListResp, error) {
 	l := logic.NewGetActivityListLogic(ctx, s.svcCtx)
 	return l.GetActivityList(in)
 }
@@ -100,7 +100,7 @@ func (s *AdminServer) ProjectActivity(ctx context.Context, in *admin_pb.ProjectA
 	return l.ProjectActivity(in)
 }
 
-func (s *AdminServer) GetAdminerList(ctx context.Context, in *admin_pb.ListReq) (*admin_pb.GetAdminerListResp, error) {
+func (s *AdminServer) GetAdminerList(ctx context.Context, in *admin_pb.AdminerListReq) (*admin_pb.GetAdminerListResp, error) {
 	l := logic.NewGetAdminerListLogic(ctx, s.svcCtx)
 	return l.GetAdminerList(in)
 }
@@ -125,12 +125,12 @@ func (s *AdminServer) DelAdminer(ctx context.Context, in *admin_pb.ItemReq) (*ad
 	return l.DelAdminer(in)
 }
 
-func (s *AdminServer) GetLuckerList(ctx context.Context, in *admin_pb.ListReq) (*admin_pb.GetLuckerListResp, error) {
+func (s *AdminServer) GetLuckerList(ctx context.Context, in *admin_pb.LuckerListReq) (*admin_pb.GetLuckerListResp, error) {
 	l := logic.NewGetLuckerListLogic(ctx, s.svcCtx)
 	return l.GetLuckerList(in)
 }
 
-func (s *AdminServer) GetLuckerDetailsList(ctx context.Context, in *admin_pb.LuckerListReq) (*admin_pb.GetLuckerDetailsResp, error) {
+func (s *AdminServer) GetLuckerDetailsList(ctx context.Context, in *admin_pb.LuckerDetailsReq) (*admin_pb.GetLuckerDetailsResp, error) {
 	l := logic.NewGetLuckerDetailsListLogic(ctx, s.svcCtx)
 	return l.GetLuckerDetailsList(in)
 }
@@ -145,9 +145,14 @@ func (s *AdminServer) AddLucker(ctx context.Context, in *admin_pb.Lucker) (*admi
 	return l.AddLucker(in)
 }
 
-func (s *AdminServer) PutLucker(ctx context.Context, in *admin_pb.Lucker) (*admin_pb.StatusResp, error) {
+func (s *AdminServer) PutLucker(ctx context.Context, in *admin_pb.LuckerPutReq) (*admin_pb.StatusResp, error) {
 	l := logic.NewPutLuckerLogic(ctx, s.svcCtx)
 	return l.PutLucker(in)
+}
+
+func (s *AdminServer) PutLuckerByPrize(ctx context.Context, in *admin_pb.LuckerPutByPrizeReq) (*admin_pb.StatusResp, error) {
+	l := logic.NewPutLuckerByPrizeLogic(ctx, s.svcCtx)
+	return l.PutLuckerByPrize(in)
 }
 
 func (s *AdminServer) DelLucker(ctx context.Context, in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
@@ -155,7 +160,7 @@ func (s *AdminServer) DelLucker(ctx context.Context, in *admin_pb.ItemReq) (*adm
 	return l.DelLucker(in)
 }
 
-func (s *AdminServer) GetPrizeList(ctx context.Context, in *admin_pb.ListReq) (*admin_pb.GetPrizeListResp, error) {
+func (s *AdminServer) GetPrizeList(ctx context.Context, in *admin_pb.PrizeListReq) (*admin_pb.GetPrizeListResp, error) {
 	l := logic.NewGetPrizeListLogic(ctx, s.svcCtx)
 	return l.GetPrizeList(in)
 }
@@ -240,7 +245,7 @@ func (s *AdminServer) SearchPrizesPool(ctx context.Context, in *admin_pb.SearchP
 	return l.SearchPrizesPool(in)
 }
 
-func (s *AdminServer) GetProjectList(ctx context.Context, in *admin_pb.ListReq) (*admin_pb.GetProjectListResp, error) {
+func (s *AdminServer) GetProjectList(ctx context.Context, in *admin_pb.ProjectListReq) (*admin_pb.GetProjectListResp, error) {
 	l := logic.NewGetProjectListLogic(ctx, s.svcCtx)
 	return l.GetProjectList(in)
 }
@@ -265,7 +270,7 @@ func (s *AdminServer) DelProject(ctx context.Context, in *admin_pb.ItemReq) (*ad
 	return l.DelProject(in)
 }
 
-func (s *AdminServer) GetUserList(ctx context.Context, in *admin_pb.ListReq) (*admin_pb.GetUserListResp, error) {
+func (s *AdminServer) GetUserList(ctx context.Context, in *admin_pb.UserListReq) (*admin_pb.GetUserListResp, error) {
 	l := logic.NewGetUserListLogic(ctx, s.svcCtx)
 	return l.GetUserList(in)
 }
@@ -333,6 +338,11 @@ func (s *AdminServer) GetActivityEnumList(ctx context.Context, in *admin_pb.Enum
 func (s *AdminServer) GetPrizeEnumList(ctx context.Context, in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
 	l := logic.NewGetPrizeEnumListLogic(ctx, s.svcCtx)
 	return l.GetPrizeEnumList(in)
+}
+
+func (s *AdminServer) GetPrizeGradeEnumList(ctx context.Context, in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
+	l := logic.NewGetPrizeGradeEnumListLogic(ctx, s.svcCtx)
+	return l.GetPrizeGradeEnumList(in)
 }
 
 func (s *AdminServer) GetLuckerEnumList(ctx context.Context, in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {

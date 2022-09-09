@@ -2,8 +2,10 @@ package logic
 
 import (
 	"errors"
+	"luck_draw-server/common/utils"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 	"luck_draw-server/service/v1/model"
+	"time"
 )
 
 func newStatusResponse() *admin_pb.StatusResp {
@@ -184,7 +186,7 @@ func mdUserToPbUser(mdUser *model.User) *admin_pb.User {
 		Phone:    mdUser.Phone,
 		Name:     mdUser.Name,
 		Address:  mdUser.Address,
-		Score:    mdUser.Status,
+		Score:    mdUser.Score,
 		Status:   mdUser.Status,
 	}
 }
@@ -240,4 +242,12 @@ func convertLuckerDetailsList(in []*model.LuckerDetailsInfo) []*admin_pb.LuckerD
 		})
 	}
 	return res
+}
+
+func timeHandler(timestamp int64) time.Time {
+	if timestamp <= 0 {
+		return time.Time{}
+	}
+	timestamp = utils.TimestampHandle(timestamp)
+	return time.Unix(timestamp, 0).Local()
 }

@@ -25,18 +25,22 @@ func NewGetUserListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 	}
 }
 
-func (l *GetUserListLogic) GetUserList(in *admin_pb.ListReq) (*admin_pb.GetUserListResp, error) {
-	list, err := l.svcCtx.UserModel.FindList(l.ctx, in.PageSize, in.Page, in.Keyword)
-	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
-		return nil, errorx.IntRpcErr(err)
+func (l *GetUserListLogic) GetUserList(in *admin_pb.UserListReq) (*admin_pb.GetUserListResp, error) {
+	var user *model.User
+	if in.User != nil {
+		user = &model.User{
+			Id:       in.User.Id,
+			Uuid:     in.User.Uuid,
+			Passport: in.User.Passport,
+			Email:    in.User.Email,
+			Phone:    in.User.Phone,
+			Name:     in.User.Name,
+			Address:  in.User.Address,
+			Score:    in.User.Score,
+			Status:   in.User.Status,
+		}
 	}
-	if err == model.ErrNotFound {
-		return &admin_pb.GetUserListResp{
-			Data: nil,
-		}, nil
-	}
-	total, err := l.svcCtx.UserModel.FindCount(l.ctx)
+	list, total, err := l.svcCtx.UserModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, user)
 	if err != nil {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

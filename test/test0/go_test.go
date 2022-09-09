@@ -2,11 +2,40 @@ package test0
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 	"time"
 
 	"github.com/asaskevich/govalidator"
 )
+
+func Test_split(t *testing.T) {
+	rows := "`id`,`uuid`,`user_id`,`prizes_pool_id`,`status`,`luck_date`,`ip`,`create_at`,`update_at`,`is_deleted`,`delete_at`"
+	diyRows := strings.Split(rows, ",")
+	for i := range diyRows {
+		diyRows[i] = fmt.Sprintf("l.%s", diyRows[i])
+	}
+	fmt.Printf("%v \n", diyRows)
+}
+
+type Anima struct {
+	Age int
+}
+
+func Test_if(t *testing.T) {
+	var a *Anima
+	if a != nil && a.Age != 0 {
+		fmt.Println("不等于0")
+	}
+	fmt.Println("结束")
+}
+
+func Test_range(t *testing.T) {
+	var list []int64 = nil
+	for _, i := range list {
+		fmt.Println(i)
+	}
+}
 
 func Test_len(t *testing.T) {
 	data := make([]int, 0)

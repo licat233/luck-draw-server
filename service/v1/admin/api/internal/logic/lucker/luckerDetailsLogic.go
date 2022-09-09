@@ -8,6 +8,7 @@ import (
 	"luck_draw-server/service/v1/admin/api/internal/types"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -25,16 +26,20 @@ func NewLuckerDetailsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Luc
 	}
 }
 
-func (l *LuckerDetailsLogic) LuckerDetails(req *types.LuckerListReq) (any, error) {
-	in := &admin_pb.LuckerListReq{
-		PageSize:   req.PageSize,
-		Page:       req.Page,
-		UserId:     req.UserId,
-		UserName:   req.UserName,
-		ProjectId:  req.ProjectId,
-		ActivityId: req.ActivityId,
-		PrizeId:    req.PageSize,
-		Status:     req.Status,
+func (l *LuckerDetailsLogic) LuckerDetails(req *types.LuckerDetailsReq) (any, error) {
+	if req.Ip != "" && !govalidator.IsIP(req.Ip) {
+		return respx.ListResp("", []any{}, 0, req.PageSize, req.Page), nil
+	}
+	in := &admin_pb.LuckerDetailsReq{
+		ListReq:      &admin_pb.ListReq{PageSize: req.PageSize, Page: req.Page, Keyword: req.Keyword},
+		Lucker:       &admin_pb.Lucker{UserId: req.UserId, PrizesPoolId: req.PrizesPoolId, Status: req.Status, LuckDate: req.LuckDate, Ip: req.Ip},
+		UserName:     req.UserName,
+		ProjectId:    req.ProjectId,
+		ActivityId:   req.ActivityId,
+		ActivityName: req.ActivityName,
+		PrizeId:      req.PeizeId,
+		PrizeName:    req.PrizeName,
+		PrizeGradeId: req.PeizeGradeId,
 	}
 	resp, err := l.svcCtx.AdminRpc.GetLuckerDetailsList(l.ctx, in)
 	if err != nil {

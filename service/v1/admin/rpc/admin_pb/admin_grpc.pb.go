@@ -38,24 +38,25 @@ type AdminClient interface {
 	IsLogout(ctx context.Context, in *IsLogoutReq, opts ...grpc.CallOption) (*IsLogoutResp, error)
 	// 解析 jwtToken, 返回原生error
 	ParseJwtToken(ctx context.Context, in *ParseJwtTokenReq, opts ...grpc.CallOption) (*ParseJwtTokenResp, error)
-	GetActivityList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetActivityListResp, error)
+	GetActivityList(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityListResp, error)
 	GetActivity(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetActivityResp, error)
 	AddActivity(ctx context.Context, in *Activity, opts ...grpc.CallOption) (*AddActivityResp, error)
 	PutActivity(ctx context.Context, in *Activity, opts ...grpc.CallOption) (*StatusResp, error)
 	DelActivity(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
 	ProjectActivity(ctx context.Context, in *ProjectActivityReq, opts ...grpc.CallOption) (*ProjectActivityResp, error)
-	GetAdminerList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetAdminerListResp, error)
+	GetAdminerList(ctx context.Context, in *AdminerListReq, opts ...grpc.CallOption) (*GetAdminerListResp, error)
 	GetAdminer(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetAdminerResp, error)
 	AddAdminer(ctx context.Context, in *Adminer, opts ...grpc.CallOption) (*AddAdminerResp, error)
 	PutAdminer(ctx context.Context, in *Adminer, opts ...grpc.CallOption) (*StatusResp, error)
 	DelAdminer(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
-	GetLuckerList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetLuckerListResp, error)
-	GetLuckerDetailsList(ctx context.Context, in *LuckerListReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error)
+	GetLuckerList(ctx context.Context, in *LuckerListReq, opts ...grpc.CallOption) (*GetLuckerListResp, error)
+	GetLuckerDetailsList(ctx context.Context, in *LuckerDetailsReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error)
 	GetLucker(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetLuckerResp, error)
 	AddLucker(ctx context.Context, in *Lucker, opts ...grpc.CallOption) (*AddLuckerResp, error)
-	PutLucker(ctx context.Context, in *Lucker, opts ...grpc.CallOption) (*StatusResp, error)
+	PutLucker(ctx context.Context, in *LuckerPutReq, opts ...grpc.CallOption) (*StatusResp, error)
+	PutLuckerByPrize(ctx context.Context, in *LuckerPutByPrizeReq, opts ...grpc.CallOption) (*StatusResp, error)
 	DelLucker(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
-	GetPrizeList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetPrizeListResp, error)
+	GetPrizeList(ctx context.Context, in *PrizeListReq, opts ...grpc.CallOption) (*GetPrizeListResp, error)
 	GetPrize(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetPrizeResp, error)
 	AddPrize(ctx context.Context, in *Prize, opts ...grpc.CallOption) (*AddPrizeResp, error)
 	PutPrize(ctx context.Context, in *Prize, opts ...grpc.CallOption) (*StatusResp, error)
@@ -72,12 +73,12 @@ type AdminClient interface {
 	PutPrizesPool(ctx context.Context, in *PrizesPool, opts ...grpc.CallOption) (*StatusResp, error)
 	DelPrizesPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
 	SearchPrizesPool(ctx context.Context, in *SearchPrizesPoolReq, opts ...grpc.CallOption) (*SearchPrizesPoolResp, error)
-	GetProjectList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetProjectListResp, error)
+	GetProjectList(ctx context.Context, in *ProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error)
 	GetProject(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetProjectResp, error)
 	AddProject(ctx context.Context, in *Project, opts ...grpc.CallOption) (*AddProjectResp, error)
 	PutProject(ctx context.Context, in *Project, opts ...grpc.CallOption) (*StatusResp, error)
 	DelProject(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
-	GetUserList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetUserListResp, error)
+	GetUserList(ctx context.Context, in *UserListReq, opts ...grpc.CallOption) (*GetUserListResp, error)
 	GetUser(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetUserResp, error)
 	AddUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*AddUserResp, error)
 	PutUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*StatusResp, error)
@@ -91,6 +92,7 @@ type AdminClient interface {
 	GetProjectEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 	GetActivityEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 	GetPrizeEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+	GetPrizeGradeEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 	GetLuckerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 	GetUserEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 }
@@ -175,7 +177,7 @@ func (c *adminClient) ParseJwtToken(ctx context.Context, in *ParseJwtTokenReq, o
 	return out, nil
 }
 
-func (c *adminClient) GetActivityList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetActivityListResp, error) {
+func (c *adminClient) GetActivityList(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityListResp, error) {
 	out := new(GetActivityListResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetActivityList", in, out, opts...)
 	if err != nil {
@@ -229,7 +231,7 @@ func (c *adminClient) ProjectActivity(ctx context.Context, in *ProjectActivityRe
 	return out, nil
 }
 
-func (c *adminClient) GetAdminerList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetAdminerListResp, error) {
+func (c *adminClient) GetAdminerList(ctx context.Context, in *AdminerListReq, opts ...grpc.CallOption) (*GetAdminerListResp, error) {
 	out := new(GetAdminerListResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetAdminerList", in, out, opts...)
 	if err != nil {
@@ -274,7 +276,7 @@ func (c *adminClient) DelAdminer(ctx context.Context, in *ItemReq, opts ...grpc.
 	return out, nil
 }
 
-func (c *adminClient) GetLuckerList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetLuckerListResp, error) {
+func (c *adminClient) GetLuckerList(ctx context.Context, in *LuckerListReq, opts ...grpc.CallOption) (*GetLuckerListResp, error) {
 	out := new(GetLuckerListResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetLuckerList", in, out, opts...)
 	if err != nil {
@@ -283,7 +285,7 @@ func (c *adminClient) GetLuckerList(ctx context.Context, in *ListReq, opts ...gr
 	return out, nil
 }
 
-func (c *adminClient) GetLuckerDetailsList(ctx context.Context, in *LuckerListReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error) {
+func (c *adminClient) GetLuckerDetailsList(ctx context.Context, in *LuckerDetailsReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error) {
 	out := new(GetLuckerDetailsResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetLuckerDetailsList", in, out, opts...)
 	if err != nil {
@@ -310,9 +312,18 @@ func (c *adminClient) AddLucker(ctx context.Context, in *Lucker, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *adminClient) PutLucker(ctx context.Context, in *Lucker, opts ...grpc.CallOption) (*StatusResp, error) {
+func (c *adminClient) PutLucker(ctx context.Context, in *LuckerPutReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	out := new(StatusResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/PutLucker", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminClient) PutLuckerByPrize(ctx context.Context, in *LuckerPutByPrizeReq, opts ...grpc.CallOption) (*StatusResp, error) {
+	out := new(StatusResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/PutLuckerByPrize", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -328,7 +339,7 @@ func (c *adminClient) DelLucker(ctx context.Context, in *ItemReq, opts ...grpc.C
 	return out, nil
 }
 
-func (c *adminClient) GetPrizeList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetPrizeListResp, error) {
+func (c *adminClient) GetPrizeList(ctx context.Context, in *PrizeListReq, opts ...grpc.CallOption) (*GetPrizeListResp, error) {
 	out := new(GetPrizeListResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetPrizeList", in, out, opts...)
 	if err != nil {
@@ -481,7 +492,7 @@ func (c *adminClient) SearchPrizesPool(ctx context.Context, in *SearchPrizesPool
 	return out, nil
 }
 
-func (c *adminClient) GetProjectList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetProjectListResp, error) {
+func (c *adminClient) GetProjectList(ctx context.Context, in *ProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error) {
 	out := new(GetProjectListResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetProjectList", in, out, opts...)
 	if err != nil {
@@ -526,7 +537,7 @@ func (c *adminClient) DelProject(ctx context.Context, in *ItemReq, opts ...grpc.
 	return out, nil
 }
 
-func (c *adminClient) GetUserList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetUserListResp, error) {
+func (c *adminClient) GetUserList(ctx context.Context, in *UserListReq, opts ...grpc.CallOption) (*GetUserListResp, error) {
 	out := new(GetUserListResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetUserList", in, out, opts...)
 	if err != nil {
@@ -652,6 +663,15 @@ func (c *adminClient) GetPrizeEnumList(ctx context.Context, in *EnumListReq, opt
 	return out, nil
 }
 
+func (c *adminClient) GetPrizeGradeEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+	out := new(EnumListResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetPrizeGradeEnumList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *adminClient) GetLuckerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
 	out := new(EnumListResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetLuckerEnumList", in, out, opts...)
@@ -690,24 +710,25 @@ type AdminServer interface {
 	IsLogout(context.Context, *IsLogoutReq) (*IsLogoutResp, error)
 	// 解析 jwtToken, 返回原生error
 	ParseJwtToken(context.Context, *ParseJwtTokenReq) (*ParseJwtTokenResp, error)
-	GetActivityList(context.Context, *ListReq) (*GetActivityListResp, error)
+	GetActivityList(context.Context, *ActivityListReq) (*GetActivityListResp, error)
 	GetActivity(context.Context, *ItemReq) (*GetActivityResp, error)
 	AddActivity(context.Context, *Activity) (*AddActivityResp, error)
 	PutActivity(context.Context, *Activity) (*StatusResp, error)
 	DelActivity(context.Context, *ItemReq) (*StatusResp, error)
 	ProjectActivity(context.Context, *ProjectActivityReq) (*ProjectActivityResp, error)
-	GetAdminerList(context.Context, *ListReq) (*GetAdminerListResp, error)
+	GetAdminerList(context.Context, *AdminerListReq) (*GetAdminerListResp, error)
 	GetAdminer(context.Context, *ItemReq) (*GetAdminerResp, error)
 	AddAdminer(context.Context, *Adminer) (*AddAdminerResp, error)
 	PutAdminer(context.Context, *Adminer) (*StatusResp, error)
 	DelAdminer(context.Context, *ItemReq) (*StatusResp, error)
-	GetLuckerList(context.Context, *ListReq) (*GetLuckerListResp, error)
-	GetLuckerDetailsList(context.Context, *LuckerListReq) (*GetLuckerDetailsResp, error)
+	GetLuckerList(context.Context, *LuckerListReq) (*GetLuckerListResp, error)
+	GetLuckerDetailsList(context.Context, *LuckerDetailsReq) (*GetLuckerDetailsResp, error)
 	GetLucker(context.Context, *ItemReq) (*GetLuckerResp, error)
 	AddLucker(context.Context, *Lucker) (*AddLuckerResp, error)
-	PutLucker(context.Context, *Lucker) (*StatusResp, error)
+	PutLucker(context.Context, *LuckerPutReq) (*StatusResp, error)
+	PutLuckerByPrize(context.Context, *LuckerPutByPrizeReq) (*StatusResp, error)
 	DelLucker(context.Context, *ItemReq) (*StatusResp, error)
-	GetPrizeList(context.Context, *ListReq) (*GetPrizeListResp, error)
+	GetPrizeList(context.Context, *PrizeListReq) (*GetPrizeListResp, error)
 	GetPrize(context.Context, *ItemReq) (*GetPrizeResp, error)
 	AddPrize(context.Context, *Prize) (*AddPrizeResp, error)
 	PutPrize(context.Context, *Prize) (*StatusResp, error)
@@ -724,12 +745,12 @@ type AdminServer interface {
 	PutPrizesPool(context.Context, *PrizesPool) (*StatusResp, error)
 	DelPrizesPool(context.Context, *ItemReq) (*StatusResp, error)
 	SearchPrizesPool(context.Context, *SearchPrizesPoolReq) (*SearchPrizesPoolResp, error)
-	GetProjectList(context.Context, *ListReq) (*GetProjectListResp, error)
+	GetProjectList(context.Context, *ProjectListReq) (*GetProjectListResp, error)
 	GetProject(context.Context, *ItemReq) (*GetProjectResp, error)
 	AddProject(context.Context, *Project) (*AddProjectResp, error)
 	PutProject(context.Context, *Project) (*StatusResp, error)
 	DelProject(context.Context, *ItemReq) (*StatusResp, error)
-	GetUserList(context.Context, *ListReq) (*GetUserListResp, error)
+	GetUserList(context.Context, *UserListReq) (*GetUserListResp, error)
 	GetUser(context.Context, *ItemReq) (*GetUserResp, error)
 	AddUser(context.Context, *User) (*AddUserResp, error)
 	PutUser(context.Context, *User) (*StatusResp, error)
@@ -743,6 +764,7 @@ type AdminServer interface {
 	GetProjectEnumList(context.Context, *EnumListReq) (*EnumListResp, error)
 	GetActivityEnumList(context.Context, *EnumListReq) (*EnumListResp, error)
 	GetPrizeEnumList(context.Context, *EnumListReq) (*EnumListResp, error)
+	GetPrizeGradeEnumList(context.Context, *EnumListReq) (*EnumListResp, error)
 	GetLuckerEnumList(context.Context, *EnumListReq) (*EnumListResp, error)
 	GetUserEnumList(context.Context, *EnumListReq) (*EnumListResp, error)
 	mustEmbedUnimplementedAdminServer()
@@ -776,7 +798,7 @@ func (UnimplementedAdminServer) IsLogout(context.Context, *IsLogoutReq) (*IsLogo
 func (UnimplementedAdminServer) ParseJwtToken(context.Context, *ParseJwtTokenReq) (*ParseJwtTokenResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ParseJwtToken not implemented")
 }
-func (UnimplementedAdminServer) GetActivityList(context.Context, *ListReq) (*GetActivityListResp, error) {
+func (UnimplementedAdminServer) GetActivityList(context.Context, *ActivityListReq) (*GetActivityListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetActivityList not implemented")
 }
 func (UnimplementedAdminServer) GetActivity(context.Context, *ItemReq) (*GetActivityResp, error) {
@@ -794,7 +816,7 @@ func (UnimplementedAdminServer) DelActivity(context.Context, *ItemReq) (*StatusR
 func (UnimplementedAdminServer) ProjectActivity(context.Context, *ProjectActivityReq) (*ProjectActivityResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ProjectActivity not implemented")
 }
-func (UnimplementedAdminServer) GetAdminerList(context.Context, *ListReq) (*GetAdminerListResp, error) {
+func (UnimplementedAdminServer) GetAdminerList(context.Context, *AdminerListReq) (*GetAdminerListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAdminerList not implemented")
 }
 func (UnimplementedAdminServer) GetAdminer(context.Context, *ItemReq) (*GetAdminerResp, error) {
@@ -809,10 +831,10 @@ func (UnimplementedAdminServer) PutAdminer(context.Context, *Adminer) (*StatusRe
 func (UnimplementedAdminServer) DelAdminer(context.Context, *ItemReq) (*StatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelAdminer not implemented")
 }
-func (UnimplementedAdminServer) GetLuckerList(context.Context, *ListReq) (*GetLuckerListResp, error) {
+func (UnimplementedAdminServer) GetLuckerList(context.Context, *LuckerListReq) (*GetLuckerListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLuckerList not implemented")
 }
-func (UnimplementedAdminServer) GetLuckerDetailsList(context.Context, *LuckerListReq) (*GetLuckerDetailsResp, error) {
+func (UnimplementedAdminServer) GetLuckerDetailsList(context.Context, *LuckerDetailsReq) (*GetLuckerDetailsResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLuckerDetailsList not implemented")
 }
 func (UnimplementedAdminServer) GetLucker(context.Context, *ItemReq) (*GetLuckerResp, error) {
@@ -821,13 +843,16 @@ func (UnimplementedAdminServer) GetLucker(context.Context, *ItemReq) (*GetLucker
 func (UnimplementedAdminServer) AddLucker(context.Context, *Lucker) (*AddLuckerResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddLucker not implemented")
 }
-func (UnimplementedAdminServer) PutLucker(context.Context, *Lucker) (*StatusResp, error) {
+func (UnimplementedAdminServer) PutLucker(context.Context, *LuckerPutReq) (*StatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PutLucker not implemented")
+}
+func (UnimplementedAdminServer) PutLuckerByPrize(context.Context, *LuckerPutByPrizeReq) (*StatusResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutLuckerByPrize not implemented")
 }
 func (UnimplementedAdminServer) DelLucker(context.Context, *ItemReq) (*StatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelLucker not implemented")
 }
-func (UnimplementedAdminServer) GetPrizeList(context.Context, *ListReq) (*GetPrizeListResp, error) {
+func (UnimplementedAdminServer) GetPrizeList(context.Context, *PrizeListReq) (*GetPrizeListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPrizeList not implemented")
 }
 func (UnimplementedAdminServer) GetPrize(context.Context, *ItemReq) (*GetPrizeResp, error) {
@@ -878,7 +903,7 @@ func (UnimplementedAdminServer) DelPrizesPool(context.Context, *ItemReq) (*Statu
 func (UnimplementedAdminServer) SearchPrizesPool(context.Context, *SearchPrizesPoolReq) (*SearchPrizesPoolResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchPrizesPool not implemented")
 }
-func (UnimplementedAdminServer) GetProjectList(context.Context, *ListReq) (*GetProjectListResp, error) {
+func (UnimplementedAdminServer) GetProjectList(context.Context, *ProjectListReq) (*GetProjectListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProjectList not implemented")
 }
 func (UnimplementedAdminServer) GetProject(context.Context, *ItemReq) (*GetProjectResp, error) {
@@ -893,7 +918,7 @@ func (UnimplementedAdminServer) PutProject(context.Context, *Project) (*StatusRe
 func (UnimplementedAdminServer) DelProject(context.Context, *ItemReq) (*StatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelProject not implemented")
 }
-func (UnimplementedAdminServer) GetUserList(context.Context, *ListReq) (*GetUserListResp, error) {
+func (UnimplementedAdminServer) GetUserList(context.Context, *UserListReq) (*GetUserListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserList not implemented")
 }
 func (UnimplementedAdminServer) GetUser(context.Context, *ItemReq) (*GetUserResp, error) {
@@ -934,6 +959,9 @@ func (UnimplementedAdminServer) GetActivityEnumList(context.Context, *EnumListRe
 }
 func (UnimplementedAdminServer) GetPrizeEnumList(context.Context, *EnumListReq) (*EnumListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPrizeEnumList not implemented")
+}
+func (UnimplementedAdminServer) GetPrizeGradeEnumList(context.Context, *EnumListReq) (*EnumListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPrizeGradeEnumList not implemented")
 }
 func (UnimplementedAdminServer) GetLuckerEnumList(context.Context, *EnumListReq) (*EnumListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLuckerEnumList not implemented")
@@ -1099,7 +1127,7 @@ func _Admin_ParseJwtToken_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _Admin_GetActivityList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListReq)
+	in := new(ActivityListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1111,7 +1139,7 @@ func _Admin_GetActivityList_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: "/admin_proto.Admin/GetActivityList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).GetActivityList(ctx, req.(*ListReq))
+		return srv.(AdminServer).GetActivityList(ctx, req.(*ActivityListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1207,7 +1235,7 @@ func _Admin_ProjectActivity_Handler(srv interface{}, ctx context.Context, dec fu
 }
 
 func _Admin_GetAdminerList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListReq)
+	in := new(AdminerListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1219,7 +1247,7 @@ func _Admin_GetAdminerList_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/admin_proto.Admin/GetAdminerList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).GetAdminerList(ctx, req.(*ListReq))
+		return srv.(AdminServer).GetAdminerList(ctx, req.(*AdminerListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1297,7 +1325,7 @@ func _Admin_DelAdminer_Handler(srv interface{}, ctx context.Context, dec func(in
 }
 
 func _Admin_GetLuckerList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListReq)
+	in := new(LuckerListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1309,13 +1337,13 @@ func _Admin_GetLuckerList_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/admin_proto.Admin/GetLuckerList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).GetLuckerList(ctx, req.(*ListReq))
+		return srv.(AdminServer).GetLuckerList(ctx, req.(*LuckerListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Admin_GetLuckerDetailsList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LuckerListReq)
+	in := new(LuckerDetailsReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1327,7 +1355,7 @@ func _Admin_GetLuckerDetailsList_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: "/admin_proto.Admin/GetLuckerDetailsList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).GetLuckerDetailsList(ctx, req.(*LuckerListReq))
+		return srv.(AdminServer).GetLuckerDetailsList(ctx, req.(*LuckerDetailsReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1369,7 +1397,7 @@ func _Admin_AddLucker_Handler(srv interface{}, ctx context.Context, dec func(int
 }
 
 func _Admin_PutLucker_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Lucker)
+	in := new(LuckerPutReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1381,7 +1409,25 @@ func _Admin_PutLucker_Handler(srv interface{}, ctx context.Context, dec func(int
 		FullMethod: "/admin_proto.Admin/PutLucker",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).PutLucker(ctx, req.(*Lucker))
+		return srv.(AdminServer).PutLucker(ctx, req.(*LuckerPutReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Admin_PutLuckerByPrize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LuckerPutByPrizeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).PutLuckerByPrize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/PutLuckerByPrize",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).PutLuckerByPrize(ctx, req.(*LuckerPutByPrizeReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1405,7 +1451,7 @@ func _Admin_DelLucker_Handler(srv interface{}, ctx context.Context, dec func(int
 }
 
 func _Admin_GetPrizeList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListReq)
+	in := new(PrizeListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1417,7 +1463,7 @@ func _Admin_GetPrizeList_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: "/admin_proto.Admin/GetPrizeList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).GetPrizeList(ctx, req.(*ListReq))
+		return srv.(AdminServer).GetPrizeList(ctx, req.(*PrizeListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1711,7 +1757,7 @@ func _Admin_SearchPrizesPool_Handler(srv interface{}, ctx context.Context, dec f
 }
 
 func _Admin_GetProjectList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListReq)
+	in := new(ProjectListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1723,7 +1769,7 @@ func _Admin_GetProjectList_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/admin_proto.Admin/GetProjectList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).GetProjectList(ctx, req.(*ListReq))
+		return srv.(AdminServer).GetProjectList(ctx, req.(*ProjectListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1801,7 +1847,7 @@ func _Admin_DelProject_Handler(srv interface{}, ctx context.Context, dec func(in
 }
 
 func _Admin_GetUserList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListReq)
+	in := new(UserListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1813,7 +1859,7 @@ func _Admin_GetUserList_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: "/admin_proto.Admin/GetUserList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).GetUserList(ctx, req.(*ListReq))
+		return srv.(AdminServer).GetUserList(ctx, req.(*UserListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2052,6 +2098,24 @@ func _Admin_GetPrizeEnumList_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Admin_GetPrizeGradeEnumList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EnumListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).GetPrizeGradeEnumList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/GetPrizeGradeEnumList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).GetPrizeGradeEnumList(ctx, req.(*EnumListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Admin_GetLuckerEnumList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EnumListReq)
 	if err := dec(in); err != nil {
@@ -2190,6 +2254,10 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PutLucker",
 			Handler:    _Admin_PutLucker_Handler,
+		},
+		{
+			MethodName: "PutLuckerByPrize",
+			Handler:    _Admin_PutLuckerByPrize_Handler,
 		},
 		{
 			MethodName: "DelLucker",
@@ -2338,6 +2406,10 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPrizeEnumList",
 			Handler:    _Admin_GetPrizeEnumList_Handler,
+		},
+		{
+			MethodName: "GetPrizeGradeEnumList",
+			Handler:    _Admin_GetPrizeGradeEnumList_Handler,
 		},
 		{
 			MethodName: "GetLuckerEnumList",

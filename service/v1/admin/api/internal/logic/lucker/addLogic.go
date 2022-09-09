@@ -6,8 +6,10 @@ import (
 	"luck_draw-server/service/v1/admin/api/internal/types"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 
+	"luck_draw-server/common/errorx"
 	"luck_draw-server/common/respx"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -26,11 +28,15 @@ func NewAddLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddLogic {
 }
 
 func (l *AddLogic) Add(req *types.LuckerAddReq) (any, error) {
+	if req.Ip != "" && !govalidator.IsIP(req.Ip) {
+		return nil, errorx.ErrInvalidParam
+	}
 	resp, err := l.svcCtx.AdminRpc.AddLucker(l.ctx, &admin_pb.Lucker{
 		UserId:       req.UserId,
 		PrizesPoolId: req.PrizesPoolId,
 		Status:       req.Status,
 		LuckDate:     req.LuckDate,
+		Ip:           req.Ip,
 	})
 	if err != nil {
 		return nil, err

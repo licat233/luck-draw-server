@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -24,6 +25,7 @@ type (
 
 		FindCount(ctx context.Context) (int64, error)
 		FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*PrizeGrade, error)
+		TableName() string
 	}
 
 	customPrizeGradeModel struct {
@@ -117,23 +119,26 @@ func (m *customPrizeGradeModel) FindCount(ctx context.Context) (int64, error) {
 	}
 }
 
-func (m *customPrizeGradeModel) FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*PrizeGrade, error) {
-	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", prizeGradeRows, m.table)
+func (m *customPrizeGradeModel) FindList(ctx context.Context, pageSize, page int64, keyword string) (resp []*PrizeGrade, err error) {
+	if pageSize == 0 {
+		return []*PrizeGrade{}, nil
+	}
+	sq := squirrel.Select(prizeGradeRows).From(m.table).Where("`is_deleted`= '0'")
 	if strings.TrimSpace(keyword) != "" {
-		query = query + " and `name` like '%" + keyword + "%'"
+		sq = sq.Where("name LIKE ?", fmt.Sprint("%", keyword, "%"))
 	}
 	if pageSize > 0 && page > 0 {
-		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
+		sq = sq.Offset(uint64((page - 1) * pageSize)).Limit(uint64(pageSize))
 	}
 
-	var resp []*PrizeGrade
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
-	switch err {
-	case nil:
-		return resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
+	query, agrs, err := sq.ToSql()
+	if err != nil {
+		return
 	}
+	err = m.QueryRowsNoCacheCtx(ctx, &resp, query, agrs...)
+	return
+}
+
+func (m *customPrizeGradeModel) TableName() string {
+	return m.table
 }

@@ -91,7 +91,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Middleware{serverCtx.JwtMiddleware},
 			[]rest.Route{
 				{
-					Method:  http.MethodGet,
+					Method:  http.MethodPost,
 					Path:    "/list",
 					Handler: activity.ListHandler(serverCtx),
 				},
@@ -186,7 +186,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Handler: lucker.ListHandler(serverCtx),
 				},
 				{
-					Method:  http.MethodGet,
+					Method:  http.MethodPost,
 					Path:    "/details",
 					Handler: lucker.LuckerDetailsHandler(serverCtx),
 				},
@@ -204,6 +204,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodPut,
 					Path:    "/",
 					Handler: lucker.PutHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/putByPrize",
+					Handler: lucker.PutByPrizeHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,

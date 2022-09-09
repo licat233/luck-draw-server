@@ -26,7 +26,7 @@ func NewGetProjectEnumListLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 }
 
 func (l *GetProjectEnumListLogic) GetProjectEnumList(in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
-	list, err := l.svcCtx.ProjectModel.FindList(l.ctx, -1, -1, "")
+	list, _, err := l.svcCtx.ProjectModel.FindList(l.ctx, -1, -1, "", nil)
 	if err != nil && err != model.ErrNotFound {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

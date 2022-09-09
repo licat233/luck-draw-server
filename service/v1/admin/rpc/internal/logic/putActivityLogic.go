@@ -42,8 +42,8 @@ func (l *PutActivityLogic) PutActivity(in *admin_pb.Activity) (*admin_pb.StatusR
 		Pattern:   in.Pattern,
 		MaxCount:  in.MaxCount,
 		MaxPrizes: in.MaxPrizes,
-		StartTime: utils.Int64ToTime(utils.TimestarpHandle(in.StartTime)),
-		EndTime:   utils.Int64ToTime(utils.TimestarpHandle(in.EndTime)),
+		StartTime: utils.Int64ToTime(utils.TimestampHandle(in.StartTime)),
+		EndTime:   utils.Int64ToTime(utils.TimestampHandle(in.EndTime)),
 	}
 
 	//更新数据

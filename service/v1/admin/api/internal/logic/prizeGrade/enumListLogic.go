@@ -5,6 +5,7 @@ import (
 
 	"luck_draw-server/service/v1/admin/api/internal/svc"
 	"luck_draw-server/service/v1/admin/api/internal/types"
+	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,7 +25,15 @@ func NewEnumListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *EnumList
 }
 
 func (l *EnumListLogic) EnumList() (resp []types.Enum, err error) {
-	// todo: add your logic here and delete this line
-
+	res, err := l.svcCtx.AdminRpc.GetPrizeGradeEnumList(l.ctx, &admin_pb.EnumListReq{})
+	if err != nil {
+		return nil, err
+	}
+	for _, item := range res.Data {
+		resp = append(resp, types.Enum{
+			Label: item.Label,
+			Value: item.Value,
+		})
+	}
 	return
 }

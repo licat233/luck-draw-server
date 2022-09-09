@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"errors"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 	"luck_draw-server/service/v1/admin/rpc/internal/svc"
 	"luck_draw-server/service/v1/model"
@@ -9,6 +10,7 @@ import (
 	"luck_draw-server/common/errorx"
 	"luck_draw-server/common/utils"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -26,11 +28,14 @@ func NewPutLuckerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutLuck
 	}
 }
 
-func (l *PutLuckerLogic) PutLucker(in *admin_pb.Lucker) (*admin_pb.StatusResp, error) {
+func (l *PutLuckerLogic) PutLucker(in *admin_pb.LuckerPutReq) (*admin_pb.StatusResp, error) {
 	if in == nil {
 		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
-	lukeDate := utils.TimestarpHandle(in.LuckDate)
+	if in.Ip != "" && !govalidator.IsIP(in.Ip) {
+		return nil, errorx.ExtRpcErr(errors.New("ip field invalid"))
+	}
+	lukeDate := utils.TimestampHandle(in.LuckDate)
 	data := &model.Lucker{
 		Id:           in.Id,
 		Uuid:         in.Uuid,

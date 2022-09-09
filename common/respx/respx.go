@@ -67,6 +67,9 @@ func NewListData(listData any, totalRecord, pageSize, Page int64) *ListData {
 
 // StateResp 返回响应状态
 func StateResp(alertMsg string, status bool) *StateData {
+	if alertMsg == "" {
+		alertMsg = SUCCESS_MSG
+	}
 	return &StateData{
 		Status:  status,
 		Message: alertMsg,
@@ -83,6 +86,9 @@ func DefaultStateResp(err error) (*StateData, error) {
 
 // SingleResp 返回单数据响应
 func SingleResp(alertMsg string, data any) *SingleData {
+	if alertMsg == "" {
+		alertMsg = SUCCESS_MSG
+	}
 	return &SingleData{
 		Status:  true,
 		Message: alertMsg,

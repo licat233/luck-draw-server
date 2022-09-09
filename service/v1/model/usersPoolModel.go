@@ -135,6 +135,9 @@ func (m *customUsersPoolModel) FindCount(ctx context.Context) (int64, error) {
 }
 
 func (m *customUsersPoolModel) FindList(ctx context.Context, pageSize, page int64) ([]*UsersPool, error) {
+	if pageSize == 0 {
+		return []*UsersPool{}, nil
+	}
 	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0' limit %v,%v", usersPoolRows, m.table, (page-1)*pageSize, pageSize)
 	if pageSize < 0 || page < 0 {
 		query = fmt.Sprintf("select %s from %s where `is_deleted`= '0'", projectRows, m.table)

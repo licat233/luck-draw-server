@@ -32,6 +32,5 @@ func (l *ActivityPrizesLogic) ActivityPrizes(req *types.ActivityPrizesReq) (any,
 	if err != nil {
 		return nil, err
 	}
-	var n = int64(len(resp.Data))
-	return respx.ListResp("", resp.Data, n, n, 1), nil
+	return respx.SingleResp("", resp.Data), nil
 }

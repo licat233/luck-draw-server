@@ -37,8 +37,11 @@ func (l *SearchLuckerLogic) SearchLucker(in *luckdraw_pb.SearchLuckerReq) (*luck
 		return nil, errorx.SecRpcErr(errors.New("user not found"))
 	}
 
+	options := model.NewLuckerDetailsOptions()
+	options.Lucker.UserId = mdUser.Id
+
 	//查询该用户的中奖名单
-	mdLuckerDetails, _, err := l.svcCtx.CommonModel.SearchLuckerDetails(l.ctx, mdUser.Id, "", -1, -1, -1, -1, -1, -1)
+	mdLuckerDetails, _, err := l.svcCtx.CommonModel.FindsLuckerDetails(l.ctx, options)
 	if err != nil && err != model.ErrNotFound {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

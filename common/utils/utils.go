@@ -3,7 +3,6 @@ package utils
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"fmt"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -26,16 +25,26 @@ func Md5V(str string) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 
-func TimestarpHandle(timestarp int64) int64 {
-	str := fmt.Sprint(timestarp)
+func TimestampHandle(timestamp int64) int64 {
+	str := strconv.FormatInt(timestamp, 10)
 	n := len(str)
 	if n > 10 {
 		str = str[:10]
-		res, _ := strconv.ParseInt(str, 0, 10)
+		res, _ := strconv.ParseInt(str, 10, 64)
 		return res
 	} else if n < 10 {
-		return time.Now().Local().Unix()
+		//返回zero时间戳
+		zeroTime := time.Time{}
+		return zeroTime.Unix()
 	} else {
-		return timestarp
+		return timestamp
 	}
+}
+
+func IdValid(id int64) bool {
+	return id > 0
+}
+
+func NameValid(name string) bool {
+	return strings.TrimSpace(name) != ""
 }

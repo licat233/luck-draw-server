@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -25,7 +26,7 @@ type (
 		FindOneByUuid(ctx context.Context, uuid string) (*Adminer, error)
 
 		FindCount(ctx context.Context) (int64, error)
-		FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Adminer, error)
+		FindList(ctx context.Context, pageSize, page int64, keyword string, adminer *Adminer) ([]*Adminer, int64, error)
 		FindOneByEmail(ctx context.Context, email string) (*Adminer, error)
 		FindOneByPassport(ctx context.Context, passport string) (*Adminer, error)
 
@@ -115,25 +116,90 @@ func (m *customAdminerModel) FindCount(ctx context.Context) (int64, error) {
 	return count, err
 }
 
-func (m *customAdminerModel) FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Adminer, error) {
-	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", adminerRows, m.table)
-	if strings.TrimSpace(keyword) != "" {
-		query = query + " and `name` like '%" + keyword + "%'"
+func (m *customAdminerModel) FindList(ctx context.Context, pageSize, page int64, keyword string, adminer *Adminer) (resp []*Adminer, total int64, err error) {
+	if pageSize == 0 {
+		return
 	}
-	if pageSize > 0 && page > 0 {
-		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
+	sq := squirrel.Select(adminerRows).From(m.table).Where("`is_deleted`= '0'")
+	sqCount := squirrel.Select("COUNT(*)").From(m.table).Where("`is_deleted`= '0'")
+	var mark bool
+	if adminer != nil {
+		//name的优先级大于keyword
+		if adminer.Name != "" {
+			sq = sq.Where("name LIKE ?", fmt.Sprint("%", adminer.Name, "%"))
+			sqCount = sqCount.Where("name LIKE ?", fmt.Sprint("%", adminer.Name, "%"))
+			mark = true
+		}
+		if adminer.Passport != "" {
+			sq = sq.Where("`passport` = ?", adminer.Passport)
+			sqCount = sqCount.Where("`passport` = ?", adminer.Passport)
+			mark = true
+		}
+		if adminer.Email != "" {
+			sq = sq.Where("`email` = ?", adminer.Email)
+			sqCount = sqCount.Where("`email` = ?", adminer.Email)
+			mark = true
+		}
+		// if adminer.Avatar != "" {
+		// 	sq.Where("`avatar` = ?", adminer.Avatar)
+		// 	mark = true
+		// }
+		if adminer.Password != "" {
+			sq = sq.Where("`password` = ?", adminer.Password)
+			sqCount = sqCount.Where("`password` = ?", adminer.Password)
+			mark = true
+		}
+		if adminer.Status != -1 {
+			sq = sq.Where("`status` = ?", adminer.Status)
+			sqCount = sqCount.Where("`status` = ?", adminer.Status)
+			mark = true
+		}
+		if adminer.IsSuperAdmin != -1 {
+			sq = sq.Where("`is_super_admin` = ?", adminer.IsSuperAdmin)
+			sqCount = sqCount.Where("`is_super_admin` = ?", adminer.IsSuperAdmin)
+			mark = true
+		}
+		if adminer.LoginCount != -1 {
+			sq = sq.Where("`login_count` = ?", adminer.LoginCount)
+			sqCount = sqCount.Where("`login_count` = ?", adminer.LoginCount)
+			mark = true
+		}
+		if !adminer.LastLogin.IsZero() {
+			dayStr := adminer.LastLogin.Format("2006-01-02")
+			sq = sq.Where("DATE_FORMAT(`last_login`,'%Y-%m-%d') = ?", dayStr)
+			sqCount = sqCount.Where("DATE_FORMAT(`last_login`,'%Y-%m-%d') = ?", dayStr)
+			mark = true
+		}
 	}
 
-	var resp []*Adminer
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
-	switch err {
-	case nil:
-		return resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
+	if !mark {
+		if keyword = strings.TrimSpace(keyword); keyword != "" {
+			sq = sq.Where("name LIKE ?", fmt.Sprint("%", keyword, "%"))
+			sqCount = sqCount.Where("name LIKE ?", fmt.Sprint("%", keyword, "%"))
+		}
 	}
+
+	isPageQuery := pageSize > 0 && page > 0
+	if isPageQuery {
+		sq = sq.Offset(uint64((page - 1) * pageSize)).Limit(uint64(pageSize))
+		queryCount, agrsCount, e := sqCount.ToSql()
+		if e != nil {
+			err = e
+			return
+		}
+		if err = m.QueryRowNoCacheCtx(ctx, &total, queryCount, agrsCount...); err != nil {
+			return
+		}
+	}
+
+	query, agrs, err := sq.ToSql()
+	if err != nil {
+		return
+	}
+	if err = m.QueryRowsNoCacheCtx(ctx, &resp, query, agrs...); err != nil {
+		return
+	}
+	return
 }
 
 func (m *customAdminerModel) FindOneByPassport(ctx context.Context, passport string) (*Adminer, error) {

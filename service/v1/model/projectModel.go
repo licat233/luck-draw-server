@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -25,7 +26,8 @@ type (
 		FindOneByUuid(ctx context.Context, uuid string) (*Project, error)
 
 		FindCount(ctx context.Context) (int64, error)
-		FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Project, error)
+		FindList(ctx context.Context, pageSize, page int64, keyword string, project *Project) (resp []*Project, total int64, err error)
+		TableName() string
 	}
 
 	customProjectModel struct {
@@ -134,23 +136,56 @@ func (m *customProjectModel) FindCount(ctx context.Context) (int64, error) {
 	}
 }
 
-func (m *customProjectModel) FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Project, error) {
-	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", projectRows, m.table)
-	if strings.TrimSpace(keyword) != "" {
-		query = query + " and `name` like '%" + keyword + "%'"
+func (m *customProjectModel) FindList(ctx context.Context, pageSize, page int64, keyword string, project *Project) (resp []*Project, total int64, err error) {
+	if pageSize == 0 {
+		return
 	}
-	if pageSize > 0 && page > 0 {
-		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
+	sq := squirrel.Select(projectRows).From(m.table).Where("`is_deleted`= '0'")
+	sqCount := squirrel.Select("COUNT(*)").From(m.table).Where("`is_deleted`= '0'")
+	var mark bool
+	if project != nil {
+		//name的优先级大于keyword
+		if project.Name != "" {
+			sq = sq.Where("name LIKE ?", fmt.Sprint("%", project.Name, "%"))
+			sqCount = sqCount.Where("name LIKE ?", fmt.Sprint("%", project.Name, "%"))
+			mark = true
+		}
+		if project.Status != -1 {
+			sq = sq.Where("`status` = ?", project.Status)
+			sqCount = sqCount.Where("`status` = ?", project.Status)
+			mark = true
+		}
+	}
+	if !mark {
+		if keyword = strings.TrimSpace(keyword); keyword != "" {
+			sq = sq.Where("name LIKE ?", fmt.Sprint("%", keyword, "%"))
+			sqCount = sqCount.Where("name LIKE ?", fmt.Sprint("%", keyword, "%"))
+		}
 	}
 
-	var resp []*Project
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
-	switch err {
-	case nil:
-		return resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
+	isPageQuery := pageSize > 0 && page > 0
+	if isPageQuery {
+		sq = sq.Offset(uint64((page - 1) * pageSize)).Limit(uint64(pageSize))
+		queryCount, agrsCount, e := sqCount.ToSql()
+		if e != nil {
+			err = e
+			return
+		}
+		if err = m.QueryRowNoCacheCtx(ctx, &total, queryCount, agrsCount...); err != nil {
+			return
+		}
 	}
+
+	query, agrs, err := sq.ToSql()
+	if err != nil {
+		return
+	}
+	if err = m.QueryRowsNoCacheCtx(ctx, &resp, query, agrs...); err != nil {
+		return
+	}
+	return
+}
+
+func (m *customProjectModel) TableName() string {
+	return m.table
 }

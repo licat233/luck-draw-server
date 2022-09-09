@@ -34,6 +34,7 @@ func Test_Model(t *testing.T) {
 	// result, err := m.ExsitByEmail(ctx, "1697470538@qq.com")
 	result, err := m.FindCount(ctx)
 	// result, err := m.FindsByName(ctx, "王")
+
 	if err != nil && err != model.ErrNotFound {
 		fmt.Printf("出错:%+v", err)
 		return

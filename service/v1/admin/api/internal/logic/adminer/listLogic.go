@@ -27,7 +27,7 @@ func NewListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ListLogic {
 	}
 }
 
-func (l *ListLogic) List(req *types.ListReq) (any, error) {
+func (l *ListLogic) List(req *types.AdminerListReq) (any, error) {
 	ok, err := SuperAdminerIdentify(l.ctx, l.svcCtx)
 	if err != nil {
 		return nil, err
@@ -35,10 +35,22 @@ func (l *ListLogic) List(req *types.ListReq) (any, error) {
 	if !ok {
 		return nil, errorx.AccessError(nil, errors.New("no request permission"))
 	}
-	resp, err := l.svcCtx.AdminRpc.GetAdminerList(l.ctx, &admin_pb.ListReq{
-		PageSize: req.PageSize,
-		Page:     req.Page,
-		Keyword:  req.Keyword,
+	resp, err := l.svcCtx.AdminRpc.GetAdminerList(l.ctx, &admin_pb.AdminerListReq{
+		ListReq: &admin_pb.ListReq{
+			PageSize: req.PageSize,
+			Page:     req.Page,
+			Keyword:  req.Keyword,
+		},
+		Adminer: &admin_pb.Adminer{
+			Name:         req.Name,
+			Passport:     req.Passport,
+			Password:     req.Password,
+			Email:        req.Email,
+			Status:       req.Status,
+			IsSuperAdmin: req.IsSuperAdmin,
+			LoginCount:   req.LoginCount,
+			LastLogin:    req.LastLogin,
+		},
 	})
 	if err != nil {
 		return nil, err

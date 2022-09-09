@@ -4,8 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"luck_draw-server/common/utils"
 	"strings"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -26,7 +28,7 @@ type (
 		DeleteSoft(ctx context.Context, data *Lucker) error
 		FindOneByUuid(ctx context.Context, uuid string) (*Lucker, error)
 
-		FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Lucker, error)
+		FindList(ctx context.Context, pageSize, page int64, keyword string, lucker *Lucker) (resp []*Lucker, total int64, err error)
 		FindsByUserId(ctx context.Context, userId int64, pageSize, page int64) ([]*Lucker, error)
 		FindCountByUserId(ctx context.Context, userId int64) (int64, error)
 		FindCount(ctx context.Context) (int64, error)
@@ -157,24 +159,57 @@ func (m *customLuckerModel) FindCount(ctx context.Context) (int64, error) {
 	}
 }
 
-func (m *customLuckerModel) FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Lucker, error) {
-	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", luckerRows, m.table)
-	if strings.TrimSpace(keyword) != "" {
-		query = query + " and `name` like '%" + keyword + "%'"
+func (m *customLuckerModel) FindList(ctx context.Context, pageSize, page int64, keyword string, lucker *Lucker) (resp []*Lucker, total int64, err error) {
+	if pageSize == 0 {
+		return
 	}
-	if pageSize > 0 && page > 0 {
-		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
+	sq := squirrel.Select(luckerRows).From(m.table).Where("`is_deleted`= '0'")
+	sqCount := squirrel.Select("COUNT(*)").From(m.table).Where("`is_deleted`= '0'")
+	if lucker != nil {
+		if utils.IdValid(lucker.UserId) {
+			sq = sq.Where("`user_id` = ?", lucker.UserId)
+			sqCount = sqCount.Where("`user_id` = ?", lucker.UserId)
+		}
+		if utils.IdValid(lucker.PrizesPoolId) {
+			sq = sq.Where("`prizes_pool_id` = ?", lucker.PrizesPoolId)
+			sqCount = sqCount.Where("`prizes_pool_id` = ?", lucker.PrizesPoolId)
+		}
+		if lucker.Status != -1 {
+			sq = sq.Where("`status` = ?", lucker.Status)
+			sqCount = sqCount.Where("`status` = ?", lucker.Status)
+		}
+		if !lucker.LuckDate.IsZero() {
+			dayStr := lucker.LuckDate.Format("2006-01-02")
+			sq = sq.Where("DATE_FORMAT(`luck_date`,'%Y-%m-%d') = ?", dayStr)
+			sqCount = sqCount.Where("DATE_FORMAT(`luck_date`,'%Y-%m-%d') = ?", dayStr)
+		}
+		if lucker.Ip != "" {
+			sq = sq.Where("`ip` = ?", lucker.Ip)
+			sqCount = sqCount.Where("`ip` = ?", lucker.Ip)
+		}
 	}
-	var resp []*Lucker
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
-	switch err {
-	case nil:
-		return resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
+
+	isPageQuery := pageSize > 0 && page > 0
+	if isPageQuery {
+		sq = sq.Offset(uint64((page - 1) * pageSize)).Limit(uint64(pageSize))
+		queryCount, agrsCount, e := sqCount.ToSql()
+		if e != nil {
+			err = e
+			return
+		}
+		if err = m.QueryRowNoCacheCtx(ctx, &total, queryCount, agrsCount...); err != nil {
+			return
+		}
 	}
+
+	query, agrs, err := sq.ToSql()
+	if err != nil {
+		return
+	}
+	if err = m.QueryRowsNoCacheCtx(ctx, &resp, query, agrs...); err != nil {
+		return
+	}
+	return
 }
 
 func (m *customLuckerModel) FindsByUserId(ctx context.Context, userId int64, pageSize, page int64) ([]*Lucker, error) {

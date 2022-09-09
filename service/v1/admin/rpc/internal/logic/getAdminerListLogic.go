@@ -25,28 +25,32 @@ func NewGetAdminerListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 	}
 }
 
-func (l *GetAdminerListLogic) GetAdminerList(in *admin_pb.ListReq) (*admin_pb.GetAdminerListResp, error) {
-	list, err := l.svcCtx.AdminerModel.FindList(l.ctx, in.PageSize, in.Page, in.Keyword)
-	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
-		return nil, errorx.IntRpcErr(err)
+func (l *GetAdminerListLogic) GetAdminerList(in *admin_pb.AdminerListReq) (*admin_pb.GetAdminerListResp, error) {
+	var adminer *model.Adminer
+	lastLogin := timeHandler(in.Adminer.LastLogin)
+	if in.Adminer != nil {
+		adminer = &model.Adminer{
+			Id:           in.Adminer.Id,
+			Uuid:         in.Adminer.Uuid,
+			Name:         in.Adminer.Name,
+			Avatar:       "",
+			Passport:     in.Adminer.Passport,
+			Password:     in.Adminer.Password,
+			Email:        in.Adminer.Email,
+			Status:       in.Adminer.Status,
+			IsSuperAdmin: in.Adminer.IsSuperAdmin,
+			LoginCount:   in.Adminer.LoginCount,
+			LastLogin:    lastLogin,
+		}
 	}
-
-	if err == model.ErrNotFound {
-		return &admin_pb.GetAdminerListResp{
-			Data: nil,
-		}, nil
-	}
-
-	// for _, adminer := range list {
-	// 	adminer.Password = ""
-	// }
-
-	total, err := l.svcCtx.AdminerModel.FindCount(l.ctx)
+	list, total, err := l.svcCtx.AdminerModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, adminer)
 	if err != nil {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
+	// for _, adminer := range list {
+	// 	adminer.Password = ""
+	// }
 
 	return &admin_pb.GetAdminerListResp{
 		Data:  mdAdminerListToPbAdminerList(list),

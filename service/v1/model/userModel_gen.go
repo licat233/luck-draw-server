@@ -47,7 +47,7 @@ type (
 		Name      string    `db:"name"`       // 用户名
 		Address   string    `db:"address"`    // 收货地址
 		Score     int64     `db:"score"`      // 积分
-		Status    int64     `db:"status"`     // 状态:-1已经封禁，0未授权，1已授权
+		Status    int64     `db:"status"`     // 状态:0未授权，1正常，2已冻结
 		CreateAt  time.Time `db:"create_at"`  // 创建时间
 		UpdateAt  time.Time `db:"update_at"`  // 更新时间
 		IsDeleted int64     `db:"is_deleted"` // 是否已被删除

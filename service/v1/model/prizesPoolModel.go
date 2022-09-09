@@ -29,9 +29,9 @@ type (
 		FindByActivityUuid(ctx context.Context, activityUuid string) ([]*PrizesPool, error)
 		FindList(ctx context.Context, pageSize, page int64) ([]*PrizesPool, error)
 		FindsByActivityId(ctx context.Context, activityId int64) ([]*PrizesPool, error)
-		FindsByActivityIds(context.Context, []int64) ([]*PrizesPool, error)
+		FindsByActivityIds(ctx context.Context, activityIds []int64) ([]*PrizesPool, error)
 
-		FindsByActivityAndPrize(context.Context, int64, int64) ([]*PrizesPool, error)
+		FindsByActivityAndPrize(ctx context.Context, activityId int64, prize_id int64) ([]*PrizesPool, error)
 		TableName() string
 		Conn() sqlc.CachedConn
 	}
@@ -186,6 +186,9 @@ func (m *customPrizesPoolModel) FindByActivityUuid(ctx context.Context, activity
 }
 
 func (m *customPrizesPoolModel) FindList(ctx context.Context, pageSize, page int64) ([]*PrizesPool, error) {
+	if pageSize == 0 {
+		return []*PrizesPool{}, nil
+	}
 	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", prizesPoolRows, m.table)
 	if pageSize > 0 && page > 0 {
 		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)

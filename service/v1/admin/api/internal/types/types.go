@@ -149,6 +149,21 @@ type ProjectActivityReq struct {
 	ProjectId int64 `form:"project_id,optional,default=-1"` //所属项目id，-1表示无限制
 }
 
+type ActivityListReq struct {
+	PageSize  int64    `json:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page      int64    `json:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword   string   `json:"keyword,optional"`                            //关键词，可选
+	Name      string   `json:"name,optional"`                               // 活动名称
+	ProjectId int64    `json:"project_id,optional,default=-1"`              // 项目id
+	Status    int64    `json:"status,optional,default=-1"`                  // 活动状态，是否在举办，默认关闭，需手动开启
+	Pattern   int64    `json:"pattern,optional,default=-1"`                 // 方案: 0私密的，1公开的
+	MaxCount  int64    `json:"max_count,optional,default=-2"`               // 单人最大抽奖次数：-1表示无限制，0表示不可抽奖
+	MaxPrizes int64    `json:"max_prizes,optional,default=-2"`              // 单人最大获奖数：-1表示无限制，0表示不可抽奖
+	StartTime int64    `json:"start_time,optional,default=0"`               // 活动开始时间
+	EndTime   int64    `json:"end_time,optional,default=0"`                 // 活动结束时间
+	RangeTime []string `json:"range_time,optional"`                         // 活动结束时间
+}
+
 type Adminer struct {
 	Id           int64  `json:"id"`             // 表主键
 	Uuid         string `json:"uuid"`           // 唯一识别码
@@ -207,6 +222,20 @@ type AdminerModifyReq struct {
 	Email    string `json:"email"`    // 邮箱
 }
 
+type AdminerListReq struct {
+	PageSize     int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page         int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword      string `form:"keyword,optional"`                            //关键词，可选
+	Name         string `form:"name,optional"`                               // 管理员名称
+	Passport     string `form:"passport,optional"`                           // 账号
+	Password     string `form:"password,optional"`                           // 密码
+	Email        string `form:"email,optional"`                              // 邮箱
+	Status       int64  `form:"status,optional,default=-1"`                  // 账号状态，是否可用
+	IsSuperAdmin int64  `form:"is_super_admin,optional,default=-1"`          // 是否为超级管理员
+	LoginCount   int64  `form:"login_count,optional,default=-1"`             // 登录次数
+	LastLogin    int64  `form:"last_login,optional,default=-1"`              // 最后一次登录时间
+}
+
 type Lucker struct {
 	Id           int64  `json:"id"`             // 表主键
 	Uuid         string `json:"uuid"`           // 唯一识别码
@@ -226,10 +255,22 @@ type LuckerGetReq struct {
 }
 
 type LuckerAddReq struct {
-	UserId       int64 `json:"user_id"`        // 中奖用户id
-	PrizesPoolId int64 `json:"prizes_pool_id"` // 抽中的奖品池id
-	Status       int64 `json:"status"`         // 状态: 0未领奖，1已领奖，2放弃领奖
-	LuckDate     int64 `json:"luck_date"`      // 抽奖时间
+	UserId       int64  `json:"user_id"`        // 中奖用户id
+	PrizesPoolId int64  `json:"prizes_pool_id"` // 抽中的奖品池id
+	Status       int64  `json:"status"`         // 状态: 0未领奖，1已领奖，2放弃领奖
+	LuckDate     int64  `json:"luck_date"`      // 抽奖时间
+	Ip           string `json:"ip,optional"`    // IP地址
+}
+
+type LuckerPutByPrizeReq struct {
+	Id         int64  `json:"id"`          // 表主键
+	Uuid       string `json:"uuid"`        // 唯一识别码
+	UserId     int64  `json:"user_id"`     // 中奖用户id
+	PrizeId    int64  `json:"prize_id"`    // 奖品id
+	ActivityId int64  `json:"activity_id"` // 活动id
+	Status     int64  `json:"status"`      // 状态: 0未领奖，1已领奖，2放弃领奖
+	LuckDate   int64  `json:"luck_date"`   // 抽奖时间
+	Ip         string `json:"ip,optional"` // IP地址
 }
 
 type LuckerPutReq struct {
@@ -239,6 +280,7 @@ type LuckerPutReq struct {
 	PrizesPoolId int64  `json:"prizes_pool_id"` // 抽中的奖品池id
 	Status       int64  `json:"status"`         // 状态: 0未领奖，1已领奖，2放弃领奖
 	LuckDate     int64  `json:"luck_date"`      // 抽奖时间
+	Ip           string `json:"ip,optional"`    // IP地址
 }
 
 type LuckerDelReq struct {
@@ -255,16 +297,33 @@ type LuckerDetails struct {
 	Project    Project    `json:"project"`     //项目信息，中奖项目，
 }
 
+type LuckerDetailsReq struct {
+	PageSize     int64  `json:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page         int64  `json:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword      string `json:"keyword,optional"`                            //关键词，可选
+	UserId       int64  `json:"user_id,optional,default=-1"`                 //用户id
+	UserName     string `json:"user_name,optional"`                          //用户名
+	ProjectId    int64  `json:"project_id,optional,default=-1"`              //项目id
+	ActivityId   int64  `json:"activity_id,optional,default=-1"`             //活动id
+	ActivityName string `json:"activity_name,optional"`                      //活动id
+	PrizesPoolId int64  `json:"prizes_pool_id,optional,default=-1"`          //奖品池id
+	PeizeId      int64  `json:"prize_id,optional,default=-1"`                //奖品id
+	PrizeName    string `json:"prize_name,optional"`                         //奖品名
+	PeizeGradeId int64  `json:"prize_grade_id,optional,default=-1"`          //奖品等级id
+	Status       int64  `json:"status,optional,default=-1"`                  //状态
+	LuckDate     int64  `json:"luck_date,optional,default=-1"`               //抽奖时间
+	Ip           string `json:"ip,optional"`                                 //IP地址
+}
+
 type LuckerListReq struct {
-	UserId     int64  `form:"user_id,optional,default=-1"`                 //用户id
-	UserName   string `form:"user_name,optional,default="`                 //用户名
-	ProjectId  int64  `form:"project_id,optional,default=-1"`              //项目id
-	ActivityId int64  `form:"activity_id,optional,default=-1"`             //活动id
-	PeizeId    int64  `form:"activity_id,optional,default=-1"`             //活动id
-	Status     int64  `form:"status,optional,default=-1"`                  //状态
-	LukerDate  int64  `form:"lucker_date,optional,default=-1"`             //抽奖时间
-	PageSize   int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
-	Page       int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	PageSize     int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page         int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword      string `form:"keyword,optional"`                            //关键词，可选
+	UserId       int64  `form:"user_id,optional,default=-1"`                 // 中奖用户id
+	PrizesPoolId int64  `form:"prizes_pool_id,optional,default=-1"`          // 抽中的奖品池id
+	Status       int64  `form:"status,optional,default=-1"`                  // 状态: 0未领奖，1已领奖，2放弃领奖
+	LuckDate     int64  `form:"luck_date,optional,default=-1"`               // 抽奖时间
+	Ip           string `form:"ip,optional"`                                 // ip地址
 }
 
 type Prize struct {
@@ -304,8 +363,27 @@ type PrizeDelReq struct {
 	Id int64 `json:"id"`
 }
 
+type ActivityPrize struct {
+	Prize      Prize      `json:"prize"`       //奖品信息
+	PrizesPool PrizesPool `json:"prizes_pool"` //奖品池信息
+	PrizeGrade PrizeGrade `json:"prize_grade"` //奖品池信息
+}
+
+type ActivityPrizeListData struct {
+	ActivityPrizeList []ActivityPrize `json:"activity_prize_list"` //活动奖品列表
+}
+
 type ActivityPrizesReq struct {
 	ActivityId int64 `form:"activity_id,optional,default=-1"` //所属活动id，-1表示无限制
+}
+
+type PrizeListReq struct {
+	PageSize int64   `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page     int64   `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword  string  `form:"keyword,optional"`                            //关键词，可选
+	Name     string  `form:"name,optional"`                               // 奖品名称
+	Price    float64 `form:"price,optional,default=-1"`                   // 奖品价格
+	Status   int64   `form:"status,optional,default=-1"`                  // 是否可用
 }
 
 type PrizeGrade struct {
@@ -418,6 +496,14 @@ type ProjectDelReq struct {
 	Id int64 `json:"id"`
 }
 
+type ProjectListReq struct {
+	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page     int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword  string `form:"keyword,optional"`                            //关键词，可选
+	Name     string `form:"name,optional"`                               // 项目名称
+	Status   int64  `form:"status,optional,default=-1"`                  // 项目状态
+}
+
 type PolicyReq struct {
 	Sub string `json:"sub"`
 	Dom string `json:"dom"`
@@ -447,7 +533,7 @@ type User struct {
 	Name      string `json:"name"`       // 用户名
 	Address   string `json:"address"`    // 收货地址
 	Score     int64  `json:"score"`      // 积分
-	Status    int64  `json:"status"`     // 状态:-1已经封禁，0未授权，1已授权
+	Status    int64  `json:"status"`     // 状态:0未授权，1正常，2已冻结
 	CreateAt  int64  `json:"create_at"`  // 创建时间
 	UpdateAt  int64  `json:"update_at"`  // 更新时间
 	IsDeleted int64  `json:"is_deleted"` // 是否已被删除
@@ -465,7 +551,7 @@ type UserAddReq struct {
 	Name     string `json:"name"`     // 用户名
 	Address  string `json:"address"`  // 收货地址
 	Score    int64  `json:"score"`    // 积分
-	Status   int64  `json:"status"`   // 状态:-1已经封禁，0未授权，1已授权
+	Status   int64  `json:"status"`   // 状态:0未授权，1正常，2已冻结
 }
 
 type UserPutReq struct {
@@ -477,11 +563,24 @@ type UserPutReq struct {
 	Name     string `json:"name"`     // 用户名
 	Address  string `json:"address"`  // 收货地址
 	Score    int64  `json:"score"`    // 积分
-	Status   int64  `json:"status"`   // 状态:-1已经封禁，0未授权，1已授权
+	Status   int64  `json:"status"`   // 状态:0未授权，1正常，2已冻结
 }
 
 type UserDelReq struct {
 	Id int64 `json:"id"`
+}
+
+type UserListReq struct {
+	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page     int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword  string `form:"keyword,optional"`                            //关键词，可选
+	Passport string `form:"passport,optional"`                           // 凭证，可以是手机号或者社交账号，一般是由客户填入
+	Email    string `form:"email,optional"`                              // 邮箱
+	Phone    string `form:"phone,optional"`                              // 手机号
+	Name     string `form:"name,optional"`                               // 用户名
+	Address  string `form:"address,optional"`                            // 收货地址
+	Score    int64  `form:"score,optional,default=-1"`                   // 积分
+	Status   int64  `form:"status,optional,default=-1"`                  // 状态:0未授权，1正常，2已冻结
 }
 
 type UsersPool struct {
@@ -489,7 +588,7 @@ type UsersPool struct {
 	Uuid       string `json:"uuid"`        // 唯一识别码
 	ActivityId int64  `json:"activity_id"` // 活动id
 	UserId     int64  `json:"user_id"`     // 奖品id
-	Status     int64  `json:"status"`      // 状态：-1已被禁止,0未授权，1已授权
+	Status     int64  `json:"status"`      // 状态:0未授权，1正常，2已冻结
 	Score      int64  `json:"score"`       // 用户在当前活动的积分
 	CreateAt   int64  `json:"create_at"`   // 创建时间
 	UpdateAt   int64  `json:"update_at"`   // 更新时间
@@ -504,7 +603,7 @@ type UsersPoolGetReq struct {
 type UsersPoolAddReq struct {
 	ActivityId int64 `json:"activity_id"` // 活动id
 	UserId     int64 `json:"user_id"`     // 奖品id
-	Status     int64 `json:"status"`      // 状态：-1已被禁止,0未授权，1已授权
+	Status     int64 `json:"status"`      // 状态:0未授权，1正常，2已冻结
 	Score      int64 `json:"score"`       // 用户在当前活动的积分
 }
 
@@ -513,7 +612,7 @@ type UsersPoolPutReq struct {
 	Uuid       string `json:"uuid"`        // 唯一识别码
 	ActivityId int64  `json:"activity_id"` // 活动id
 	UserId     int64  `json:"user_id"`     // 奖品id
-	Status     int64  `json:"status"`      // 状态：-1已被禁止,0未授权，1已授权
+	Status     int64  `json:"status"`      // 状态:0未授权，1正常，2已冻结
 	Score      int64  `json:"score"`       // 用户在当前活动的积分
 }
 

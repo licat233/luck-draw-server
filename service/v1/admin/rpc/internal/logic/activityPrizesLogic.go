@@ -27,21 +27,49 @@ func NewActivityPrizesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ac
 
 func (l *ActivityPrizesLogic) ActivityPrizes(in *admin_pb.ActivityPrizesReq) (*admin_pb.ActivityPrizesResp, error) {
 	prizesPoolLogic := NewSearchPrizesPoolLogic(l.ctx, l.svcCtx)
-	prizesPoolList, err := prizesPoolLogic.SearchPrizesPool(&admin_pb.SearchPrizesPoolReq{
+	prizesPoolListResp, err := prizesPoolLogic.SearchPrizesPool(&admin_pb.SearchPrizesPoolReq{
 		ActivityId: in.ActivityId,
 	})
 	if err != nil {
 		return nil, err
 	}
 	var prizesIds []int64
-	for _, prizesPool := range prizesPoolList.Data {
+	for _, prizesPool := range prizesPoolListResp.Data {
 		prizesIds = append(prizesIds, prizesPool.PrizeId)
 	}
-	list, err := l.svcCtx.PrizeModel.FindInIds(l.ctx, prizesIds)
+	prizeList, err := l.svcCtx.PrizeModel.FindInIds(l.ctx, prizesIds)
 	if err != nil && err != model.ErrNotFound {
 		return nil, errorx.IntRpcErr(err)
 	}
+
+	prizeGradeListLogic := NewGetPrizeGradeListLogic(l.ctx, l.svcCtx)
+	prizeGradeListResp, err := prizeGradeListLogic.GetPrizeGradeList(&admin_pb.ListReq{
+		PageSize: -1,
+		Page:     -1,
+		Keyword:  "",
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	var activityPrizes []*admin_pb.ActivityPrize
+	for _, prize := range prizeList {
+		for _, prizesPool := range prizesPoolListResp.Data {
+			if prize.Id == prizesPool.PrizeId {
+				for _, prizeGrade := range prizeGradeListResp.Data {
+					if prizesPool.GradeId == prizeGrade.Id {
+						activityPrizes = append(activityPrizes, &admin_pb.ActivityPrize{
+							Prize:      mdPrizeToPbPrize(prize),
+							PrizesPool: prizesPool,
+							PrizeGrade: prizeGrade,
+						})
+					}
+				}
+			}
+		}
+	}
+
 	return &admin_pb.ActivityPrizesResp{
-		Data: mdPrizeListToPbPrizeList(list),
+		Data: activityPrizes,
 	}, nil
 }

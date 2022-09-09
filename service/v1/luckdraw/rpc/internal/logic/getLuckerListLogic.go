@@ -40,7 +40,11 @@ func (l *GetLuckerListLogic) GetLuckerList(in *luckdraw_pb.GetLuckerListReq) (*l
 		return nil, errorx.ExtRpcErr(errors.New("activity not found"))
 	}
 
-	luckerDtailsList, _, err := l.svcCtx.CommonModel.SearchLuckerDetails(l.ctx, in.UserId, "", activity.Id, -1, -1, -1, -1, -1)
+	options := model.NewLuckerDetailsOptions()
+	options.Lucker.UserId = in.UserId
+	options.ActivityId = activity.Id
+
+	luckerDtailsList, _, err := l.svcCtx.CommonModel.FindsLuckerDetails(l.ctx, options)
 	if err != nil && err != model.ErrNotFound {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

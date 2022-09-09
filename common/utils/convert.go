@@ -28,15 +28,10 @@ func ExpToNumber(ExpNum string) (int64, error) {
 }
 
 func Int64ToTime(timestamp int64) time.Time {
-	numstr := fmt.Sprint(timestamp)
-	length := len(numstr)
-	if length < 10 {
-		return time.Now().Local()
+	if timestamp <= 0 {
+		return time.Time{}
 	}
-	if length == 13 {
-		numstr = numstr[:10]
-	}
-	timestamp, _ = strconv.ParseInt(numstr, 10, 0)
+	timestamp = TimestampHandle(timestamp)
 	return time.Unix(timestamp, 0).Local()
 }
 

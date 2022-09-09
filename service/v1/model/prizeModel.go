@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -29,8 +30,9 @@ type (
 		FindPrizesByActivityUuid(ctx context.Context, activityUuid string) ([]*Prize, error)
 		FindsByUserAndActivity(ctx context.Context, userId, activityId int64) ([]*Prize, error)
 		FindsByUserAndActivityAndStatus(ctx context.Context, userId, activityId, Status int64) ([]*Prize, error)
-		FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Prize, error)
+		FindList(ctx context.Context, pageSize, page int64, keyword string, prize *Prize) (resp []*Prize, total int64, err error)
 		FindInIds(ctx context.Context, prizesIds []int64) ([]*Prize, error)
+		TableName() string
 	}
 
 	customPrizeModel struct {
@@ -127,11 +129,11 @@ func (m *customPrizeModel) Update(ctx context.Context, data *Prize) error {
 
 func (m *customPrizeModel) FindCount(ctx context.Context) (int64, error) {
 	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted`= '0'", m.table)
-	var count int64
-	err := m.QueryRowNoCacheCtx(ctx, &count, query)
+	var total int64
+	err := m.QueryRowNoCacheCtx(ctx, &total, query)
 	switch err {
 	case nil:
-		return count, nil
+		return total, nil
 	case sqlc.ErrNotFound:
 		return 0, nil
 	default:
@@ -188,25 +190,60 @@ func (m *customPrizeModel) FindsByUserAndActivityAndStatus(ctx context.Context, 
 	}
 }
 
-func (m *customPrizeModel) FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*Prize, error) {
-	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0'", prizeRows, m.table)
-	if strings.TrimSpace(keyword) != "" {
-		query = query + " and `name` like '%" + keyword + "%'"
+func (m *customPrizeModel) FindList(ctx context.Context, pageSize, page int64, keyword string, prize *Prize) (resp []*Prize, total int64, err error) {
+	if pageSize == 0 {
+		return
 	}
-	if pageSize > 0 && page > 0 {
-		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
+	sq := squirrel.Select(prizeRows).From(m.table).Where("`is_deleted`= '0'")
+	sqCount := squirrel.Select("COUNT(*)").From(m.table).Where("`is_deleted`= '0'")
+	var mark bool
+	if prize != nil {
+		//name的优先级大于keyword
+		if prize.Name != "" {
+			sq = sq.Where("name LIKE ?", fmt.Sprint("%", prize.Name, "%"))
+			sqCount = sqCount.Where("name LIKE ?", fmt.Sprint("%", prize.Name, "%"))
+			mark = true
+		}
+		if prize.Price != -1 {
+			sq = sq.Where("`price` = ?", prize.Price)
+			sqCount = sqCount.Where("`price` = ?", prize.Price)
+			mark = true
+		}
+		if prize.Status != -1 {
+			sq = sq.Where("`status` = ?", prize.Status)
+			sqCount = sqCount.Where("`status` = ?", prize.Status)
+			mark = true
+		}
 	}
 
-	var resp []*Prize
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
-	switch err {
-	case nil:
-		return resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
+	if !mark {
+		if keyword = strings.TrimSpace(keyword); keyword != "" {
+			sq = sq.Where("name LIKE ?", fmt.Sprint("%", keyword, "%"))
+			sqCount = sqCount.Where("name LIKE ?", fmt.Sprint("%", keyword, "%"))
+		}
 	}
+
+	isPageQuery := pageSize > 0 && page > 0
+	if isPageQuery {
+		sq = sq.Offset(uint64((page - 1) * pageSize)).Limit(uint64(pageSize))
+		queryCount, agrsCount, e := sqCount.ToSql()
+		if e != nil {
+			err = e
+			return
+		}
+		if err = m.QueryRowNoCacheCtx(ctx, &total, queryCount, agrsCount...); err != nil {
+			return
+		}
+	}
+
+	query, agrs, err := sq.ToSql()
+	if err != nil {
+		return
+	}
+	if err = m.QueryRowsNoCacheCtx(ctx, &resp, query, agrs...); err != nil {
+		return
+	}
+	return
 }
 
 func (m *customPrizeModel) FindInIds(ctx context.Context, prizesIds []int64) ([]*Prize, error) {
@@ -229,4 +266,8 @@ func (m *customPrizeModel) FindInIds(ctx context.Context, prizesIds []int64) ([]
 	default:
 		return nil, err
 	}
+}
+
+func (m *customPrizeModel) TableName() string {
+	return m.table
 }

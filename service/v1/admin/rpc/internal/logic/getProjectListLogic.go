@@ -25,18 +25,11 @@ func NewGetProjectListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 	}
 }
 
-func (l *GetProjectListLogic) GetProjectList(in *admin_pb.ListReq) (*admin_pb.GetProjectListResp, error) {
-	list, err := l.svcCtx.ProjectModel.FindList(l.ctx, in.PageSize, in.Page, in.Keyword)
-	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
-		return nil, errorx.IntRpcErr(err)
-	}
-	if err == model.ErrNotFound {
-		return &admin_pb.GetProjectListResp{
-			Data: nil,
-		}, nil
-	}
-	total, err := l.svcCtx.ProjectModel.FindCount(l.ctx)
+func (l *GetProjectListLogic) GetProjectList(in *admin_pb.ProjectListReq) (*admin_pb.GetProjectListResp, error) {
+	list, total, err := l.svcCtx.ProjectModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, &model.Project{
+		Name:   in.Project.Name,
+		Status: in.Project.Status,
+	})
 	if err != nil {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

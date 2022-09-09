@@ -25,11 +25,18 @@ func NewListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ListLogic {
 	}
 }
 
-func (l *ListLogic) List(req *types.ListReq) (any, error) {
-	resp, err := l.svcCtx.AdminRpc.GetPrizeList(l.ctx, &admin_pb.ListReq{
-		PageSize: req.PageSize,
-		Page:     req.Page,
-		Keyword:  req.Keyword,
+func (l *ListLogic) List(req *types.PrizeListReq) (any, error) {
+	resp, err := l.svcCtx.AdminRpc.GetPrizeList(l.ctx, &admin_pb.PrizeListReq{
+		ListReq: &admin_pb.ListReq{
+			PageSize: req.PageSize,
+			Page:     req.Page,
+			Keyword:  req.Keyword,
+		},
+		Prize: &admin_pb.Prize{
+			Name:   req.Name,
+			Price:  req.Price,
+			Status: req.Status,
+		},
 	})
 	if err != nil {
 		return nil, err
