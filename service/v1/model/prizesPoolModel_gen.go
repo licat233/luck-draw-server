@@ -46,7 +46,7 @@ type (
 		GradeId    int64     `db:"grade_id"`    // 奖品等级
 		LuckValue  int64     `db:"luck_value"`  // 幸运值
 		Status     int64     `db:"status"`      // 是否可用，0不可用，1可用
-		Number     int64     `db:"number"`      // 奖品总数量
+		Total      int64     `db:"total"`       // 奖品总数量
 		Remainder  int64     `db:"remainder"`   // 奖品剩余数量
 		CreateAt   time.Time `db:"create_at"`   // 创建时间
 		UpdateAt   time.Time `db:"update_at"`   // 更新时间
@@ -92,7 +92,7 @@ func (m *defaultPrizesPoolModel) Insert(ctx context.Context, data *PrizesPool) (
 	luckDrawPrizesPoolIdKey := fmt.Sprintf("%s%v", cacheLuckDrawPrizesPoolIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, prizesPoolRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.PrizeId, data.GradeId, data.LuckValue, data.Status, data.Number, data.Remainder, data.IsDeleted, data.DeleteAt)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.PrizeId, data.GradeId, data.LuckValue, data.Status, data.Total, data.Remainder, data.IsDeleted, data.DeleteAt)
 	}, luckDrawPrizesPoolIdKey)
 	return ret, err
 }
@@ -101,7 +101,7 @@ func (m *defaultPrizesPoolModel) Update(ctx context.Context, data *PrizesPool) e
 	luckDrawPrizesPoolIdKey := fmt.Sprintf("%s%v", cacheLuckDrawPrizesPoolIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, prizesPoolRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.PrizeId, data.GradeId, data.LuckValue, data.Status, data.Number, data.Remainder, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.PrizeId, data.GradeId, data.LuckValue, data.Status, data.Total, data.Remainder, data.IsDeleted, data.DeleteAt, data.Id)
 	}, luckDrawPrizesPoolIdKey)
 	return err
 }

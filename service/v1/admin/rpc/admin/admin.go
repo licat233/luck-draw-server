@@ -79,8 +79,10 @@ type (
 	Policy                = admin_pb.Policy
 	Prize                 = admin_pb.Prize
 	PrizeGrade            = admin_pb.PrizeGrade
+	PrizeGradeListReq     = admin_pb.PrizeGradeListReq
 	PrizeListReq          = admin_pb.PrizeListReq
 	PrizesPool            = admin_pb.PrizesPool
+	PrizesPoolListReq     = admin_pb.PrizesPoolListReq
 	Project               = admin_pb.Project
 	ProjectActivityReq    = admin_pb.ProjectActivityReq
 	ProjectActivityResp   = admin_pb.ProjectActivityResp
@@ -91,6 +93,7 @@ type (
 	User                  = admin_pb.User
 	UserListReq           = admin_pb.UserListReq
 	UsersPool             = admin_pb.UsersPool
+	UsersPoolListReq      = admin_pb.UsersPoolListReq
 
 	Admin interface {
 		// 生产token
@@ -133,12 +136,12 @@ type (
 		PutPrize(ctx context.Context, in *Prize, opts ...grpc.CallOption) (*StatusResp, error)
 		DelPrize(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
 		ActivityPrizes(ctx context.Context, in *ActivityPrizesReq, opts ...grpc.CallOption) (*ActivityPrizesResp, error)
-		GetPrizeGradeList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetPrizeGradeListResp, error)
+		GetPrizeGradeList(ctx context.Context, in *PrizeGradeListReq, opts ...grpc.CallOption) (*GetPrizeGradeListResp, error)
 		GetPrizeGrade(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetPrizeGradeResp, error)
 		AddPrizeGrade(ctx context.Context, in *PrizeGrade, opts ...grpc.CallOption) (*AddPrizeGradeResp, error)
 		PutPrizeGrade(ctx context.Context, in *PrizeGrade, opts ...grpc.CallOption) (*StatusResp, error)
 		DelPrizeGrade(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
-		GetPrizesPoolList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetPrizesPoolListResp, error)
+		GetPrizesPoolList(ctx context.Context, in *PrizesPoolListReq, opts ...grpc.CallOption) (*GetPrizesPoolListResp, error)
 		GetPrizesPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetPrizesPoolResp, error)
 		AddPrizesPool(ctx context.Context, in *PrizesPool, opts ...grpc.CallOption) (*AddPrizesPoolResp, error)
 		PutPrizesPool(ctx context.Context, in *PrizesPool, opts ...grpc.CallOption) (*StatusResp, error)
@@ -154,7 +157,7 @@ type (
 		AddUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*AddUserResp, error)
 		PutUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*StatusResp, error)
 		DelUser(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
-		GetUsersPoolList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetUsersPoolListResp, error)
+		GetUsersPoolList(ctx context.Context, in *UsersPoolListReq, opts ...grpc.CallOption) (*GetUsersPoolListResp, error)
 		GetUsersPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetUsersPoolResp, error)
 		AddUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*AddUsersPoolResp, error)
 		PutUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*StatusResp, error)
@@ -347,7 +350,7 @@ func (m *defaultAdmin) ActivityPrizes(ctx context.Context, in *ActivityPrizesReq
 	return client.ActivityPrizes(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) GetPrizeGradeList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetPrizeGradeListResp, error) {
+func (m *defaultAdmin) GetPrizeGradeList(ctx context.Context, in *PrizeGradeListReq, opts ...grpc.CallOption) (*GetPrizeGradeListResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetPrizeGradeList(ctx, in, opts...)
 }
@@ -372,7 +375,7 @@ func (m *defaultAdmin) DelPrizeGrade(ctx context.Context, in *ItemReq, opts ...g
 	return client.DelPrizeGrade(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) GetPrizesPoolList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetPrizesPoolListResp, error) {
+func (m *defaultAdmin) GetPrizesPoolList(ctx context.Context, in *PrizesPoolListReq, opts ...grpc.CallOption) (*GetPrizesPoolListResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetPrizesPoolList(ctx, in, opts...)
 }
@@ -452,7 +455,7 @@ func (m *defaultAdmin) DelUser(ctx context.Context, in *ItemReq, opts ...grpc.Ca
 	return client.DelUser(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) GetUsersPoolList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetUsersPoolListResp, error) {
+func (m *defaultAdmin) GetUsersPoolList(ctx context.Context, in *UsersPoolListReq, opts ...grpc.CallOption) (*GetUsersPoolListResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetUsersPoolList(ctx, in, opts...)
 }

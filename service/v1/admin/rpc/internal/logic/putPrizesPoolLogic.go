@@ -38,7 +38,7 @@ func (l *PutPrizesPoolLogic) PutPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.S
 		GradeId:    in.GradeId,
 		LuckValue:  in.LuckValue,
 		Status:     in.Status,
-		Number:     in.Number,
+		Total:      in.Total,
 		Remainder:  in.Remainder,
 	}
 

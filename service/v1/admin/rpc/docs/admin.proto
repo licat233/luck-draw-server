@@ -58,7 +58,7 @@ message PrizesPool {
   int64 grade_id = 7;
   int64 luck_value = 5;
   int64 status = 6;
-  int64 number = 8;
+  int64 total = 8;
   int64 remainder = 9;
 }
 
@@ -442,6 +442,11 @@ message UserListReq {
   User user = 2;
 }
 
+message UsersPoolListReq {
+  ListReq list_req = 1;
+  UsersPool users_pool = 2;
+}
+
 message ProjectListReq {
   ListReq list_req = 1;
   Project project = 2;
@@ -455,6 +460,16 @@ message ActivityListReq {
 message PrizeListReq {
   ListReq list_req = 1;
   Prize prize = 2;
+}
+
+message PrizesPoolListReq {
+  ListReq list_req = 1;
+  PrizesPool prizes_pool = 2;
+}
+
+message PrizeGradeListReq {
+  ListReq list_req = 1;
+  PrizeGrade prize_grade = 2;
 }
 
 message LuckerListReq {
@@ -508,13 +523,13 @@ service Admin {
   rpc DelPrize (ItemReq) returns (StatusResp);
   rpc ActivityPrizes (ActivityPrizesReq) returns (ActivityPrizesResp);
 
-  rpc GetPrizeGradeList (ListReq) returns (GetPrizeGradeListResp);
+  rpc GetPrizeGradeList (PrizeGradeListReq) returns (GetPrizeGradeListResp);
   rpc GetPrizeGrade (ItemReq) returns (GetPrizeGradeResp);
   rpc AddPrizeGrade (PrizeGrade) returns (AddPrizeGradeResp);
   rpc PutPrizeGrade (PrizeGrade) returns (StatusResp);
   rpc DelPrizeGrade (ItemReq) returns (StatusResp);
 
-  rpc GetPrizesPoolList (ListReq) returns (GetPrizesPoolListResp);
+  rpc GetPrizesPoolList (PrizesPoolListReq) returns (GetPrizesPoolListResp);
   rpc GetPrizesPool (ItemReq) returns (GetPrizesPoolResp);
   rpc AddPrizesPool (PrizesPool) returns (AddPrizesPoolResp);
   rpc PutPrizesPool (PrizesPool) returns (StatusResp);
@@ -533,7 +548,7 @@ service Admin {
   rpc PutUser (User) returns (StatusResp);
   rpc DelUser (ItemReq) returns (StatusResp);
 
-  rpc GetUsersPoolList (ListReq) returns (GetUsersPoolListResp);
+  rpc GetUsersPoolList (UsersPoolListReq) returns (GetUsersPoolListResp);
   rpc GetUsersPool (ItemReq) returns (GetUsersPoolResp);
   rpc AddUsersPool (UsersPool) returns (AddUsersPoolResp);
   rpc PutUsersPool (UsersPool) returns (StatusResp);

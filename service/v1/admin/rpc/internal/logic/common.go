@@ -5,11 +5,28 @@ import (
 	"luck_draw-server/common/utils"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 	"luck_draw-server/service/v1/model"
-	"time"
 )
 
 func newStatusResponse() *admin_pb.StatusResp {
 	return &admin_pb.StatusResp{}
+}
+
+func pbActivityToMdActivity(pbActivity *admin_pb.Activity) *model.Activity {
+	if pbActivity == nil {
+		return nil
+	}
+	return &model.Activity{
+		Id:        pbActivity.Id,
+		Uuid:      pbActivity.Uuid,
+		Name:      pbActivity.Name,
+		ProjectId: pbActivity.ProjectId,
+		Status:    pbActivity.Status,
+		Pattern:   pbActivity.Pattern,
+		MaxCount:  pbActivity.MaxCount,
+		MaxPrizes: pbActivity.MaxPrizes,
+		StartTime: utils.Int64ToTime(pbActivity.StartTime),
+		EndTime:   utils.Int64ToTime(pbActivity.EndTime),
+	}
 }
 
 func mdActivityToPbActivity(mdActivity *model.Activity) *admin_pb.Activity {
@@ -36,6 +53,25 @@ func mdActivityListToPbActivityList(mdActivityList []*model.Activity) []*admin_p
 		pbActivityList = append(pbActivityList, mdActivityToPbActivity(mdActivity))
 	}
 	return pbActivityList
+}
+
+func pbAdminerToMdAdminer(pbAdminer *admin_pb.Adminer) *model.Adminer {
+	if pbAdminer == nil {
+		return nil
+	}
+	return &model.Adminer{
+		Id:           pbAdminer.Id,
+		Uuid:         pbAdminer.Uuid,
+		Name:         pbAdminer.Name,
+		Avatar:       pbAdminer.Avatar,
+		Passport:     pbAdminer.Passport,
+		Password:     pbAdminer.Password,
+		Email:        pbAdminer.Email,
+		Status:       pbAdminer.Status,
+		IsSuperAdmin: pbAdminer.IsSuperAdmin,
+		LoginCount:   pbAdminer.LoginCount,
+		LastLogin:    utils.Int64ToTime(pbAdminer.LastLogin),
+	}
 }
 
 func mdAdminerToPbAdminer(mdAdminer *model.Adminer) *admin_pb.Adminer {
@@ -65,6 +101,21 @@ func mdAdminerListToPbAdminerList(mdAdminerList []*model.Adminer) []*admin_pb.Ad
 	return pbAdminerList
 }
 
+func pbLuckerToMdLucker(pbLucker *admin_pb.Lucker) *model.Lucker {
+	if pbLucker == nil {
+		return nil
+	}
+	return &model.Lucker{
+		Id:           pbLucker.Id,
+		Uuid:         pbLucker.Uuid,
+		UserId:       pbLucker.UserId,
+		PrizesPoolId: pbLucker.PrizesPoolId,
+		Status:       pbLucker.Status,
+		LuckDate:     utils.Int64ToTime(pbLucker.LuckDate),
+		Ip:           pbLucker.Ip,
+	}
+}
+
 func mdLuckerToPbLucker(mdLucker *model.Lucker) *admin_pb.Lucker {
 	if mdLucker == nil {
 		return nil
@@ -86,6 +137,20 @@ func mdLuckerListToPbLuckerList(mdLuckerList []*model.Lucker) []*admin_pb.Lucker
 		pbLuckerList = append(pbLuckerList, mdLuckerToPbLucker(mdLucker))
 	}
 	return pbLuckerList
+}
+
+func pbPrizeToMdPrize(pbPrize *admin_pb.Prize) *model.Prize {
+	if pbPrize == nil {
+		return nil
+	}
+	return &model.Prize{
+		Id:     pbPrize.Id,
+		Uuid:   pbPrize.Uuid,
+		Name:   pbPrize.Name,
+		Image:  pbPrize.Image,
+		Price:  pbPrize.Price,
+		Status: pbPrize.Status,
+	}
 }
 
 func mdPrizeToPbPrize(mdPrize *model.Prize) *admin_pb.Prize {
@@ -110,6 +175,17 @@ func mdPrizeListToPbPrizeList(mdPrizeList []*model.Prize) []*admin_pb.Prize {
 	return pbPrizeList
 }
 
+func pbPrizeGradeToMdPrizeGrade(pbPrizeGrade *admin_pb.PrizeGrade) *model.PrizeGrade {
+	if pbPrizeGrade == nil {
+		return nil
+	}
+	return &model.PrizeGrade{
+		Id:    pbPrizeGrade.Id,
+		Name:  pbPrizeGrade.Name,
+		IsWin: pbPrizeGrade.IsWin,
+	}
+}
+
 func mdPrizeGradeToPbPrizeGrade(mdPrizeGrade *model.PrizeGrade) *admin_pb.PrizeGrade {
 	if mdPrizeGrade == nil {
 		return nil
@@ -117,7 +193,7 @@ func mdPrizeGradeToPbPrizeGrade(mdPrizeGrade *model.PrizeGrade) *admin_pb.PrizeG
 	return &admin_pb.PrizeGrade{
 		Id:    mdPrizeGrade.Id,
 		Name:  mdPrizeGrade.Name,
-		IsWin: 0,
+		IsWin: mdPrizeGrade.IsWin,
 	}
 }
 
@@ -127,6 +203,23 @@ func mdPrizeGradeListToPbPrizeGradeList(mdPrizeGradeList []*model.PrizeGrade) []
 		pbPrizeGradeList = append(pbPrizeGradeList, mdPrizeGradeToPbPrizeGrade(mdPrizeGrade))
 	}
 	return pbPrizeGradeList
+}
+
+func pbPrizesPoolToMdPrizesPool(pbPrizesPool *admin_pb.PrizesPool) *model.PrizesPool {
+	if pbPrizesPool == nil {
+		return nil
+	}
+	return &model.PrizesPool{
+		Id:         pbPrizesPool.Id,
+		Uuid:       pbPrizesPool.Uuid,
+		ActivityId: pbPrizesPool.ActivityId,
+		PrizeId:    pbPrizesPool.PrizeId,
+		GradeId:    pbPrizesPool.GradeId,
+		LuckValue:  pbPrizesPool.LuckValue,
+		Status:     pbPrizesPool.Status,
+		Total:      pbPrizesPool.Total,
+		Remainder:  pbPrizesPool.Remainder,
+	}
 }
 
 func mdPrizesPoolToPbPrizesPool(mdPrizesPool *model.PrizesPool) *admin_pb.PrizesPool {
@@ -141,7 +234,7 @@ func mdPrizesPoolToPbPrizesPool(mdPrizesPool *model.PrizesPool) *admin_pb.Prizes
 		GradeId:    mdPrizesPool.GradeId,
 		LuckValue:  mdPrizesPool.LuckValue,
 		Status:     mdPrizesPool.Status,
-		Number:     mdPrizesPool.Number,
+		Total:      mdPrizesPool.Total,
 		Remainder:  mdPrizesPool.Remainder,
 	}
 }
@@ -152,6 +245,18 @@ func mdPrizesPoolListToPbPrizesPoolList(mdPrizesPoolList []*model.PrizesPool) []
 		pbPrizesPoolList = append(pbPrizesPoolList, mdPrizesPoolToPbPrizesPool(mdPrizesPool))
 	}
 	return pbPrizesPoolList
+}
+
+func pbProjectToMdProject(pbProject *admin_pb.Project) *model.Project {
+	if pbProject == nil {
+		return nil
+	}
+	return &model.Project{
+		Id:     pbProject.Id,
+		Uuid:   pbProject.Uuid,
+		Name:   pbProject.Name,
+		Status: pbProject.Status,
+	}
 }
 
 func mdProjectToPbProject(mdProject *model.Project) *admin_pb.Project {
@@ -172,6 +277,23 @@ func mdProjectListToPbProjectList(mdProjectList []*model.Project) []*admin_pb.Pr
 		pbProjectList = append(pbProjectList, mdProjectToPbProject(mdProject))
 	}
 	return pbProjectList
+}
+
+func pbUserToMdUser(pbUser *admin_pb.User) *model.User {
+	if pbUser == nil {
+		return nil
+	}
+	return &model.User{
+		Id:       pbUser.Id,
+		Uuid:     pbUser.Uuid,
+		Passport: pbUser.Passport,
+		Email:    pbUser.Email,
+		Phone:    pbUser.Phone,
+		Name:     pbUser.Name,
+		Address:  pbUser.Address,
+		Score:    pbUser.Score,
+		Status:   pbUser.Status,
+	}
 }
 
 func mdUserToPbUser(mdUser *model.User) *admin_pb.User {
@@ -197,6 +319,20 @@ func mdUserListToPbUserList(mdUserList []*model.User) []*admin_pb.User {
 		pbUserList = append(pbUserList, mdUserToPbUser(mdUser))
 	}
 	return pbUserList
+}
+
+func pbUsersPoolToMdUsersPool(pbUsersPool *admin_pb.UsersPool) *model.UsersPool {
+	if pbUsersPool == nil {
+		return nil
+	}
+	return &model.UsersPool{
+		Id:         pbUsersPool.Id,
+		Uuid:       pbUsersPool.Uuid,
+		ActivityId: pbUsersPool.ActivityId,
+		UserId:     pbUsersPool.UserId,
+		Status:     pbUsersPool.Status,
+		Score:      pbUsersPool.Score,
+	}
 }
 
 func mdUsersPoolToPbUsersPool(mdUsersPool *model.UsersPool) *admin_pb.UsersPool {
@@ -244,10 +380,13 @@ func convertLuckerDetailsList(in []*model.LuckerDetailsInfo) []*admin_pb.LuckerD
 	return res
 }
 
-func timeHandler(timestamp int64) time.Time {
-	if timestamp <= 0 {
-		return time.Time{}
+func newListReq(in *admin_pb.ListReq) *admin_pb.ListReq {
+	if in == nil {
+		return &admin_pb.ListReq{
+			PageSize: -1,
+			Page:     -1,
+			Keyword:  "",
+		}
 	}
-	timestamp = utils.TimestampHandle(timestamp)
-	return time.Unix(timestamp, 0).Local()
+	return in
 }

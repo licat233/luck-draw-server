@@ -43,10 +43,9 @@ func (l *ActivityPrizesLogic) ActivityPrizes(in *admin_pb.ActivityPrizesReq) (*a
 	}
 
 	prizeGradeListLogic := NewGetPrizeGradeListLogic(l.ctx, l.svcCtx)
-	prizeGradeListResp, err := prizeGradeListLogic.GetPrizeGradeList(&admin_pb.ListReq{
-		PageSize: -1,
-		Page:     -1,
-		Keyword:  "",
+	prizeGradeListResp, err := prizeGradeListLogic.GetPrizeGradeList(&admin_pb.PrizeGradeListReq{
+		ListReq:    nil,
+		PrizeGrade: nil,
 	})
 	if err != nil {
 		return nil, err

@@ -32,7 +32,7 @@ func (l *AddLogic) Add(req *types.PrizesPoolAddReq) (any, error) {
 		GradeId:    req.GradeId,
 		LuckValue:  req.LuckValue,
 		Status:     req.Status,
-		Number:     req.Number,
+		Total:      req.Total,
 		Remainder:  req.Remainder,
 	})
 	if err != nil {

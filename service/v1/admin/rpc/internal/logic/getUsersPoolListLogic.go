@@ -4,7 +4,6 @@ import (
 	"context"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 	"luck_draw-server/service/v1/admin/rpc/internal/svc"
-	"luck_draw-server/service/v1/model"
 
 	"luck_draw-server/common/errorx"
 
@@ -25,18 +24,9 @@ func NewGetUsersPoolListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *GetUsersPoolListLogic) GetUsersPoolList(in *admin_pb.ListReq) (*admin_pb.GetUsersPoolListResp, error) {
-	list, err := l.svcCtx.UsersPoolModel.FindList(l.ctx, in.PageSize, in.Page)
-	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
-		return nil, errorx.IntRpcErr(err)
-	}
-	if err == model.ErrNotFound {
-		return &admin_pb.GetUsersPoolListResp{
-			Data: nil,
-		}, nil
-	}
-	total, err := l.svcCtx.UsersPoolModel.FindCount(l.ctx)
+func (l *GetUsersPoolListLogic) GetUsersPoolList(in *admin_pb.UsersPoolListReq) (*admin_pb.GetUsersPoolListResp, error) {
+	in.ListReq = newListReq(in.ListReq)
+	list, total, err := l.svcCtx.UsersPoolModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, pbUsersPoolToMdUsersPool(in.UsersPool))
 	if err != nil {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

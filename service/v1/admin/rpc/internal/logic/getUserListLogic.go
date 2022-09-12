@@ -4,7 +4,6 @@ import (
 	"context"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 	"luck_draw-server/service/v1/admin/rpc/internal/svc"
-	"luck_draw-server/service/v1/model"
 
 	"luck_draw-server/common/errorx"
 
@@ -26,21 +25,8 @@ func NewGetUserListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 }
 
 func (l *GetUserListLogic) GetUserList(in *admin_pb.UserListReq) (*admin_pb.GetUserListResp, error) {
-	var user *model.User
-	if in.User != nil {
-		user = &model.User{
-			Id:       in.User.Id,
-			Uuid:     in.User.Uuid,
-			Passport: in.User.Passport,
-			Email:    in.User.Email,
-			Phone:    in.User.Phone,
-			Name:     in.User.Name,
-			Address:  in.User.Address,
-			Score:    in.User.Score,
-			Status:   in.User.Status,
-		}
-	}
-	list, total, err := l.svcCtx.UserModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, user)
+	in.ListReq = newListReq(in.ListReq)
+	list, total, err := l.svcCtx.UserModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, pbUserToMdUser(in.User))
 	if err != nil {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

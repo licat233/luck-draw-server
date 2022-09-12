@@ -62,12 +62,12 @@ type AdminClient interface {
 	PutPrize(ctx context.Context, in *Prize, opts ...grpc.CallOption) (*StatusResp, error)
 	DelPrize(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
 	ActivityPrizes(ctx context.Context, in *ActivityPrizesReq, opts ...grpc.CallOption) (*ActivityPrizesResp, error)
-	GetPrizeGradeList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetPrizeGradeListResp, error)
+	GetPrizeGradeList(ctx context.Context, in *PrizeGradeListReq, opts ...grpc.CallOption) (*GetPrizeGradeListResp, error)
 	GetPrizeGrade(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetPrizeGradeResp, error)
 	AddPrizeGrade(ctx context.Context, in *PrizeGrade, opts ...grpc.CallOption) (*AddPrizeGradeResp, error)
 	PutPrizeGrade(ctx context.Context, in *PrizeGrade, opts ...grpc.CallOption) (*StatusResp, error)
 	DelPrizeGrade(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
-	GetPrizesPoolList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetPrizesPoolListResp, error)
+	GetPrizesPoolList(ctx context.Context, in *PrizesPoolListReq, opts ...grpc.CallOption) (*GetPrizesPoolListResp, error)
 	GetPrizesPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetPrizesPoolResp, error)
 	AddPrizesPool(ctx context.Context, in *PrizesPool, opts ...grpc.CallOption) (*AddPrizesPoolResp, error)
 	PutPrizesPool(ctx context.Context, in *PrizesPool, opts ...grpc.CallOption) (*StatusResp, error)
@@ -83,7 +83,7 @@ type AdminClient interface {
 	AddUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*AddUserResp, error)
 	PutUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*StatusResp, error)
 	DelUser(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
-	GetUsersPoolList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetUsersPoolListResp, error)
+	GetUsersPoolList(ctx context.Context, in *UsersPoolListReq, opts ...grpc.CallOption) (*GetUsersPoolListResp, error)
 	GetUsersPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetUsersPoolResp, error)
 	AddUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*AddUsersPoolResp, error)
 	PutUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*StatusResp, error)
@@ -393,7 +393,7 @@ func (c *adminClient) ActivityPrizes(ctx context.Context, in *ActivityPrizesReq,
 	return out, nil
 }
 
-func (c *adminClient) GetPrizeGradeList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetPrizeGradeListResp, error) {
+func (c *adminClient) GetPrizeGradeList(ctx context.Context, in *PrizeGradeListReq, opts ...grpc.CallOption) (*GetPrizeGradeListResp, error) {
 	out := new(GetPrizeGradeListResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetPrizeGradeList", in, out, opts...)
 	if err != nil {
@@ -438,7 +438,7 @@ func (c *adminClient) DelPrizeGrade(ctx context.Context, in *ItemReq, opts ...gr
 	return out, nil
 }
 
-func (c *adminClient) GetPrizesPoolList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetPrizesPoolListResp, error) {
+func (c *adminClient) GetPrizesPoolList(ctx context.Context, in *PrizesPoolListReq, opts ...grpc.CallOption) (*GetPrizesPoolListResp, error) {
 	out := new(GetPrizesPoolListResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetPrizesPoolList", in, out, opts...)
 	if err != nil {
@@ -582,7 +582,7 @@ func (c *adminClient) DelUser(ctx context.Context, in *ItemReq, opts ...grpc.Cal
 	return out, nil
 }
 
-func (c *adminClient) GetUsersPoolList(ctx context.Context, in *ListReq, opts ...grpc.CallOption) (*GetUsersPoolListResp, error) {
+func (c *adminClient) GetUsersPoolList(ctx context.Context, in *UsersPoolListReq, opts ...grpc.CallOption) (*GetUsersPoolListResp, error) {
 	out := new(GetUsersPoolListResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetUsersPoolList", in, out, opts...)
 	if err != nil {
@@ -734,12 +734,12 @@ type AdminServer interface {
 	PutPrize(context.Context, *Prize) (*StatusResp, error)
 	DelPrize(context.Context, *ItemReq) (*StatusResp, error)
 	ActivityPrizes(context.Context, *ActivityPrizesReq) (*ActivityPrizesResp, error)
-	GetPrizeGradeList(context.Context, *ListReq) (*GetPrizeGradeListResp, error)
+	GetPrizeGradeList(context.Context, *PrizeGradeListReq) (*GetPrizeGradeListResp, error)
 	GetPrizeGrade(context.Context, *ItemReq) (*GetPrizeGradeResp, error)
 	AddPrizeGrade(context.Context, *PrizeGrade) (*AddPrizeGradeResp, error)
 	PutPrizeGrade(context.Context, *PrizeGrade) (*StatusResp, error)
 	DelPrizeGrade(context.Context, *ItemReq) (*StatusResp, error)
-	GetPrizesPoolList(context.Context, *ListReq) (*GetPrizesPoolListResp, error)
+	GetPrizesPoolList(context.Context, *PrizesPoolListReq) (*GetPrizesPoolListResp, error)
 	GetPrizesPool(context.Context, *ItemReq) (*GetPrizesPoolResp, error)
 	AddPrizesPool(context.Context, *PrizesPool) (*AddPrizesPoolResp, error)
 	PutPrizesPool(context.Context, *PrizesPool) (*StatusResp, error)
@@ -755,7 +755,7 @@ type AdminServer interface {
 	AddUser(context.Context, *User) (*AddUserResp, error)
 	PutUser(context.Context, *User) (*StatusResp, error)
 	DelUser(context.Context, *ItemReq) (*StatusResp, error)
-	GetUsersPoolList(context.Context, *ListReq) (*GetUsersPoolListResp, error)
+	GetUsersPoolList(context.Context, *UsersPoolListReq) (*GetUsersPoolListResp, error)
 	GetUsersPool(context.Context, *ItemReq) (*GetUsersPoolResp, error)
 	AddUsersPool(context.Context, *UsersPool) (*AddUsersPoolResp, error)
 	PutUsersPool(context.Context, *UsersPool) (*StatusResp, error)
@@ -870,7 +870,7 @@ func (UnimplementedAdminServer) DelPrize(context.Context, *ItemReq) (*StatusResp
 func (UnimplementedAdminServer) ActivityPrizes(context.Context, *ActivityPrizesReq) (*ActivityPrizesResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ActivityPrizes not implemented")
 }
-func (UnimplementedAdminServer) GetPrizeGradeList(context.Context, *ListReq) (*GetPrizeGradeListResp, error) {
+func (UnimplementedAdminServer) GetPrizeGradeList(context.Context, *PrizeGradeListReq) (*GetPrizeGradeListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPrizeGradeList not implemented")
 }
 func (UnimplementedAdminServer) GetPrizeGrade(context.Context, *ItemReq) (*GetPrizeGradeResp, error) {
@@ -885,7 +885,7 @@ func (UnimplementedAdminServer) PutPrizeGrade(context.Context, *PrizeGrade) (*St
 func (UnimplementedAdminServer) DelPrizeGrade(context.Context, *ItemReq) (*StatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelPrizeGrade not implemented")
 }
-func (UnimplementedAdminServer) GetPrizesPoolList(context.Context, *ListReq) (*GetPrizesPoolListResp, error) {
+func (UnimplementedAdminServer) GetPrizesPoolList(context.Context, *PrizesPoolListReq) (*GetPrizesPoolListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPrizesPoolList not implemented")
 }
 func (UnimplementedAdminServer) GetPrizesPool(context.Context, *ItemReq) (*GetPrizesPoolResp, error) {
@@ -933,7 +933,7 @@ func (UnimplementedAdminServer) PutUser(context.Context, *User) (*StatusResp, er
 func (UnimplementedAdminServer) DelUser(context.Context, *ItemReq) (*StatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelUser not implemented")
 }
-func (UnimplementedAdminServer) GetUsersPoolList(context.Context, *ListReq) (*GetUsersPoolListResp, error) {
+func (UnimplementedAdminServer) GetUsersPoolList(context.Context, *UsersPoolListReq) (*GetUsersPoolListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUsersPoolList not implemented")
 }
 func (UnimplementedAdminServer) GetUsersPool(context.Context, *ItemReq) (*GetUsersPoolResp, error) {
@@ -1559,7 +1559,7 @@ func _Admin_ActivityPrizes_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _Admin_GetPrizeGradeList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListReq)
+	in := new(PrizeGradeListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1571,7 +1571,7 @@ func _Admin_GetPrizeGradeList_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: "/admin_proto.Admin/GetPrizeGradeList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).GetPrizeGradeList(ctx, req.(*ListReq))
+		return srv.(AdminServer).GetPrizeGradeList(ctx, req.(*PrizeGradeListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1649,7 +1649,7 @@ func _Admin_DelPrizeGrade_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _Admin_GetPrizesPoolList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListReq)
+	in := new(PrizesPoolListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1661,7 +1661,7 @@ func _Admin_GetPrizesPoolList_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: "/admin_proto.Admin/GetPrizesPoolList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).GetPrizesPoolList(ctx, req.(*ListReq))
+		return srv.(AdminServer).GetPrizesPoolList(ctx, req.(*PrizesPoolListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1937,7 +1937,7 @@ func _Admin_DelUser_Handler(srv interface{}, ctx context.Context, dec func(inter
 }
 
 func _Admin_GetUsersPoolList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListReq)
+	in := new(UsersPoolListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1949,7 +1949,7 @@ func _Admin_GetUsersPoolList_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/admin_proto.Admin/GetUsersPoolList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).GetUsersPoolList(ctx, req.(*ListReq))
+		return srv.(AdminServer).GetUsersPoolList(ctx, req.(*UsersPoolListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }

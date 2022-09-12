@@ -308,7 +308,7 @@ export function activityPrizes(params: components.ActivityPrizesReqParams) {
  * @description "获取奖品级别列表"
  * @param params
  */
-export function list(params: components.ListReqParams) {
+export function list(params: components.PrizeGradeListReqParams) {
 	return webapi.get<components.BaseResp>("/v1/api/admin/prizeGrade/list", params)
 }
 
@@ -355,8 +355,8 @@ export function enumList() {
  * @description "获取奖品池列表"
  * @param params
  */
-export function list(params: components.ListReqParams) {
-	return webapi.get<components.BaseResp>("/v1/api/admin/PrizesPool/list", params)
+export function list(params: components.PrizesPoolListReqParams) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/prizesPool/list", params)
 }
 
 /**
@@ -364,7 +364,7 @@ export function list(params: components.ListReqParams) {
  * @param params
  */
 export function info(params: components.PrizesPoolGetReqParams) {
-	return webapi.get<components.BaseResp>("/v1/api/admin/PrizesPool", params)
+	return webapi.get<components.BaseResp>("/v1/api/admin/prizesPool", params)
 }
 
 /**
@@ -372,7 +372,7 @@ export function info(params: components.PrizesPoolGetReqParams) {
  * @param req
  */
 export function add(req: components.PrizesPoolAddReq) {
-	return webapi.post<components.BaseResp>("/v1/api/admin/PrizesPool", req)
+	return webapi.post<components.BaseResp>("/v1/api/admin/prizesPool", req)
 }
 
 /**
@@ -380,7 +380,7 @@ export function add(req: components.PrizesPoolAddReq) {
  * @param req
  */
 export function put(req: components.PrizesPoolPutReq) {
-	return webapi.put<components.BaseResp>("/v1/api/admin/PrizesPool", req)
+	return webapi.put<components.BaseResp>("/v1/api/admin/prizesPool", req)
 }
 
 /**
@@ -388,7 +388,7 @@ export function put(req: components.PrizesPoolPutReq) {
  * @param req
  */
 export function del(req: components.PrizesPoolDelReq) {
-	return webapi.delete<components.BaseResp>("/v1/api/admin/PrizesPool", req)
+	return webapi.delete<components.BaseResp>("/v1/api/admin/prizesPool", req)
 }
 
 /**
@@ -396,7 +396,7 @@ export function del(req: components.PrizesPoolDelReq) {
  * @param params
  */
 export function searchPrizesPool(params: components.SearchPrizesPoolParams) {
-	return webapi.get<components.BaseResp>("/v1/api/admin/PrizesPool/search", params)
+	return webapi.get<components.BaseResp>("/v1/api/admin/prizesPool/search", params)
 }
 
 /**
@@ -598,7 +598,7 @@ export function enumList() {
  * @description "获取用户池列表"
  * @param params
  */
-export function list(params: components.ListReqParams) {
+export function list(params: components.UsersPoolListReqParams) {
 	return webapi.get<components.BaseResp>("/v1/api/admin/usersPool/list", params)
 }
 

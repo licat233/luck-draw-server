@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -25,7 +26,7 @@ type (
 		FindOneByUuid(ctx context.Context, uuid string) (*UsersPool, error)
 
 		FindCount(ctx context.Context) (int64, error)
-		FindList(ctx context.Context, pageSize, page int64) ([]*UsersPool, error)
+		FindList(ctx context.Context, pageSize, page int64, usersPool *UsersPool) ([]*UsersPool, int64, error)
 	}
 
 	customUsersPoolModel struct {
@@ -134,22 +135,50 @@ func (m *customUsersPoolModel) FindCount(ctx context.Context) (int64, error) {
 	}
 }
 
-func (m *customUsersPoolModel) FindList(ctx context.Context, pageSize, page int64) ([]*UsersPool, error) {
+func (m *customUsersPoolModel) FindList(ctx context.Context, pageSize, page int64, usersPool *UsersPool) (resp []*UsersPool, total int64, err error) {
 	if pageSize == 0 {
-		return []*UsersPool{}, nil
+		return
 	}
-	query := fmt.Sprintf("select %s from %s where `is_deleted`= '0' limit %v,%v", usersPoolRows, m.table, (page-1)*pageSize, pageSize)
-	if pageSize < 0 || page < 0 {
-		query = fmt.Sprintf("select %s from %s where `is_deleted`= '0'", projectRows, m.table)
+	sqQuery := squirrel.Select(usersPoolRows).From(m.table).Where("`is_deleted`= '0'")
+	sqCount := squirrel.Select("COUNT(*)").From(m.table).Where("`is_deleted`= '0'")
+	if usersPool != nil {
+		if usersPool.ActivityId != -1 {
+			sqQuery = sqQuery.Where("`activity_id` = ?", usersPool.ActivityId)
+			sqCount = sqCount.Where("`activity_id` = ?", usersPool.ActivityId)
+		}
+		if usersPool.UserId != -1 {
+			sqQuery = sqQuery.Where("`user_id` = ?", usersPool.UserId)
+			sqCount = sqCount.Where("`user_id` = ?", usersPool.UserId)
+		}
+		if usersPool.Status != -1 {
+			sqQuery = sqQuery.Where("`status` = ?", usersPool.Status)
+			sqCount = sqCount.Where("`status` = ?", usersPool.Status)
+		}
+		if usersPool.Score != -1 {
+			sqQuery = sqQuery.Where("`score` = ?", usersPool.Score)
+			sqCount = sqCount.Where("`score` = ?", usersPool.Score)
+		}
 	}
-	var resp []*UsersPool
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
-	switch err {
-	case nil:
-		return resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
+
+	isPageQuery := pageSize > 0 && page > 0
+	if isPageQuery {
+		sqQuery = sqQuery.Offset(uint64((page - 1) * pageSize)).Limit(uint64(pageSize))
+		queryCount, agrsCount, e := sqCount.ToSql()
+		if e != nil {
+			err = e
+			return
+		}
+		if err = m.QueryRowNoCacheCtx(ctx, &total, queryCount, agrsCount...); err != nil {
+			return
+		}
 	}
+
+	query, agrs, err := sqQuery.ToSql()
+	if err != nil {
+		return
+	}
+	if err = m.QueryRowsNoCacheCtx(ctx, &resp, query, agrs...); err != nil {
+		return
+	}
+	return
 }

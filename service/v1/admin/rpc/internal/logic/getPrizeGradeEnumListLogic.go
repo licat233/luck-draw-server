@@ -25,7 +25,7 @@ func NewGetPrizeGradeEnumListLogic(ctx context.Context, svcCtx *svc.ServiceConte
 }
 
 func (l *GetPrizeGradeEnumListLogic) GetPrizeGradeEnumList(in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
-	list, err := l.svcCtx.PrizeGradeModel.FindList(l.ctx, -1, -1, "")
+	list, _, err := l.svcCtx.PrizeGradeModel.FindList(l.ctx, -1, -1, "", nil)
 	if err != nil {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

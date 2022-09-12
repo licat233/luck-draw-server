@@ -190,7 +190,7 @@ func (s *AdminServer) ActivityPrizes(ctx context.Context, in *admin_pb.ActivityP
 	return l.ActivityPrizes(in)
 }
 
-func (s *AdminServer) GetPrizeGradeList(ctx context.Context, in *admin_pb.ListReq) (*admin_pb.GetPrizeGradeListResp, error) {
+func (s *AdminServer) GetPrizeGradeList(ctx context.Context, in *admin_pb.PrizeGradeListReq) (*admin_pb.GetPrizeGradeListResp, error) {
 	l := logic.NewGetPrizeGradeListLogic(ctx, s.svcCtx)
 	return l.GetPrizeGradeList(in)
 }
@@ -215,7 +215,7 @@ func (s *AdminServer) DelPrizeGrade(ctx context.Context, in *admin_pb.ItemReq) (
 	return l.DelPrizeGrade(in)
 }
 
-func (s *AdminServer) GetPrizesPoolList(ctx context.Context, in *admin_pb.ListReq) (*admin_pb.GetPrizesPoolListResp, error) {
+func (s *AdminServer) GetPrizesPoolList(ctx context.Context, in *admin_pb.PrizesPoolListReq) (*admin_pb.GetPrizesPoolListResp, error) {
 	l := logic.NewGetPrizesPoolListLogic(ctx, s.svcCtx)
 	return l.GetPrizesPoolList(in)
 }
@@ -295,7 +295,7 @@ func (s *AdminServer) DelUser(ctx context.Context, in *admin_pb.ItemReq) (*admin
 	return l.DelUser(in)
 }
 
-func (s *AdminServer) GetUsersPoolList(ctx context.Context, in *admin_pb.ListReq) (*admin_pb.GetUsersPoolListResp, error) {
+func (s *AdminServer) GetUsersPoolList(ctx context.Context, in *admin_pb.UsersPoolListReq) (*admin_pb.GetUsersPoolListResp, error) {
 	l := logic.NewGetUsersPoolListLogic(ctx, s.svcCtx)
 	return l.GetUsersPoolList(in)
 }

@@ -415,6 +415,14 @@ type PrizeGradeDelReq struct {
 	Id int64 `json:"id"`
 }
 
+type PrizeGradeListReq struct {
+	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page     int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword  string `form:"keyword,optional"`                            //关键词，可选
+	Name     string `form:"name,optional"`                               // 级别名称
+	IsWin    int64  `form:"is_win,optional,default=-1"`                  // 是否中奖
+}
+
 type PrizesPool struct {
 	Id         int64  `json:"id"`          // 表主键
 	Uuid       string `json:"uuid"`        // 唯一识别码
@@ -423,7 +431,7 @@ type PrizesPool struct {
 	LuckValue  int64  `json:"luck_value"`  // 幸运值
 	Status     int64  `json:"status"`      // 是否可用，0不可用，1可用
 	GradeId    int64  `json:"grade_id"`    // 等级id，如：一等奖
-	Number     int64  `json:"number"`      // 奖品总数量
+	Total      int64  `json:"total"`       // 奖品总数量
 	Remainder  int64  `json:"remainder"`   // 奖品剩余数量
 	CreateAt   int64  `json:"create_at"`   // 创建时间
 	UpdateAt   int64  `json:"update_at"`   // 更新时间
@@ -441,7 +449,7 @@ type PrizesPoolAddReq struct {
 	LuckValue  int64 `json:"luck_value"`  // 幸运值
 	Status     int64 `json:"status"`      // 是否可用，0不可用，1可用
 	GradeId    int64 `json:"grade_id"`    // 等级id，如：一等奖
-	Number     int64 `json:"number"`      // 奖品总数量
+	Total      int64 `json:"total"`       // 奖品总数量
 	Remainder  int64 `json:"remainder"`   // 奖品剩余数量
 }
 
@@ -453,7 +461,7 @@ type PrizesPoolPutReq struct {
 	LuckValue  int64  `json:"luck_value"`  // 幸运值
 	Status     int64  `json:"status"`      // 是否可用，0不可用，1可用
 	GradeId    int64  `json:"grade_id"`    // 等级id，如：一等奖
-	Number     int64  `json:"number"`      // 奖品总数量
+	Total      int64  `json:"total"`       // 奖品总数量
 	Remainder  int64  `json:"remainder"`   // 奖品剩余数量
 }
 
@@ -463,6 +471,19 @@ type PrizesPoolDelReq struct {
 
 type SearchPrizesPool struct {
 	ActivityId int64 `form:"activity_id,optional,default=-1"` //所属活动id，-1表示无限制
+}
+
+type PrizesPoolListReq struct {
+	PageSize   int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page       int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword    string `form:"keyword,optional"`                            //关键词，可选
+	ActivityId int64  `form:"activity_id,optional,default=-1"`             // 活动id
+	PrizeId    int64  `form:"prize_id,optional,default=-1"`                // 奖品id
+	LuckValue  int64  `form:"luck_value,optional,default=-1"`              // 幸运值
+	Status     int64  `form:"status,optional,default=-1"`                  // 是否可用，0不可用，1可用
+	GradeId    int64  `form:"grade_id,optional,default=-1"`                // 等级id，如：一等奖
+	Total      int64  `form:"total,optional,default=-1"`                   // 奖品总数量
+	Remainder  int64  `form:"remainder,optional,default=-1"`               // 奖品剩余数量
 }
 
 type Project struct {
@@ -618,4 +639,14 @@ type UsersPoolPutReq struct {
 
 type UsersPoolDelReq struct {
 	Id int64 `json:"id"`
+}
+
+type UsersPoolListReq struct {
+	PageSize   int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page       int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword    string `form:"keyword,optional"`                            //关键词，可选
+	ActivityId int64  `form:"activity_id,optional,default=-1"`             // 活动id
+	UserId     int64  `form:"user_id,optional,default=-1"`                 // 奖品id
+	Status     int64  `form:"status,optional,default=-1"`                  // 状态:0未授权，1正常，2已冻结
+	Score      int64  `form:"score,optional,default=-1"`                   // 用户在当前活动的积分
 }

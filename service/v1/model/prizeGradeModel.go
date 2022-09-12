@@ -24,7 +24,7 @@ type (
 		DeleteSoft(ctx context.Context, data *PrizeGrade) error
 
 		FindCount(ctx context.Context) (int64, error)
-		FindList(ctx context.Context, pageSize, page int64, keyword string) ([]*PrizeGrade, error)
+		FindList(ctx context.Context, pageSize, page int64, keyword string, prizeGrade *PrizeGrade) (resp []*PrizeGrade, total int64, err error)
 		TableName() string
 	}
 
@@ -119,23 +119,53 @@ func (m *customPrizeGradeModel) FindCount(ctx context.Context) (int64, error) {
 	}
 }
 
-func (m *customPrizeGradeModel) FindList(ctx context.Context, pageSize, page int64, keyword string) (resp []*PrizeGrade, err error) {
+func (m *customPrizeGradeModel) FindList(ctx context.Context, pageSize, page int64, keyword string, prizeGrade *PrizeGrade) (resp []*PrizeGrade, total int64, err error) {
 	if pageSize == 0 {
-		return []*PrizeGrade{}, nil
+		return
 	}
 	sq := squirrel.Select(prizeGradeRows).From(m.table).Where("`is_deleted`= '0'")
-	if strings.TrimSpace(keyword) != "" {
-		sq = sq.Where("name LIKE ?", fmt.Sprint("%", keyword, "%"))
+	sqCount := squirrel.Select("COUNT(*)").From(m.table).Where("`is_deleted`= '0'")
+	var mark bool
+	if prizeGrade != nil {
+		//name的优先级大于keyword
+		if prizeGrade.Name != "" {
+			sq = sq.Where("name LIKE ?", fmt.Sprint("%", prizeGrade.Name, "%"))
+			sqCount = sqCount.Where("name LIKE ?", fmt.Sprint("%", prizeGrade.Name, "%"))
+			mark = true
+		}
+		if prizeGrade.IsWin != -1 {
+			sq = sq.Where("`is_win` = ?", prizeGrade.IsWin)
+			sqCount = sqCount.Where("`is_win` = ?", prizeGrade.IsWin)
+			mark = true
+		}
 	}
-	if pageSize > 0 && page > 0 {
+	if !mark {
+		if keyword = strings.TrimSpace(keyword); keyword != "" {
+			sq = sq.Where("name LIKE ?", fmt.Sprint("%", keyword, "%"))
+			sqCount = sqCount.Where("name LIKE ?", fmt.Sprint("%", keyword, "%"))
+		}
+	}
+
+	isPageQuery := pageSize > 0 && page > 0
+	if isPageQuery {
 		sq = sq.Offset(uint64((page - 1) * pageSize)).Limit(uint64(pageSize))
+		queryCount, agrsCount, e := sqCount.ToSql()
+		if e != nil {
+			err = e
+			return
+		}
+		if err = m.QueryRowNoCacheCtx(ctx, &total, queryCount, agrsCount...); err != nil {
+			return
+		}
 	}
 
 	query, agrs, err := sq.ToSql()
 	if err != nil {
 		return
 	}
-	err = m.QueryRowsNoCacheCtx(ctx, &resp, query, agrs...)
+	if err = m.QueryRowsNoCacheCtx(ctx, &resp, query, agrs...); err != nil {
+		return
+	}
 	return
 }
 

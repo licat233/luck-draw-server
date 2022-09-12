@@ -4,7 +4,6 @@ import (
 	"context"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 	"luck_draw-server/service/v1/admin/rpc/internal/svc"
-	"luck_draw-server/service/v1/model"
 
 	"luck_draw-server/common/errorx"
 
@@ -26,11 +25,8 @@ func NewGetPrizeListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetP
 }
 
 func (l *GetPrizeListLogic) GetPrizeList(in *admin_pb.PrizeListReq) (*admin_pb.GetPrizeListResp, error) {
-	list, total, err := l.svcCtx.PrizeModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, &model.Prize{
-		Name:   in.Prize.Name,
-		Price:  in.Prize.Price,
-		Status: in.Prize.Status,
-	})
+	in.ListReq = newListReq(in.ListReq)
+	list, total, err := l.svcCtx.PrizeModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, pbPrizeToMdPrize(in.Prize))
 	if err != nil {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

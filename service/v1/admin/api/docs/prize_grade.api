@@ -29,6 +29,16 @@ type PrizeGradeDelReq {
 	Id int64 `json:"id"`
 }
 
+//通用页面数据请求
+type PrizeGradeListReq {
+	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page     int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword  string `form:"keyword,optional"`                            //关键词，可选
+	//字段搜索
+    Name      string    `form:"name,optional"`       // 级别名称
+    IsWin     int64     `form:"is_win,optional,default=-1"`     // 是否中奖
+}
+
 @server(
 	jwt: JwtAuth
 	group: prizeGrade
@@ -38,7 +48,7 @@ type PrizeGradeDelReq {
 service admin-api {
 	@doc "获取奖品级别列表"
 	@handler List
-	get /list(ListReq) returns(BaseResp)
+	get /list(PrizeGradeListReq) returns(BaseResp)
 
 	@doc "获取奖品级别信息"
 	@handler info 

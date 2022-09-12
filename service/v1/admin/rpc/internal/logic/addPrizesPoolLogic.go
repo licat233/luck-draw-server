@@ -38,7 +38,7 @@ func (l *AddPrizesPoolLogic) AddPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.A
 		GradeId:    in.GradeId,
 		LuckValue:  in.LuckValue,
 		Status:     in.Status,
-		Number:     in.Number,
+		Total:      in.Total,
 		Remainder:  in.Remainder,
 	}
 	result, err := l.svcCtx.PrizesPoolModel.Insert(l.ctx, data)

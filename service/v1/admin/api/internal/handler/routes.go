@@ -348,7 +348,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			}...,
 		),
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/PrizesPool"),
+		rest.WithPrefix("/v1/api/admin/prizesPool"),
 	)
 
 	server.AddRoutes(

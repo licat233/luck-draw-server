@@ -464,6 +464,18 @@ export interface PrizeGradeDelReq {
 	id: number
 }
 
+export interface PrizeGradeListReq {
+}
+
+export interface PrizeGradeListReqParams {
+	pageSize: number // 页面大小
+	current: number // 当前页码
+	keyword: string // 关键词，可选
+	//字段搜索
+	name: string // 级别名称
+	is_win: number // 是否中奖
+}
+
 export interface PrizesPool {
 	id: number // 表主键
 	uuid: string // 唯一识别码
@@ -472,7 +484,7 @@ export interface PrizesPool {
 	luck_value: number // 幸运值
 	status: number // 是否可用，0不可用，1可用
 	grade_id: number // 等级id，如：一等奖
-	number: number // 奖品总数量
+	total: number // 奖品总数量
 	remainder: number // 奖品剩余数量
 	create_at: number // 创建时间
 	update_at: number // 更新时间
@@ -493,7 +505,7 @@ export interface PrizesPoolAddReq {
 	luck_value: number // 幸运值
 	status: number // 是否可用，0不可用，1可用
 	grade_id: number // 等级id，如：一等奖
-	number: number // 奖品总数量
+	total: number // 奖品总数量
 	remainder: number // 奖品剩余数量
 }
 
@@ -505,7 +517,7 @@ export interface PrizesPoolPutReq {
 	luck_value: number // 幸运值
 	status: number // 是否可用，0不可用，1可用
 	grade_id: number // 等级id，如：一等奖
-	number: number // 奖品总数量
+	total: number // 奖品总数量
 	remainder: number // 奖品剩余数量
 }
 
@@ -518,6 +530,23 @@ export interface SearchPrizesPool {
 
 export interface SearchPrizesPoolParams {
 	activity_id: number // 所属活动id，-1表示无限制
+}
+
+export interface PrizesPoolListReq {
+}
+
+export interface PrizesPoolListReqParams {
+	pageSize: number // 页面大小
+	current: number // 当前页码
+	keyword: string // 关键词，可选
+	//字段搜索
+	activity_id: number // 活动id
+	prize_id: number // 奖品id
+	luck_value: number // 幸运值
+	status: number // 是否可用，0不可用，1可用
+	grade_id: number // 等级id，如：一等奖
+	total: number // 奖品总数量
+	remainder: number // 奖品剩余数量
 }
 
 export interface Project {
@@ -690,5 +719,19 @@ export interface UsersPoolPutReq {
 
 export interface UsersPoolDelReq {
 	id: number
+}
+
+export interface UsersPoolListReq {
+}
+
+export interface UsersPoolListReqParams {
+	pageSize: number // 页面大小
+	current: number // 当前页码
+	keyword: string // 关键词，可选
+	//字段搜索
+	activity_id: number // 活动id
+	user_id: number // 奖品id
+	status: number // 状态:0未授权，1正常，2已冻结
+	score: number // 用户在当前活动的积分
 }
 

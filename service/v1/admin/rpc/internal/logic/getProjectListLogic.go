@@ -4,7 +4,6 @@ import (
 	"context"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 	"luck_draw-server/service/v1/admin/rpc/internal/svc"
-	"luck_draw-server/service/v1/model"
 
 	"luck_draw-server/common/errorx"
 
@@ -26,10 +25,8 @@ func NewGetProjectListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 }
 
 func (l *GetProjectListLogic) GetProjectList(in *admin_pb.ProjectListReq) (*admin_pb.GetProjectListResp, error) {
-	list, total, err := l.svcCtx.ProjectModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, &model.Project{
-		Name:   in.Project.Name,
-		Status: in.Project.Status,
-	})
+	in.ListReq = newListReq(in.ListReq)
+	list, total, err := l.svcCtx.ProjectModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, pbProjectToMdProject(in.Project))
 	if err != nil {
 		logx.Error(err)
 		return nil, errorx.IntRpcErr(err)

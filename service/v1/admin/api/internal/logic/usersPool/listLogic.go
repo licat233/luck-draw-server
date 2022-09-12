@@ -25,11 +25,19 @@ func NewListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ListLogic {
 	}
 }
 
-func (l *ListLogic) List(req *types.ListReq) (any, error) {
-	resp, err := l.svcCtx.AdminRpc.GetUsersPoolList(l.ctx, &admin_pb.ListReq{
-		PageSize: req.PageSize,
-		Page:     req.Page,
-		Keyword:  req.Keyword,
+func (l *ListLogic) List(req *types.UsersPoolListReq) (any, error) {
+	resp, err := l.svcCtx.AdminRpc.GetUsersPoolList(l.ctx, &admin_pb.UsersPoolListReq{
+		ListReq: &admin_pb.ListReq{
+			PageSize: req.PageSize,
+			Page:     req.Page,
+			Keyword:  req.Keyword,
+		},
+		UsersPool: &admin_pb.UsersPool{
+			ActivityId: req.ActivityId,
+			UserId:     req.UserId,
+			Status:     req.Status,
+			Score:      req.Score,
+		},
 	})
 	if err != nil {
 		return nil, err

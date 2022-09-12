@@ -34,7 +34,7 @@ func (l *PutLogic) Put(req *types.PrizesPoolPutReq) (any, error) {
 		GradeId:    req.GradeId,
 		LuckValue:  req.LuckValue,
 		Status:     req.Status,
-		Number:     req.Number,
+		Total:      req.Total,
 		Remainder:  req.Remainder,
 	})
 	if err != nil {

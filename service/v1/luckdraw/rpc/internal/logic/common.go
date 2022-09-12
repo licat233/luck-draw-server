@@ -92,7 +92,7 @@ func convertPrizesPool(mdPrizesPool *model.PrizesPool) *luckdraw_pb.PrizesPool {
 		LuckValue:  mdPrizesPool.LuckValue,
 		Status:     mdPrizesPool.Status,
 		GradeId:    mdPrizesPool.GradeId,
-		Number:     mdPrizesPool.Number,
+		Number:     mdPrizesPool.Total,
 		Remainder:  mdPrizesPool.Remainder,
 	}
 }
