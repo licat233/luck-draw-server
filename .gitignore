@@ -17,6 +17,12 @@
 .DS_Store
 */.DS_Store
 *.log
+*/api/logs/
+*/rpc/logs/
+*/logs/
+
+# 取消忽略go文件
+!*.go
 
 # 忽略掉所有文件
 # *

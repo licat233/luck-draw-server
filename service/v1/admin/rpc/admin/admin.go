@@ -13,87 +13,91 @@ import (
 )
 
 type (
-	Activity              = admin_pb.Activity
-	ActivityListReq       = admin_pb.ActivityListReq
-	ActivityPrize         = admin_pb.ActivityPrize
-	ActivityPrizesReq     = admin_pb.ActivityPrizesReq
-	ActivityPrizesResp    = admin_pb.ActivityPrizesResp
-	AddActivityResp       = admin_pb.AddActivityResp
-	AddAdminerResp        = admin_pb.AddAdminerResp
-	AddLuckerResp         = admin_pb.AddLuckerResp
-	AddPrizeGradeResp     = admin_pb.AddPrizeGradeResp
-	AddPrizeResp          = admin_pb.AddPrizeResp
-	AddPrizesPoolResp     = admin_pb.AddPrizesPoolResp
-	AddProjectResp        = admin_pb.AddProjectResp
-	AddUserResp           = admin_pb.AddUserResp
-	AddUsersPoolResp      = admin_pb.AddUsersPoolResp
-	Adminer               = admin_pb.Adminer
-	AdminerListReq        = admin_pb.AdminerListReq
-	Enum                  = admin_pb.Enum
-	EnumListReq           = admin_pb.EnumListReq
-	EnumListResp          = admin_pb.EnumListResp
-	ExsitEmailReq         = admin_pb.ExsitEmailReq
-	ExsitEmailResp        = admin_pb.ExsitEmailResp
-	FindByEmailReq        = admin_pb.FindByEmailReq
-	FindByEmailResp       = admin_pb.FindByEmailResp
-	GenerateTokenReq      = admin_pb.GenerateTokenReq
-	GenerateTokenResp     = admin_pb.GenerateTokenResp
-	GetActivityListResp   = admin_pb.GetActivityListResp
-	GetActivityResp       = admin_pb.GetActivityResp
-	GetAdminerListResp    = admin_pb.GetAdminerListResp
-	GetAdminerResp        = admin_pb.GetAdminerResp
-	GetLuckerDetailsResp  = admin_pb.GetLuckerDetailsResp
-	GetLuckerListResp     = admin_pb.GetLuckerListResp
-	GetLuckerResp         = admin_pb.GetLuckerResp
-	GetPrizeGradeListResp = admin_pb.GetPrizeGradeListResp
-	GetPrizeGradeResp     = admin_pb.GetPrizeGradeResp
-	GetPrizeListResp      = admin_pb.GetPrizeListResp
-	GetPrizeResp          = admin_pb.GetPrizeResp
-	GetPrizesPoolListResp = admin_pb.GetPrizesPoolListResp
-	GetPrizesPoolResp     = admin_pb.GetPrizesPoolResp
-	GetProjectListResp    = admin_pb.GetProjectListResp
-	GetProjectResp        = admin_pb.GetProjectResp
-	GetUserListResp       = admin_pb.GetUserListResp
-	GetUserResp           = admin_pb.GetUserResp
-	GetUsersPoolListResp  = admin_pb.GetUsersPoolListResp
-	GetUsersPoolResp      = admin_pb.GetUsersPoolResp
-	IsLogoutReq           = admin_pb.IsLogoutReq
-	IsLogoutResp          = admin_pb.IsLogoutResp
-	ItemReq               = admin_pb.ItemReq
-	JwtData               = admin_pb.JwtData
-	JwtToken              = admin_pb.JwtToken
-	ListReq               = admin_pb.ListReq
-	LoginByEmailReq       = admin_pb.LoginByEmailReq
-	LoginReq              = admin_pb.LoginReq
-	LoginResp             = admin_pb.LoginResp
-	LogoutReq             = admin_pb.LogoutReq
-	LogoutResp            = admin_pb.LogoutResp
-	Lucker                = admin_pb.Lucker
-	LuckerDetail          = admin_pb.LuckerDetail
-	LuckerDetailsReq      = admin_pb.LuckerDetailsReq
-	LuckerListReq         = admin_pb.LuckerListReq
-	LuckerPutByPrizeReq   = admin_pb.LuckerPutByPrizeReq
-	LuckerPutReq          = admin_pb.LuckerPutReq
-	ParseJwtTokenReq      = admin_pb.ParseJwtTokenReq
-	ParseJwtTokenResp     = admin_pb.ParseJwtTokenResp
-	Policy                = admin_pb.Policy
-	Prize                 = admin_pb.Prize
-	PrizeGrade            = admin_pb.PrizeGrade
-	PrizeGradeListReq     = admin_pb.PrizeGradeListReq
-	PrizeListReq          = admin_pb.PrizeListReq
-	PrizesPool            = admin_pb.PrizesPool
-	PrizesPoolListReq     = admin_pb.PrizesPoolListReq
-	Project               = admin_pb.Project
-	ProjectActivityReq    = admin_pb.ProjectActivityReq
-	ProjectActivityResp   = admin_pb.ProjectActivityResp
-	ProjectListReq        = admin_pb.ProjectListReq
-	SearchPrizesPoolReq   = admin_pb.SearchPrizesPoolReq
-	SearchPrizesPoolResp  = admin_pb.SearchPrizesPoolResp
-	StatusResp            = admin_pb.StatusResp
-	User                  = admin_pb.User
-	UserListReq           = admin_pb.UserListReq
-	UsersPool             = admin_pb.UsersPool
-	UsersPoolListReq      = admin_pb.UsersPoolListReq
+	Activity                   = admin_pb.Activity
+	ActivityDetails            = admin_pb.ActivityDetails
+	ActivityListReq            = admin_pb.ActivityListReq
+	ActivityPrize              = admin_pb.ActivityPrize
+	ActivityPrizesReq          = admin_pb.ActivityPrizesReq
+	ActivityPrizesResp         = admin_pb.ActivityPrizesResp
+	AddActivityResp            = admin_pb.AddActivityResp
+	AddAdminerResp             = admin_pb.AddAdminerResp
+	AddLuckerResp              = admin_pb.AddLuckerResp
+	AddPrizeGradeResp          = admin_pb.AddPrizeGradeResp
+	AddPrizeResp               = admin_pb.AddPrizeResp
+	AddPrizesPoolResp          = admin_pb.AddPrizesPoolResp
+	AddProjectResp             = admin_pb.AddProjectResp
+	AddUserResp                = admin_pb.AddUserResp
+	AddUsersPoolResp           = admin_pb.AddUsersPoolResp
+	Adminer                    = admin_pb.Adminer
+	AdminerListReq             = admin_pb.AdminerListReq
+	Enum                       = admin_pb.Enum
+	EnumListReq                = admin_pb.EnumListReq
+	EnumListResp               = admin_pb.EnumListResp
+	ExsitEmailReq              = admin_pb.ExsitEmailReq
+	ExsitEmailResp             = admin_pb.ExsitEmailResp
+	FindByEmailReq             = admin_pb.FindByEmailReq
+	FindByEmailResp            = admin_pb.FindByEmailResp
+	GenerateTokenReq           = admin_pb.GenerateTokenReq
+	GenerateTokenResp          = admin_pb.GenerateTokenResp
+	GetActivityDetailReq       = admin_pb.GetActivityDetailReq
+	GetActivityDetailResp      = admin_pb.GetActivityDetailResp
+	GetActivityDetailsListResp = admin_pb.GetActivityDetailsListResp
+	GetActivityListResp        = admin_pb.GetActivityListResp
+	GetActivityResp            = admin_pb.GetActivityResp
+	GetAdminerListResp         = admin_pb.GetAdminerListResp
+	GetAdminerResp             = admin_pb.GetAdminerResp
+	GetLuckerDetailsResp       = admin_pb.GetLuckerDetailsResp
+	GetLuckerListResp          = admin_pb.GetLuckerListResp
+	GetLuckerResp              = admin_pb.GetLuckerResp
+	GetPrizeGradeListResp      = admin_pb.GetPrizeGradeListResp
+	GetPrizeGradeResp          = admin_pb.GetPrizeGradeResp
+	GetPrizeListResp           = admin_pb.GetPrizeListResp
+	GetPrizeResp               = admin_pb.GetPrizeResp
+	GetPrizesPoolListResp      = admin_pb.GetPrizesPoolListResp
+	GetPrizesPoolResp          = admin_pb.GetPrizesPoolResp
+	GetProjectListResp         = admin_pb.GetProjectListResp
+	GetProjectResp             = admin_pb.GetProjectResp
+	GetUserListResp            = admin_pb.GetUserListResp
+	GetUserResp                = admin_pb.GetUserResp
+	GetUsersPoolListResp       = admin_pb.GetUsersPoolListResp
+	GetUsersPoolResp           = admin_pb.GetUsersPoolResp
+	IsLogoutReq                = admin_pb.IsLogoutReq
+	IsLogoutResp               = admin_pb.IsLogoutResp
+	ItemReq                    = admin_pb.ItemReq
+	JwtData                    = admin_pb.JwtData
+	JwtToken                   = admin_pb.JwtToken
+	ListReq                    = admin_pb.ListReq
+	LoginByEmailReq            = admin_pb.LoginByEmailReq
+	LoginReq                   = admin_pb.LoginReq
+	LoginResp                  = admin_pb.LoginResp
+	LogoutReq                  = admin_pb.LogoutReq
+	LogoutResp                 = admin_pb.LogoutResp
+	Lucker                     = admin_pb.Lucker
+	LuckerDetail               = admin_pb.LuckerDetail
+	LuckerDetailsReq           = admin_pb.LuckerDetailsReq
+	LuckerListReq              = admin_pb.LuckerListReq
+	LuckerPutByPrizeReq        = admin_pb.LuckerPutByPrizeReq
+	LuckerPutReq               = admin_pb.LuckerPutReq
+	ParseJwtTokenReq           = admin_pb.ParseJwtTokenReq
+	ParseJwtTokenResp          = admin_pb.ParseJwtTokenResp
+	Policy                     = admin_pb.Policy
+	Prize                      = admin_pb.Prize
+	PrizeGrade                 = admin_pb.PrizeGrade
+	PrizeGradeListReq          = admin_pb.PrizeGradeListReq
+	PrizeListReq               = admin_pb.PrizeListReq
+	PrizesPool                 = admin_pb.PrizesPool
+	PrizesPoolListReq          = admin_pb.PrizesPoolListReq
+	Project                    = admin_pb.Project
+	ProjectActivityReq         = admin_pb.ProjectActivityReq
+	ProjectActivityResp        = admin_pb.ProjectActivityResp
+	ProjectListReq             = admin_pb.ProjectListReq
+	SearchPrizesPoolReq        = admin_pb.SearchPrizesPoolReq
+	SearchPrizesPoolResp       = admin_pb.SearchPrizesPoolResp
+	StatusResp                 = admin_pb.StatusResp
+	User                       = admin_pb.User
+	UserListReq                = admin_pb.UserListReq
+	UsersPool                  = admin_pb.UsersPool
+	UsersPoolListReq           = admin_pb.UsersPoolListReq
 
 	Admin interface {
 		// 生产token
@@ -113,6 +117,8 @@ type (
 		// 解析 jwtToken, 返回原生error
 		ParseJwtToken(ctx context.Context, in *ParseJwtTokenReq, opts ...grpc.CallOption) (*ParseJwtTokenResp, error)
 		GetActivityList(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityListResp, error)
+		GetActivityDetail(ctx context.Context, in *GetActivityDetailReq, opts ...grpc.CallOption) (*GetActivityDetailResp, error)
+		GetActivityDetails(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityDetailsListResp, error)
 		GetActivity(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetActivityResp, error)
 		AddActivity(ctx context.Context, in *Activity, opts ...grpc.CallOption) (*AddActivityResp, error)
 		PutActivity(ctx context.Context, in *Activity, opts ...grpc.CallOption) (*StatusResp, error)
@@ -233,6 +239,16 @@ func (m *defaultAdmin) ParseJwtToken(ctx context.Context, in *ParseJwtTokenReq, 
 func (m *defaultAdmin) GetActivityList(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityListResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetActivityList(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) GetActivityDetail(ctx context.Context, in *GetActivityDetailReq, opts ...grpc.CallOption) (*GetActivityDetailResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.GetActivityDetail(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) GetActivityDetails(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityDetailsListResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.GetActivityDetails(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetActivity(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetActivityResp, error) {

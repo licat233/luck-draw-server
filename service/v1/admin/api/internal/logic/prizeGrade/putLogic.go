@@ -3,8 +3,11 @@ package prizeGrade
 import (
 	"context"
 
+	"luck_draw-server/common/errorx"
+	"luck_draw-server/common/respx"
 	"luck_draw-server/service/v1/admin/api/internal/svc"
 	"luck_draw-server/service/v1/admin/api/internal/types"
+	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,8 +26,17 @@ func NewPutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutLogic {
 	}
 }
 
-func (l *PutLogic) Put(req *types.PrizeGradePutReq) (resp *types.BaseResp, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+func (l *PutLogic) Put(req *types.PrizeGradePutReq) (any, error) {
+	if req.Name == "" {
+		return nil, errorx.ErrInvalidParam
+	}
+	_, err := l.svcCtx.AdminRpc.PutPrizeGrade(l.ctx, &admin_pb.PrizeGrade{
+		Id:    req.Id,
+		Name:  req.Name,
+		IsWin: req.IsWin,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return respx.DefaultStateResp(err)
 }

@@ -3,8 +3,10 @@ package prizeGrade
 import (
 	"context"
 
+	"luck_draw-server/common/respx"
 	"luck_draw-server/service/v1/admin/api/internal/svc"
 	"luck_draw-server/service/v1/admin/api/internal/types"
+	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,8 +25,12 @@ func NewInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *InfoLogic {
 	}
 }
 
-func (l *InfoLogic) Info(req *types.PrizeGradeGetReq) (resp *types.BaseResp, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+func (l *InfoLogic) Info(req *types.PrizeGradeGetReq) (any, error) {
+	resp, err := l.svcCtx.AdminRpc.GetPrizeGrade(l.ctx, &admin_pb.ItemReq{
+		Id: req.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return respx.DefaultSingleResp(resp.PrizeGrade, err)
 }

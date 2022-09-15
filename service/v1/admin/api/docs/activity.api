@@ -69,6 +69,15 @@ type ActivityListReq {
   RangeTime []string  `json:"range_time,optional"`   // 活动结束时间
 }
 
+type ActivityDetail {
+  Activity       Activity       `json:"activity"`  //活动信息
+  ActivityPrize  []ActivityPrize  `json:"activity_prizes"` //活动奖品列表
+}
+
+type ActivityDetailReq {
+  Id int64 `form:"id"`  //活动id
+}
+
 @server(
   jwt: JwtAuth
   group: activity
@@ -79,6 +88,12 @@ service admin-api {
   @doc "获取活动列表，因为设计数组传参，post方式会比较合适"
   @handler List
   post /list(ActivityListReq) returns(BaseResp)
+
+  @handler ActivityDetail
+  get /detail(ActivityDetailReq) returns(BaseResp)
+
+  @handler ActivityDetails
+  post /details(ActivityListReq) returns(BaseResp)
 
   @doc "获取活动信息"
   @handler info 

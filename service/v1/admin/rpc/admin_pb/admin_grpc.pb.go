@@ -39,6 +39,8 @@ type AdminClient interface {
 	// 解析 jwtToken, 返回原生error
 	ParseJwtToken(ctx context.Context, in *ParseJwtTokenReq, opts ...grpc.CallOption) (*ParseJwtTokenResp, error)
 	GetActivityList(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityListResp, error)
+	GetActivityDetail(ctx context.Context, in *GetActivityDetailReq, opts ...grpc.CallOption) (*GetActivityDetailResp, error)
+	GetActivityDetails(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityDetailsListResp, error)
 	GetActivity(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetActivityResp, error)
 	AddActivity(ctx context.Context, in *Activity, opts ...grpc.CallOption) (*AddActivityResp, error)
 	PutActivity(ctx context.Context, in *Activity, opts ...grpc.CallOption) (*StatusResp, error)
@@ -180,6 +182,24 @@ func (c *adminClient) ParseJwtToken(ctx context.Context, in *ParseJwtTokenReq, o
 func (c *adminClient) GetActivityList(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityListResp, error) {
 	out := new(GetActivityListResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetActivityList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminClient) GetActivityDetail(ctx context.Context, in *GetActivityDetailReq, opts ...grpc.CallOption) (*GetActivityDetailResp, error) {
+	out := new(GetActivityDetailResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetActivityDetail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminClient) GetActivityDetails(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityDetailsListResp, error) {
+	out := new(GetActivityDetailsListResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetActivityDetails", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -711,6 +731,8 @@ type AdminServer interface {
 	// 解析 jwtToken, 返回原生error
 	ParseJwtToken(context.Context, *ParseJwtTokenReq) (*ParseJwtTokenResp, error)
 	GetActivityList(context.Context, *ActivityListReq) (*GetActivityListResp, error)
+	GetActivityDetail(context.Context, *GetActivityDetailReq) (*GetActivityDetailResp, error)
+	GetActivityDetails(context.Context, *ActivityListReq) (*GetActivityDetailsListResp, error)
 	GetActivity(context.Context, *ItemReq) (*GetActivityResp, error)
 	AddActivity(context.Context, *Activity) (*AddActivityResp, error)
 	PutActivity(context.Context, *Activity) (*StatusResp, error)
@@ -800,6 +822,12 @@ func (UnimplementedAdminServer) ParseJwtToken(context.Context, *ParseJwtTokenReq
 }
 func (UnimplementedAdminServer) GetActivityList(context.Context, *ActivityListReq) (*GetActivityListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetActivityList not implemented")
+}
+func (UnimplementedAdminServer) GetActivityDetail(context.Context, *GetActivityDetailReq) (*GetActivityDetailResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetActivityDetail not implemented")
+}
+func (UnimplementedAdminServer) GetActivityDetails(context.Context, *ActivityListReq) (*GetActivityDetailsListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetActivityDetails not implemented")
 }
 func (UnimplementedAdminServer) GetActivity(context.Context, *ItemReq) (*GetActivityResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetActivity not implemented")
@@ -1140,6 +1168,42 @@ func _Admin_GetActivityList_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AdminServer).GetActivityList(ctx, req.(*ActivityListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Admin_GetActivityDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetActivityDetailReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).GetActivityDetail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/GetActivityDetail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).GetActivityDetail(ctx, req.(*GetActivityDetailReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Admin_GetActivityDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ActivityListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).GetActivityDetails(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/GetActivityDetails",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).GetActivityDetails(ctx, req.(*ActivityListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2194,6 +2258,14 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetActivityList",
 			Handler:    _Admin_GetActivityList_Handler,
+		},
+		{
+			MethodName: "GetActivityDetail",
+			Handler:    _Admin_GetActivityDetail_Handler,
+		},
+		{
+			MethodName: "GetActivityDetails",
+			Handler:    _Admin_GetActivityDetails_Handler,
 		},
 		{
 			MethodName: "GetActivity",

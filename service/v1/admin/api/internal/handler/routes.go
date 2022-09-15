@@ -97,6 +97,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 				{
 					Method:  http.MethodGet,
+					Path:    "/detail",
+					Handler: activity.ActivityDetailHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/details",
+					Handler: activity.ActivityDetailsHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
 					Path:    "/",
 					Handler: activity.InfoHandler(serverCtx),
 				},
@@ -339,11 +349,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodDelete,
 					Path:    "/",
 					Handler: prizesPool.DelHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/search",
-					Handler: prizesPool.SearchPrizesPoolHandler(serverCtx),
 				},
 			}...,
 		),

@@ -12,3 +12,9 @@ var (
 	//更新时omit的字段
 	BaseUpdateOmitField = []string{"`id`", "`uuid`", "`create_at`", "`update_at`", "`is_deleted`", "`delete_at`"}
 )
+
+type ListReq struct {
+	PageSize int64
+	Page     int64
+	Keyword  string
+}

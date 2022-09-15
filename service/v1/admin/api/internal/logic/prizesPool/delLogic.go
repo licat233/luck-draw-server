@@ -26,7 +26,7 @@ func NewDelLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelLogic {
 }
 
 func (l *DelLogic) Del(req *types.PrizesPoolDelReq) (any, error) {
-	_, err := l.svcCtx.AdminRpc.DelLucker(l.ctx, &admin_pb.ItemReq{
+	_, err := l.svcCtx.AdminRpc.DelPrizesPool(l.ctx, &admin_pb.ItemReq{
 		Id: req.Id,
 	})
 	if err != nil {

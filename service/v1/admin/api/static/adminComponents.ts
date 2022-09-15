@@ -185,6 +185,18 @@ export interface ActivityListReq {
 	range_time?: Array<string> // 活动结束时间
 }
 
+export interface ActivityDetail {
+	activity: Activity // 活动信息
+	activity_prizes: Array<ActivityPrize> // 活动奖品列表
+}
+
+export interface ActivityDetailReq {
+}
+
+export interface ActivityDetailReqParams {
+	id: number // 活动id
+}
+
 export interface Adminer {
 	id: number // 表主键
 	uuid: string // 唯一识别码
@@ -523,13 +535,6 @@ export interface PrizesPoolPutReq {
 
 export interface PrizesPoolDelReq {
 	id: number
-}
-
-export interface SearchPrizesPool {
-}
-
-export interface SearchPrizesPoolParams {
-	activity_id: number // 所属活动id，-1表示无限制
 }
 
 export interface PrizesPoolListReq {

@@ -120,6 +120,60 @@
         ]
       }
     },
+    "/v1/api/admin/activity/detail": {
+      "get": {
+        "operationId": "ActivityDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "活动id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "activity"
+        ]
+      }
+    },
+    "/v1/api/admin/activity/details": {
+      "post": {
+        "operationId": "ActivityDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ActivityListReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "activity"
+        ]
+      }
+    },
     "/v1/api/admin/activity/enumList": {
       "get": {
         "summary": "枚举列表",
@@ -1491,35 +1545,6 @@
         ]
       }
     },
-    "/v1/api/admin/prizesPool/search": {
-      "get": {
-        "summary": "获取某活动的奖品池",
-        "operationId": "searchPrizesPool",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "activity_id",
-            "description": "所属活动id，-1表示无限制",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "prizesPool"
-        ]
-      }
-    },
     "/v1/api/admin/project/": {
       "get": {
         "summary": "获取项目信息",
@@ -2694,6 +2719,41 @@
         }
       },
       "title": "ActivityDelReq",
+      "required": [
+        "id"
+      ]
+    },
+    "ActivityDetail": {
+      "type": "object",
+      "properties": {
+        "activity": {
+          "$ref": "#/definitions/Activity",
+          "description": "活动信息"
+        },
+        "activity_prizes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ActivityPrize"
+          },
+          "description": "活动奖品列表"
+        }
+      },
+      "title": "ActivityDetail",
+      "required": [
+        "activity",
+        "activity_prizes"
+      ]
+    },
+    "ActivityDetailReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "活动id"
+        }
+      },
+      "title": "ActivityDetailReq",
       "required": [
         "id"
       ]
@@ -5449,21 +5509,6 @@
       "required": [
         "email",
         "solution"
-      ]
-    },
-    "searchPrizesPool": {
-      "type": "object",
-      "properties": {
-        "activity_id": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "所属活动id，-1表示无限制"
-        }
-      },
-      "title": "searchPrizesPool",
-      "required": [
-        "activity_id"
       ]
     }
   },

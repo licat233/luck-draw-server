@@ -46,10 +46,6 @@ type PrizesPoolDelReq {
 	Id int64 `json:"id"`
 }
 
-type searchPrizesPool {
-	ActivityId int64 `form:"activity_id,optional,default=-1"`  //所属活动id，-1表示无限制
-}
-
 //通用页面数据请求
 type PrizesPoolListReq {
 	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
@@ -91,8 +87,4 @@ service admin-api {
     @doc "删除奖品池"
 	@handler del 
 	delete /(PrizesPoolDelReq) returns(BaseResp)
-
-	@doc "获取某活动的奖品池"
-	@handler searchPrizesPool
-	get /search(searchPrizesPool) returns(BaseResp)
 }

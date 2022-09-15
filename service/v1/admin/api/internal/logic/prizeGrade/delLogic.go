@@ -3,8 +3,10 @@ package prizeGrade
 import (
 	"context"
 
+	"luck_draw-server/common/respx"
 	"luck_draw-server/service/v1/admin/api/internal/svc"
 	"luck_draw-server/service/v1/admin/api/internal/types"
+	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,8 +25,12 @@ func NewDelLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelLogic {
 	}
 }
 
-func (l *DelLogic) Del(req *types.PrizeGradeDelReq) (resp *types.BaseResp, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+func (l *DelLogic) Del(req *types.PrizeGradeDelReq) (any, error) {
+	_, err := l.svcCtx.AdminRpc.DelPrizeGrade(l.ctx, &admin_pb.ItemReq{
+		Id: req.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return respx.DefaultStateResp(err)
 }

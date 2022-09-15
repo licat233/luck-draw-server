@@ -3,8 +3,10 @@ package prizeGrade
 import (
 	"context"
 
+	"luck_draw-server/common/respx"
 	"luck_draw-server/service/v1/admin/api/internal/svc"
 	"luck_draw-server/service/v1/admin/api/internal/types"
+	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,8 +25,16 @@ func NewListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ListLogic {
 	}
 }
 
-func (l *ListLogic) List(req *types.ListReq) (resp *types.BaseResp, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+func (l *ListLogic) List(req *types.PrizeGradeListReq) (any, error) {
+	resp, err := l.svcCtx.AdminRpc.GetPrizeGradeList(l.ctx, &admin_pb.PrizeGradeListReq{
+		ListReq: &admin_pb.ListReq{PageSize: req.PageSize, Page: req.Page, Keyword: req.Keyword},
+		PrizeGrade: &admin_pb.PrizeGrade{
+			Name:  req.Name,
+			IsWin: req.IsWin,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+	return respx.DefaultListResp(resp.Data, resp.Total, req.PageSize, req.Page, err)
 }

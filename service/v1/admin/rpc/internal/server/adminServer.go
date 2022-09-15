@@ -75,6 +75,16 @@ func (s *AdminServer) GetActivityList(ctx context.Context, in *admin_pb.Activity
 	return l.GetActivityList(in)
 }
 
+func (s *AdminServer) GetActivityDetail(ctx context.Context, in *admin_pb.GetActivityDetailReq) (*admin_pb.GetActivityDetailResp, error) {
+	l := logic.NewGetActivityDetailLogic(ctx, s.svcCtx)
+	return l.GetActivityDetail(in)
+}
+
+func (s *AdminServer) GetActivityDetails(ctx context.Context, in *admin_pb.ActivityListReq) (*admin_pb.GetActivityDetailsListResp, error) {
+	l := logic.NewGetActivityDetailsLogic(ctx, s.svcCtx)
+	return l.GetActivityDetails(in)
+}
+
 func (s *AdminServer) GetActivity(ctx context.Context, in *admin_pb.ItemReq) (*admin_pb.GetActivityResp, error) {
 	l := logic.NewGetActivityLogic(ctx, s.svcCtx)
 	return l.GetActivity(in)

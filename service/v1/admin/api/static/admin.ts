@@ -85,6 +85,22 @@ export function list(req: components.ActivityListReq) {
 }
 
 /**
+ * @description 
+ * @param params
+ */
+export function activityDetail(params: components.ActivityDetailReqParams) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/activity/detail", params)
+}
+
+/**
+ * @description 
+ * @param req
+ */
+export function activityDetails(req: components.ActivityListReq) {
+	return webapi.post<components.BaseResp>("/v1/api/admin/activity/details", req)
+}
+
+/**
  * @description "获取活动信息"
  * @param params
  */
@@ -389,14 +405,6 @@ export function put(req: components.PrizesPoolPutReq) {
  */
 export function del(req: components.PrizesPoolDelReq) {
 	return webapi.delete<components.BaseResp>("/v1/api/admin/prizesPool", req)
-}
-
-/**
- * @description "获取某活动的奖品池"
- * @param params
- */
-export function searchPrizesPool(params: components.SearchPrizesPoolParams) {
-	return webapi.get<components.BaseResp>("/v1/api/admin/prizesPool/search", params)
 }
 
 /**

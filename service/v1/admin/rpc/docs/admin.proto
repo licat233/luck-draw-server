@@ -207,6 +207,10 @@ message ParseJwtTokenResp {
   map<string, string> claims = 1;
 }
 
+message GetActivityDetailReq{
+  int64 activity_id = 1;
+}
+
 //-----------
 
 //列表数据请求
@@ -299,9 +303,23 @@ message GetUsersPoolResp{
   UsersPool users_pool = 1;
 }
 
+message GetActivityDetailResp{
+  ActivityDetails data = 1;
+}
+
 //多条数据响应
 message GetActivityListResp {
   repeated Activity data = 1;
+  int64 total = 2;
+}
+
+message ActivityDetails {
+  Activity activity = 1;
+  repeated ActivityPrize activity_prizes = 2;
+}
+
+message GetActivityDetailsListResp {
+  repeated ActivityDetails data = 1;
   int64 total = 2;
 }
 
@@ -496,6 +514,8 @@ service Admin {
   rpc ParseJwtToken (ParseJwtTokenReq) returns (ParseJwtTokenResp);
 
   rpc GetActivityList (ActivityListReq) returns (GetActivityListResp);
+  rpc GetActivityDetail (GetActivityDetailReq) returns (GetActivityDetailResp);
+  rpc GetActivityDetails (ActivityListReq) returns (GetActivityDetailsListResp);
   rpc GetActivity (ItemReq) returns (GetActivityResp);
   rpc AddActivity (Activity) returns (AddActivityResp);
   rpc PutActivity (Activity) returns (StatusResp);

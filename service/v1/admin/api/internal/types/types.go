@@ -164,6 +164,15 @@ type ActivityListReq struct {
 	RangeTime []string `json:"range_time,optional"`                         // 活动结束时间
 }
 
+type ActivityDetail struct {
+	Activity      Activity        `json:"activity"`        //活动信息
+	ActivityPrize []ActivityPrize `json:"activity_prizes"` //活动奖品列表
+}
+
+type ActivityDetailReq struct {
+	Id int64 `form:"id"` //活动id
+}
+
 type Adminer struct {
 	Id           int64  `json:"id"`             // 表主键
 	Uuid         string `json:"uuid"`           // 唯一识别码
@@ -467,10 +476,6 @@ type PrizesPoolPutReq struct {
 
 type PrizesPoolDelReq struct {
 	Id int64 `json:"id"`
-}
-
-type SearchPrizesPool struct {
-	ActivityId int64 `form:"activity_id,optional,default=-1"` //所属活动id，-1表示无限制
 }
 
 type PrizesPoolListReq struct {

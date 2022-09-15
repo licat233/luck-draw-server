@@ -1,24 +1,24 @@
-package prizesPool
+package activity
 
 import (
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"luck_draw-server/service/v1/admin/api/internal/logic/prizesPool"
+	"luck_draw-server/service/v1/admin/api/internal/logic/activity"
 	"luck_draw-server/service/v1/admin/api/internal/svc"
 	"luck_draw-server/service/v1/admin/api/internal/types"
 )
 
-func SearchPrizesPoolHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func ActivityDetailsHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.SearchPrizesPool
+		var req types.ActivityListReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
 		}
 
-		l := prizesPool.NewSearchPrizesPoolLogic(r.Context(), svcCtx)
-		resp, err := l.SearchPrizesPool(&req)
+		l := activity.NewActivityDetailsLogic(r.Context(), svcCtx)
+		resp, err := l.ActivityDetails(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {
