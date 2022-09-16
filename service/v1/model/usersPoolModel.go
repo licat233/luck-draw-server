@@ -54,7 +54,7 @@ func (m *customUsersPoolModel) DeleteSoft(ctx context.Context, data *UsersPool) 
 	luckDrawUsersPoolIdKey := m.formatPrimary(data.Id)
 	luckDrawUsersPoolUuidKey := m.formatUuidKey(data.Uuid)
 	//更新 is_deleted 状态，不走缓存
-	query := fmt.Sprintf("update %s set `is_deleted` = '1', `deleted_at` = now() where `id` = ?", m.table)
+	query := fmt.Sprintf("update %s set `is_deleted` = '1', `delete_at` = now() where `id` = ?", m.table)
 	_, err := m.ExecNoCacheCtx(ctx, query, data.Id)
 	if err != nil {
 		return err

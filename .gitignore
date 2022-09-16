@@ -17,8 +17,8 @@
 .DS_Store
 */.DS_Store
 *.log
-*/api/logs/
-*/rpc/logs/
+*/api/logs/*
+*/rpc/logs/*
 */logs/
 
 # 取消忽略go文件
@@ -41,3 +41,5 @@ admin-api
 
 # Go workspace file
 go.work
+
+service/v1/admin/api/logs
