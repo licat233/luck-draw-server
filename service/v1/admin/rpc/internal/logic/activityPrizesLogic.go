@@ -37,6 +37,7 @@ func (l *ActivityPrizesLogic) ActivityPrizes(in *admin_pb.ActivityPrizesReq) (*a
 	for _, prizesPool := range prizesPoolListResp.Data {
 		prizesIds = append(prizesIds, prizesPool.PrizeId)
 	}
+
 	prizeList, err := l.svcCtx.PrizeModel.FindInIds(l.ctx, prizesIds)
 	if err != nil && err != model.ErrNotFound {
 		return nil, errorx.IntRpcErr(err)

@@ -32,6 +32,7 @@ type (
 		FindList(ctx context.Context, pageSize, page int64, keyword string, activity *Activity) (resp []*Activity, total int64, err error)
 		FindsByProjectId(ctx context.Context, projectId int64) ([]*Activity, error)
 		TableName() string
+		FindsByIds(ctx context.Context, ids []int64) ([]*Activity, error)
 	}
 
 	customActivityModel struct {
@@ -255,4 +256,12 @@ func (m *customActivityModel) FindsByProjectId(ctx context.Context, projectId in
 
 func (m *customActivityModel) TableName() string {
 	return m.table
+}
+
+func (m *customActivityModel) FindsByIds(ctx context.Context, ids []int64) ([]*Activity, error) {
+	var resp []*Activity
+	where := utils.SliceIntToString(ids, ",")
+	query := fmt.Sprintf("select %s from %s where `id` in(%s) and `is_deleted` = '0'", activityRows, m.table, where)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
+	return resp, err
 }

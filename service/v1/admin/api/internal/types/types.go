@@ -165,12 +165,21 @@ type ActivityListReq struct {
 }
 
 type ActivityDetail struct {
-	Activity      Activity        `json:"activity"`        //活动信息
-	ActivityPrize []ActivityPrize `json:"activity_prizes"` //活动奖品列表
+	Activity       Activity        `json:"activity"`        //活动信息
+	ActivityPrizes []ActivityPrize `json:"activity_prizes"` //活动奖品列表
 }
 
 type ActivityDetailReq struct {
 	Id int64 `form:"id"` //活动id
+}
+
+type UserActivity struct {
+	Activity  Activity  `json:"activity"`   //活动信息
+	UsersPool UsersPool `json:"users_pool"` //活动用户池信息
+}
+
+type UserActivitiesReq struct {
+	UserId int64 `form:"user_id,optional,default=-1"` //所属用户id，-1表示无限制
 }
 
 type Adminer struct {
@@ -607,6 +616,19 @@ type UserListReq struct {
 	Address  string `form:"address,optional"`                            // 收货地址
 	Score    int64  `form:"score,optional,default=-1"`                   // 积分
 	Status   int64  `form:"status,optional,default=-1"`                  // 状态:0未授权，1正常，2已冻结
+}
+
+type UserDetailReq struct {
+	Id int64 `form:"id"`
+}
+
+type UserDetail struct {
+	User           User           `json:"user"`
+	UserActivities []UserActivity `json:"user_activities"`
+}
+
+type UserDetails struct {
+	UserDetails []UserDetail `json:"user_details"`
 }
 
 type UsersPool struct {

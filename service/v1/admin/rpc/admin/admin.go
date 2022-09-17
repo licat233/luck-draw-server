@@ -57,6 +57,9 @@ type (
 	GetPrizesPoolResp          = admin_pb.GetPrizesPoolResp
 	GetProjectListResp         = admin_pb.GetProjectListResp
 	GetProjectResp             = admin_pb.GetProjectResp
+	GetUserDetailReq           = admin_pb.GetUserDetailReq
+	GetUserDetailResp          = admin_pb.GetUserDetailResp
+	GetUserDetailsListResp     = admin_pb.GetUserDetailsListResp
 	GetUserListResp            = admin_pb.GetUserListResp
 	GetUserResp                = admin_pb.GetUserResp
 	GetUsersPoolListResp       = admin_pb.GetUsersPoolListResp
@@ -95,6 +98,10 @@ type (
 	SearchPrizesPoolResp       = admin_pb.SearchPrizesPoolResp
 	StatusResp                 = admin_pb.StatusResp
 	User                       = admin_pb.User
+	UserActivity               = admin_pb.UserActivity
+	UserActivityReq            = admin_pb.UserActivityReq
+	UserActivityResp           = admin_pb.UserActivityResp
+	UserDetails                = admin_pb.UserDetails
 	UserListReq                = admin_pb.UserListReq
 	UsersPool                  = admin_pb.UsersPool
 	UsersPoolListReq           = admin_pb.UsersPoolListReq
@@ -159,10 +166,13 @@ type (
 		PutProject(ctx context.Context, in *Project, opts ...grpc.CallOption) (*StatusResp, error)
 		DelProject(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
 		GetUserList(ctx context.Context, in *UserListReq, opts ...grpc.CallOption) (*GetUserListResp, error)
+		GetUserDetail(ctx context.Context, in *GetUserDetailReq, opts ...grpc.CallOption) (*GetUserDetailResp, error)
+		GetUserDetails(ctx context.Context, in *UserListReq, opts ...grpc.CallOption) (*GetUserDetailsListResp, error)
 		GetUser(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetUserResp, error)
 		AddUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*AddUserResp, error)
 		PutUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*StatusResp, error)
 		DelUser(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
+		UserActivity(ctx context.Context, in *UserActivityReq, opts ...grpc.CallOption) (*UserActivityResp, error)
 		GetUsersPoolList(ctx context.Context, in *UsersPoolListReq, opts ...grpc.CallOption) (*GetUsersPoolListResp, error)
 		GetUsersPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetUsersPoolResp, error)
 		AddUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*AddUsersPoolResp, error)
@@ -451,6 +461,16 @@ func (m *defaultAdmin) GetUserList(ctx context.Context, in *UserListReq, opts ..
 	return client.GetUserList(ctx, in, opts...)
 }
 
+func (m *defaultAdmin) GetUserDetail(ctx context.Context, in *GetUserDetailReq, opts ...grpc.CallOption) (*GetUserDetailResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.GetUserDetail(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) GetUserDetails(ctx context.Context, in *UserListReq, opts ...grpc.CallOption) (*GetUserDetailsListResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.GetUserDetails(ctx, in, opts...)
+}
+
 func (m *defaultAdmin) GetUser(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetUserResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetUser(ctx, in, opts...)
@@ -469,6 +489,11 @@ func (m *defaultAdmin) PutUser(ctx context.Context, in *User, opts ...grpc.CallO
 func (m *defaultAdmin) DelUser(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.DelUser(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) UserActivity(ctx context.Context, in *UserActivityReq, opts ...grpc.CallOption) (*UserActivityResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.UserActivity(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetUsersPoolList(ctx context.Context, in *UsersPoolListReq, opts ...grpc.CallOption) (*GetUsersPoolListResp, error) {

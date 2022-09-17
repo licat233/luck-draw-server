@@ -148,6 +148,14 @@ export function projectActivity(params: components.ProjectActivityReqParams) {
 }
 
 /**
+ * @description "获取某用户参与的活动"
+ * @param params
+ */
+export function userActivities(params: components.UserActivitiesReqParams) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/activity/userActivities", params)
+}
+
+/**
  * @description "获取管理员列表"
  * @param params
  */
@@ -561,6 +569,22 @@ export function getPermissionsForUserInDomain(req: components.RoleAndDomainReq) 
  */
 export function list(params: components.UserListReqParams) {
 	return webapi.get<components.BaseResp>("/v1/api/admin/user/list", params)
+}
+
+/**
+ * @description "获取用户详情列表"
+ * @param params
+ */
+export function userDetail(params: components.UserDetailReqParams) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/user/detail", params)
+}
+
+/**
+ * @description "获取用户详情列表"
+ * @param params
+ */
+export function userDetails(params: components.UserListReqParams) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/user/details", params)
 }
 
 /**

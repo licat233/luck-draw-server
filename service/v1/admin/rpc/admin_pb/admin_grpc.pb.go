@@ -81,10 +81,13 @@ type AdminClient interface {
 	PutProject(ctx context.Context, in *Project, opts ...grpc.CallOption) (*StatusResp, error)
 	DelProject(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
 	GetUserList(ctx context.Context, in *UserListReq, opts ...grpc.CallOption) (*GetUserListResp, error)
+	GetUserDetail(ctx context.Context, in *GetUserDetailReq, opts ...grpc.CallOption) (*GetUserDetailResp, error)
+	GetUserDetails(ctx context.Context, in *UserListReq, opts ...grpc.CallOption) (*GetUserDetailsListResp, error)
 	GetUser(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetUserResp, error)
 	AddUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*AddUserResp, error)
 	PutUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*StatusResp, error)
 	DelUser(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
+	UserActivity(ctx context.Context, in *UserActivityReq, opts ...grpc.CallOption) (*UserActivityResp, error)
 	GetUsersPoolList(ctx context.Context, in *UsersPoolListReq, opts ...grpc.CallOption) (*GetUsersPoolListResp, error)
 	GetUsersPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetUsersPoolResp, error)
 	AddUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*AddUsersPoolResp, error)
@@ -566,6 +569,24 @@ func (c *adminClient) GetUserList(ctx context.Context, in *UserListReq, opts ...
 	return out, nil
 }
 
+func (c *adminClient) GetUserDetail(ctx context.Context, in *GetUserDetailReq, opts ...grpc.CallOption) (*GetUserDetailResp, error) {
+	out := new(GetUserDetailResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetUserDetail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminClient) GetUserDetails(ctx context.Context, in *UserListReq, opts ...grpc.CallOption) (*GetUserDetailsListResp, error) {
+	out := new(GetUserDetailsListResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetUserDetails", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *adminClient) GetUser(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetUserResp, error) {
 	out := new(GetUserResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetUser", in, out, opts...)
@@ -596,6 +617,15 @@ func (c *adminClient) PutUser(ctx context.Context, in *User, opts ...grpc.CallOp
 func (c *adminClient) DelUser(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	out := new(StatusResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/DelUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminClient) UserActivity(ctx context.Context, in *UserActivityReq, opts ...grpc.CallOption) (*UserActivityResp, error) {
+	out := new(UserActivityResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/UserActivity", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -773,10 +803,13 @@ type AdminServer interface {
 	PutProject(context.Context, *Project) (*StatusResp, error)
 	DelProject(context.Context, *ItemReq) (*StatusResp, error)
 	GetUserList(context.Context, *UserListReq) (*GetUserListResp, error)
+	GetUserDetail(context.Context, *GetUserDetailReq) (*GetUserDetailResp, error)
+	GetUserDetails(context.Context, *UserListReq) (*GetUserDetailsListResp, error)
 	GetUser(context.Context, *ItemReq) (*GetUserResp, error)
 	AddUser(context.Context, *User) (*AddUserResp, error)
 	PutUser(context.Context, *User) (*StatusResp, error)
 	DelUser(context.Context, *ItemReq) (*StatusResp, error)
+	UserActivity(context.Context, *UserActivityReq) (*UserActivityResp, error)
 	GetUsersPoolList(context.Context, *UsersPoolListReq) (*GetUsersPoolListResp, error)
 	GetUsersPool(context.Context, *ItemReq) (*GetUsersPoolResp, error)
 	AddUsersPool(context.Context, *UsersPool) (*AddUsersPoolResp, error)
@@ -949,6 +982,12 @@ func (UnimplementedAdminServer) DelProject(context.Context, *ItemReq) (*StatusRe
 func (UnimplementedAdminServer) GetUserList(context.Context, *UserListReq) (*GetUserListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserList not implemented")
 }
+func (UnimplementedAdminServer) GetUserDetail(context.Context, *GetUserDetailReq) (*GetUserDetailResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserDetail not implemented")
+}
+func (UnimplementedAdminServer) GetUserDetails(context.Context, *UserListReq) (*GetUserDetailsListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserDetails not implemented")
+}
 func (UnimplementedAdminServer) GetUser(context.Context, *ItemReq) (*GetUserResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
@@ -960,6 +999,9 @@ func (UnimplementedAdminServer) PutUser(context.Context, *User) (*StatusResp, er
 }
 func (UnimplementedAdminServer) DelUser(context.Context, *ItemReq) (*StatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelUser not implemented")
+}
+func (UnimplementedAdminServer) UserActivity(context.Context, *UserActivityReq) (*UserActivityResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserActivity not implemented")
 }
 func (UnimplementedAdminServer) GetUsersPoolList(context.Context, *UsersPoolListReq) (*GetUsersPoolListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUsersPoolList not implemented")
@@ -1928,6 +1970,42 @@ func _Admin_GetUserList_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Admin_GetUserDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserDetailReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).GetUserDetail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/GetUserDetail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).GetUserDetail(ctx, req.(*GetUserDetailReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Admin_GetUserDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).GetUserDetails(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/GetUserDetails",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).GetUserDetails(ctx, req.(*UserListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Admin_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ItemReq)
 	if err := dec(in); err != nil {
@@ -1996,6 +2074,24 @@ func _Admin_DelUser_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AdminServer).DelUser(ctx, req.(*ItemReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Admin_UserActivity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserActivityReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).UserActivity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/UserActivity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).UserActivity(ctx, req.(*UserActivityReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2428,6 +2524,14 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Admin_GetUserList_Handler,
 		},
 		{
+			MethodName: "GetUserDetail",
+			Handler:    _Admin_GetUserDetail_Handler,
+		},
+		{
+			MethodName: "GetUserDetails",
+			Handler:    _Admin_GetUserDetails_Handler,
+		},
+		{
 			MethodName: "GetUser",
 			Handler:    _Admin_GetUser_Handler,
 		},
@@ -2442,6 +2546,10 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DelUser",
 			Handler:    _Admin_DelUser_Handler,
+		},
+		{
+			MethodName: "UserActivity",
+			Handler:    _Admin_UserActivity_Handler,
 		},
 		{
 			MethodName: "GetUsersPoolList",

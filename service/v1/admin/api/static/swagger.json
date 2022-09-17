@@ -249,6 +249,35 @@
         ]
       }
     },
+    "/v1/api/admin/activity/userActivities": {
+      "get": {
+        "summary": "获取某用户参与的活动",
+        "operationId": "UserActivities",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "user_id",
+            "description": "所属用户id，-1表示无限制",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "activity"
+        ]
+      }
+    },
     "/v1/api/admin/adminer/": {
       "get": {
         "summary": "获取管理员信息",
@@ -2253,6 +2282,131 @@
             "schema": {
               "$ref": "#/definitions/UserPutReq"
             }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/v1/api/admin/user/detail": {
+      "get": {
+        "summary": "获取用户详情列表",
+        "operationId": "UserDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/v1/api/admin/user/details": {
+      "get": {
+        "summary": "获取用户详情列表",
+        "operationId": "UserDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "页面大小",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "default": "20"
+          },
+          {
+            "name": "current",
+            "description": "当前页码",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "passport",
+            "description": " 凭证，可以是手机号或者社交账号，一般是由客户填入",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "description": " 邮箱",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "description": " 手机号",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": " 用户名",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "address",
+            "description": " 收货地址",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "score",
+            "description": " 积分",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "status",
+            "description": " 状态:0未授权，1正常，2已冻结",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
           }
         ],
         "requestBody": {},
@@ -4960,6 +5114,39 @@
         "delete_at"
       ]
     },
+    "UserActivitiesReq": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "所属用户id，-1表示无限制"
+        }
+      },
+      "title": "UserActivitiesReq",
+      "required": [
+        "user_id"
+      ]
+    },
+    "UserActivity": {
+      "type": "object",
+      "properties": {
+        "activity": {
+          "$ref": "#/definitions/Activity",
+          "description": "活动信息"
+        },
+        "users_pool": {
+          "$ref": "#/definitions/UsersPool",
+          "description": "活动用户池信息"
+        }
+      },
+      "title": "UserActivity",
+      "required": [
+        "activity",
+        "users_pool"
+      ]
+    },
     "UserAddReq": {
       "type": "object",
       "properties": {
@@ -5016,6 +5203,53 @@
       "title": "UserDelReq",
       "required": [
         "id"
+      ]
+    },
+    "UserDetail": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "user_activities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserActivity"
+          }
+        }
+      },
+      "title": "UserDetail",
+      "required": [
+        "user",
+        "user_activities"
+      ]
+    },
+    "UserDetailReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "UserDetailReq",
+      "required": [
+        "id"
+      ]
+    },
+    "UserDetails": {
+      "type": "object",
+      "properties": {
+        "user_details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserDetail"
+          }
+        }
+      },
+      "title": "UserDetails",
+      "required": [
+        "user_details"
       ]
     },
     "UserGetReq": {

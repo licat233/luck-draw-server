@@ -70,12 +70,21 @@ type ActivityListReq {
 }
 
 type ActivityDetail {
-  Activity       Activity       `json:"activity"`  //活动信息
-  ActivityPrize  []ActivityPrize  `json:"activity_prizes"` //活动奖品列表
+  Activity           Activity       `json:"activity"`  //活动信息
+  ActivityPrizes  []ActivityPrize  `json:"activity_prizes"` //活动奖品列表
 }
 
 type ActivityDetailReq {
   Id int64 `form:"id"`  //活动id
+}
+
+type UserActivity {
+	Activity       Activity       `json:"activity"`    //活动信息
+  UsersPool      UsersPool       `json:"users_pool"`  //活动用户池信息
+}
+
+type UserActivitiesReq {
+  UserId int64  `form:"user_id,optional,default=-1"`  //所属用户id，-1表示无限制
 }
 
 @server(
@@ -119,5 +128,8 @@ service admin-api {
   @handler projectActivity
   get /projectActivity (projectActivityReq) returns(BaseResp)
   
+  @doc "获取某用户参与的活动"
+	@handler UserActivities
+	get /userActivities(UserActivitiesReq) returns(BaseResp)
 }
 

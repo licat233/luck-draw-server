@@ -135,6 +135,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/projectActivity",
 					Handler: activity.ProjectActivityHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/userActivities",
+					Handler: activity.UserActivitiesHandler(serverCtx),
+				},
 			}...,
 		),
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
@@ -479,6 +484,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodGet,
 					Path:    "/list",
 					Handler: user.ListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/detail",
+					Handler: user.UserDetailHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/details",
+					Handler: user.UserDetailsHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,

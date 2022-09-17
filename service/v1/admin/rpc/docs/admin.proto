@@ -139,6 +139,63 @@ message JwtToken {
   int64 refresh_after = 3;
 }
 
+
+//枚举基本类型
+message Enum {
+  string label = 1;
+  int64  value = 2;
+}
+
+message Option {
+  string title = 1;
+  int64  value = 2;
+  Option children = 3;
+}
+
+message EnumListReq{
+}
+
+//枚举列表
+message EnumListResp{
+  repeated Enum data = 1;
+}
+
+message GetProjectDetailReq {
+  int64 project_id = 1;
+}
+
+message ProjectDetails {
+  Project project = 1;
+  repeated Activity activities = 2;
+}
+
+message GetProjectDetailResp {
+  ProjectDetails data = 1;
+}
+
+message GetProjectDetailsListResp {
+  repeated ProjectDetails data = 1;
+}
+
+message ProjectTreeOptionsResp {
+  repeated Option data = 1;
+}
+
+message ActivityDetails {
+  Activity activity = 1;
+  repeated ActivityPrize activity_prizes = 2;
+}
+
+//每个用户的信息，包含参与的活动信息
+message UserDetails {
+  User user = 1;
+  repeated UserActivity user_activities = 2;
+}
+
+//基本数据结构 end
+
+//请求结构体
+
 message GenerateTokenReq {
   JwtData jwt_data = 1; //jwt数据
   bool auto_login = 2; //自动登录，1天或者7天免登录
@@ -209,6 +266,10 @@ message ParseJwtTokenResp {
 
 message GetActivityDetailReq{
   int64 activity_id = 1;
+}
+
+message GetUserDetailReq {
+  int64 user_id = 1;
 }
 
 //-----------
@@ -307,19 +368,13 @@ message GetActivityDetailResp{
   ActivityDetails data = 1;
 }
 
+message GetUserDetailResp{
+  UserDetails data = 1;
+}
+
 //多条数据响应
 message GetActivityListResp {
   repeated Activity data = 1;
-  int64 total = 2;
-}
-
-message ActivityDetails {
-  Activity activity = 1;
-  repeated ActivityPrize activity_prizes = 2;
-}
-
-message GetActivityDetailsListResp {
-  repeated ActivityDetails data = 1;
   int64 total = 2;
 }
 
@@ -363,23 +418,21 @@ message GetUserListResp {
   int64 total = 2;
 }
 
-message GetUsersPoolListResp {
-  repeated UsersPool data = 1;
+//多条详细数据响应
+message GetActivityDetailsListResp {
+  repeated ActivityDetails data = 1;
   int64 total = 2;
 }
 
-//枚举基本类型
-message Enum {
-  string label = 1;
-  int64 value = 2;
+message GetUserDetailsListResp {
+  repeated UserDetails data = 1;
+  int64 total = 2;
 }
 
-message EnumListReq{
-}
-
-//枚举列表
-message EnumListResp{
-  repeated Enum data = 1;
+//用户池列表响应
+message GetUsersPoolListResp {
+  repeated UsersPool data = 1;
+  int64 total = 2;
 }
 
 //搜索请求
@@ -389,6 +442,20 @@ message SearchPrizesPoolReq{
 
 message SearchPrizesPoolResp {
   repeated PrizesPool data = 1;
+}
+
+//用户活动
+message UserActivity {
+  Activity activity = 1;
+  UsersPool users_pool = 2;
+}
+
+message UserActivityReq {
+  int64 user_id = 1;
+}
+
+message UserActivityResp {
+  repeated UserActivity data = 1;
 }
 
 //活动奖品
@@ -561,12 +628,17 @@ service Admin {
   rpc AddProject (Project) returns (AddProjectResp);
   rpc PutProject (Project) returns (StatusResp);
   rpc DelProject (ItemReq) returns (StatusResp);
+  rpc GetProjectDetail (GetProjectDetailReq) returns (GetProjectDetailResp);
+  rpc GetProjectDetails (ProjectListReq) returns (GetProjectDetailsListResp);
 
   rpc GetUserList (UserListReq) returns (GetUserListResp);
+  rpc GetUserDetail (GetUserDetailReq) returns (GetUserDetailResp);
+  rpc GetUserDetails (UserListReq) returns (GetUserDetailsListResp);
   rpc GetUser (ItemReq) returns (GetUserResp);
   rpc AddUser (User) returns (AddUserResp);
   rpc PutUser (User) returns (StatusResp);
   rpc DelUser (ItemReq) returns (StatusResp);
+  rpc UserActivity (UserActivityReq) returns (UserActivityResp);
 
   rpc GetUsersPoolList (UsersPoolListReq) returns (GetUsersPoolListResp);
   rpc GetUsersPool (ItemReq) returns (GetUsersPoolResp);
@@ -581,5 +653,6 @@ service Admin {
   rpc GetPrizeGradeEnumList (EnumListReq) returns (EnumListResp);
   rpc GetLuckerEnumList (EnumListReq) returns (EnumListResp);
   rpc GetUserEnumList (EnumListReq) returns (EnumListResp);
+  rpc GetProjectTreeOptions (EnumListReq) returns (ProjectTreeOptionsResp);
 }
 

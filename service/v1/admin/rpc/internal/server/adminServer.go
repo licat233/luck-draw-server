@@ -285,6 +285,16 @@ func (s *AdminServer) GetUserList(ctx context.Context, in *admin_pb.UserListReq)
 	return l.GetUserList(in)
 }
 
+func (s *AdminServer) GetUserDetail(ctx context.Context, in *admin_pb.GetUserDetailReq) (*admin_pb.GetUserDetailResp, error) {
+	l := logic.NewGetUserDetailLogic(ctx, s.svcCtx)
+	return l.GetUserDetail(in)
+}
+
+func (s *AdminServer) GetUserDetails(ctx context.Context, in *admin_pb.UserListReq) (*admin_pb.GetUserDetailsListResp, error) {
+	l := logic.NewGetUserDetailsLogic(ctx, s.svcCtx)
+	return l.GetUserDetails(in)
+}
+
 func (s *AdminServer) GetUser(ctx context.Context, in *admin_pb.ItemReq) (*admin_pb.GetUserResp, error) {
 	l := logic.NewGetUserLogic(ctx, s.svcCtx)
 	return l.GetUser(in)
@@ -303,6 +313,11 @@ func (s *AdminServer) PutUser(ctx context.Context, in *admin_pb.User) (*admin_pb
 func (s *AdminServer) DelUser(ctx context.Context, in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
 	l := logic.NewDelUserLogic(ctx, s.svcCtx)
 	return l.DelUser(in)
+}
+
+func (s *AdminServer) UserActivity(ctx context.Context, in *admin_pb.UserActivityReq) (*admin_pb.UserActivityResp, error) {
+	l := logic.NewUserActivityLogic(ctx, s.svcCtx)
+	return l.UserActivity(in)
 }
 
 func (s *AdminServer) GetUsersPoolList(ctx context.Context, in *admin_pb.UsersPoolListReq) (*admin_pb.GetUsersPoolListResp, error) {

@@ -197,6 +197,18 @@ export interface ActivityDetailReqParams {
 	id: number // 活动id
 }
 
+export interface UserActivity {
+	activity: Activity // 活动信息
+	users_pool: UsersPool // 活动用户池信息
+}
+
+export interface UserActivitiesReq {
+}
+
+export interface UserActivitiesReqParams {
+	user_id: number // 所属用户id，-1表示无限制
+}
+
 export interface Adminer {
 	id: number // 表主键
 	uuid: string // 唯一识别码
@@ -684,6 +696,22 @@ export interface UserListReqParams {
 	address: string // 收货地址
 	score: number // 积分
 	status: number // 状态:0未授权，1正常，2已冻结
+}
+
+export interface UserDetailReq {
+}
+
+export interface UserDetailReqParams {
+	id: number
+}
+
+export interface UserDetail {
+	user: User
+	user_activities: Array<UserActivity>
+}
+
+export interface UserDetails {
+	user_details: Array<UserDetail>
 }
 
 export interface UsersPool {
