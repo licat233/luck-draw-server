@@ -110,6 +110,12 @@ export interface Enum {
 	value: any
 }
 
+export interface TreeOptions {
+	title: string
+	value: number
+	children?: Array<TreeOptions>
+}
+
 export interface Activity {
 	id: number // 表主键
 	uuid: string // 唯一识别码
@@ -207,6 +213,13 @@ export interface UserActivitiesReq {
 
 export interface UserActivitiesReqParams {
 	user_id: number // 所属用户id，-1表示无限制
+}
+
+export interface EnumListReq {
+}
+
+export interface EnumListReqParams {
+	project_id: number // 所属项目id，-1表示无限制
 }
 
 export interface Adminer {
@@ -610,6 +623,18 @@ export interface ProjectListReqParams {
 	//字段搜索
 	name: string // 项目名称
 	status: number // 项目状态
+}
+
+export interface ProjectDtail {
+	project: Project
+	activities: Array<Activity>
+}
+
+export interface ProjectDetailReq {
+}
+
+export interface ProjectDetailReqParams {
+	id: number // 项目id
 }
 
 export interface PolicyReq {

@@ -40,6 +40,16 @@ type ProjectListReq {
 	Status    int64     `form:"status,optional,default=-1"`     // 项目状态
 }
 
+type ProjectDtail {
+	Project     Project   `json:"project"`
+	Activities []Activity `json:"activities"`
+}
+
+type ProjectDetailReq {
+  Id int64 `form:"id"`  //项目id
+}
+
+
 @server(
 	jwt: JwtAuth
 	group: project
@@ -50,6 +60,10 @@ service admin-api {
 	@doc "获取项目列表"
 	@handler List
 	get /list(ProjectListReq) returns(BaseResp)
+
+	@doc "获取项目详细列表"
+	@handler ProjectDetails
+	get /projectDetails(ProjectListReq) returns(BaseResp)
 
 	@doc "获取项目信息"
 	@handler info 
@@ -70,5 +84,13 @@ service admin-api {
     @doc "枚举列表"
 	@handler enumList
 	get /enumList returns([]Enum)
+
+	@doc "获取项目详细"
+	@handler ProjectDetail
+	get /projectDetail(ProjectDetailReq) returns(BaseResp)
+
+	@doc "获取项目树形枚举数据"
+	@handler projectTreeOptions
+	get /projectTreeOptions returns([]TreeOptions)
 }
 

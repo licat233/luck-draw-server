@@ -372,6 +372,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 				{
 					Method:  http.MethodGet,
+					Path:    "/projectDetails",
+					Handler: project.ProjectDetailsHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
 					Path:    "/",
 					Handler: project.InfoHandler(serverCtx),
 				},
@@ -394,6 +399,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodGet,
 					Path:    "/enumList",
 					Handler: project.EnumListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/projectDetail",
+					Handler: project.ProjectDetailHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/projectTreeOptions",
+					Handler: project.ProjectTreeOptionsHandler(serverCtx),
 				},
 			}...,
 		),

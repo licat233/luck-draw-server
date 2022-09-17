@@ -3,6 +3,7 @@ package prize
 import (
 	"context"
 
+	"luck_draw-server/service/v1/admin/api/internal/logic/common"
 	"luck_draw-server/service/v1/admin/api/internal/svc"
 	"luck_draw-server/service/v1/admin/api/internal/types"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
@@ -24,16 +25,10 @@ func NewEnumListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *EnumList
 	}
 }
 
-func (l *EnumListLogic) EnumList() (resp []types.Enum, err error) {
-	res, err := l.svcCtx.AdminRpc.GetPrizeEnumList(l.ctx, &admin_pb.EnumListReq{})
+func (l *EnumListLogic) EnumList() ([]types.Enum, error) {
+	resp, err := l.svcCtx.AdminRpc.GetPrizeEnumList(l.ctx, &admin_pb.EnumListReq{})
 	if err != nil {
 		return nil, err
 	}
-	for _, item := range res.Data {
-		resp = append(resp, types.Enum{
-			Label: item.Label,
-			Value: item.Value,
-		})
-	}
-	return
+	return common.ConvertEnumList(resp.Data), nil
 }

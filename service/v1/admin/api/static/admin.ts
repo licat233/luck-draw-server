@@ -134,9 +134,10 @@ export function del(req: components.ActivityDelReq) {
 
 /**
  * @description "枚举列表"
+ * @param params
  */
-export function enumList() {
-	return webapi.get<Array<components.Enum>>("/v1/api/admin/activity/enumList")
+export function enumList(params: components.EnumListReqParams) {
+	return webapi.get<Array<components.Enum>>("/v1/api/admin/activity/enumList", params)
 }
 
 /**
@@ -424,6 +425,14 @@ export function list(params: components.ProjectListReqParams) {
 }
 
 /**
+ * @description "获取项目详细列表"
+ * @param params
+ */
+export function projectDetails(params: components.ProjectListReqParams) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/project/projectDetails", params)
+}
+
+/**
  * @description "获取项目信息"
  * @param params
  */
@@ -460,6 +469,21 @@ export function del(req: components.ProjectDelReq) {
  */
 export function enumList() {
 	return webapi.get<Array<components.Enum>>("/v1/api/admin/project/enumList")
+}
+
+/**
+ * @description "获取项目详细"
+ * @param params
+ */
+export function projectDetail(params: components.ProjectDetailReqParams) {
+	return webapi.get<components.BaseResp>("/v1/api/admin/project/projectDetail", params)
+}
+
+/**
+ * @description "获取项目树形枚举数据"
+ */
+export function projectTreeOptions() {
+	return webapi.get<Array<components.TreeOptions>>("/v1/api/admin/project/projectTreeOptions")
 }
 
 /**

@@ -96,6 +96,12 @@ type Enum struct {
 	Value interface{} `json:"value"`
 }
 
+type TreeOptions struct {
+	Title    string        `json:"title"`
+	Value    int64         `json:"value"`
+	Children []TreeOptions `json:"children,optional"`
+}
+
 type Activity struct {
 	Id        int64  `json:"id"`         // 表主键
 	Uuid      string `json:"uuid"`       // 唯一识别码
@@ -180,6 +186,10 @@ type UserActivity struct {
 
 type UserActivitiesReq struct {
 	UserId int64 `form:"user_id,optional,default=-1"` //所属用户id，-1表示无限制
+}
+
+type EnumListReq struct {
+	ProjectId int64 `form:"project_id,optional,default=-1"` //所属项目id，-1表示无限制
 }
 
 type Adminer struct {
@@ -537,6 +547,15 @@ type ProjectListReq struct {
 	Keyword  string `form:"keyword,optional"`                            //关键词，可选
 	Name     string `form:"name,optional"`                               // 项目名称
 	Status   int64  `form:"status,optional,default=-1"`                  // 项目状态
+}
+
+type ProjectDtail struct {
+	Project    Project    `json:"project"`
+	Activities []Activity `json:"activities"`
+}
+
+type ProjectDetailReq struct {
+	Id int64 `form:"id"` //项目id
 }
 
 type PolicyReq struct {

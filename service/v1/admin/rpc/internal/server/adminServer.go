@@ -280,6 +280,16 @@ func (s *AdminServer) DelProject(ctx context.Context, in *admin_pb.ItemReq) (*ad
 	return l.DelProject(in)
 }
 
+func (s *AdminServer) GetProjectDetail(ctx context.Context, in *admin_pb.GetProjectDetailReq) (*admin_pb.GetProjectDetailResp, error) {
+	l := logic.NewGetProjectDetailLogic(ctx, s.svcCtx)
+	return l.GetProjectDetail(in)
+}
+
+func (s *AdminServer) GetProjectDetails(ctx context.Context, in *admin_pb.ProjectListReq) (*admin_pb.GetProjectDetailsListResp, error) {
+	l := logic.NewGetProjectDetailsLogic(ctx, s.svcCtx)
+	return l.GetProjectDetails(in)
+}
+
 func (s *AdminServer) GetUserList(ctx context.Context, in *admin_pb.UserListReq) (*admin_pb.GetUserListResp, error) {
 	l := logic.NewGetUserListLogic(ctx, s.svcCtx)
 	return l.GetUserList(in)
@@ -355,7 +365,7 @@ func (s *AdminServer) GetProjectEnumList(ctx context.Context, in *admin_pb.EnumL
 	return l.GetProjectEnumList(in)
 }
 
-func (s *AdminServer) GetActivityEnumList(ctx context.Context, in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
+func (s *AdminServer) GetActivityEnumList(ctx context.Context, in *admin_pb.GetActivityEnumListReq) (*admin_pb.EnumListResp, error) {
 	l := logic.NewGetActivityEnumListLogic(ctx, s.svcCtx)
 	return l.GetActivityEnumList(in)
 }
@@ -378,4 +388,9 @@ func (s *AdminServer) GetLuckerEnumList(ctx context.Context, in *admin_pb.EnumLi
 func (s *AdminServer) GetUserEnumList(ctx context.Context, in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
 	l := logic.NewGetUserEnumListLogic(ctx, s.svcCtx)
 	return l.GetUserEnumList(in)
+}
+
+func (s *AdminServer) GetProjectTreeOptions(ctx context.Context, in *admin_pb.EnumListReq) (*admin_pb.ProjectTreeOptionsResp, error) {
+	l := logic.NewGetProjectTreeOptionsLogic(ctx, s.svcCtx)
+	return l.GetProjectTreeOptions(in)
 }

@@ -42,6 +42,7 @@ type (
 	GetActivityDetailReq       = admin_pb.GetActivityDetailReq
 	GetActivityDetailResp      = admin_pb.GetActivityDetailResp
 	GetActivityDetailsListResp = admin_pb.GetActivityDetailsListResp
+	GetActivityEnumListReq     = admin_pb.GetActivityEnumListReq
 	GetActivityListResp        = admin_pb.GetActivityListResp
 	GetActivityResp            = admin_pb.GetActivityResp
 	GetAdminerListResp         = admin_pb.GetAdminerListResp
@@ -55,6 +56,9 @@ type (
 	GetPrizeResp               = admin_pb.GetPrizeResp
 	GetPrizesPoolListResp      = admin_pb.GetPrizesPoolListResp
 	GetPrizesPoolResp          = admin_pb.GetPrizesPoolResp
+	GetProjectDetailReq        = admin_pb.GetProjectDetailReq
+	GetProjectDetailResp       = admin_pb.GetProjectDetailResp
+	GetProjectDetailsListResp  = admin_pb.GetProjectDetailsListResp
 	GetProjectListResp         = admin_pb.GetProjectListResp
 	GetProjectResp             = admin_pb.GetProjectResp
 	GetUserDetailReq           = admin_pb.GetUserDetailReq
@@ -93,10 +97,13 @@ type (
 	Project                    = admin_pb.Project
 	ProjectActivityReq         = admin_pb.ProjectActivityReq
 	ProjectActivityResp        = admin_pb.ProjectActivityResp
+	ProjectDetails             = admin_pb.ProjectDetails
 	ProjectListReq             = admin_pb.ProjectListReq
+	ProjectTreeOptionsResp     = admin_pb.ProjectTreeOptionsResp
 	SearchPrizesPoolReq        = admin_pb.SearchPrizesPoolReq
 	SearchPrizesPoolResp       = admin_pb.SearchPrizesPoolResp
 	StatusResp                 = admin_pb.StatusResp
+	TreeOptions                = admin_pb.TreeOptions
 	User                       = admin_pb.User
 	UserActivity               = admin_pb.UserActivity
 	UserActivityReq            = admin_pb.UserActivityReq
@@ -165,6 +172,8 @@ type (
 		AddProject(ctx context.Context, in *Project, opts ...grpc.CallOption) (*AddProjectResp, error)
 		PutProject(ctx context.Context, in *Project, opts ...grpc.CallOption) (*StatusResp, error)
 		DelProject(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
+		GetProjectDetail(ctx context.Context, in *GetProjectDetailReq, opts ...grpc.CallOption) (*GetProjectDetailResp, error)
+		GetProjectDetails(ctx context.Context, in *ProjectListReq, opts ...grpc.CallOption) (*GetProjectDetailsListResp, error)
 		GetUserList(ctx context.Context, in *UserListReq, opts ...grpc.CallOption) (*GetUserListResp, error)
 		GetUserDetail(ctx context.Context, in *GetUserDetailReq, opts ...grpc.CallOption) (*GetUserDetailResp, error)
 		GetUserDetails(ctx context.Context, in *UserListReq, opts ...grpc.CallOption) (*GetUserDetailsListResp, error)
@@ -180,11 +189,12 @@ type (
 		DelUsersPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
 		GetAdminerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 		GetProjectEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
-		GetActivityEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+		GetActivityEnumList(ctx context.Context, in *GetActivityEnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 		GetPrizeEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 		GetPrizeGradeEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 		GetLuckerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 		GetUserEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+		GetProjectTreeOptions(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*ProjectTreeOptionsResp, error)
 	}
 
 	defaultAdmin struct {
@@ -456,6 +466,16 @@ func (m *defaultAdmin) DelProject(ctx context.Context, in *ItemReq, opts ...grpc
 	return client.DelProject(ctx, in, opts...)
 }
 
+func (m *defaultAdmin) GetProjectDetail(ctx context.Context, in *GetProjectDetailReq, opts ...grpc.CallOption) (*GetProjectDetailResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.GetProjectDetail(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) GetProjectDetails(ctx context.Context, in *ProjectListReq, opts ...grpc.CallOption) (*GetProjectDetailsListResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.GetProjectDetails(ctx, in, opts...)
+}
+
 func (m *defaultAdmin) GetUserList(ctx context.Context, in *UserListReq, opts ...grpc.CallOption) (*GetUserListResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetUserList(ctx, in, opts...)
@@ -531,7 +551,7 @@ func (m *defaultAdmin) GetProjectEnumList(ctx context.Context, in *EnumListReq, 
 	return client.GetProjectEnumList(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) GetActivityEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+func (m *defaultAdmin) GetActivityEnumList(ctx context.Context, in *GetActivityEnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetActivityEnumList(ctx, in, opts...)
 }
@@ -554,4 +574,9 @@ func (m *defaultAdmin) GetLuckerEnumList(ctx context.Context, in *EnumListReq, o
 func (m *defaultAdmin) GetUserEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetUserEnumList(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) GetProjectTreeOptions(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*ProjectTreeOptionsResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.GetProjectTreeOptions(ctx, in, opts...)
 }

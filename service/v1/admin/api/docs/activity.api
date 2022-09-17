@@ -87,6 +87,10 @@ type UserActivitiesReq {
   UserId int64  `form:"user_id,optional,default=-1"`  //所属用户id，-1表示无限制
 }
 
+type EnumListReq {
+  ProjectId int64  `form:"project_id,optional,default=-1"`  //所属项目id，-1表示无限制
+}
+
 @server(
   jwt: JwtAuth
   group: activity
@@ -122,7 +126,7 @@ service admin-api {
 
   @doc "枚举列表"
 	@handler enumList
-	get /enumList returns([]Enum)
+	get /enumList(EnumListReq) returns([]Enum)
 
   @doc "指定项目的活动"
   @handler projectActivity
