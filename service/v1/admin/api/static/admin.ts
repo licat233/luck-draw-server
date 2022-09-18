@@ -157,6 +157,13 @@ export function userActivities(params: components.UserActivitiesReqParams) {
 }
 
 /**
+ * @description 获取活动模式枚举列表
+ */
+export function activityPatternEnumList() {
+	return webapi.get<Array<components.Enum>>("/v1/api/admin/activity/patternEnumList")
+}
+
+/**
  * @description "获取管理员列表"
  * @param params
  */

@@ -567,6 +567,8 @@ message LuckerListReq {
   Lucker lucker = 2;
 }
 
+message NilReq{}
+
 service Admin {
   //生产token
   rpc GenerateToken (GenerateTokenReq) returns (GenerateTokenResp);
@@ -593,6 +595,7 @@ service Admin {
   rpc PutActivity (Activity) returns (StatusResp);
   rpc DelActivity (ItemReq) returns (StatusResp);
   rpc ProjectActivity (ProjectActivityReq) returns (ProjectActivityResp);
+  
 
   rpc GetAdminerList (AdminerListReq) returns (GetAdminerListResp);
   rpc GetAdminer (ItemReq) returns (GetAdminerResp);
@@ -658,6 +661,7 @@ service Admin {
   rpc GetPrizeGradeEnumList (EnumListReq) returns (EnumListResp);
   rpc GetLuckerEnumList (EnumListReq) returns (EnumListResp);
   rpc GetUserEnumList (EnumListReq) returns (EnumListResp);
+  rpc ActivityPatternEnumList (NilReq) returns (EnumListResp);
   rpc GetProjectTreeOptions (EnumListReq) returns (ProjectTreeOptionsResp);
 }
 

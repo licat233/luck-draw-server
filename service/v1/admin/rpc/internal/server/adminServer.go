@@ -390,6 +390,11 @@ func (s *AdminServer) GetUserEnumList(ctx context.Context, in *admin_pb.EnumList
 	return l.GetUserEnumList(in)
 }
 
+func (s *AdminServer) ActivityPatternEnumList(ctx context.Context, in *admin_pb.NilReq) (*admin_pb.EnumListResp, error) {
+	l := logic.NewActivityPatternEnumListLogic(ctx, s.svcCtx)
+	return l.ActivityPatternEnumList(in)
+}
+
 func (s *AdminServer) GetProjectTreeOptions(ctx context.Context, in *admin_pb.EnumListReq) (*admin_pb.ProjectTreeOptionsResp, error) {
 	l := logic.NewGetProjectTreeOptionsLogic(ctx, s.svcCtx)
 	return l.GetProjectTreeOptions(in)

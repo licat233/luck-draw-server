@@ -33,6 +33,8 @@ type (
 		FindsByProjectId(ctx context.Context, projectId int64) ([]*Activity, error)
 		TableName() string
 		FindsByIds(ctx context.Context, ids []int64) ([]*Activity, error)
+		FindsByPattern(ctx context.Context, pattern int64) ([]*Activity, error)
+		PatternEnumList() []*Enum
 	}
 
 	customActivityModel struct {
@@ -264,4 +266,28 @@ func (m *customActivityModel) FindsByIds(ctx context.Context, ids []int64) ([]*A
 	query := fmt.Sprintf("select %s from %s where `id` in(%s) and `is_deleted` = '0'", activityRows, m.table, where)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	return resp, err
+}
+
+func (m *customActivityModel) FindsByPattern(ctx context.Context, pattern int64) ([]*Activity, error) {
+	var resp []*Activity
+	query := fmt.Sprintf("select %s from %s where `pattern` = ? and `is_deleted` = '0'", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, pattern)
+	return resp, err
+}
+
+func (m *customActivityModel) PatternEnumList() []*Enum {
+	return []*Enum{
+		{
+			Label: "会员制",
+			Value: 0,
+		},
+		{
+			Label: "公开制",
+			Value: 1,
+		},
+		{
+			Label: "VIP制",
+			Value: 2,
+		},
+	}
 }

@@ -28,6 +28,7 @@ type (
 		FindCount(ctx context.Context) (int64, error)
 		FindList(ctx context.Context, pageSize, page int64, usersPool *UsersPool) ([]*UsersPool, int64, error)
 		FindsByUserId(ctx context.Context, userId int64) ([]*UsersPool, error)
+		FindByUidAndAid(ctx context.Context, userId, activityId int64) ([]*UsersPool, error)
 	}
 
 	customUsersPoolModel struct {
@@ -187,6 +188,13 @@ func (m *customUsersPoolModel) FindList(ctx context.Context, pageSize, page int6
 func (m *customUsersPoolModel) FindsByUserId(ctx context.Context, userId int64) ([]*UsersPool, error) {
 	var resp []*UsersPool
 	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `is_deleted` = '0'", usersPoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userId)
+	return resp, err
+}
+
+func (m *customUsersPoolModel) FindByUidAndAid(ctx context.Context, userId, activityId int64) ([]*UsersPool, error) {
+	var resp []*UsersPool
+	query := fmt.Sprintf("select %s from %s `activity_id` = ? and `user_id` = ?  and `is_deleted` = '0'", usersPoolRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userId)
 	return resp, err
 }

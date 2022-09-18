@@ -18,3 +18,8 @@ type ListReq struct {
 	Page     int64
 	Keyword  string
 }
+
+type Enum struct {
+	Label string `json:"label"`
+	Value int64  `json:"value"`
+}

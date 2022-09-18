@@ -231,6 +231,24 @@
         ]
       }
     },
+    "/v1/api/admin/activity/patternEnumList": {
+      "get": {
+        "summary": "获取活动模式枚举列表",
+        "operationId": "ActivityPatternEnumList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/[]Enum"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "activity"
+        ]
+      }
+    },
     "/v1/api/admin/activity/projectActivity": {
       "get": {
         "summary": "指定项目的活动",

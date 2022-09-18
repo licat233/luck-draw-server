@@ -140,6 +140,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/userActivities",
 					Handler: activity.UserActivitiesHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/patternEnumList",
+					Handler: activity.ActivityPatternEnumListHandler(serverCtx),
+				},
 			}...,
 		),
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),

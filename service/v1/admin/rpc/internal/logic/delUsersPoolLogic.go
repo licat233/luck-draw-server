@@ -27,6 +27,9 @@ func NewDelUsersPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelU
 }
 
 func (l *DelUsersPoolLogic) DelUsersPool(in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
+	if in.Id == -1 {
+		return nil, errorx.ExtRpcErr(errors.New("无法删除，请设置禁止状态即可"))
+	}
 	data, err := l.svcCtx.UsersPoolModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		logx.Error(err)

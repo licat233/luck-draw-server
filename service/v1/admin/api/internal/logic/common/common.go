@@ -7,23 +7,23 @@ import (
 
 func ConvertTreeOptions(data []*admin_pb.TreeOptions) (res []types.TreeOptions) {
 	res = make([]types.TreeOptions, len(data))
-	for _, item := range data {
-		res = append(res, types.TreeOptions{
+	for index, item := range data {
+		res[index] = types.TreeOptions{
 			Title:    item.Title,
 			Value:    item.Value,
 			Children: ConvertTreeOptions(item.Children),
-		})
+		}
 	}
 	return
 }
 
 func ConvertEnumList(data []*admin_pb.Enum) (res []types.Enum) {
 	res = make([]types.Enum, len(data))
-	for _, item := range data {
-		res = append(res, types.Enum{
+	for index, item := range data {
+		res[index] = types.Enum{
 			Label: item.Label,
 			Value: item.Value,
-		})
+		}
 	}
 	return
 }

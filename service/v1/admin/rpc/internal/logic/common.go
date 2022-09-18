@@ -390,3 +390,18 @@ func newListReq(in *admin_pb.ListReq) *admin_pb.ListReq {
 	}
 	return in
 }
+
+func mdEnumToPbEnum(enum *model.Enum) *admin_pb.Enum {
+	return &admin_pb.Enum{
+		Label: enum.Label,
+		Value: enum.Value,
+	}
+}
+
+func mdEnumListToPbEnumList(enumList []*model.Enum) []*admin_pb.Enum {
+	list := make([]*admin_pb.Enum, len(enumList))
+	for index, enum := range enumList {
+		list[index] = mdEnumToPbEnum(enum)
+	}
+	return list
+}

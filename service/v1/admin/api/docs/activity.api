@@ -135,5 +135,11 @@ service admin-api {
   @doc "获取某用户参与的活动"
 	@handler UserActivities
 	get /userActivities(UserActivitiesReq) returns(BaseResp)
+
+  @doc(
+      summary: 获取活动模式枚举列表
+  )
+  @handler ActivityPatternEnumList
+  get /patternEnumList returns([]Enum)
 }
 

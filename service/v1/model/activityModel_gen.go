@@ -44,7 +44,7 @@ type (
 		Name      string    `db:"name"`       // 活动名称
 		ProjectId int64     `db:"project_id"` // 项目id
 		Status    int64     `db:"status"`     // 活动状态，是否在举办，默认关闭，需手动开启
-		Pattern   int64     `db:"pattern"`    // 方案: 0私密的，1公开的
+		Pattern   int64     `db:"pattern"`    // 方案: 0会员制，1公开制，2会员需授权
 		MaxCount  int64     `db:"max_count"`  // 最大抽奖次数：-1表示无限制，0表示不可抽奖
 		MaxPrizes int64     `db:"max_prizes"` // 最大抽奖次数：-1表示无限制，0表示不可中奖
 		StartTime time.Time `db:"start_time"` // 活动开始时间

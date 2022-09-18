@@ -85,6 +85,7 @@ type (
 	LuckerListReq              = admin_pb.LuckerListReq
 	LuckerPutByPrizeReq        = admin_pb.LuckerPutByPrizeReq
 	LuckerPutReq               = admin_pb.LuckerPutReq
+	NilReq                     = admin_pb.NilReq
 	ParseJwtTokenReq           = admin_pb.ParseJwtTokenReq
 	ParseJwtTokenResp          = admin_pb.ParseJwtTokenResp
 	Policy                     = admin_pb.Policy
@@ -194,6 +195,7 @@ type (
 		GetPrizeGradeEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 		GetLuckerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 		GetUserEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+		ActivityPatternEnumList(ctx context.Context, in *NilReq, opts ...grpc.CallOption) (*EnumListResp, error)
 		GetProjectTreeOptions(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*ProjectTreeOptionsResp, error)
 	}
 
@@ -574,6 +576,11 @@ func (m *defaultAdmin) GetLuckerEnumList(ctx context.Context, in *EnumListReq, o
 func (m *defaultAdmin) GetUserEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetUserEnumList(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) ActivityPatternEnumList(ctx context.Context, in *NilReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.ActivityPatternEnumList(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetProjectTreeOptions(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*ProjectTreeOptionsResp, error) {

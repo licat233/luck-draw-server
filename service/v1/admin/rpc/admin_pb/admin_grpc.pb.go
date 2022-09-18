@@ -102,6 +102,7 @@ type AdminClient interface {
 	GetPrizeGradeEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 	GetLuckerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 	GetUserEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+	ActivityPatternEnumList(ctx context.Context, in *NilReq, opts ...grpc.CallOption) (*EnumListResp, error)
 	GetProjectTreeOptions(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*ProjectTreeOptionsResp, error)
 }
 
@@ -761,6 +762,15 @@ func (c *adminClient) GetUserEnumList(ctx context.Context, in *EnumListReq, opts
 	return out, nil
 }
 
+func (c *adminClient) ActivityPatternEnumList(ctx context.Context, in *NilReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+	out := new(EnumListResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/ActivityPatternEnumList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *adminClient) GetProjectTreeOptions(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*ProjectTreeOptionsResp, error) {
 	out := new(ProjectTreeOptionsResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetProjectTreeOptions", in, out, opts...)
@@ -854,6 +864,7 @@ type AdminServer interface {
 	GetPrizeGradeEnumList(context.Context, *EnumListReq) (*EnumListResp, error)
 	GetLuckerEnumList(context.Context, *EnumListReq) (*EnumListResp, error)
 	GetUserEnumList(context.Context, *EnumListReq) (*EnumListResp, error)
+	ActivityPatternEnumList(context.Context, *NilReq) (*EnumListResp, error)
 	GetProjectTreeOptions(context.Context, *EnumListReq) (*ProjectTreeOptionsResp, error)
 	mustEmbedUnimplementedAdminServer()
 }
@@ -1077,6 +1088,9 @@ func (UnimplementedAdminServer) GetLuckerEnumList(context.Context, *EnumListReq)
 }
 func (UnimplementedAdminServer) GetUserEnumList(context.Context, *EnumListReq) (*EnumListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserEnumList not implemented")
+}
+func (UnimplementedAdminServer) ActivityPatternEnumList(context.Context, *NilReq) (*EnumListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ActivityPatternEnumList not implemented")
 }
 func (UnimplementedAdminServer) GetProjectTreeOptions(context.Context, *EnumListReq) (*ProjectTreeOptionsResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProjectTreeOptions not implemented")
@@ -2390,6 +2404,24 @@ func _Admin_GetUserEnumList_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Admin_ActivityPatternEnumList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NilReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).ActivityPatternEnumList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/ActivityPatternEnumList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).ActivityPatternEnumList(ctx, req.(*NilReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Admin_GetProjectTreeOptions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EnumListReq)
 	if err := dec(in); err != nil {
@@ -2702,6 +2734,10 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserEnumList",
 			Handler:    _Admin_GetUserEnumList_Handler,
+		},
+		{
+			MethodName: "ActivityPatternEnumList",
+			Handler:    _Admin_ActivityPatternEnumList_Handler,
 		},
 		{
 			MethodName: "GetProjectTreeOptions",
