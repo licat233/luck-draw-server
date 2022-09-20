@@ -1,4 +1,4 @@
-package logic
+package upload
 
 import (
 	"context"

@@ -2,9 +2,11 @@ package logic
 
 import (
 	"context"
+	"errors"
 	"luck_draw-server/service/v1/admin/rpc/admin_pb"
 	"luck_draw-server/service/v1/admin/rpc/internal/svc"
 	"luck_draw-server/service/v1/model"
+	"strings"
 
 	"luck_draw-server/common/errorx"
 	"luck_draw-server/common/utils"
@@ -29,6 +31,18 @@ func NewPutAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutAdm
 func (l *PutAdminerLogic) PutAdminer(in *admin_pb.Adminer) (*admin_pb.StatusResp, error) {
 	if in == nil {
 		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
+	}
+
+	if strings.TrimSpace(in.Password) == "" {
+		adminer, err := l.svcCtx.AdminerModel.FindOne(l.ctx, in.Id)
+		if err != nil && err != model.ErrNotFound {
+			logx.Error(err)
+			return nil, errorx.IntRpcErr(err)
+		}
+		if err == model.ErrNotFound {
+			return nil, errorx.ExtRpcErr(errors.New("current adminer not found"))
+		}
+		in.Password = adminer.Password
 	}
 
 	data := &model.Adminer{

@@ -37,25 +37,17 @@ type AdminerPutReq {
 	Uuid         string       `json:"uuid"`           // 唯一识别码
 	Name         string       `json:"name"`           // 管理员名称
 	Avatar       string       `json:"avatar"`         // 头像
-	Passport     string       `json:"passport"`       // 账号
-	Password     string       `json:"password"`       // 密码
-	Email        string       `json:"email"`          // 邮箱
+	Passport     string       `json:"passport"`          // 账号
+	Password     string       `json:"password,optional"` // 密码
+	Email        string       `json:"email"`             // 邮箱
 	Status       int64        `json:"status,default=0"`  // 账号状态，是否可用
 	IsSuperAdmin int64        `json:"is_super_admin,default=0"` // 是否为超级管理员
-	LoginCount int64 `json:"login_count,default=0"`  //登录次数
-	LastLogin int64 `json:"last_login,default=0"`  //最后一次登录时间
+	LoginCount   int64        `json:"login_count,default=0"`  //登录次数
+	LastLogin    int64        `json:"last_login,default=0"`  //最后一次登录时间
 }
 
 type AdminerDelReq {
 	Id int64 `json:"id"`
-}
-
-type AdminerModifyReq {
-	Name         string       `json:"name"`           // 管理员名称
-	Avatar       string       `json:"avatar"`         // 头像
-	Passport     string       `json:"passport"`       // 账号
-	Password     string       `json:"password"`       // 密码
-	Email        string       `json:"email"`          // 邮箱
 }
 
 type AdminerListReq {
@@ -100,11 +92,7 @@ service admin-api {
 	@handler del 
 	delete /(AdminerDelReq) returns(BaseResp)
 
-	@doc "管理员修改自己的账号信息"
-	@handler modify
-	post /modify(AdminerModifyReq) returns(BaseResp)
-
     @doc "枚举列表"
 	@handler enumList
-	get /enumList returns([]Enum)	
+	get /enumList returns([]Enum)
 }

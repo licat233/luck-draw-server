@@ -4,6 +4,7 @@ package handler
 import (
 	"net/http"
 
+	account "luck_draw-server/service/v1/admin/api/internal/handler/account"
 	activity "luck_draw-server/service/v1/admin/api/internal/handler/activity"
 	adminer "luck_draw-server/service/v1/admin/api/internal/handler/adminer"
 	lucker "luck_draw-server/service/v1/admin/api/internal/handler/lucker"
@@ -12,6 +13,7 @@ import (
 	prizesPool "luck_draw-server/service/v1/admin/api/internal/handler/prizesPool"
 	project "luck_draw-server/service/v1/admin/api/internal/handler/project"
 	rbac "luck_draw-server/service/v1/admin/api/internal/handler/rbac"
+	upload "luck_draw-server/service/v1/admin/api/internal/handler/upload"
 	user "luck_draw-server/service/v1/admin/api/internal/handler/user"
 	usersPool "luck_draw-server/service/v1/admin/api/internal/handler/usersPool"
 	"luck_draw-server/service/v1/admin/api/internal/svc"
@@ -64,21 +66,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodPost,
 					Path:    "/currentUser",
 					Handler: currentUserHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/uploadAvatar",
-					Handler: uploadAvatarHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/uploadLogo",
-					Handler: uploadLogoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/uploadImg",
-					Handler: uploadImgHandler(serverCtx),
 				},
 			}...,
 		),
@@ -179,11 +166,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodDelete,
 					Path:    "/",
 					Handler: adminer.DelHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/modify",
-					Handler: adminer.ModifyHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
@@ -579,5 +561,60 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		),
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
 		rest.WithPrefix("/v1/api/admin/usersPool"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.JwtMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/verifyPassword",
+					Handler: account.VerifyPasswordHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/putCurrent",
+					Handler: account.PutCurrentHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/currentInfo",
+					Handler: account.CurrentInfoHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/putPassword",
+					Handler: account.PutPasswordHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
+		rest.WithPrefix("/v1/api/admin/account"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.JwtMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/avatar",
+					Handler: upload.UploadAvatarHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/logo",
+					Handler: upload.UploadLogoHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/image",
+					Handler: upload.UploadImgHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
+		rest.WithPrefix("/v1/api/admin/upload"),
 	)
 }

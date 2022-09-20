@@ -80,6 +80,11 @@ type JwtToken struct {
 	RefreshAfter int64  `json:"refresh_after"`
 }
 
+type CaptchaReq struct {
+	CaptchaId string `json:"captcha_id"` //验证码ID
+	Solution  string `json:"solution"`   //验证码答案
+}
+
 type CaptchaResp struct {
 	CaptchaId string `json:"captcha_id"`
 	ExpiresAt int64  `json:"expires_at"`
@@ -230,7 +235,7 @@ type AdminerPutReq struct {
 	Name         string `json:"name"`                     // 管理员名称
 	Avatar       string `json:"avatar"`                   // 头像
 	Passport     string `json:"passport"`                 // 账号
-	Password     string `json:"password"`                 // 密码
+	Password     string `json:"password,optional"`        // 密码
 	Email        string `json:"email"`                    // 邮箱
 	Status       int64  `json:"status,default=0"`         // 账号状态，是否可用
 	IsSuperAdmin int64  `json:"is_super_admin,default=0"` // 是否为超级管理员
@@ -240,14 +245,6 @@ type AdminerPutReq struct {
 
 type AdminerDelReq struct {
 	Id int64 `json:"id"`
-}
-
-type AdminerModifyReq struct {
-	Name     string `json:"name"`     // 管理员名称
-	Avatar   string `json:"avatar"`   // 头像
-	Passport string `json:"passport"` // 账号
-	Password string `json:"password"` // 密码
-	Email    string `json:"email"`    // 邮箱
 }
 
 type AdminerListReq struct {
@@ -695,4 +692,22 @@ type UsersPoolListReq struct {
 	UserId     int64  `form:"user_id,optional,default=-1"`                 // 奖品id
 	Status     int64  `form:"status,optional,default=-1"`                  // 状态:0未授权，1正常，2已冻结
 	Score      int64  `form:"score,optional,default=-1"`                   // 用户在当前活动的积分
+}
+
+type PutCurrentReq struct {
+	Name     string `json:"name"`     // 管理员名称
+	Avatar   string `json:"avatar"`   // 头像
+	Passport string `json:"passport"` // 账号
+	Email    string `json:"email"`    // 邮箱
+}
+
+type VerifyPasswordReq struct {
+	Password string `json:"password"` // 密码
+}
+
+type PutPasswordReq struct {
+	OldPassword string `json:"old_password"` // 旧密码
+	NewPassword string `json:"new_password"` // 新密码
+	CaptchaId   string `json:"captcha_id"`   //验证码ID
+	Solution    string `json:"solution"`     //验证码答案
 }

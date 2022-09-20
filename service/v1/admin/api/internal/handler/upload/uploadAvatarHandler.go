@@ -1,18 +1,18 @@
-package handler
+package upload
 
 import (
 	"net/http"
 
-	"luck_draw-server/service/v1/admin/api/internal/logic"
+	"luck_draw-server/service/v1/admin/api/internal/logic/upload"
 	"luck_draw-server/service/v1/admin/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func uploadImgHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func UploadAvatarHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		l := logic.NewUploadImgLogic(r.Context(), svcCtx, r)
-		resp, err := l.UploadImg()
+		l := upload.NewUploadAvatarLogic(r.Context(), svcCtx, r)
+		resp, err := l.UploadAvatar()
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

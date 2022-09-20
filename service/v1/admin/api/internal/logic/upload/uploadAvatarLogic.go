@@ -1,4 +1,4 @@
-package logic
+package upload
 
 import (
 	"context"
@@ -13,15 +13,15 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type UploadImgLogic struct {
+type UploadAvatarLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	r      *http.Request
 }
 
-func NewUploadImgLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Request) *UploadImgLogic {
-	return &UploadImgLogic{
+func NewUploadAvatarLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Request) *UploadAvatarLogic {
+	return &UploadAvatarLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
@@ -29,8 +29,8 @@ func NewUploadImgLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.
 	}
 }
 
-func (l *UploadImgLogic) UploadImg() (resp any, err error) {
-	saveDir := path.Join(global.ProjectRootPath, global.Viper.GetString("StaticConfig.Root"), "img")
-	path, err := filex.SaveHttpImg(l.r, saveDir, "img")
+func (l *UploadAvatarLogic) UploadAvatar() (resp any, err error) {
+	saveDir := path.Join(global.ProjectRootPath, global.Viper.GetString("StaticConfig.Root"), "avatar")
+	path, err := filex.SaveHttpImg(l.r, saveDir, "avatar")
 	return respx.DefaultSingleResp(path, err)
 }

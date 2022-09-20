@@ -15,6 +15,109 @@
     "application/json"
   ],
   "paths": {
+    "/v1/api/admin/account/currentInfo": {
+      "get": {
+        "summary": "获取自己的账号信息",
+        "operationId": "currentInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/v1/api/admin/account/putCurrent": {
+      "post": {
+        "summary": "管理员修改自己的账号信息，当修改密码时，需要提供验证码",
+        "operationId": "putCurrent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "修改个人信息请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutCurrentReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/v1/api/admin/account/putPassword": {
+      "post": {
+        "summary": "修改自己的密码",
+        "operationId": "putPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/putPasswordReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/v1/api/admin/account/verifyPassword": {
+      "post": {
+        "summary": "管理员校验自己的密码",
+        "operationId": "verifyPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifyPasswordReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "account"
+        ]
+      }
+    },
     "/v1/api/admin/activity/": {
       "get": {
         "summary": "获取活动信息",
@@ -539,34 +642,6 @@
         ]
       }
     },
-    "/v1/api/admin/adminer/modify": {
-      "post": {
-        "summary": "管理员修改自己的账号信息",
-        "operationId": "modify",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/AdminerModifyReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "adminer"
-        ]
-      }
-    },
     "/v1/api/admin/bindEmailCaptcha": {
       "post": {
         "summary": "给绑定邮箱发送验证码",
@@ -700,7 +775,7 @@
     },
     "/v1/api/admin/logout": {
       "post": {
-        "summary": "注销",
+        "summary": "注销登录",
         "operationId": "logout",
         "responses": {
           "200": {
@@ -2267,7 +2342,7 @@
         ]
       }
     },
-    "/v1/api/admin/uploadAvatar": {
+    "/v1/api/admin/upload/avatar": {
       "post": {
         "summary": "上传头像",
         "operationId": "uploadAvatar",
@@ -2281,11 +2356,11 @@
         },
         "requestBody": {},
         "tags": [
-          "admin-api"
+          "upload"
         ]
       }
     },
-    "/v1/api/admin/uploadImg": {
+    "/v1/api/admin/upload/image": {
       "post": {
         "summary": "上传图片",
         "operationId": "uploadImg",
@@ -2299,11 +2374,11 @@
         },
         "requestBody": {},
         "tags": [
-          "admin-api"
+          "upload"
         ]
       }
     },
-    "/v1/api/admin/uploadLogo": {
+    "/v1/api/admin/upload/logo": {
       "post": {
         "summary": "上传logo",
         "operationId": "uploadLogo",
@@ -2317,7 +2392,7 @@
         },
         "requestBody": {},
         "tags": [
-          "admin-api"
+          "upload"
         ]
       }
     },
@@ -3502,39 +3577,6 @@
         "last_login"
       ]
     },
-    "AdminerModifyReq": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": " 管理员名称"
-        },
-        "avatar": {
-          "type": "string",
-          "description": " 头像"
-        },
-        "passport": {
-          "type": "string",
-          "description": " 账号"
-        },
-        "password": {
-          "type": "string",
-          "description": " 密码"
-        },
-        "email": {
-          "type": "string",
-          "description": " 邮箱"
-        }
-      },
-      "title": "AdminerModifyReq",
-      "required": [
-        "name",
-        "avatar",
-        "passport",
-        "password",
-        "email"
-      ]
-    },
     "AdminerPutReq": {
       "type": "object",
       "properties": {
@@ -3599,7 +3641,6 @@
         "name",
         "avatar",
         "passport",
-        "password",
         "email",
         "status",
         "is_super_admin",
@@ -3689,6 +3730,24 @@
       "title": "BatchIdReq",
       "required": [
         "id"
+      ]
+    },
+    "CaptchaReq": {
+      "type": "object",
+      "properties": {
+        "captcha_id": {
+          "type": "string",
+          "description": "验证码ID"
+        },
+        "solution": {
+          "type": "string",
+          "description": "验证码答案"
+        }
+      },
+      "title": "CaptchaReq",
+      "required": [
+        "captcha_id",
+        "solution"
       ]
     },
     "CaptchaResp": {
@@ -5176,6 +5235,34 @@
         "status"
       ]
     },
+    "PutCurrentReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": " 管理员名称"
+        },
+        "avatar": {
+          "type": "string",
+          "description": " 头像"
+        },
+        "passport": {
+          "type": "string",
+          "description": " 账号"
+        },
+        "email": {
+          "type": "string",
+          "description": " 邮箱"
+        }
+      },
+      "title": "PutCurrentReq",
+      "required": [
+        "name",
+        "avatar",
+        "passport",
+        "email"
+      ]
+    },
     "RoleAndDomainReq": {
       "type": "object",
       "properties": {
@@ -5810,6 +5897,19 @@
         "score"
       ]
     },
+    "VerifyPasswordReq": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string",
+          "description": " 密码"
+        }
+      },
+      "title": "VerifyPasswordReq",
+      "required": [
+        "password"
+      ]
+    },
     "bindEmailCaptchaReq": {
       "type": "object",
       "properties": {
@@ -5928,6 +6028,34 @@
       "title": "projectActivityReq",
       "required": [
         "project_id"
+      ]
+    },
+    "putPasswordReq": {
+      "type": "object",
+      "properties": {
+        "old_password": {
+          "type": "string",
+          "description": " 旧密码"
+        },
+        "new_password": {
+          "type": "string",
+          "description": " 新密码"
+        },
+        "captcha_id": {
+          "type": "string",
+          "description": "验证码ID"
+        },
+        "solution": {
+          "type": "string",
+          "description": "验证码答案"
+        }
+      },
+      "title": "putPasswordReq",
+      "required": [
+        "old_password",
+        "new_password",
+        "captcha_id",
+        "solution"
       ]
     },
     "registerEmailCaptchaReq": {

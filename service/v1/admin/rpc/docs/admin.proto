@@ -567,7 +567,25 @@ message LuckerListReq {
   Lucker lucker = 2;
 }
 
-message NilReq{}
+message NilReq{
+}
+
+message VerifyPasswordReq {
+  int64 adminer_id = 1;
+  string password = 2;
+}
+
+message VerifyPasswordResp {
+  bool ok = 1;
+}
+
+message PutPasswordReq {
+  int64  adminer_id = 1;
+  string old_password = 2; // 旧密码
+  string new_password = 3; // 新密码
+  string captcha_id = 4; //验证码ID
+  string solution = 5; //验证码答案
+}
 
 service Admin {
   //生产token
@@ -586,6 +604,8 @@ service Admin {
   rpc IsLogout (IsLogoutReq) returns (IsLogoutResp);
   //解析 jwtToken, 返回原生error
   rpc ParseJwtToken (ParseJwtTokenReq) returns (ParseJwtTokenResp);
+  //验证管理员密码
+  rpc VerifyPassword (VerifyPasswordReq) returns (VerifyPasswordResp);
 
   rpc GetActivityList (ActivityListReq) returns (GetActivityListResp);
   rpc GetActivityDetail (GetActivityDetailReq) returns (GetActivityDetailResp);
@@ -602,6 +622,7 @@ service Admin {
   rpc AddAdminer (Adminer) returns (AddAdminerResp);
   rpc PutAdminer (Adminer) returns (StatusResp);
   rpc DelAdminer (ItemReq) returns (StatusResp);
+  rpc PutPassword (PutPasswordReq) returns (StatusResp);
 
   rpc GetLuckerList (LuckerListReq) returns (GetLuckerListResp);
   rpc GetLuckerDetailsList (LuckerDetailsReq) returns (GetLuckerDetailsResp);

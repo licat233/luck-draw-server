@@ -62,6 +62,11 @@ type JwtToken {
 	RefreshAfter int64  `json:"refresh_after"`
 }
 
+type CaptchaReq {
+	CaptchaId string `json:"captcha_id"` //验证码ID
+	Solution  string `json:"solution"`   //验证码答案
+}
+
 type CaptchaResp {
 	CaptchaId string `json:"captcha_id"`
 	ExpiresAt int64  `json:"expires_at"`

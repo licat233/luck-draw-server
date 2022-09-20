@@ -14,6 +14,7 @@ var (
 	CtxKeyJwtPlatform   = "jwtPlatform"
 )
 
+// 获取用户id
 func GetUidFromCtx(ctx context.Context) int64 {
 	var user_id int64
 	if jsonUid, ok := ctx.Value(CtxKeyJwtUserId).(json.Number); ok {
@@ -26,6 +27,7 @@ func GetUidFromCtx(ctx context.Context) int64 {
 	return user_id
 }
 
+// 获取活动id
 func GetAidFromCtx(ctx context.Context) int64 {
 	var activity_id int64
 	if jsonAid, ok := ctx.Value(CtxKeyJwtActivityId).(json.Number); ok {

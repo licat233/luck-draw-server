@@ -38,6 +38,8 @@ type AdminClient interface {
 	IsLogout(ctx context.Context, in *IsLogoutReq, opts ...grpc.CallOption) (*IsLogoutResp, error)
 	// 解析 jwtToken, 返回原生error
 	ParseJwtToken(ctx context.Context, in *ParseJwtTokenReq, opts ...grpc.CallOption) (*ParseJwtTokenResp, error)
+	// 验证管理员密码
+	VerifyPassword(ctx context.Context, in *VerifyPasswordReq, opts ...grpc.CallOption) (*VerifyPasswordResp, error)
 	GetActivityList(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityListResp, error)
 	GetActivityDetail(ctx context.Context, in *GetActivityDetailReq, opts ...grpc.CallOption) (*GetActivityDetailResp, error)
 	GetActivityDetails(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityDetailsListResp, error)
@@ -51,6 +53,7 @@ type AdminClient interface {
 	AddAdminer(ctx context.Context, in *Adminer, opts ...grpc.CallOption) (*AddAdminerResp, error)
 	PutAdminer(ctx context.Context, in *Adminer, opts ...grpc.CallOption) (*StatusResp, error)
 	DelAdminer(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
+	PutPassword(ctx context.Context, in *PutPasswordReq, opts ...grpc.CallOption) (*StatusResp, error)
 	GetLuckerList(ctx context.Context, in *LuckerListReq, opts ...grpc.CallOption) (*GetLuckerListResp, error)
 	GetLuckerDetailsList(ctx context.Context, in *LuckerDetailsReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error)
 	GetLucker(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetLuckerResp, error)
@@ -186,6 +189,15 @@ func (c *adminClient) ParseJwtToken(ctx context.Context, in *ParseJwtTokenReq, o
 	return out, nil
 }
 
+func (c *adminClient) VerifyPassword(ctx context.Context, in *VerifyPasswordReq, opts ...grpc.CallOption) (*VerifyPasswordResp, error) {
+	out := new(VerifyPasswordResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/VerifyPassword", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *adminClient) GetActivityList(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityListResp, error) {
 	out := new(GetActivityListResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetActivityList", in, out, opts...)
@@ -297,6 +309,15 @@ func (c *adminClient) PutAdminer(ctx context.Context, in *Adminer, opts ...grpc.
 func (c *adminClient) DelAdminer(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	out := new(StatusResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/DelAdminer", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminClient) PutPassword(ctx context.Context, in *PutPasswordReq, opts ...grpc.CallOption) (*StatusResp, error) {
+	out := new(StatusResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/PutPassword", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -800,6 +821,8 @@ type AdminServer interface {
 	IsLogout(context.Context, *IsLogoutReq) (*IsLogoutResp, error)
 	// 解析 jwtToken, 返回原生error
 	ParseJwtToken(context.Context, *ParseJwtTokenReq) (*ParseJwtTokenResp, error)
+	// 验证管理员密码
+	VerifyPassword(context.Context, *VerifyPasswordReq) (*VerifyPasswordResp, error)
 	GetActivityList(context.Context, *ActivityListReq) (*GetActivityListResp, error)
 	GetActivityDetail(context.Context, *GetActivityDetailReq) (*GetActivityDetailResp, error)
 	GetActivityDetails(context.Context, *ActivityListReq) (*GetActivityDetailsListResp, error)
@@ -813,6 +836,7 @@ type AdminServer interface {
 	AddAdminer(context.Context, *Adminer) (*AddAdminerResp, error)
 	PutAdminer(context.Context, *Adminer) (*StatusResp, error)
 	DelAdminer(context.Context, *ItemReq) (*StatusResp, error)
+	PutPassword(context.Context, *PutPasswordReq) (*StatusResp, error)
 	GetLuckerList(context.Context, *LuckerListReq) (*GetLuckerListResp, error)
 	GetLuckerDetailsList(context.Context, *LuckerDetailsReq) (*GetLuckerDetailsResp, error)
 	GetLucker(context.Context, *ItemReq) (*GetLuckerResp, error)
@@ -897,6 +921,9 @@ func (UnimplementedAdminServer) IsLogout(context.Context, *IsLogoutReq) (*IsLogo
 func (UnimplementedAdminServer) ParseJwtToken(context.Context, *ParseJwtTokenReq) (*ParseJwtTokenResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ParseJwtToken not implemented")
 }
+func (UnimplementedAdminServer) VerifyPassword(context.Context, *VerifyPasswordReq) (*VerifyPasswordResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyPassword not implemented")
+}
 func (UnimplementedAdminServer) GetActivityList(context.Context, *ActivityListReq) (*GetActivityListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetActivityList not implemented")
 }
@@ -935,6 +962,9 @@ func (UnimplementedAdminServer) PutAdminer(context.Context, *Adminer) (*StatusRe
 }
 func (UnimplementedAdminServer) DelAdminer(context.Context, *ItemReq) (*StatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelAdminer not implemented")
+}
+func (UnimplementedAdminServer) PutPassword(context.Context, *PutPasswordReq) (*StatusResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutPassword not implemented")
 }
 func (UnimplementedAdminServer) GetLuckerList(context.Context, *LuckerListReq) (*GetLuckerListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLuckerList not implemented")
@@ -1252,6 +1282,24 @@ func _Admin_ParseJwtToken_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Admin_VerifyPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyPasswordReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).VerifyPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/VerifyPassword",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).VerifyPassword(ctx, req.(*VerifyPasswordReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Admin_GetActivityList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ActivityListReq)
 	if err := dec(in); err != nil {
@@ -1482,6 +1530,24 @@ func _Admin_DelAdminer_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AdminServer).DelAdminer(ctx, req.(*ItemReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Admin_PutPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutPasswordReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).PutPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/PutPassword",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).PutPassword(ctx, req.(*PutPasswordReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2480,6 +2546,10 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Admin_ParseJwtToken_Handler,
 		},
 		{
+			MethodName: "VerifyPassword",
+			Handler:    _Admin_VerifyPassword_Handler,
+		},
+		{
 			MethodName: "GetActivityList",
 			Handler:    _Admin_GetActivityList_Handler,
 		},
@@ -2530,6 +2600,10 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DelAdminer",
 			Handler:    _Admin_DelAdminer_Handler,
+		},
+		{
+			MethodName: "PutPassword",
+			Handler:    _Admin_PutPassword_Handler,
 		},
 		{
 			MethodName: "GetLuckerList",

@@ -101,6 +101,7 @@ type (
 	ProjectDetails             = admin_pb.ProjectDetails
 	ProjectListReq             = admin_pb.ProjectListReq
 	ProjectTreeOptionsResp     = admin_pb.ProjectTreeOptionsResp
+	PutPasswordReq             = admin_pb.PutPasswordReq
 	SearchPrizesPoolReq        = admin_pb.SearchPrizesPoolReq
 	SearchPrizesPoolResp       = admin_pb.SearchPrizesPoolResp
 	StatusResp                 = admin_pb.StatusResp
@@ -113,6 +114,8 @@ type (
 	UserListReq                = admin_pb.UserListReq
 	UsersPool                  = admin_pb.UsersPool
 	UsersPoolListReq           = admin_pb.UsersPoolListReq
+	VerifyPasswordReq          = admin_pb.VerifyPasswordReq
+	VerifyPasswordResp         = admin_pb.VerifyPasswordResp
 
 	Admin interface {
 		// 生产token
@@ -131,6 +134,8 @@ type (
 		IsLogout(ctx context.Context, in *IsLogoutReq, opts ...grpc.CallOption) (*IsLogoutResp, error)
 		// 解析 jwtToken, 返回原生error
 		ParseJwtToken(ctx context.Context, in *ParseJwtTokenReq, opts ...grpc.CallOption) (*ParseJwtTokenResp, error)
+		// 验证管理员密码
+		VerifyPassword(ctx context.Context, in *VerifyPasswordReq, opts ...grpc.CallOption) (*VerifyPasswordResp, error)
 		GetActivityList(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityListResp, error)
 		GetActivityDetail(ctx context.Context, in *GetActivityDetailReq, opts ...grpc.CallOption) (*GetActivityDetailResp, error)
 		GetActivityDetails(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityDetailsListResp, error)
@@ -144,6 +149,7 @@ type (
 		AddAdminer(ctx context.Context, in *Adminer, opts ...grpc.CallOption) (*AddAdminerResp, error)
 		PutAdminer(ctx context.Context, in *Adminer, opts ...grpc.CallOption) (*StatusResp, error)
 		DelAdminer(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
+		PutPassword(ctx context.Context, in *PutPasswordReq, opts ...grpc.CallOption) (*StatusResp, error)
 		GetLuckerList(ctx context.Context, in *LuckerListReq, opts ...grpc.CallOption) (*GetLuckerListResp, error)
 		GetLuckerDetailsList(ctx context.Context, in *LuckerDetailsReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error)
 		GetLucker(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetLuckerResp, error)
@@ -258,6 +264,12 @@ func (m *defaultAdmin) ParseJwtToken(ctx context.Context, in *ParseJwtTokenReq, 
 	return client.ParseJwtToken(ctx, in, opts...)
 }
 
+// 验证管理员密码
+func (m *defaultAdmin) VerifyPassword(ctx context.Context, in *VerifyPasswordReq, opts ...grpc.CallOption) (*VerifyPasswordResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.VerifyPassword(ctx, in, opts...)
+}
+
 func (m *defaultAdmin) GetActivityList(ctx context.Context, in *ActivityListReq, opts ...grpc.CallOption) (*GetActivityListResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.GetActivityList(ctx, in, opts...)
@@ -321,6 +333,11 @@ func (m *defaultAdmin) PutAdminer(ctx context.Context, in *Adminer, opts ...grpc
 func (m *defaultAdmin) DelAdminer(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.DelAdminer(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) PutPassword(ctx context.Context, in *PutPasswordReq, opts ...grpc.CallOption) (*StatusResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.PutPassword(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetLuckerList(ctx context.Context, in *LuckerListReq, opts ...grpc.CallOption) (*GetLuckerListResp, error) {

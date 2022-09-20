@@ -2,12 +2,24 @@ package test0
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/asaskevich/govalidator"
 )
+
+func PasswordPattern(password string) bool {
+	matched, _ := regexp.MatchString("^.{6,34}$", password)
+	return matched
+}
+
+func Test_Regexp(t *testing.T) {
+	password := "12323"
+	res := PasswordPattern(password)
+	fmt.Println("结果:", res)
+}
 
 func Test_split(t *testing.T) {
 	rows := "`id`,`uuid`,`user_id`,`prizes_pool_id`,`status`,`luck_date`,`ip`,`create_at`,`update_at`,`is_deleted`,`delete_at`"

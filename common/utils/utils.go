@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"math/rand"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -47,4 +48,9 @@ func IdValid(id int64) bool {
 
 func NameValid(name string) bool {
 	return strings.TrimSpace(name) != ""
+}
+
+func PasswordPattern(password string) bool {
+	matched, _ := regexp.MatchString("^.{6,34}$", password)
+	return matched
 }

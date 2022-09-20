@@ -70,6 +70,12 @@ func (s *AdminServer) ParseJwtToken(ctx context.Context, in *admin_pb.ParseJwtTo
 	return l.ParseJwtToken(in)
 }
 
+// 验证管理员密码
+func (s *AdminServer) VerifyPassword(ctx context.Context, in *admin_pb.VerifyPasswordReq) (*admin_pb.VerifyPasswordResp, error) {
+	l := logic.NewVerifyPasswordLogic(ctx, s.svcCtx)
+	return l.VerifyPassword(in)
+}
+
 func (s *AdminServer) GetActivityList(ctx context.Context, in *admin_pb.ActivityListReq) (*admin_pb.GetActivityListResp, error) {
 	l := logic.NewGetActivityListLogic(ctx, s.svcCtx)
 	return l.GetActivityList(in)
@@ -133,6 +139,11 @@ func (s *AdminServer) PutAdminer(ctx context.Context, in *admin_pb.Adminer) (*ad
 func (s *AdminServer) DelAdminer(ctx context.Context, in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
 	l := logic.NewDelAdminerLogic(ctx, s.svcCtx)
 	return l.DelAdminer(in)
+}
+
+func (s *AdminServer) PutPassword(ctx context.Context, in *admin_pb.PutPasswordReq) (*admin_pb.StatusResp, error) {
+	l := logic.NewPutPasswordLogic(ctx, s.svcCtx)
+	return l.PutPassword(in)
 }
 
 func (s *AdminServer) GetLuckerList(ctx context.Context, in *admin_pb.LuckerListReq) (*admin_pb.GetLuckerListResp, error) {

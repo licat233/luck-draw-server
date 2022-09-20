@@ -11,6 +11,8 @@ import "project.api"
 import "rbac.api"
 import "user.api"
 import "users_pool.api"
+import "account.api"
+import "upload.api"
 
 //管理员登陆，可用账号、手机号、邮箱登录，(暂未实现验证码登录功能)
 type loginReq {
@@ -80,23 +82,11 @@ service admin-api {
 	prefix: /v1/api/admin
 )
 service admin-api {
-	@doc "注销"
+	@doc "注销登录"
 	@handler logout
 	post /logout returns(BaseResp)
 	
 	@doc "获取当前用户信息"
 	@handler currentUser
 	post /currentUser returns(BaseResp)
-	
-	@doc "上传头像"
-	@handler uploadAvatar
-	post /uploadAvatar returns(BaseResp)
-	
-	@doc "上传logo"
-	@handler uploadLogo
-	post /uploadLogo returns(BaseResp)
-	
-	@doc "上传图片"
-	@handler uploadImg
-	post /uploadImg returns(BaseResp)
 }
