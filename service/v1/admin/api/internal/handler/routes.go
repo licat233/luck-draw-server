@@ -342,6 +342,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/",
 					Handler: prizesPool.DelHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/resetLuckValue",
+					Handler: prizesPool.ResetLuckValueHandler(serverCtx),
+				},
 			}...,
 		),
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),

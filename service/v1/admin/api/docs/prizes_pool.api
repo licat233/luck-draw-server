@@ -61,6 +61,11 @@ type PrizesPoolListReq {
 	Remainder  int64     `form:"remainder,optional,default=-1"`   // 奖品剩余数量
 }
 
+type ResetLuckValueReq {
+	ActivityId    int64  `json:"activity_id"`              // 表主键
+	ActivityUuid  string `json:"activity_uuid"`          // 保险起见，加入uuid做验证
+}
+
 @server(
 	jwt: JwtAuth
 	group: prizesPool
@@ -87,4 +92,11 @@ service admin-api {
     @doc "删除奖品池"
 	@handler del 
 	delete /(PrizesPoolDelReq) returns(BaseResp)
+
+	@doc(
+		summary: 重置某活动的奖品池概率
+	)
+	@handler ResetLuckValue
+	post /resetLuckValue(ResetLuckValueReq) returns(BaseResp)
+	
 }

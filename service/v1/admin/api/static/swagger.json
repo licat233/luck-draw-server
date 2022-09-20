@@ -1678,6 +1678,34 @@
         ]
       }
     },
+    "/v1/api/admin/prizesPool/resetLuckValue": {
+      "post": {
+        "summary": "重置某活动的奖品池概率",
+        "operationId": "ResetLuckValue",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ResetLuckValueReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "prizesPool"
+        ]
+      }
+    },
     "/v1/api/admin/project/": {
       "get": {
         "summary": "获取项目信息",
@@ -5261,6 +5289,25 @@
         "avatar",
         "passport",
         "email"
+      ]
+    },
+    "ResetLuckValueReq": {
+      "type": "object",
+      "properties": {
+        "activity_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 表主键"
+        },
+        "activity_uuid": {
+          "type": "string",
+          "description": " 保险起见，加入uuid做验证"
+        }
+      },
+      "title": "ResetLuckValueReq",
+      "required": [
+        "activity_id",
+        "activity_uuid"
       ]
     },
     "RoleAndDomainReq": {

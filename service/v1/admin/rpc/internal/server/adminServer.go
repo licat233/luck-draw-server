@@ -266,6 +266,11 @@ func (s *AdminServer) SearchPrizesPool(ctx context.Context, in *admin_pb.SearchP
 	return l.SearchPrizesPool(in)
 }
 
+func (s *AdminServer) ResetLuckValue(ctx context.Context, in *admin_pb.ResetLuckValueReq) (*admin_pb.StatusResp, error) {
+	l := logic.NewResetLuckValueLogic(ctx, s.svcCtx)
+	return l.ResetLuckValue(in)
+}
+
 func (s *AdminServer) GetProjectList(ctx context.Context, in *admin_pb.ProjectListReq) (*admin_pb.GetProjectListResp, error) {
 	l := logic.NewGetProjectListLogic(ctx, s.svcCtx)
 	return l.GetProjectList(in)

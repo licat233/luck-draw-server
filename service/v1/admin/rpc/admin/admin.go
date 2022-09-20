@@ -102,6 +102,7 @@ type (
 	ProjectListReq             = admin_pb.ProjectListReq
 	ProjectTreeOptionsResp     = admin_pb.ProjectTreeOptionsResp
 	PutPasswordReq             = admin_pb.PutPasswordReq
+	ResetLuckValueReq          = admin_pb.ResetLuckValueReq
 	SearchPrizesPoolReq        = admin_pb.SearchPrizesPoolReq
 	SearchPrizesPoolResp       = admin_pb.SearchPrizesPoolResp
 	StatusResp                 = admin_pb.StatusResp
@@ -174,6 +175,7 @@ type (
 		PutPrizesPool(ctx context.Context, in *PrizesPool, opts ...grpc.CallOption) (*StatusResp, error)
 		DelPrizesPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
 		SearchPrizesPool(ctx context.Context, in *SearchPrizesPoolReq, opts ...grpc.CallOption) (*SearchPrizesPoolResp, error)
+		ResetLuckValue(ctx context.Context, in *ResetLuckValueReq, opts ...grpc.CallOption) (*StatusResp, error)
 		GetProjectList(ctx context.Context, in *ProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error)
 		GetProject(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetProjectResp, error)
 		AddProject(ctx context.Context, in *Project, opts ...grpc.CallOption) (*AddProjectResp, error)
@@ -458,6 +460,11 @@ func (m *defaultAdmin) DelPrizesPool(ctx context.Context, in *ItemReq, opts ...g
 func (m *defaultAdmin) SearchPrizesPool(ctx context.Context, in *SearchPrizesPoolReq, opts ...grpc.CallOption) (*SearchPrizesPoolResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.SearchPrizesPool(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) ResetLuckValue(ctx context.Context, in *ResetLuckValueReq, opts ...grpc.CallOption) (*StatusResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.ResetLuckValue(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetProjectList(ctx context.Context, in *ProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error) {

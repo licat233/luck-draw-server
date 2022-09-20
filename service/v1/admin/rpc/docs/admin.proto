@@ -587,6 +587,11 @@ message PutPasswordReq {
   string solution = 5; //验证码答案
 }
 
+message ResetLuckValueReq {
+  int64 activity_id = 1;
+  string activity_uuid = 2;
+}
+
 service Admin {
   //生产token
   rpc GenerateToken (GenerateTokenReq) returns (GenerateTokenResp);
@@ -651,6 +656,7 @@ service Admin {
   rpc PutPrizesPool (PrizesPool) returns (StatusResp);
   rpc DelPrizesPool (ItemReq) returns (StatusResp);
   rpc SearchPrizesPool (SearchPrizesPoolReq) returns (SearchPrizesPoolResp);
+  rpc ResetLuckValue (ResetLuckValueReq) returns (StatusResp);
 
   rpc GetProjectList (ProjectListReq) returns (GetProjectListResp);
   rpc GetProject (ItemReq) returns (GetProjectResp);

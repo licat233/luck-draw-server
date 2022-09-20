@@ -78,6 +78,7 @@ type AdminClient interface {
 	PutPrizesPool(ctx context.Context, in *PrizesPool, opts ...grpc.CallOption) (*StatusResp, error)
 	DelPrizesPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
 	SearchPrizesPool(ctx context.Context, in *SearchPrizesPoolReq, opts ...grpc.CallOption) (*SearchPrizesPoolResp, error)
+	ResetLuckValue(ctx context.Context, in *ResetLuckValueReq, opts ...grpc.CallOption) (*StatusResp, error)
 	GetProjectList(ctx context.Context, in *ProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error)
 	GetProject(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetProjectResp, error)
 	AddProject(ctx context.Context, in *Project, opts ...grpc.CallOption) (*AddProjectResp, error)
@@ -540,6 +541,15 @@ func (c *adminClient) SearchPrizesPool(ctx context.Context, in *SearchPrizesPool
 	return out, nil
 }
 
+func (c *adminClient) ResetLuckValue(ctx context.Context, in *ResetLuckValueReq, opts ...grpc.CallOption) (*StatusResp, error) {
+	out := new(StatusResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/ResetLuckValue", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *adminClient) GetProjectList(ctx context.Context, in *ProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error) {
 	out := new(GetProjectListResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetProjectList", in, out, opts...)
@@ -861,6 +871,7 @@ type AdminServer interface {
 	PutPrizesPool(context.Context, *PrizesPool) (*StatusResp, error)
 	DelPrizesPool(context.Context, *ItemReq) (*StatusResp, error)
 	SearchPrizesPool(context.Context, *SearchPrizesPoolReq) (*SearchPrizesPoolResp, error)
+	ResetLuckValue(context.Context, *ResetLuckValueReq) (*StatusResp, error)
 	GetProjectList(context.Context, *ProjectListReq) (*GetProjectListResp, error)
 	GetProject(context.Context, *ItemReq) (*GetProjectResp, error)
 	AddProject(context.Context, *Project) (*AddProjectResp, error)
@@ -1037,6 +1048,9 @@ func (UnimplementedAdminServer) DelPrizesPool(context.Context, *ItemReq) (*Statu
 }
 func (UnimplementedAdminServer) SearchPrizesPool(context.Context, *SearchPrizesPoolReq) (*SearchPrizesPoolResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchPrizesPool not implemented")
+}
+func (UnimplementedAdminServer) ResetLuckValue(context.Context, *ResetLuckValueReq) (*StatusResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResetLuckValue not implemented")
 }
 func (UnimplementedAdminServer) GetProjectList(context.Context, *ProjectListReq) (*GetProjectListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProjectList not implemented")
@@ -1984,6 +1998,24 @@ func _Admin_SearchPrizesPool_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Admin_ResetLuckValue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResetLuckValueReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).ResetLuckValue(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/ResetLuckValue",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).ResetLuckValue(ctx, req.(*ResetLuckValueReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Admin_GetProjectList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProjectListReq)
 	if err := dec(in); err != nil {
@@ -2700,6 +2732,10 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SearchPrizesPool",
 			Handler:    _Admin_SearchPrizesPool_Handler,
+		},
+		{
+			MethodName: "ResetLuckValue",
+			Handler:    _Admin_ResetLuckValue_Handler,
 		},
 		{
 			MethodName: "GetProjectList",

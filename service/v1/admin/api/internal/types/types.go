@@ -507,6 +507,11 @@ type PrizesPoolListReq struct {
 	Remainder  int64  `form:"remainder,optional,default=-1"`               // 奖品剩余数量
 }
 
+type ResetLuckValueReq struct {
+	ActivityId   int64  `json:"activity_id"`   // 表主键
+	ActivityUuid string `json:"activity_uuid"` // 保险起见，加入uuid做验证
+}
+
 type Project struct {
 	Id        int64  `json:"id"`         // 表主键
 	Uuid      string `json:"uuid"`       // 唯一识别码
