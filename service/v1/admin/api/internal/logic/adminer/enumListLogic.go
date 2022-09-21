@@ -2,7 +2,9 @@ package adminer
 
 import (
 	"context"
+	"errors"
 
+	"luck_draw-server/common/errorx"
 	"luck_draw-server/service/v1/admin/api/internal/logic/common"
 	"luck_draw-server/service/v1/admin/api/internal/svc"
 	"luck_draw-server/service/v1/admin/api/internal/types"
@@ -26,6 +28,13 @@ func NewEnumListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *EnumList
 }
 
 func (l *EnumListLogic) EnumList() ([]types.Enum, error) {
+	ok, err := SuperAdminerIdentify(l.ctx, l.svcCtx)
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return nil, errorx.AccessError(nil, errors.New("no request permission"))
+	}
 	resp, err := l.svcCtx.AdminRpc.GetAdminerEnumList(l.ctx, &admin_pb.EnumListReq{})
 	if err != nil {
 		return nil, err
