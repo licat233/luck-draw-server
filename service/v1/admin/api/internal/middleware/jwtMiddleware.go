@@ -35,9 +35,6 @@ func NewJwtMiddleware(c config.Config, jwtModel model.JwtBlacklistsModel, admine
 func (m *JwtMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		next(w, r)
-		return
-
 		jwtToken := r.Header.Get(jwtx.ReqHeaderKey)
 		if jwtToken == "" {
 			httpx.Error(w, errorx.ErrAuth)
