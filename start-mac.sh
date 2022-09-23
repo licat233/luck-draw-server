@@ -21,6 +21,11 @@ current_path=$(
     pwd
 )
 
-cd "$current_path/deploy/script/"
+cd "$current_path/deploy/script/mac"
 
-./build.sh $1 $2
+chmod a+x ./gen.sh
+chmod a+x ./build.sh
+chmod a+x ./run.sh
+chmod a+x ./start.sh
+
+./start.sh $1 $2 $3

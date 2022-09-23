@@ -11,7 +11,7 @@
  Target Server Version : 80030
  File Encoding         : 65001
 
- Date: 30/08/2022 16:23:51
+ Date: 22/09/2022 14:22:30
 */
 
 SET NAMES utf8mb4;
@@ -27,7 +27,7 @@ CREATE TABLE `activity` (
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '活动名称',
   `project_id` int NOT NULL COMMENT '项目id',
   `status` tinyint NOT NULL DEFAULT '0' COMMENT '活动状态，是否在举办，默认关闭，需手动开启',
-  `pattern` tinyint NOT NULL DEFAULT '0' COMMENT '方案: 0私密的，1公开的',
+  `pattern` tinyint NOT NULL DEFAULT '0' COMMENT '方案: 0会员制，1公开制，2会员需授权',
   `max_count` int NOT NULL DEFAULT '1' COMMENT '最大抽奖次数：-1表示无限制，0表示不可抽奖',
   `max_prizes` int NOT NULL DEFAULT '1' COMMENT '最大抽奖次数：-1表示无限制，0表示不可中奖',
   `start_time` datetime NOT NULL COMMENT '活动开始时间',
@@ -47,7 +47,7 @@ CREATE TABLE `activity` (
 BEGIN;
 INSERT INTO `activity` VALUES (1, 'eC3cD3fC3hR0dQ7cA6oD0gC1dA5aJ2kC1aY2', '618购物节', 1, 0, 0, 1, 1, '2022-07-07 17:38:50', '2022-07-31 17:38:52', '2022-07-07 17:38:56', '2022-08-29 11:34:43', 0, '2005-01-02 15:04:05');
 INSERT INTO `activity` VALUES (2, 'aJ1eI3bA2iG1cC5lJ0bG0qA7aK2aC0aG8cY0', '七夕促销', 1, 1, 1, 1, 1, '2022-07-07 17:39:39', '2022-08-31 17:39:41', '2022-07-07 17:39:46', '2022-07-07 17:39:46', 0, '2005-01-02 15:04:05');
-INSERT INTO `activity` VALUES (3, 'cbabd3d3-f30c-4b9c-b167-a8670dc0b71a', '中秋活动', 1, 0, 0, 1, 1, '2022-08-30 14:56:10', '2022-08-31 14:56:14', '2022-08-30 14:59:43', '2022-08-30 14:59:43', 0, '2005-01-02 15:04:05');
+INSERT INTO `activity` VALUES (3, 'cbabd3d3-f30c-4b9c-b167-a8670dc0b71a', '中秋活动', 1, 1, 2, 1, 1, '2022-08-30 14:56:10', '2022-08-31 14:56:14', '2022-08-30 14:59:43', '2022-09-20 17:03:04', 1, '2022-09-20 17:03:04');
 COMMIT;
 
 -- ----------------------------
@@ -78,8 +78,23 @@ CREATE TABLE `adminer` (
 -- Records of adminer
 -- ----------------------------
 BEGIN;
-INSERT INTO `adminer` VALUES (1, '3a37bef3-65da-4d1f-9acf-f13b308ad213', '超管', 'https://img.alicdn.com/imgextra/i2/917298378/O1CN010hGXaf2BlAzexJ8cM_!!917298378.png', 'licat', 'licat233', '1697470538@qq.com', 1, 1, 6, '2022-08-23 17:11:37', '2022-07-29 09:47:08', '2022-08-27 16:51:02', 0, '2005-01-02 15:04:05');
+INSERT INTO `adminer` VALUES (1, '3a37bef3-65da-4d1f-9acf-f13b308ad213', '超管', '//luckdraw.com/static/avatar/avatar_1_1663575200688027000.jpg', 'licat', '', '1697470538@qq.com', 1, 1, 15, '2022-09-20 11:37:06', '2022-07-29 09:47:08', '2022-09-20 11:37:05', 0, '2005-01-02 15:04:05');
 COMMIT;
+
+-- ----------------------------
+-- Table structure for casbin_rule
+-- ----------------------------
+DROP TABLE IF EXISTS `casbin_rule`;
+CREATE TABLE `casbin_rule` (
+  `p_type` varchar(32) NOT NULL DEFAULT '',
+  `v0` varchar(255) NOT NULL DEFAULT '',
+  `v1` varchar(255) NOT NULL DEFAULT '',
+  `v2` varchar(255) NOT NULL DEFAULT '',
+  `v3` varchar(255) NOT NULL DEFAULT '',
+  `v4` varchar(255) NOT NULL DEFAULT '',
+  `v5` varchar(255) NOT NULL DEFAULT '',
+  KEY `idx_casbin_rule` (`p_type`,`v0`,`v1`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Table structure for jwt_blacklists
@@ -106,8 +121,8 @@ CREATE TABLE `lucker` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
   `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '唯一识别码',
   `user_id` int NOT NULL COMMENT '中奖用户id',
-  `prizes_pool_id` int NOT NULL COMMENT '抽中的奖品池id',
-  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态: 0未领奖，1已领奖，2放弃领奖',
+  `prizes_pool_id` int NOT NULL COMMENT '所属奖品池id',
+  `status` tinyint NOT NULL DEFAULT '0' COMMENT '状态: 0未领奖，1已领奖，2弃领',
   `luck_date` datetime NOT NULL COMMENT '抽奖时间',
   `ip` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0.0.0.0' COMMENT 'ip地址',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -124,7 +139,7 @@ CREATE TABLE `lucker` (
 -- Records of lucker
 -- ----------------------------
 BEGIN;
-INSERT INTO `lucker` VALUES (1, 'cL0bQ7aA0bC0aC0jA2aD0jA6jL8oL0fF2dI1', 1, 1, 1, '2022-07-07 17:49:13', '', '2022-07-07 17:49:15', '2022-08-30 16:22:52', 0, '2005-01-02 15:04:05');
+INSERT INTO `lucker` VALUES (1, 'cL0bQ7aA0bC0aC0jA2aD0jA6jL8oL0fF2dI1', 1, 2, 1, '2022-07-29 17:49:13', '127.0.0.1', '2022-07-07 17:49:15', '2022-09-09 15:24:25', 0, '2005-01-02 15:04:05');
 COMMIT;
 
 -- ----------------------------
@@ -144,16 +159,19 @@ CREATE TABLE `prize` (
   `delete_at` datetime NOT NULL DEFAULT '2005-01-02 15:04:05' COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `uuid` (`uuid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='奖品名单';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='奖品名单';
 
 -- ----------------------------
 -- Records of prize
 -- ----------------------------
 BEGIN;
-INSERT INTO `prize` VALUES (1, 'aC6nB0fC0qI4lC1fT2aQ2bA4aN0aB0yT0aM0', '美的蒸烤箱', 'https://img.alicdn.com/imgextra/i3/917298378/O1CN01Us4mhB2BlAymmJh8F_!!917298378.png', 325.99, 1, '2022-07-07 17:51:03', '2022-07-07 17:51:03', 0, '2005-01-02 15:04:05');
+INSERT INTO `prize` VALUES (1, 'aC6nB0fC0qI4lC1fT2aQ2bA4aN0aB0yT0aM0', '美的蒸烤箱', 'https://img.alicdn.com/imgextra/i3/917298378/O1CN01Us4mhB2BlAymmJh8F_!!917298378.png', 325.99, 0, '2022-07-07 17:51:03', '2022-09-02 09:45:09', 0, '2005-01-02 15:04:05');
 INSERT INTO `prize` VALUES (2, 'dG7cE0uC3cB2dC2iF3hE0eC4jH1fI7gP1jF1', 'YSL-聖羅蘭', 'https://img.alicdn.com/imgextra/i3/917298378/O1CN01WlLtDx2BlAyrbjRQs_!!917298378.png', 199.89, 1, '2022-07-07 17:51:38', '2022-07-07 17:51:38', 0, '2005-01-02 15:04:05');
 INSERT INTO `prize` VALUES (3, 'bB1gA0aD1qI2kA8dD0jD0fE2uK3dF0bA1mC9', '雪肌淨膚面膜', 'https://img.alicdn.com/imgextra/i3/917298378/O1CN01Nr8x9L2BlAyrbiAQ8_!!917298378.png', 668.99, 1, '2022-07-07 17:36:33', '2022-07-07 17:36:33', 0, '2005-01-02 15:04:05');
-INSERT INTO `prize` VALUES (4, 'gA5dC0oC0cQ3aA0aT0aI3eH0qJ0jA1cL2oP0', '谢谢参与', '\'\'', 0.00, 1, '2022-07-07 17:44:39', '2022-07-07 17:44:39', 0, '2005-01-02 15:04:05');
+INSERT INTO `prize` VALUES (4, 'gA5dC0oC0cQ3aA0aT0aI3eH0qJ0jA1cL2oP0', '谢谢参与', '', 0.00, 1, '2022-07-07 17:44:39', '2022-09-01 17:40:00', 0, '2005-01-02 15:04:05');
+INSERT INTO `prize` VALUES (5, '0b224d01-09cf-4df4-9198-54b89bcdb2d3', '黑头仪', '//luckdraw.com/static/img/img_1_1663557715940496000.jpg', 32.00, 1, '2022-09-19 11:22:09', '2022-09-19 11:26:23', 1, '2022-09-19 11:26:23');
+INSERT INTO `prize` VALUES (6, '837b02db-59d7-4087-8e0c-aa58469b5010', '黑头仪', '//luckdraw.com/static/img/img_1_1663557803475449000.jpg', 32.00, 1, '2022-09-19 11:23:39', '2022-09-19 11:29:44', 1, '2022-09-19 11:29:44');
+INSERT INTO `prize` VALUES (7, '2232cd4e-3e3c-4f65-ae18-eb7cbd1ae291', '黑头仪', '//luckdraw.com/static/img/img_1_1663557945410676000.jpg', 32.00, 1, '2022-09-19 11:25:48', '2022-09-19 11:25:48', 0, '2005-01-02 15:04:05');
 COMMIT;
 
 -- ----------------------------
@@ -193,11 +211,11 @@ CREATE TABLE `prizes_pool` (
   `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '唯一识别码',
   `activity_id` int NOT NULL COMMENT '活动id',
   `prize_id` int NOT NULL COMMENT '奖品id',
+  `grade_id` int NOT NULL DEFAULT '1' COMMENT '奖品等级',
   `luck_value` int NOT NULL DEFAULT '0' COMMENT '幸运值',
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '是否可用，0不可用，1可用',
-  `grade_id` int NOT NULL DEFAULT '1' COMMENT '奖品等级',
-  `number` int NOT NULL DEFAULT '1' COMMENT '奖品总数量',
-  `balance` int NOT NULL DEFAULT '1' COMMENT '奖品剩余数量',
+  `total` int NOT NULL DEFAULT '1' COMMENT '奖品总数量',
+  `remainder` int NOT NULL DEFAULT '1' COMMENT '奖品剩余数量',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已被删除',
@@ -206,16 +224,26 @@ CREATE TABLE `prizes_pool` (
   KEY `uuid` (`uuid`),
   KEY `activity_id` (`activity_id`),
   KEY `prize_id` (`prize_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='活动奖品池';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='活动奖品池，某活动中的奖品信息';
 
 -- ----------------------------
 -- Records of prizes_pool
 -- ----------------------------
 BEGIN;
-INSERT INTO `prizes_pool` VALUES (1, 'aE1gM6eE5kK0eO2bI3cA1iK1bR0qD0rC0aB4', 1, 4, 100, 1, 1, 1, 1, '2022-07-07 17:44:54', '2022-07-07 17:45:00', 0, '2005-01-02 15:04:05');
-INSERT INTO `prizes_pool` VALUES (2, 'bK0bA0uD0kH0bB0oC0cA0oH3eB0aH0wI6cR4', 1, 1, 100, 1, 2, 1, 1, '2022-07-07 17:46:01', '2022-07-07 17:46:01', 0, '2005-01-02 15:04:05');
-INSERT INTO `prizes_pool` VALUES (3, 'iD3hE0gD2yD3mT0jI5jV0bB5bC2aA1qA2fC0', 1, 2, 100, 1, 3, 1, 1, '2022-07-07 17:46:26', '2022-07-07 17:46:26', 0, '2005-01-02 15:04:05');
-INSERT INTO `prizes_pool` VALUES (4, 'aW1cI0aB0cB0gA6aR4bC1mA1bD0fJ2bB5hB8', 1, 3, 100, 1, 4, 1, 1, '2022-07-07 17:46:44', '2022-07-07 17:46:44', 0, '2005-01-02 15:04:05');
+INSERT INTO `prizes_pool` VALUES (1, 'aE1gM6eE5kK0eO2bI3cA1iK1bR0qD0rC0aB4', 1, 4, 1, 100, 1, 1, 1, '2022-07-07 17:44:54', '2022-09-16 11:14:53', 1, '2022-09-16 11:14:53');
+INSERT INTO `prizes_pool` VALUES (2, 'bK0bA0uD0kH0bB0oC0cA0oH3eB0aH0wI6cR4', 1, 1, 2, 100, 1, 1, 1, '2022-07-07 17:46:01', '2022-09-20 16:55:59', 1, '2022-09-20 16:55:59');
+INSERT INTO `prizes_pool` VALUES (3, 'iD3hE0gD2yD3mT0jI5jV0bB5bC2aA1qA2fC0', 1, 2, 3, 100, 1, 1, 1, '2022-07-07 17:46:26', '2022-07-07 17:46:26', 0, '2005-01-02 15:04:05');
+INSERT INTO `prizes_pool` VALUES (4, 'aW1cI0aB0cB0gA6aR4bC1mA1bD0fJ2bB5hB8', 1, 3, 4, 100, 1, 1, 1, '2022-07-07 17:46:44', '2022-07-07 17:46:44', 0, '2005-01-02 15:04:05');
+INSERT INTO `prizes_pool` VALUES (5, 'a101c466-27d8-4bc5-a7ee-e336a95eedc0', 2, 1, 3, 100, 1, 2, 1, '2022-09-15 15:58:35', '2022-09-15 18:34:49', 1, '2022-09-15 18:34:49');
+INSERT INTO `prizes_pool` VALUES (6, '373470dd-fe52-4fce-b494-f1e68614fa8b', 3, 3, 3, 100, 1, 1, 1, '2022-09-15 16:44:59', '2022-09-16 10:35:29', 1, '2022-09-16 10:35:29');
+INSERT INTO `prizes_pool` VALUES (7, '8bbefce6-58e2-49f5-9892-678b15bf7919', 3, 4, 3, 100, 1, 1, 1, '2022-09-15 16:48:41', '2022-09-16 10:00:08', 1, '2022-09-16 10:00:08');
+INSERT INTO `prizes_pool` VALUES (8, 'b71dbda2-1259-4c91-8465-1c3a642318cf', 3, 2, 2, 100, 1, 1, 1, '2022-09-15 16:53:43', '2022-09-17 17:25:45', 1, '2022-09-17 17:25:45');
+INSERT INTO `prizes_pool` VALUES (9, 'de1b6a70-3258-4642-b62a-cccf286e9cae', 3, 1, 7, 100, 1, 1, 1, '2022-09-15 16:58:17', '2022-09-15 16:58:17', 0, '2005-01-02 15:04:05');
+INSERT INTO `prizes_pool` VALUES (10, '073ceb11-8a13-4df0-a24f-85e0510da708', 2, 2, 4, 100, 1, 1, 1, '2022-09-15 16:58:32', '2022-09-16 10:03:17', 1, '2022-09-16 10:03:17');
+INSERT INTO `prizes_pool` VALUES (11, '6f59aec7-47c8-4067-98ed-2e748bfc7679', 2, 3, 5, 100, 1, 1, 1, '2022-09-15 16:58:54', '2022-09-17 17:12:02', 1, '2022-09-17 17:12:02');
+INSERT INTO `prizes_pool` VALUES (12, 'd4abe8bc-3422-40d0-9a17-b44a6674f39f', 2, 1, 3, 100, 1, 1, 1, '2022-09-15 17:53:57', '2022-09-20 16:26:53', 0, '2005-01-02 15:04:05');
+INSERT INTO `prizes_pool` VALUES (13, '98350e4d-8112-447d-a332-982a0197983c', 2, 2, 4, 100, 1, 1, 1, '2022-09-15 17:57:02', '2022-09-20 17:08:04', 1, '2022-09-20 17:08:04');
+INSERT INTO `prizes_pool` VALUES (14, '79030ce6-e043-479e-a98f-9a0c910886ba', 3, 3, 5, 100, 1, 1, 1, '2022-09-16 10:35:37', '2022-09-17 17:25:42', 1, '2022-09-17 17:25:42');
 COMMIT;
 
 -- ----------------------------
@@ -256,7 +284,7 @@ CREATE TABLE `user` (
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户名',
   `address` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '收货地址',
   `score` int NOT NULL DEFAULT '0' COMMENT '积分',
-  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态:-1已经封禁，0未授权，1已授权',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态:0未授权，1正常，2已冻结',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已被删除',
@@ -269,7 +297,7 @@ CREATE TABLE `user` (
 -- Records of user
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` VALUES (1, 'aB3eO3fA0pA0lI7mJ2mY1fJ3fQ1gR0aB0eW6', 'licat', 'licat233@gmail.com', '13570923455', '李哥', '广东省广州市白云区金沙洲', 0, 1, '2022-07-07 17:50:22', '2022-07-07 17:50:22', 0, '2005-01-02 15:04:05');
+INSERT INTO `user` VALUES (1, 'aB3eO3fA0pA0lI7mJ2mY1fJ3fQ1gR0aB0eW6', 'licat', 'licat233@gmail.com', '13570923455', '李哥', '广东省广州市白云区金沙洲', 0, 1, '2022-07-07 17:50:22', '2022-09-07 17:19:38', 0, '2005-01-02 15:04:05');
 COMMIT;
 
 -- ----------------------------
@@ -280,8 +308,8 @@ CREATE TABLE `users_pool` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
   `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '唯一识别码',
   `activity_id` int NOT NULL COMMENT '活动id',
-  `user_id` int NOT NULL COMMENT '奖品id',
-  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态：-1已被禁止,0未授权，1已授权',
+  `user_id` int NOT NULL COMMENT '用户id',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态:0未授权，1正常，2已冻结',
   `score` int NOT NULL DEFAULT '0' COMMENT '用户在当前活动的积分',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -291,13 +319,16 @@ CREATE TABLE `users_pool` (
   KEY `uuid` (`uuid`),
   KEY `activity_id` (`activity_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='活动用户池';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理';
 
 -- ----------------------------
 -- Records of users_pool
 -- ----------------------------
 BEGIN;
 INSERT INTO `users_pool` VALUES (1, 'bD0aI3iF0kS3iU0jA1iA0xX0gK6aT0lU0sE0', 1, 1, 1, 0, '2022-07-07 17:53:05', '2022-07-07 17:53:05', 0, '2005-01-02 15:04:05');
+INSERT INTO `users_pool` VALUES (3, '48af4515-2ee6-47a2-95dc-d91fc9e261c2', 2, 1, 1, 0, '2022-09-17 17:30:12', '2022-09-17 17:30:18', 1, '2022-09-17 17:30:18');
+INSERT INTO `users_pool` VALUES (4, 'db182f4c-c174-4223-9e64-b01b6a1cb6db', 3, 1, 1, 0, '2022-09-17 17:30:26', '2022-09-19 00:12:39', 1, '2022-09-19 00:12:39');
+INSERT INTO `users_pool` VALUES (5, 'c0995277-5cba-475f-890e-6715e3b6bc80', 3, 1, 1, 0, '2022-09-17 17:31:12', '2022-09-19 00:16:29', 1, '2022-09-19 00:16:29');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
