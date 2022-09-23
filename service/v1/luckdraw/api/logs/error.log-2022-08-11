@@ -1,2 +1,0 @@
-{"@timestamp":"2022-08-11T19:33:03.503+08:00","caller":"internal/discovbuilder.go:34","content":"bad resolver state","level":"error"}
-{"@timestamp":"2022-08-11T19:33:43.705+08:00","caller":"internal/discovbuilder.go:34","content":"bad resolver state","level":"error"}

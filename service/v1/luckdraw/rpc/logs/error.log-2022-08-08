@@ -1,1 +1,0 @@
-{"@timestamp":"2022-08-05T17:40:07.569+08:00","caller":"zrpc/server.go:90","content":"listen tcp 127.0.0.1:6002: bind: address already in use","level":"error"}

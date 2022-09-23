@@ -1,2 +1,0 @@
-{"@timestamp":"2022-08-11T08:29:43.532+08:00","caller":"kq/queue.go:170","content":"Error on reading message, \"failed to dial: failed to open connection to localhost:9092: dial tcp [::1]:9092: connect: connection refused\"","level":"error"}
-{"@timestamp":"2022-08-11T19:33:43.723+08:00","caller":"internal/discovbuilder.go:34","content":"bad resolver state","level":"error"}
