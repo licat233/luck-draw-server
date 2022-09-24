@@ -15,6 +15,9 @@ func Mqs(c config.Config) []service.Service {
 	var services []service.Service
 
 	//kq: pub sub
-	services = append(services, KqMqs(c, ctx, svcCtx)...)
+	// services = append(services, KqMqs(c, ctx, svcCtx)...)  //暂时不需要使用 kafka
+
+	//使用asynq代替
+	services = append(services, AsynqMqs(ctx, svcCtx)...)
 	return services
 }

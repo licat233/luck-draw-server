@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"luck_draw-server/common/kqueue"
 	"luck_draw-server/service/v1/luckdraw/mq/internal/svc"
+	"luck_draw-server/service/v1/luckdraw/mq/types"
 	"luck_draw-server/service/v1/model"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -24,7 +24,7 @@ func NewGoodluckStatusMq(ctx context.Context, svcCtx *svc.ServiceContext) *Goodl
 }
 
 func (l *GoodluckStatusMq) Consume(_, val string) error {
-	var msg kqueue.GoodluckStatusNotifyMessage
+	var msg types.LuckdrawResultMsg
 	if err := json.Unmarshal([]byte(val), &msg); err != nil {
 		logx.Errorf("Consume unmarshal error, err: %+v", err)
 		return err
@@ -38,9 +38,9 @@ func (l *GoodluckStatusMq) Consume(_, val string) error {
 	return nil
 }
 
-//如果没有中奖，那就给予10个积分奖励
-//如果中奖了，不给额外的奖励
-func (l *GoodluckStatusMq) execService(message kqueue.GoodluckStatusNotifyMessage) (err error) {
+// 如果没有中奖，那就给予10个积分奖励
+// 如果中奖了，不给额外的奖励
+func (l *GoodluckStatusMq) execService(message types.LuckdrawResultMsg) (err error) {
 	if message.IsWin {
 		return
 	}

@@ -14,9 +14,10 @@ import (
 	"time"
 
 	"luck_draw-server/common/errorx"
-	"luck_draw-server/common/kqueue"
 	"luck_draw-server/common/uniqueid"
 	"luck_draw-server/common/utils"
+
+	"luck_draw-server/service/v1/luckdraw/mq/types"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -73,7 +74,7 @@ func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.Good
 		return nil, errorx.SecRpcErr(fmt.Errorf("activity not found, id: %d", in.ActivityId))
 	}
 	if mdActivity.Uuid != in.ActivityUuid {
-		return nil, errorx.SecRpcErr(errors.New("Activity UUID does not match activity ID"))
+		return nil, errorx.SecRpcErr(errors.New("activity UUID does not match activity ID"))
 	}
 	err = model.VerifyActivity(mdActivity)
 	if err != nil {
@@ -147,9 +148,13 @@ func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.Good
 	}
 	isWin := utils.Int64ToBool(grade.IsWin)
 
-	//交给mq去处理
-	if err := l.kqUpdateUserScore(user.Id, isWin); err != nil {
-		logx.Errorf("l.kqUpdateUserScore(user.Id, PrizesPool.IsWin) error: %v", err)
+	//交给kafka，mq去处理。已经弃用了kafka，使用asynq代替
+	// if err := l.kqUpdateUserScore(user.Id, isWin); err != nil {
+	// 	logx.Errorf("l.kqUpdateUserScore(user.Id, isWin) error: %v", err)
+	// }
+
+	if err := l.asynqUpdateUserScore(user.Id, isWin); err != nil {
+		logx.Errorf("消息队列任务处理错误：l.asynqUpdateUserScore(user.Id, isWin) error: %v", err)
 	}
 
 	//获取奖品信息
@@ -176,8 +181,24 @@ func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.Good
 	}, nil
 }
 
+func (l *GoodluckLogic) asynqUpdateUserScore(userId int64, isWin bool) error {
+	if l.svcCtx.AsynqClient == nil {
+		err := errors.New("asynq client未初始化")
+		return err
+	}
+	msg := types.LuckdrawResultMsg{
+		IsWin:  isWin,
+		UserId: userId,
+	}
+	return l.svcCtx.AsynqClient.AddTask(msg)
+}
+
 func (l *GoodluckLogic) kqUpdateUserScore(userId int64, isWin bool) error {
-	m := kqueue.GoodluckStatusNotifyMessage{
+	if l.svcCtx.KqueueGoodluckStatusHandlerClient == nil {
+		err := errors.New("kafka client 未初始化")
+		return err
+	}
+	m := types.LuckdrawResultMsg{
 		IsWin:  isWin,
 		UserId: userId,
 	}

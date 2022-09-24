@@ -141,37 +141,31 @@ func convertPrizeGrade(in *model.PrizeGrade) *luckdraw_pb.PrizeGrade {
 }
 
 func convertPrizes(mPrizes []*model.Prize) (pbPrizes []*luckdraw_pb.Prize) {
+	pbPrizes = make([]*luckdraw_pb.Prize, len(mPrizes))
 	if len(mPrizes) == 0 {
 		return
 	}
-	for _, mPrize := range mPrizes {
+	for index, mPrize := range mPrizes {
 		lprize := convertPrize(mPrize)
-		if lprize == nil {
-			continue
-		}
-		pbPrizes = append(pbPrizes, lprize)
+		pbPrizes[index] = lprize
 	}
 	return
 }
 
 func convertLuckerList(mdLuckerList []*model.Lucker) (pbLuckerlist []*luckdraw_pb.Lucker) {
-	for _, mdLucker := range mdLuckerList {
+	pbLuckerlist = make([]*luckdraw_pb.Lucker, len(mdLuckerList))
+	for index, mdLucker := range mdLuckerList {
 		pbLucker := convertLucker(mdLucker)
-		if pbLucker == nil {
-			continue
-		}
-		pbLuckerlist = append(pbLuckerlist, pbLucker)
+		pbLuckerlist[index] = pbLucker
 	}
 	return
 }
 
 func convertPrizesPoolList(mdPrizesPoolList []*model.PrizesPool) (pbPrizesPoolList []*luckdraw_pb.PrizesPool) {
-	for _, mdPrizesPool := range mdPrizesPoolList {
+	pbPrizesPoolList = make([]*luckdraw_pb.PrizesPool, len(mdPrizesPoolList))
+	for index, mdPrizesPool := range mdPrizesPoolList {
 		pbPrizesPool := convertPrizesPool(mdPrizesPool)
-		if pbPrizesPool == nil {
-			continue
-		}
-		pbPrizesPoolList = append(pbPrizesPoolList, pbPrizesPool)
+		pbPrizesPoolList[index] = pbPrizesPool
 	}
 	return
 }
@@ -189,13 +183,11 @@ func convertLuckerDetail(mdLuckerDetail *model.LuckerDetailsInfo) *luckdraw_pb.L
 	}
 }
 
-func convertLuckerDetailsList(mdLuckerDetailsList []*model.LuckerDetailsInfo) (res []*luckdraw_pb.LuckerDetail) {
-	for _, mdluckerDetail := range mdLuckerDetailsList {
+func convertLuckerDetailsList(mdLuckerDetailsList []*model.LuckerDetailsInfo) (list []*luckdraw_pb.LuckerDetail) {
+	list = make([]*luckdraw_pb.LuckerDetail, len(mdLuckerDetailsList))
+	for index, mdluckerDetail := range mdLuckerDetailsList {
 		pbLuckerDetail := convertLuckerDetail(mdluckerDetail)
-		if pbLuckerDetail == nil {
-			continue
-		}
-		res = append(res, pbLuckerDetail)
+		list[index] = pbLuckerDetail
 	}
 	return
 }

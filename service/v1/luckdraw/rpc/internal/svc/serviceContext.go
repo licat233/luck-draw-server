@@ -1,9 +1,12 @@
 package svc
 
 import (
+	"context"
+	"luck_draw-server/common/asynqmq"
 	"luck_draw-server/service/v1/luckdraw/rpc/internal/config"
 	"luck_draw-server/service/v1/model"
 
+	"github.com/hibiken/asynq"
 	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
@@ -24,9 +27,11 @@ type ServiceContext struct {
 	CommonModel *model.CommonModel
 
 	KqueueGoodluckStatusHandlerClient *kq.Pusher
+	AsynqClient                       *asynqmq.AsynqProducer
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
+	ctx := context.Background()
 	sqlConn := sqlx.NewMysql(c.Mysql.DataSource)
 	svc := &ServiceContext{
 		Config:          c,
@@ -41,7 +46,13 @@ func NewServiceContext(c config.Config) *ServiceContext {
 
 		CommonModel: nil,
 
-		KqueueGoodluckStatusHandlerClient: kq.NewPusher(c.KqGoodluckConf.Brokers, c.KqGoodluckConf.Topic),
+		// KqueueGoodluckStatusHandlerClient: kq.NewPusher(c.KqGoodluckConf.Brokers, c.KqGoodluckConf.Topic),
+		KqueueGoodluckStatusHandlerClient: nil, //这里放弃使用kakfa，用asynq来代替
+		AsynqClient: asynqmq.NewAsynqProducer(ctx, &asynq.RedisClientOpt{
+			Addr:     c.Redis.Host,
+			Password: c.Redis.Pass,
+			DB:       asynqmq.RedisDB,
+		}),
 	}
 	svc.CommonModel = &model.CommonModel{
 		ProjectModel:    svc.ProjectModel,
