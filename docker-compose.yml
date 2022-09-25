@@ -11,10 +11,7 @@ services:
       - 3307:3306
     depends_on:
       - mysql
-      - redis
     volumes:
       - luckdraw
-  redis:
-    image: redis
   mysql:
     image: mysql

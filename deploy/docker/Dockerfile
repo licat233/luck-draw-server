@@ -18,7 +18,7 @@ ADD go.mod .
 ADD go.sum .
 RUN go mod download
 COPY . .
-RUN ./run-on-docker.sh
+RUN ./run.sh
 
 FROM scratch
 
@@ -33,4 +33,4 @@ WORKDIR /app
 COPY --from=builder /app/admin /app/admin
 COPY --from=builder /app/etc /app/etc
 
-# CMD ["./admin", "-f", "etc/admin-api.yaml"]
+CMD ["./admin", "-f", "etc/admin-api.yaml"]

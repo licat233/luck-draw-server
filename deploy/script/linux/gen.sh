@@ -1,8 +1,5 @@
 #!/bin/sh
 
-#进入monitor mode
-set -m
-
 current_path=$(
     cd $(dirname $0)
     pwd

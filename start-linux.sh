@@ -1,5 +1,4 @@
 #!/bin/sh
-set -m
 
 current_path=$(
     cd $(dirname $0)

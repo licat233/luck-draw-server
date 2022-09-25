@@ -1,8 +1,4 @@
 #!/bin/sh
-set -m
-
-#进入monitor mode
-set -m
 
 current_path=$(
     cd $(dirname $0)
@@ -20,13 +16,12 @@ if [ ! -d $script_path ]; then
 fi
 cd $script_path
 
-if [ "$1" = "gen"];then
+if [[ "$1" = "gen" ]];then
 ./gen.sh $2 $3
-elif [ "$1" = "build"];then
-./gen.sh $2 $3
-elif [ "$1" = "build"];then
-./gen.sh $2 $3
+elif [[ "$1" = "build" ]];then
+./build.sh $2 $3
+elif [[ "$1" = "run" ]];then
+./run.sh $2 $3
 else
 ./gen.sh $1 $2 && ./build.sh $1 $2 && ./run.sh $1 $2
 fi
-
