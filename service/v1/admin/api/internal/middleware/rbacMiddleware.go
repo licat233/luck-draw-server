@@ -2,11 +2,9 @@ package middleware
 
 import (
 	"database/sql"
-	"luck_draw-server/common/global"
 	"luck_draw-server/service/v1/admin/api/internal/config"
 	"luck_draw-server/service/v1/admin/rpc/admin"
 	"net/http"
-	"path"
 
 	sqladapter "github.com/Blank-Xu/sql-adapter"
 	"github.com/casbin/casbin/v2"
@@ -39,14 +37,13 @@ func NewCasbinEnforcer(db *sql.DB) *casbin.SyncedEnforcer {
 	if db == nil {
 		return nil
 	}
-	adapter, err := sqladapter.NewAdapter(db, "mysql", global.Viper.GetString("Casbin.TableName"))
+	adapter, err := sqladapter.NewAdapter(db, "mysql", "casbin_rule")
 	if err != nil {
 		logx.Errorf("新建Casbin Adapter失败:%v", err)
 		return nil
 	}
 
-	confPath := path.Join(global.ProjectRootPath, global.Viper.GetString("Casbin.ModelPath"))
-	syncedEnforcer, err := casbin.NewSyncedEnforcer(confPath, adapter)
+	syncedEnforcer, err := casbin.NewSyncedEnforcer("etc/rbac_with_domains_model.conf", adapter)
 	if err != nil {
 		logx.Errorf("新建Casbin Enforcer失败:%v", err)
 		return nil

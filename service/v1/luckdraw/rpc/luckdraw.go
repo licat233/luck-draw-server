@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"luck_draw-server/common/errorx"
-	"luck_draw-server/common/initialize"
 	"luck_draw-server/service/v1/luckdraw/rpc/internal/config"
 	"luck_draw-server/service/v1/luckdraw/rpc/internal/server"
 	"luck_draw-server/service/v1/luckdraw/rpc/internal/svc"
@@ -21,9 +20,6 @@ var configFile = flag.String("f", "etc/luckdraw.yaml", "the config file")
 
 func main() {
 	flag.Parse()
-
-	//初始化项目所需的所有配置
-	initialize.Initialize()
 
 	var c config.Config
 	//加载配置文件

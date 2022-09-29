@@ -1,0 +1,1 @@
+{"@timestamp":"2022-09-27T18:01:31.343+08:00","caller":"rest/server.go:285","content":"listen tcp 0.0.0.0:7002: bind: address already in use","level":"error"}

@@ -8,22 +8,19 @@ import (
 	"luck_draw-server/service/v1/captcha/rpc/internal/server"
 	"luck_draw-server/service/v1/captcha/rpc/internal/svc"
 
+	"luck_draw-server/common/errorx"
+
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"luck_draw-server/common/errorx"
-	"luck_draw-server/common/initialize"
 )
 
 var configFile = flag.String("f", "etc/captcha.yaml", "the config file")
 
 func main() {
 	flag.Parse()
-
-	//务必先初始化global
-	initialize.Initialize()
 
 	var c config.Config
 	//加载配置文件

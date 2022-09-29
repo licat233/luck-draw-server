@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func Test_path(t *testing.T) {
+func Test_Path(t *testing.T) {
 	res := utils.CurrentPath()
 	fmt.Println("结果：", res)
 }

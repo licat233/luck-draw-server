@@ -24,6 +24,10 @@ type Config struct {
 
 	CacheRedis cache.CacheConf
 
-	CaptchaRpc zrpc.RpcClientConf
-	AdminRpc   zrpc.RpcClientConf
+	CaptchaRpc   zrpc.RpcClientConf
+	AdminRpc     zrpc.RpcClientConf
+	StaticConfig struct {
+		Domain string
+		Root   string
+	}
 }

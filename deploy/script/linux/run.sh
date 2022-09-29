@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 current_path=$(
     cd $(dirname $0)
@@ -28,6 +28,19 @@ run() {
         echo "文件: ${filename} 不存在"
         return
     fi
+    #查找相关服务，并终止
+    pid=$(ps -ef | grep $filename | grep -v grep | awk '{print $2}')
+    if [ ! -z $pid ]; then
+        kill -9 $pid
+        if [ ! $? -eq 0 ]; then
+            #kill失败
+            echo "提示: ${filename}: [ kill -9 $pid ] 失败"
+            exit
+            return
+        fi
+        echo "已终止进程：${filename} $pid"
+    fi
+    #启动
     echo "后台启动 ${filename} 服务"
     rm -f "${service_path}/nohup.out"
     nohup "${service_path}/${filename}" &
@@ -74,4 +87,4 @@ for name in ${all_services[*]}; do
     done
 done
 
-echo "----------- generator successful -----------"
+echo "----------- runing successful -----------"

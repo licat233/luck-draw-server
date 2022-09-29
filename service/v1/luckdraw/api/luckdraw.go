@@ -9,7 +9,6 @@ import (
 	"net/http"
 
 	"luck_draw-server/common/errorx"
-	"luck_draw-server/common/initialize"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
@@ -20,9 +19,6 @@ var configFile = flag.String("f", "etc/luckdraw-api.yaml", "the config file")
 
 func main() {
 	flag.Parse()
-
-	//初始化项目所需的所有配置
-	initialize.Initialize()
 
 	var c config.Config
 	//加载配置文件

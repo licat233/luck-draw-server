@@ -6,7 +6,6 @@ import (
 	"io"
 	"luck_draw-server/common/ctxdata"
 	"luck_draw-server/common/errorx"
-	"luck_draw-server/common/global"
 	"net/http"
 	"os"
 	"path"
@@ -24,20 +23,20 @@ const MaxFileSize = 10 << 20 // 10 MB
  * saveDir string 保存目录
  * prefix string 文件名前缀
  */
-func SaveHttpImg(r *http.Request, saveDir, prefix string) (url string, err error) {
+func SaveHttpImg(r *http.Request, saveDir, prefix string) error {
 	r.ParseMultipartForm(MaxFileSize)
 	file, header, err := r.FormFile("file")
 	if err != nil {
-		return "", errorx.ExternalError(err, errors.New("上傳文件失敗"))
+		return errorx.ExternalError(err, errors.New("上傳文件失敗"))
 	}
 	defer file.Close()
 	_, filetype, err := FileNameAndType(header.Filename)
 	if err != nil {
-		return "", err
+		return err
 	}
 	ok, err := ImgTypeVerify(filetype)
 	if !ok {
-		return "", err
+		return err
 	}
 	ctx := r.Context()
 	uid := ctxdata.GetUidFromCtx(ctx)
@@ -45,36 +44,16 @@ func SaveHttpImg(r *http.Request, saveDir, prefix string) (url string, err error
 	name := fmt.Sprint(filename, ".", filetype)
 	filepath := path.Join(saveDir, name)
 	if FileExist(filepath) {
-		return "", errorx.ExternalError(nil, errors.New("上傳異常，請重试"))
+		return errorx.ExternalError(nil, errors.New("上傳異常，請重试"))
 	}
 	tempFile, err := os.Create(filepath)
 	if err != nil {
 		logx.Errorf("文件保存失敗:%v", err)
-		return "", errorx.InternalError(err)
+		return errorx.InternalError(err)
 	}
 	defer tempFile.Close()
-	io.Copy(tempFile, file)
-	url, err = ImgHttpUrl(filepath)
-	if err != nil {
-		return "", err
-	}
-	return url, nil
-}
-
-// ImgHttpUrl 传入图片路径，返回图片访问url
-// 返回errorx错误
-func ImgHttpUrl(filepath string) (string, error) {
-	n := len(global.ProjectRootPath)
-	m := len(filepath)
-	if n > m {
-		logx.Error("ImgHttpUrl方法出错")
-		return "", errorx.InternalError(errors.New("utils.go ImgHttpUrl方法出错"))
-	}
-	if n == m {
-		return "", nil
-	}
-	res := path.Join(global.Viper.GetString("StaticConfig.Domain"), filepath[n:])
-	return "//" + res, nil
+	_, err = io.Copy(tempFile, file)
+	return err
 }
 
 // ImgTypeVerify 图片类型检查，返回errorx错误

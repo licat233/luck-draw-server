@@ -39,3 +39,8 @@ CacheRedis:
   - Host: 127.0.0.1:6379
     Pass: 
     Type: node
+
+#静态资源服务配置
+StaticConfig:
+  Domain: luckdraw.com
+  Root: static

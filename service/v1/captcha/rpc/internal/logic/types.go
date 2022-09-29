@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/mojocn/base64Captcha"
@@ -19,8 +20,17 @@ type CaptchaConfig struct {
 
 var CaptchaKeyPrefix = "LicatCaptcha"
 
+var (
+	ErrEmailTimed      = errors.New("requests are too frequent. Please try again in a minute")
+	ErrEmailSendFailed = errors.New("mail sending failed, please check email address")
+)
+
 func formatEmailCaptchaKey(captchaId interface{}) string {
 	return fmt.Sprintf("%s:%v", CaptchaKeyPrefix, captchaId)
+}
+
+func formatEmailCaptchaReceiverKey(receiver any) string {
+	return fmt.Sprintf("captchaReceiver:%v", receiver)
 }
 
 func generateDigitCaptcha(store base64Captcha.Store) (captchaId string, err error) {

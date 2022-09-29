@@ -1,30 +1,24 @@
 package initialize
 
 import (
-	"luck_draw-server/common/global"
-	"luck_draw-server/common/redisx"
-	"luck_draw-server/common/utils"
-	"luck_draw-server/common/viperx"
 	"time"
-
-	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 func Initialize() {
 	InitTime()
-	initViper()
-	InitProjectRootPath()
-	initRedisx() //emailx会用到
+	// initViper()
+	// InitProjectRootPath()
+	// initRedisx() //emailx会用到
 	// initRedis()
 }
 
-func initViper() {
-	global.Viper = viperx.NewViper()
-}
+// func initViper() {
+// global.Viper = viperx.NewViper()
+// }
 
-func initRedisx() {
-	global.RedisX = redisx.CreateRedisX()
-}
+// func initRedisx() {
+// 	global.RedisX = redisx.CreateRedisX()
+// }
 
 func InitTime() {
 	var cstSh, _ = time.LoadLocation("Asia/Shanghai") //上海
@@ -35,10 +29,10 @@ func InitTime() {
 // 	global.JwtBlacklistsModel = jwtx.NewJwtBlacklistsModel()
 // }
 
-func InitProjectRootPath() {
-	global.ProjectRootPath = utils.CurrentProjectRootPath()
-}
+// func InitProjectRootPath() {
+// 	global.ProjectRootPath = utils.CurrentProjectRootPath()
+// }
 
-func InitMysql() {
-	global.SQLConn = sqlx.NewMysql(global.Viper.GetString("Mysql.DataSource"))
-}
+// func InitMysql() {
+// 	global.SQLConn = sqlx.NewMysql(global.Viper.GetString("Mysql.DataSource"))
+// }

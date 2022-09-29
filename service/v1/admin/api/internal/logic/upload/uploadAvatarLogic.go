@@ -2,11 +2,12 @@ package upload
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"path"
 
+	"luck_draw-server/common/errorx"
 	"luck_draw-server/common/filex"
-	"luck_draw-server/common/global"
 	"luck_draw-server/common/respx"
 	"luck_draw-server/service/v1/admin/api/internal/svc"
 
@@ -30,7 +31,12 @@ func NewUploadAvatarLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *ht
 }
 
 func (l *UploadAvatarLogic) UploadAvatar() (resp any, err error) {
-	saveDir := path.Join(global.ProjectRootPath, global.Viper.GetString("StaticConfig.Root"), "avatar")
-	path, err := filex.SaveHttpImg(l.r, saveDir, "avatar")
-	return respx.DefaultSingleResp(path, err)
+	saveDir := path.Join(l.svcCtx.Config.StaticConfig.Root, "avatar")
+	err = filex.SaveHttpImg(l.r, saveDir, "avatar")
+	if err != nil {
+		logx.Error(err)
+		return nil, errorx.InternalError(err)
+	}
+	url := fmt.Sprint("//", l.svcCtx.Config.StaticConfig.Domain, saveDir)
+	return respx.DefaultSingleResp(url, nil)
 }

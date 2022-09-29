@@ -1,17 +1,116 @@
 version: '3.7'
+# 网络配置
+networks:
+  backend:
+    driver: bridge
+# 服务容器配置
 services:
-  luckdraw-server:
+  golang:
     build: 
       context: .
-      dockerfile: Dockerfile
     ports:
       - 7001:7001
       - 7002:7002
       - 7003:7003
-      - 3307:3306
     depends_on:
       - mysql
-    volumes:
-      - luckdraw
+      - redis
+    environment:
+      - TZ=Asia/Shanghai
+      - GOPROXY=https://goproxy.cn,direct
+    working_dir: /luck_draw-server
+    # volumes:
+    #   - db:/luck_draw-server
+    restart: always
+    privileged: true
+    stdin_open: true   # 打开标准输入，可以接受外部输入
+    tty: true
+    networks:
+      - backend
   mysql:
-    image: mysql
+    build: 
+      context: ./deploy/docker/mysql
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3406:3306"
+    volumes:
+      - /usr/local/mysql:/var/lib/mysql
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_USER=luck_draw
+      - MYSQL_PASSWORD=123123123
+      - MYSQL_ROOT_PASSWORD=123123123
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    privileged: true
+    networks:
+      - backend
+  redis:
+    build: 
+      context: ./deploy/docker/redis
+    image: redis:latest
+    restart: always
+    ports:
+      - "6479:6379"
+    networks:
+      - backend
+    privileged: true
+  etcd:
+    build:
+      context: ./deploy/docker/etcd
+    environment:
+      - TZ=Asia/Shanghai
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+    ports:
+      - 2479:2379
+    networks:
+      - backend
+    restart: always
+  mysql-manage:
+    build:
+      context: ./deploy/docker/mysql-manage
+    environment:
+      - TZ=Asia/Shanghai
+      - PMA_ARBITRARY=1
+      - MYSQL_USER=root                                  # 设置连接的 Mysql 服务用户名称
+      - MYSQL_PASSWORD=123123123                          # 设置连接的 Mysql 服务用户密码
+      - MYSQL_ROOT_PASSWORD=123123123                     # 设置连接的 Mysql 服务 root 用户密码
+      - PMA_HOST=phpmyadmin.work                          # 设置连接的 Mysql 服务 host，可以是 Mysql 服务容器的名称，也可以是 Mysql 服务容器的 ip 地址
+      - PMA_PORT=3406                                    # 设置连接的 Mysql 服务端口号
+    ports:
+      - "3407:80"                                         # 设置容器80端口映射指定宿主机端口，用于宿主机访问可视化web
+    depends_on:                                           # 依赖容器
+      - mysql                                             # 在 Mysql 服务容器启动后启动
+    networks:
+      - backend
+    restart: always
+  redis-manage:
+    build:
+      context: ./deploy/docker/redis-manage
+    environment:
+      - TZ=Asia/Shanghai
+      - ADMIN_USER=licat                              # 设置 Redis 可视化管理的用户名称
+      - ADMIN_PASS=123123123                          # 设置 Redis 可视化管理的用户密码
+      - REDIS_1_HOST=phpredisadmin.work               # 设置连接的 Redis 服务 host，可以是 Redis 服务容器的名称，也可以是 Redis 服务容器的 ip 地址
+      - REDIS_1_PORT=6479                             # 设置连接的 Redis 服务端口号
+    ports:
+      - "6480:80"                                     # 设置容器80端口映射指定宿主机端口，用于宿主机访问可视化web
+    depends_on:                                       # 依赖容器
+      - redis                                         # 在 Redis 服务容器启动后启动
+    networks:
+      - backend
+    restart: always
+  etcd-manage:
+    build:
+      context: ./deploy/docker/etcd-manage
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "2480:8080"                                   # 设置容器8080端口映射指定宿主机端口，用于宿主机访问可视化web
+    depends_on:                                       # 依赖容器
+      - etcd                                          # 在 etcd 服务容器启动后启动
+    networks:
+      - backend
+    restart: always
+ 

@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"luck_draw-server/common/errorx"
-	"luck_draw-server/common/initialize"
 	"luck_draw-server/service/v1/luckdraw/mq/internal/config"
 	"luck_draw-server/service/v1/luckdraw/mq/internal/listen"
 
@@ -16,9 +15,6 @@ var configFile = flag.String("f", "etc/luckdraw-mq.yaml", "the config file")
 
 func main() {
 	flag.Parse()
-
-	//初始化项目所需的所有配置
-	initialize.Initialize()
 
 	var c config.Config
 	//加载配置文件
