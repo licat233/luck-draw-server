@@ -1,11 +1,11 @@
 Name: luckdraw.rpc
-ListenOn: 127.0.0.1:6002
+ListenOn: 127.0.0.1:7032
 Debug: true
 
-Etcd:
-  Hosts:
-    - 127.0.0.1:2379
-  Key: luckdraw.rpc
+# Etcd:
+#   Hosts:
+#     - 127.0.0.1:2379
+#   Key: luckdraw.rpc
 
 Mysql:
   DataSource: luck_draw:123123123@tcp(127.0.0.1:3306)/luck_draw?parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai
@@ -18,10 +18,18 @@ Log:
   Level: error
   Mode: file
 
-Redis:
-  Host: 127.0.0.1:6379
-  Pass:
-  Type: node
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 7106
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: luckdarw-rpc
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
 
 CacheRedis:
   - Host: 127.0.0.1:6379

@@ -1,22 +1,43 @@
 Name: luckdraw-api
 Host: 0.0.0.0
-Port: 7002
+Port: 7031
 Debug: true
+
 Log:
   Level: error
   Mode: file
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 7105
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: luckdarw-api
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
 
 JwtAuth:
   AccessSecret: nA0eH4jC2aF0fC0eP0nH0lC1cB0aE8aQ0cI0
   AccessExpire: 86400
 
 CaptchaRpc:
-  Etcd:
-    Hosts:
-      - 127.0.0.1:2379
-    Key: captcha.rpc
+  Endpoints:
+    - 127.0.0.1:7022
+  NonBlock: true
+  # Etcd:
+  #   Hosts:
+  #     - 127.0.0.1:2379
+  #   Key: captcha.rpc
+
 LuckdrawRpc:
-  Etcd:
-    Hosts:
-      - 127.0.0.1:2379
-    Key: luckdraw.rpc
+  Endpoints:
+    - 127.0.0.1:7032
+  NonBlock: true
+  # Etcd:
+  #   Hosts:
+  #     - 127.0.0.1:2379
+  #   Key: luckdraw.rpc

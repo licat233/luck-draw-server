@@ -1,6 +1,6 @@
 Name: admin-api
 Host: 0.0.0.0
-Port: 7003
+Port: 7011
 
 Mysql:
   DataSource: luck_draw:123123123@tcp(127.0.0.1:3306)/luck_draw?parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai
@@ -13,28 +13,21 @@ Log:
   Level: error
   Mode: file
 
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 7101
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: admin-api
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
 Debug: true
 
-Redis:
-  Host: 127.0.0.1:6379
-  Pass:
-  Type: node
-
-CaptchaRpc:
-  Etcd:
-    Hosts:
-      - 127.0.0.1:2379
-    Key: captcha.rpc
-AdminRpc:
-  Etcd:
-    Hosts:
-      - 127.0.0.1:2379
-    Key: admin.rpc
-Cache:
-  Redis:
-    - Host: 127.0.0.1:6379
-      Pass: ""
-      Type: node
 CacheRedis:
   - Host: 127.0.0.1:6379
     Pass: 
@@ -44,3 +37,22 @@ CacheRedis:
 StaticConfig:
   Domain: luckdraw.com
   Root: static
+
+#rpc
+CaptchaRpc:
+  Endpoints:
+    - 127.0.0.1:7022
+  NonBlock: true
+  # Etcd:
+  #   Hosts:
+  #     - 127.0.0.1:2379
+  #   Key: captcha.rpc
+
+AdminRpc:
+  Endpoints:
+    - 127.0.0.1:7012
+  NonBlock: true
+  # Etcd:
+  #   Hosts:
+  #     - 127.0.0.1:2379
+  #   Key: admin.rpc

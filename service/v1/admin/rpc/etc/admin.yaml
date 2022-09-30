@@ -1,15 +1,29 @@
 Name: admin.rpc
-ListenOn: 127.0.0.1:6003
+ListenOn: 127.0.0.1:7012
 
-Etcd:
-  Hosts:
-    - 127.0.0.1:2379
-  Key: admin.rpc
+# Etcd:
+#   Hosts:
+#     - 127.0.0.1:2379
+#   Key: admin.rpc
+
 Log:
   Level: error
   Mode: file
 
 Debug: true
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 7102
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: admin-rpc
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
 
 JwtAuth:
   AccessSecret: nA0eH4jC1aF0vC5eP0nH0lC1cB0aE8aQ0cI5
@@ -17,10 +31,7 @@ JwtAuth:
 
 Mysql:
   DataSource: luck_draw:123123123@tcp(127.0.0.1:3306)/luck_draw?parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai
-Redis:
-  Host: 127.0.0.1:6379
-  Pass: 
-  Type: node
+
 CacheRedis:
   - Host: 127.0.0.1:6379
     Pass: 

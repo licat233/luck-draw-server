@@ -1,6 +1,6 @@
 Name: luckdraw-mq
 Host: 0.0.0.0
-Port: 8002
+Port: 7033
 
 Debug: true
 
@@ -8,6 +8,19 @@ Log:
   ServiceName: luckdraw-mq
   Level: error
   Mode: file
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 7107
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: luckdraw-mq
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
 
 Mysql:
   DataSource: luck_draw:123123123@tcp(127.0.0.1:3306)/luck_draw?parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai
@@ -23,11 +36,15 @@ CacheRedis:
     Type: node
 
 LuckdrawRpc:
-  Etcd:
-    Hosts:
-      - 127.0.0.1:2379
-    Key: luckdraw.rpc
+  Endpoints:
+    - 127.0.0.1:7032
+  NonBlock: true
+  # Etcd:
+  #   Hosts:
+  #     - 127.0.0.1:2379
+  #   Key: luckdraw.rpc
 
+#kafka配置
 GoodluckConf:
     Name: GoodluckStatus
     Brokers:
