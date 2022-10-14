@@ -43,6 +43,7 @@ gen_api() {
     echo "生成typescript调用文件 ...... "
     goctl api ts -api "${name}.api" -dir ../static
     cd ../
+    rm -f Dockerfile
     goctl docker -go "${name}.go"
     echo "生成${name} RPC服务的Dockerfile"
 }
@@ -78,6 +79,7 @@ gen_rpc() {
     sed -i 's/,omitempty//g' "${name}.pb.go"
     echo "${name}-${micro}服务生成完成!"
     cd ../
+    rm -f Dockerfile
     goctl docker -go "${name}.go"
     echo "生成${name} RPC服务的Dockerfile"
 }

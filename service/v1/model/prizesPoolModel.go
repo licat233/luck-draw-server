@@ -23,6 +23,7 @@ type (
 	// and implement the added methods in customPrizesPoolModel.
 	PrizesPoolModel interface {
 		prizesPoolModel
+		QueryOne(ctx context.Context, id int64) (*PrizesPool, error)
 		DeleteSoft(ctx context.Context, data *PrizesPool) error
 		FindOneByUuid(ctx context.Context, uuid string) (*PrizesPool, error)
 
@@ -95,6 +96,23 @@ func (m *customPrizesPoolModel) FindOne(ctx context.Context, id int64) (*PrizesP
 	var resp PrizesPool
 	err := m.QueryRowCtx(ctx, &resp, luckDrawPrizesPoolIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
 		query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' limit 1", prizesPoolRows, m.table)
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *customPrizesPoolModel) QueryOne(ctx context.Context, id int64) (*PrizesPool, error) {
+	luckDrawPrizesPoolIdKey := m.formatPrimary(id)
+	var resp PrizesPool
+	err := m.QueryRowCtx(ctx, &resp, luckDrawPrizesPoolIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
+		query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", prizesPoolRows, m.table)
 		return conn.QueryRowCtx(ctx, v, query, id)
 	})
 	switch err {

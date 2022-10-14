@@ -7,10 +7,7 @@ import (
 
 type Config struct {
 	rest.RestConf
-	Debug   bool
-	JwtAuth struct {
-		AccessSecret string
-	}
+	Debug      bool
 	CaptchaRpc zrpc.RpcClientConf
 	Redis      struct {
 		Addr string

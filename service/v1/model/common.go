@@ -292,7 +292,7 @@ func (m *CommonModel) FindsLuckerDetails(ctx context.Context, options *LuckerDet
 	return
 }
 
-// QueryLuckerDetailsInfo2 查询lucker详细，方案二
+// QueryLuckerDetailsInfo2 查询lucker详细，使用了go内存做数据缓存，方案二
 func (m *CommonModel) QueryLuckerDetailsInfo2(ctx context.Context, luckerList []*Lucker) (resp []*LuckerDetailsInfo, err error) {
 	for _, lucker := range luckerList {
 		var user *User
@@ -303,7 +303,7 @@ func (m *CommonModel) QueryLuckerDetailsInfo2(ctx context.Context, luckerList []
 		var prize *Prize
 
 		//查询用户
-		if v, ok := m.storage.User[lucker.UserId]; ok {
+		if v, ok := m.storage.User[lucker.UserId]; ok && v != nil {
 			user = v
 		} else {
 			user, err = m.UserModel.FindOne(ctx, lucker.UserId)
@@ -320,10 +320,10 @@ func (m *CommonModel) QueryLuckerDetailsInfo2(ctx context.Context, luckerList []
 		}
 
 		//查询奖品池
-		if v, ok := m.storage.PrizesPool[lucker.PrizesPoolId]; ok {
+		if v, ok := m.storage.PrizesPool[lucker.PrizesPoolId]; ok && v != nil {
 			prizesPool = v
 		} else {
-			prizesPool, err = m.PrizesPoolModel.FindOne(ctx, lucker.PrizesPoolId)
+			prizesPool, err = m.PrizesPoolModel.QueryOne(ctx, lucker.PrizesPoolId)
 			if err != nil && err != ErrNotFound {
 				return
 			}
@@ -331,12 +331,14 @@ func (m *CommonModel) QueryLuckerDetailsInfo2(ctx context.Context, luckerList []
 				m.storage.PrizesPool[lucker.PrizesPoolId] = prizesPool
 			}
 			if err == ErrNotFound {
-				goto SAVE
+				//奖品池不存在，则无法查询剩余信息，该条中奖信息不输出
+				continue
+				// goto SAVE
 			}
 		}
 
 		//通过奖品池查询获奖等级
-		if v, ok := m.storage.PrizeGrade[prizesPool.GradeId]; ok {
+		if v, ok := m.storage.PrizeGrade[prizesPool.GradeId]; ok && v != nil {
 			prizeGrade = v
 		} else {
 			prizeGrade, err = m.PrizeGradeModel.FindOne(ctx, prizesPool.GradeId)
@@ -349,7 +351,7 @@ func (m *CommonModel) QueryLuckerDetailsInfo2(ctx context.Context, luckerList []
 		}
 
 		//通过奖品池查询奖品
-		if v, ok := m.storage.Prize[prizesPool.PrizeId]; ok {
+		if v, ok := m.storage.Prize[prizesPool.PrizeId]; ok && v != nil {
 			prize = v
 		} else {
 			prize, err = m.PrizeModel.FindOne(ctx, prizesPool.PrizeId)
@@ -362,7 +364,7 @@ func (m *CommonModel) QueryLuckerDetailsInfo2(ctx context.Context, luckerList []
 		}
 
 		//通过奖品池查询活动
-		if v, ok := m.storage.Activity[prizesPool.ActivityId]; ok {
+		if v, ok := m.storage.Activity[prizesPool.ActivityId]; ok && v != nil {
 			activity = v
 		} else {
 			activity, err = m.ActivityModel.FindOne(ctx, prizesPool.ActivityId)
@@ -378,7 +380,7 @@ func (m *CommonModel) QueryLuckerDetailsInfo2(ctx context.Context, luckerList []
 		}
 
 		//通过活动查询项目
-		if v, ok := m.storage.Project[activity.ProjectId]; ok {
+		if v, ok := m.storage.Project[activity.ProjectId]; ok && v != nil {
 			project = v
 		} else {
 			project, err = m.ProjectModel.FindOne(ctx, activity.ProjectId)

@@ -27,18 +27,17 @@ services:
     networks:
       - catli_net
     depends_on:
-      - luck_draw-server
-  admin-api:
+      - luck_draw
+
+  luck_draw:
     build: 
-      context: ./service/v1/admin/api
-    ports:
-      - 7001:7001
-    depends_on:
-      - mysql
-      - redis
+      context: .
+    container_name: luck_draw
     environment:
       - TZ=Asia/Shanghai
       - GOPROXY=https://goproxy.cn,direct
+    volumes:
+      - .:/go/luck_draw
     working_dir: /luck_draw-server
     restart: always
     privileged: true
@@ -46,21 +45,3 @@ services:
     tty: true
     networks:
       - catli_net
-
-  admin-rpc:
-    build: 
-      context: ./service/v1/admin/rpc
-    depends_on:
-      - mysql
-      - redis
-    environment:
-      - TZ=Asia/Shanghai
-      - GOPROXY=https://goproxy.cn,direct
-    working_dir: /luck_draw-server
-    restart: always
-    privileged: true
-    stdin_open: true   # 打开标准输入，可以接受外部输入
-    tty: true
-    networks:
-      - catli_net
-
