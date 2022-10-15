@@ -434,7 +434,7 @@ func (m *customLuckerModel) FindCountByUserIds(ctx context.Context, userIds []in
 		temps = append(temps, fmt.Sprint(userId))
 	}
 	whereSql := strings.Join(temps, ",")
-	query := fmt.Sprintf("select count(*) from %s where `is_deleted` = '0' and `user_id` in(%s)", luckerRows, m.table, whereSql)
+	query := fmt.Sprintf("select count(*) from %s where `is_deleted` = '0' and `user_id` in(%s)", m.table, whereSql)
 	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
 	return count, err
 }

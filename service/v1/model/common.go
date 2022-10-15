@@ -331,9 +331,9 @@ func (m *CommonModel) QueryLuckerDetailsInfo2(ctx context.Context, luckerList []
 				m.storage.PrizesPool[lucker.PrizesPoolId] = prizesPool
 			}
 			if err == ErrNotFound {
-				//奖品池不存在，则无法查询剩余信息，该条中奖信息不输出
-				continue
-				// goto SAVE
+				// //奖品池不存在，则无法查询剩余信息，直接跳过
+				// continue
+				goto SAVE
 			}
 		}
 

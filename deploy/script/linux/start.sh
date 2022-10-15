@@ -22,6 +22,12 @@ elif [[ "$1" = "build" ]];then
 ./build.sh $2 $3
 elif [[ "$1" = "run" ]];then
 ./run.sh $2 $3
+elif [[ "$1" = "-h" ]];then
+echo "command: "
+echo "gen [service-name] [micro-name]"
+echo "build [service-name] [micro-name]"
+echo "run [service-name] [micro-name]"
+echo "[service-name] [micro-name]"
 else
 ./gen.sh $1 $2 && ./build.sh $1 $2 && ./run.sh $1 $2
 fi

@@ -20,6 +20,8 @@
 */api/logs/*
 */rpc/logs/*
 */logs/
+build/
+data/
 
 # 取消忽略go文件
 !*.go

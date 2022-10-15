@@ -5,6 +5,7 @@ import (
 	"luck_draw-server/service/v1/admin/api/internal/config"
 	"luck_draw-server/service/v1/admin/rpc/admin"
 	"net/http"
+	"path"
 
 	sqladapter "github.com/Blank-Xu/sql-adapter"
 	"github.com/casbin/casbin/v2"
@@ -18,8 +19,9 @@ type RbacMiddleware struct {
 }
 
 func NewRbacMiddleware(db *sql.DB, c config.Config) *RbacMiddleware {
+	casbinFile := path.Join(c.RootDir, "etc/rbac_with_domains_model.conf")
 	return &RbacMiddleware{
-		CasbinEnforcer: NewCasbinEnforcer(db),
+		CasbinEnforcer: NewCasbinEnforcer(db, casbinFile),
 		AdminRpc:       admin.NewAdmin(zrpc.MustNewClient(c.AdminRpc)),
 	}
 }
@@ -33,7 +35,7 @@ func (m *RbacMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func NewCasbinEnforcer(db *sql.DB) *casbin.SyncedEnforcer {
+func NewCasbinEnforcer(db *sql.DB, casbinFile string) *casbin.SyncedEnforcer {
 	if db == nil {
 		return nil
 	}
@@ -43,7 +45,7 @@ func NewCasbinEnforcer(db *sql.DB) *casbin.SyncedEnforcer {
 		return nil
 	}
 
-	syncedEnforcer, err := casbin.NewSyncedEnforcer("etc/rbac_with_domains_model.conf", adapter)
+	syncedEnforcer, err := casbin.NewSyncedEnforcer(casbinFile, adapter)
 	if err != nil {
 		logx.Errorf("新建Casbin Enforcer失败:%v", err)
 		return nil

@@ -46,8 +46,16 @@ build_go() {
     fi
 
     echo -e "\n开始编译${filename} ...... "
-    rm -f $filename
     go build -o $filename "${name}.go"
+    dirpath="../../../../build/${filename}"
+    mkdir -p $dirpath/etc/
+    cp -rf ./etc/ $dirpath/etc/
+    if [ -d ./static/ ]; then
+        #如果目录存在，则复制
+        mkdir -p $dirpath/static/
+        cp -rf ./static/ $dirpath/static/
+    fi
+    mv -f $filename $dirpath/$filename
     echo "${filename} 编译完成"
     # run $filename $service_path
 }

@@ -133,3 +133,31 @@ func FileNameAndType(filename string) (fileName string, fileType string, err err
 func GenerateImgName(prefix string) string {
 	return fmt.Sprintf("%s%d", prefix, time.Now().UnixNano())
 }
+
+// 判断文件夹是否存在
+func HasDir(path string) (bool, error) {
+	_, _err := os.Stat(path)
+	if _err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(_err) {
+		return false, nil
+	}
+	return false, _err
+}
+
+// 创建文件夹
+func CreateDir(path string) error {
+	_exist, _err := HasDir(path)
+	if _err != nil {
+		return fmt.Errorf("获取文件夹异常 -> %v", _err)
+	}
+	if _exist {
+		return nil
+	}
+	err := os.Mkdir(path, os.ModePerm)
+	if err != nil {
+		return fmt.Errorf("创建目录异常 -> %v", _err)
+	}
+	return nil
+}

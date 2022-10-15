@@ -22,10 +22,11 @@ run() {
     service_path=$2
     if [ ! -d $service_path ]; then
         #如果目录不存在，则退出
-        echo "目录: ${service_path} 不存在"
+        # echo "目录: ${service_path} 不存在"
         return
     fi
     cd $service_path
+    cd ../../../../build/$filename
     if [ ! -f $filename ]; then
         #如果文件不存在，则退出
         echo "文件: ${filename} 不存在"
@@ -46,6 +47,7 @@ run() {
     #启动
     echo "后台启动 ${filename} 服务"
     rm -f "${service_path}/nohup.out"
+    # nohup "${service_path}/${filename}" > ${filename}.file 2>&1 &
     nohup "${service_path}/${filename}" &
     return
     nohup=$("./${filename}" &)

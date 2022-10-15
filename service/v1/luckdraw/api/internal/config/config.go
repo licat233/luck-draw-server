@@ -8,6 +8,7 @@ import (
 type Config struct {
 	rest.RestConf
 	Debug   bool
+	RootDir string
 	JwtAuth struct {
 		AccessSecret string
 	}
