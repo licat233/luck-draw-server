@@ -23,16 +23,16 @@ Telemetry:
   Batcher: jaeger
 
 Mysql:
-  DataSource: luck_draw:123123123@tcp(127.0.0.1:3306)/luck_draw?parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai
+  DataSource: luck_draw:mysql123123123@tcp(127.0.0.1:3306)/luck_draw?parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai
 
 Redis:
-  Host: 127.0.0.1:6379
-  Pass:
+  Host: redis:6379
+  Pass: redis123123123
   Type: node
 
 CacheRedis:
-  - Host: 127.0.0.1:6379
-    Pass:
+  - Host: redis:6379
+    Pass: redis123123123
     Type: node
 
 LuckdrawRpc:

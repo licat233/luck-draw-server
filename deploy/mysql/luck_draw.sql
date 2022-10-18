@@ -1,7 +1,7 @@
 /*
  Navicat MySQL Data Transfer
 
- Source Server         : luck_draw
+ Source Server         : localmysql
  Source Server Type    : MySQL
  Source Server Version : 80030
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 80030
  File Encoding         : 65001
 
- Date: 22/09/2022 14:22:30
+ Date: 17/10/2022 17:33:22
 */
 
 SET NAMES utf8mb4;
@@ -78,7 +78,7 @@ CREATE TABLE `adminer` (
 -- Records of adminer
 -- ----------------------------
 BEGIN;
-INSERT INTO `adminer` VALUES (1, '3a37bef3-65da-4d1f-9acf-f13b308ad213', '超管', '//luckdraw.com/static/avatar/avatar_1_1663575200688027000.jpg', 'licat', '', '1697470538@qq.com', 1, 1, 15, '2022-09-20 11:37:06', '2022-07-29 09:47:08', '2022-09-20 11:37:05', 0, '2005-01-02 15:04:05');
+INSERT INTO `adminer` VALUES (1, '3a37bef3-65da-4d1f-9acf-f13b308ad213', '超管', '//luckdraw.com/static/avatar/avatar_1_1663575200688027000.jpg', 'licat', '', '1697470538@qq.com', 1, 1, 18, '2022-10-14 17:04:03', '2022-07-29 09:47:08', '2022-10-14 17:04:02', 0, '2005-01-02 15:04:05');
 COMMIT;
 
 -- ----------------------------

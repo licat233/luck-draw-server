@@ -2,7 +2,7 @@
 ----------------
 -- Mysql创建luck_draw用户
 ----------------
-create user 'luck_draw'@'%' identified by '123123123';
+create user 'luck_draw'@'%' identified by 'mysql123123123';
 
 ---------------------
 -- 将luck_draw用户绑定到luck_draw数据库上

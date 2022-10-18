@@ -1,0 +1,51 @@
+version: '3.7'
+
+######## app下api+rpc ,  Before starting this project, start the environment that the project depends on docker-compose-env.yml #######
+
+
+# 网络配置
+networks:
+  catli_net:
+    driver: bridge
+    # ipam:
+    #   config:
+    #     - subnet: 172.20.0.0/16
+# 服务容器配置
+services:
+  nginx-gateway:
+    image: nginx
+    container_name: nginx-gateway
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./deploy/nginx/conf.d:/etc/nginx/conf.d
+      - ./deploy/nginx/ssl:/etc/nginx/ssl
+      - ./data/nginx/log:/var/log/nginx
+      - ./static:/web/static
+      - ./ui/admin/dist:/web/admin
+    networks:
+      - catli_net
+    depends_on:
+      - luck_draw
+
+  luck_draw:
+    build: 
+      context: .
+    container_name: luck_draw
+    environment:
+      - TZ=Asia/Shanghai
+      - GOPROXY=https://goproxy.cn,direct
+    volumes:
+      - .:/go/luck_draw
+    working_dir: /go/luck_draw
+    restart: always
+    privileged: true
+    stdin_open: true   # 打开标准输入，可以接受外部输入
+    tty: true
+    networks:
+      - catli_net

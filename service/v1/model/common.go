@@ -293,6 +293,7 @@ func (m *CommonModel) FindsLuckerDetails(ctx context.Context, options *LuckerDet
 }
 
 // QueryLuckerDetailsInfo2 查询lucker详细，使用了go内存做数据缓存，方案二
+// 用空间换时间
 func (m *CommonModel) QueryLuckerDetailsInfo2(ctx context.Context, luckerList []*Lucker) (resp []*LuckerDetailsInfo, err error) {
 	for _, lucker := range luckerList {
 		var user *User

@@ -8,7 +8,7 @@ Debug: true
 #   Key: luckdraw.rpc
 
 Mysql:
-  DataSource: luck_draw:123123123@tcp(127.0.0.1:3306)/luck_draw?parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai
+  DataSource: luck_draw:mysql123123123@tcp(mysql:3306)/luck_draw?parseTime=True&charset=utf8mb4&collation=utf8mb4_general_ci&loc=Asia%2FShanghai
 
 JwtAuth:
   AccessSecret: nA0eH4jC2aF0fC0eP0nH0lC1cB0aE8aQ0cI0
@@ -32,8 +32,8 @@ Telemetry:
   Batcher: jaeger
 
 CacheRedis:
-  - Host: 127.0.0.1:6379
-    Pass:
+  - Host: redis:6379
+    Pass: redis123123123
     Type: node
 
 KqGoodluckConf:

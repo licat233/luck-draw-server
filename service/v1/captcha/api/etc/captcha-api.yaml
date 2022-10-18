@@ -32,7 +32,7 @@ CaptchaRpc:
   #   Key: captcha.rpc
 
 Redis:
-  Addr: 127.0.0.1:6379
-  Pass:
+  Addr: redis:6379
+  Pass: redis123123123
   Type: node
   DB: 1
